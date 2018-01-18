@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import FlatButton from 'material-ui/FlatButton';
@@ -29,7 +30,7 @@ const Logged = (props) => (
     targetOrigin={{horizontal: 'right', vertical: 'top'}}
     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
   >
-    <MenuItem primaryText="Refresh" href="/contacts" />
+    <MenuItem primaryText="Refresh" />
     <MenuItem primaryText="Help" />
     <MenuItem primaryText="Sign out" />
   </IconMenu>
@@ -67,23 +68,26 @@ class NavBar extends Component {
   // }
 
   render() {
+    const openState = this.state.open;
+    const loggedState = this.state.logged;
+
     return (
       <div>
         <AppBar
           title="ЕДДС"
-          // href = "/"
           onLeftIconButtonClick={this.handleToggle}
-          iconElementLeft={this.state.open ? <IconButton><NavigationCloseIcon /></IconButton> : <IconButton><NavigationExpandMoreIcon /></IconButton>}
-          iconElementRight={this.state.logged ? <Logged /> : <Login />}
+          iconElementLeft={openState ? <IconButton><NavigationCloseIcon /></IconButton> : <IconButton><NavigationExpandMoreIcon /></IconButton>}
+          iconElementRight={loggedState ? <Logged /> : <Login />}
         />
         <Drawer
           docked={false}
           width={200}
-          open={this.state.open}
+          open={openState}
           onRequestChange={(open) => this.setState({open})}
         >
-          <MenuItem onClick={this.handleClose} href="/contacts">Контакты</MenuItem>
-          <MenuItem onClick={this.handleClose}>Организации</MenuItem>
+          <MenuItem onClick={this.handleClose} containerElement={<Link to="/" />}>Home</MenuItem>
+          <MenuItem onClick={this.handleClose} containerElement={<Link to="/contacts" />}>Контакты</MenuItem>
+          <MenuItem onClick={this.handleClose} containerElement={<Link to="/companies" />}>Организации</MenuItem>
         </Drawer>
       </div>
     );
