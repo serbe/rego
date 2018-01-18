@@ -68,8 +68,7 @@ class NavBar extends Component {
   // }
 
   render() {
-    const openState = this.state.open;
-    const loggedState = this.state.logged;
+    const { openState, loggedState } = this.state;
 
     return (
       <div>
