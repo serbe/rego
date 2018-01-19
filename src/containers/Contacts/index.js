@@ -12,7 +12,7 @@ class Contacts extends Component {
   }
 
   componentDidMount() {
-    fetch("https://api.example.com/items")
+    fetch("/api/contacts")
       .then(res => res.json())
       .then(
         (result) => {

@@ -68,20 +68,18 @@ class NavBar extends Component {
   // }
 
   render() {
-    const { openState, loggedState } = this.state;
-
     return (
       <div>
         <AppBar
           title="ЕДДС"
           onLeftIconButtonClick={this.handleToggle}
-          iconElementLeft={openState ? <IconButton><NavigationCloseIcon /></IconButton> : <IconButton><NavigationExpandMoreIcon /></IconButton>}
-          iconElementRight={loggedState ? <Logged /> : <Login />}
+          iconElementLeft={this.state.open ? <IconButton><NavigationCloseIcon /></IconButton> : <IconButton><NavigationExpandMoreIcon /></IconButton>}
+          iconElementRight={this.state.logged ? <Logged /> : <Login />}
         />
         <Drawer
           docked={false}
           width={200}
-          open={openState}
+          open={this.state.open}
           onRequestChange={(open) => this.setState({open})}
         >
           <MenuItem onClick={this.handleClose} containerElement={<Link to="/" />}>Home</MenuItem>
