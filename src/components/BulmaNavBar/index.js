@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 class BulmaNavBar extends Component {
   static contextTypes = {
@@ -12,6 +12,7 @@ class BulmaNavBar extends Component {
     this.state = {
       logged: true,
       open: false,
+      auth: true,
     };
   }
 
@@ -30,57 +31,64 @@ class BulmaNavBar extends Component {
 
   render() {
     let navBurgerClass = "navbar-burger burger";
-    if (this.open === false) {
-      navBurgerClass =  navBurgerClass + 'is-active';
+    if (this.state.open === false) {
+      navBurgerClass =  navBurgerClass + ' is-active';
     }
     let navMenuClass = "navbar-menu";
-    if (this.open === false) {
-      navMenuClass =  navMenuClass + 'is-active';
+    if (this.state.open === false) {
+      navMenuClass =  navMenuClass + ' is-active';
     }
 
     return (
       <div className="container">
-      <nav className="navbar">
-        <div className="navbar-brand">
-          <template v-if="user.authenticated">
-            <router-link to="/" className="navbar-item" exact>ЕДДС</router-link>
-            <router-link to="/contacts" className="navbar-item">Контакты</router-link>
-            <router-link to="/companies" className="navbar-item">Организации</router-link>
-          </template>
-          <router-link v-else to="/login" className="navbar-item" key="NavbarNotLogged">Авторизация</router-link>
-          <div className={navBurgerClass} data-target="navMenu" onClick={this.handleToggle}>
-            <span></span>
-            <span></span>
-            <span></span>
+        <nav className="navbar">
+          <div className="navbar-brand">
+            { this.state.auth ? (
+              <React.Fragment>
+                <NavLink to="/" className="navbar-item">ЕДДС</NavLink>
+                <NavLink to="/contacts" className="navbar-item">Контакты</NavLink>
+                <NavLink to="/companies" className="navbar-item">Организации</NavLink>
+              </React.Fragment>
+            ) : (
+              <NavLink to="/login" className="navbar-item" key="NavbarNotLogged">Авторизация</NavLink>
+            )}
+            <div className={navBurgerClass} data-target="navMenu" onClick={this.handleToggle}>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
           </div>
-        </div>
 
         <div id="navMenu" className={navMenuClass}>
           <div className="navbar-start">
-            <template v-if="user.authenticated">
-              <router-link to="/sirens" className="navbar-item">Сирены</router-link>
-              <div className="navbar-item has-dropdown is-hoverable">
-                <a className="navbar-link">Справочники</a>
-                <div className="navbar-dropdown">
-                  <router-link to="/departments" className="navbar-item" onClick={this.handleToggle}>Отделы</router-link>
-                  <router-link to="/educations" className="navbar-item" onClick={this.handleToggle}>Обучение</router-link>
-                  <router-link to="/kinds" className="navbar-item" onClick={this.handleToggle}>Типы</router-link>
-                  <router-link to="/posts" className="navbar-item" onClick={this.handleToggle}>Должности</router-link>
-                  <router-link to="/practices" className="navbar-item" onClick={this.handleToggle}>Учения</router-link>
-                  <router-link to="/ranks" className="navbar-item" onClick={this.handleToggle}>Чины</router-link>
-                  <router-link to="/scopes" className="navbar-item" onClick={this.handleToggle}>Сферы</router-link>
-                  <router-link to="/certificates" className="navbar-item" onClick={this.handleToggle}>Удостоверения</router-link>
-                  <hr className="navbar-divider"/>
-                  <router-link to="/sirentypes" className="navbar-item" onClick={this.handleToggle}>Типы сирен</router-link>
+            { this.state.auth ? (
+              <React.Fragment>
+                <NavLink to="/sirens" className="navbar-item">Сирены</NavLink>
+                <div className="navbar-item has-dropdown is-hoverable">
+                  <a className="navbar-link">Справочники</a>
+                  <div className="navbar-dropdown">
+                    <NavLink to="/departments" className="navbar-item" onClick={this.handleToggle}>Отделы</NavLink>
+                    <NavLink to="/educations" className="navbar-item" onClick={this.handleToggle}>Обучение</NavLink>
+                    <NavLink to="/kinds" className="navbar-item" onClick={this.handleToggle}>Типы</NavLink>
+                    <NavLink to="/posts" className="navbar-item" onClick={this.handleToggle}>Должности</NavLink>
+                    <NavLink to="/practices" className="navbar-item" onClick={this.handleToggle}>Учения</NavLink>
+                    <NavLink to="/ranks" className="navbar-item" onClick={this.handleToggle}>Чины</NavLink>
+                    <NavLink to="/scopes" className="navbar-item" onClick={this.handleToggle}>Сферы</NavLink>
+                    <NavLink to="/certificates" className="navbar-item" onClick={this.handleToggle}>Удостоверения</NavLink>
+                    <hr className="navbar-divider"/>
+                    <NavLink to="/sirentypes" className="navbar-item" onClick={this.handleToggle}>Типы сирен</NavLink>
+                  </div>
                 </div>
-              </div>
-            </template>
+              </React.Fragment>
+            ) : (<React.Fragment/>)}
           </div>
           <div className="navbar-end">
             <div className="navbar-item has-dropdown is-hoverable">
-              {/* <a className="navbar-link">{{ user.name }}</a> */}
+              <a className="navbar-link"> user.name </a>
               <div className="navbar-dropdown is-right">
-                <bulma-button v-if="user.authenticated" className="navbar-item" text="Выход" color="info" onClick={this.handleToggle} key="user"></bulma-button>
+              { this.state.auth ? (
+                <bulma-button className="navbar-item" text="Выход" color="info" onClick={this.handleToggle} key="user"></bulma-button>
+              ) : (<React.Fragment/>)}
               </div>
             </div>
           </div>
