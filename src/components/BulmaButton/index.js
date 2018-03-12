@@ -1,50 +1,48 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
+// import PropTypes from 'prop-types';
+// import { NavLink } from 'react-router-dom';
 
-class BulmaNavBar extends Component {
-  static contextTypes = {
-    router: PropTypes.object
+class BulmaButton extends Component {
+  // static contextTypes = {
+  //   router: PropTypes.object
+  // }
+  constructor(props) {
+    super(props);
+    // this.state = { hasError: false };
   }
 
-  constructor(props, context) {
-    super(props, context);
-    this.state = {
-      logged: true,
-      open: false,
-      auth: true,
-    };
-  }
-
-  // handleChange = (event, logged) => {
-  //   this.setState({logged: logged});
-  // };
-
-  handleToggle = () => this.setState({open: !this.state.open});
-
-  handleClose = () => this.setState({open: false});
-
-  // handleLink = (e, uri) => {
-  //   // e.preventDefault();
-  //   this.context.router.history.push(uri);
+  // constructor(props, context) {
+  //   super(props, context);
+  //   this.state = {
+  //     logged: true,
+  //     open: false,
+  //     auth: true,
+  //   };
   // }
 
   render() {
-    let navBurgerClass = "navbar-burger burger";
-    if (this.state.open === false) {
-      navBurgerClass =  navBurgerClass + ' is-active';
+    let buttonClass = "button";
+    if (this.props.color) {
+      buttonClass = buttonClass + ` is-${this.props.color}`;
     }
-    let navMenuClass = "navbar-menu";
-    if (this.state.open === false) {
-      navMenuClass =  navMenuClass + ' is-active';
+    if (this.props.size) {
+      buttonClass = buttonClass + ` is-${this.props.size}`;
+    }
+    if (this.props.state) {
+      buttonClass = buttonClass + ` is-${this.props.state}`;
+    }
+
+    let IconButton = null;
+    if (this.props.icon) {
+      IconButton = <bulma-icon size="this.props.size" icon="this.props.icon" position="this.props.iconPosition" color="this.props.color"/>
     }
 
     return (
-      <div class="field">
-        <p class="control">
-          <a :class="aClassList" @click="click">
-            <bulma-icon v-if="icon" :size="size" :icon="icon" :position="iconPosition" :color="color" key="ButtonIcon"/>
-            <template v-if="text">{{ text }}</template>
+      <div className="field">
+        <p className="control">
+          <a className={buttonClass} onClick="click">
+            <IconButton/>
+            { this.props.text }
           </a>
         </p>
       </div>
@@ -52,4 +50,9 @@ class BulmaNavBar extends Component {
   }
 }
 
-export default BulmaNavBar;
+BulmaButton.propTypes = {
+  // color: PropTypes.string,
+
+};
+
+export default BulmaButton;
