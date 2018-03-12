@@ -22,7 +22,7 @@ class BulmaNavBar extends Component {
 
   handleToggle = () => this.setState({open: !this.state.open});
 
-  handleClose = () => this.setState({open: false});
+  // handleClose = () => this.setState({open: false});
 
   // handleLink = (e, uri) => {
   //   // e.preventDefault();
