@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import 'styles/home.css';
 
-class Contacts extends Component {
+export default class Contacts extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -12,19 +12,17 @@ class Contacts extends Component {
   }
 
   componentDidMount() {
-    fetch("/api/contacts")
+    fetch("http://localhost:9090/edds/api/contacts")
       .then(res => res.json())
       .then(
         (result) => {
           this.setState({
             isLoaded: true,
-            items: result.items
+            items: result.contacts
           });
         },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
         (error) => {
+          console.log(error)
           this.setState({
             isLoaded: true,
             error
@@ -41,23 +39,9 @@ class Contacts extends Component {
       return <div>Loading...</div>;
     } else {
       return (
-        <ul>
-          {items.map(item => (
-            <li key={item.name}>
-              {item.name} {item.price}
-            </li>
-          ))}
-        </ul>
+        <div class="container">
+        </div>
       );
     }
   }
-  // render() {
-  //   return (
-  //     <div className="Contacts">
-  //       <h1>Контакты</h1>
-  //     </div>
-  //   );
-  // }
 }
-
-export default Contacts;

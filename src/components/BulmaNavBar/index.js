@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import BulmaButton from 'components/BulmaButton'
 
-class BulmaNavBar extends Component {
+export default class BulmaNavBar extends Component {
   static contextTypes = {
     router: PropTypes.object
   }
@@ -85,10 +85,16 @@ class BulmaNavBar extends Component {
           </div>
           <div className="navbar-end">
             <div className="navbar-item has-dropdown is-hoverable">
-              <a className="navbar-link"> user.name </a>
+              <a className="navbar-link"> name </a>
               <div className="navbar-dropdown is-right">
               { this.state.auth ? (
-                <BulmaButton className="navbar-item" text="Выход" color="info" onClick={this.handleToggle} key="user"></BulmaButton>
+                <div className="navbar-item">
+                  <div className="field">
+                    <p className="control">
+                      <BulmaButton text="Выход" color="info" onClick={this.handleToggle} key="user"></BulmaButton>
+                    </p>
+                  </div>
+                </div>
               ) : (<React.Fragment/>)}
               </div>
             </div>
@@ -99,5 +105,3 @@ class BulmaNavBar extends Component {
     );
   }
 }
-
-export default BulmaNavBar;
