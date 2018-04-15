@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
-import BulmaButton from 'components/BulmaButton'
+import Button from 'components/Button'
 
-export default class BulmaNavBar extends Component {
+export default class NavBar extends Component {
   static contextTypes = {
     router: PropTypes.object
   }
@@ -91,7 +91,7 @@ export default class BulmaNavBar extends Component {
                 <div className="navbar-item">
                   <div className="field">
                     <p className="control">
-                      <BulmaButton text="Выход" color="info" onClick={this.handleToggle} key="user"></BulmaButton>
+                      <Button color="info" onClick={this.handleToggle} key="user">Выход</Button>
                     </p>
                   </div>
                 </div>

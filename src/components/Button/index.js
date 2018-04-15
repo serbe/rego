@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import cc from 'classcat';
-import BulmaIcon from 'components/BulmaIcon';
+// import BulmaIcon from 'components/BulmaIcon';
 
-export default class BulmaButton extends PureComponent {
+export default class Button extends PureComponent {
 	static propTypes = {
     children: PropTypes.node,
 		className: PropTypes.string,
@@ -18,7 +18,7 @@ export default class BulmaButton extends PureComponent {
 		focused: PropTypes.bool,
 		active: PropTypes.bool,
 		loading: PropTypes.bool,
-		static: PropTypes.bool,
+		isStatic: PropTypes.bool,
 		disabled: PropTypes.bool
 	};
 
@@ -36,7 +36,7 @@ export default class BulmaButton extends PureComponent {
 		focused: false,
 		active: false,
 		loading: false,
-		static: false,
+		isStatic: false,
 		disabled: false
 	};
 
@@ -55,11 +55,11 @@ export default class BulmaButton extends PureComponent {
 			focused,
 			active,
 			loading,
-			static,
+			isStatic,
 			disabled,
 			...props
 		} = this.props;
-		let Button = static ? 'span' : 'a';
+		let Button = isStatic ? 'span' : 'a';
 
 		return (
 			<Button
@@ -79,7 +79,7 @@ export default class BulmaButton extends PureComponent {
 						'is-focused': focused,
 						'is-active': active,
 						'is-loading': loading,
-						'is-static': static
+						'is-static': isStatic
 					}
 				])}
 			>
