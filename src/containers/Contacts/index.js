@@ -39,7 +39,7 @@ export default class Contacts extends Component {
       return <div>Loading...</div>;
     } else {
       return (
-        <div class="container">
+        <div className="container">
         </div>
       );
     }

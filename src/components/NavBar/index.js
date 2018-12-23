@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
-import Button from 'components/Button'
+import { Button } from 'components/Button'
 
 export default class NavBar extends Component {
   static contextTypes = {
@@ -21,7 +21,9 @@ export default class NavBar extends Component {
   //   this.setState({logged: logged});
   // };
 
-  handleToggle = () => this.setState({open: !this.state.open});
+  handleToggle = () => {
+    this.setState({open: !prevState.open});
+  }
 
   // handleClose = () => this.setState({open: false});
 

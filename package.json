@@ -4,12 +4,12 @@
   "private": true,
   "dependencies": {
     "bulma": "^0.7.0",
-    "classcat": "^3.0.2",
+    "classcat": "^3.2.0",
     "prop-types": "^15.6.0",
-    "react": "^16.3.0",
-    "react-dom": "^16.3.0",
-    "react-router-dom": "^4.2.0",
-    "react-scripts": "^1.1.0"
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-router-dom": "^4.3.0",
+    "react-scripts": "^2.1.0"
   },
   "scripts": {
     "start": "cross-env NODE_PATH=src react-scripts start",
@@ -18,6 +18,6 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "cross-env": "^5.1.0"
+    "cross-env": "^5.2.0"
   }
 }
