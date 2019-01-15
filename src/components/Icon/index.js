@@ -1,45 +1,48 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import cc from 'classcat';
+import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
+import cc from "classcat";
 
 export default class Icon extends PureComponent {
   static propTypes = {
     children: PropTypes.node,
-		className: PropTypes.string,
+    className: PropTypes.string,
     icon: PropTypes.string.isRequired,
-    color: PropTypes.oneOf('info', 'success', 'warning', 'danger'),
-    size: PropTypes.oneOf('small', 'medium', 'large')
-  }
+    color: PropTypes.oneOf("info", "success", "warning", "danger"),
+    size: PropTypes.oneOf("small", "medium", "large")
+  };
 
   static defaultProps = {
     children: null,
-    className: '',
+    className: "",
     color: "",
     size: "",
-    position: "",
-  }
+    position: ""
+  };
 
   render() {
+    const {
+      children,
+      className,
+      color,
+      size,
+      position,
+      icon,
+      ...props
+    } = this.props;
+
     return (
       <span
         {...props}
         className={cc([
-					{className},
-          'icon',
+          { className },
+          "icon",
           {
             [`has-text-${color}`]: color,
             [`is-${size}`]: size
           }
         ])}
       >
-        <i
-          className={cc([
-            'fas',
-            {[`fa-${icon}`]: icon}
-          ])}
-        >
-          {children}
-        </i>
+        <i className={cc(["fas", { [`fa-${icon}`]: icon }])}>{children}</i>
       </span>
     );
   }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import 'home.css';
+// import 'home.css';
 
 export default class Contacts extends Component {
   constructor(props) {
