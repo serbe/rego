@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import 'styles/home.css';
+import 'home.css';
 
 export default class Contacts extends Component {
   constructor(props) {
@@ -32,6 +32,7 @@ export default class Contacts extends Component {
   }
 
   render() {
+    // eslint-disable-next-line no-unused-vars
     const { error, isLoaded, items } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;

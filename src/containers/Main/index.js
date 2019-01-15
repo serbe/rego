@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom'
 import Home from 'containers/Home'
 import Contacts from 'containers/Contacts'
 
-class Main extends React.Component {
+class Main extends Component {
   constructor(props) {
     super(props);
   }

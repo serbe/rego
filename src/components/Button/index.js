@@ -40,6 +40,10 @@ export default class Button extends PureComponent {
 		disabled: false
 	};
 
+	handleEvent = () => {
+    console.log(this.props);
+  }
+
 	render() {
 		const {
 			children,
@@ -65,7 +69,7 @@ export default class Button extends PureComponent {
 			<Button
 				{...props}
 				disabled={disabled}
-				onClick={disabled ? undefined : onClick}
+				onClick={disabled ? undefined : onClick()}
 				className={cc([
 					{className},
 					'button',
