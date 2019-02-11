@@ -1,13 +1,12 @@
 import classNames from "classnames";
 import * as React from "react";
-import { FourColors, Sizes } from "src/components/vars";
 
 interface IIconProps {
   children?: React.ReactNode;
   className?: string;
   icon: string;
-  color?: FourColors;
-  size?: Sizes;
+  color?: "info" | "success" | "warning" | "danger";
+  size?: "small" | "medium" | "large";
 }
 
 export default class Icon extends React.Component<IIconProps> {

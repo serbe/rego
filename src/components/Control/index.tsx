@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import * as React from "react";
-import { Sizes } from "src/components/vars";
 
 interface IControlProps {
   children?: React.ReactNode;
@@ -8,7 +7,7 @@ interface IControlProps {
   onClick?: React.MouseEventHandler;
   isPTag: boolean;
   // color: PropTypes.oneOf('white', 'light', 'dark', 'text', 'primary', 'link', 'info', 'success', 'warning', 'danger'),
-  size?: Sizes;
+  size?: "small" | "medium" | "large";
   leftIcon: string;
   rightIcon: string;
   // outlined?: boolean;

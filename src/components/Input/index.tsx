@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import * as React from "react";
-import { FiveColors, InputTypes, Sizes } from "src/components/vars";
+
 
 interface IInputProps {
   value?: string;
@@ -9,9 +9,9 @@ interface IInputProps {
   onClick?: React.MouseEventHandler;
   children?: React.ReactNode;
   className?: string;
-  type?: InputTypes;
-  color?: FiveColors;
-  size?: Sizes;
+  type?: "text" | "password" | "email" | "tel";
+  color?: "primary" | "info" | "success" | "warning" | "danger";
+  size?: "small" | "medium" | "large";
   rounded?: boolean;
   hovered?: boolean;
   focused?: boolean;

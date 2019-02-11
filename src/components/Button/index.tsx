@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import * as React from "react";
-import { Colors, Sizes } from "src/components/vars";
 // import BulmaIcon from 'components/BulmaIcon';
 
 interface IButtonProps {
@@ -8,8 +7,8 @@ interface IButtonProps {
   children?: React.ReactNode;
   className?: string;
   href?: string;
-  color?: Colors;
-  size?: Sizes;
+  color?: "white" | "light" | "dark" | "text" | "black" | "primary" | "link" | "info" | "success" | "warning" | "danger";
+  size?: "small" | "medium" | "large";
   outlined?: boolean;
   inverted?: boolean;
   rounded?: boolean;
