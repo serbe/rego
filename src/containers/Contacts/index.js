@@ -1,38 +1,37 @@
-import * as React from "react";
+import React, { Component } from 'react';
 // import 'home.css';
 
-interface IContactsStates {
-  error: boolean;
-  isLoaded: boolean;
-  items: any
-}
-
-class Contacts extends React.Component<any, IContactsStates> {
-  constructor(props: any) {
+export default class Contacts extends Component {
+  constructor(props) {
     super(props);
+    this.state = {
+      error: null,
+      isLoaded: false,
+      items: []
+    };
   }
 
-  public componentDidMount() {
+  componentDidMount() {
     fetch("http://localhost:9090/edds/api/contacts")
       .then(res => res.json())
       .then(
-        result => {
+        (result) => {
           this.setState({
             isLoaded: true,
             items: result.contacts
           });
         },
-        error => {
-          // console.log(error)
+        (error) => {
+          console.log(error)
           this.setState({
-            error,
-            isLoaded: true
+            isLoaded: true,
+            error
           });
         }
-      );
+      )
   }
 
-  public render() {
+  render() {
     // eslint-disable-next-line no-unused-vars
     const { error, isLoaded, items } = this.state;
     if (error) {
@@ -40,9 +39,10 @@ class Contacts extends React.Component<any, IContactsStates> {
     } else if (!isLoaded) {
       return <div>Loading...</div>;
     } else {
-      return <div className="container" />;
+      return (
+        <div className="container">
+        </div>
+      );
     }
   }
 }
-
-export default Contacts;
