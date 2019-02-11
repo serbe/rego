@@ -1,13 +1,9 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 import cc from "classcat";
 // import BulmaIcon from 'components/BulmaIcon';
 
 class Button extends Component {
-  // handleEvent = () => {
-  //   console.log(this.props);
-  // };
-
   render() {
     let {
       type,

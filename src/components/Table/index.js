@@ -1,8 +1,8 @@
-import React, { PureComponent } from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 import cc from "classcat";
 
-export default class BulmaTable extends PureComponent {
+export default class BulmaTable extends Component {
   static propTypes = {
     children: PropTypes.node,
     className: PropTypes.string,
