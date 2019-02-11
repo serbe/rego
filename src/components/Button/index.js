@@ -3,7 +3,71 @@ import PropTypes from "prop-types";
 import cc from "classcat";
 // import BulmaIcon from 'components/BulmaIcon';
 
-const propTypes = {
+class Button extends Component {
+  // handleEvent = () => {
+  //   console.log(this.props);
+  // };
+
+  render() {
+    let {
+      type,
+      color,
+      size,
+      fullwidth,
+      outline,
+      invert,
+      round,
+      hover,
+      focus,
+      active,
+      loading,
+      isStatic,
+      disable,
+      className,
+      click,
+      href,
+      children
+    } = this.props;
+
+    let Tag = type;
+    if (isStatic) {
+      Tag = "span";
+    } else if (type === "submit" || type === "reset") {
+      Tag = "input";
+    }
+
+    let classes = cc([
+      { className },
+      "button",
+      {
+        [`is-${color}`]: color,
+        [`is-${size}`]: size,
+        "is-fullwidth": fullwidth,
+        "is-outlined": outline,
+        "is-inverted": invert,
+        "is-rounded": round,
+        "is-hovered": hover,
+        "is-focused": focus,
+        "is-active": active,
+        "is-loading": loading,
+        "is-static": isStatic
+      }
+    ]);
+
+    return (
+      <Tag
+        // {...props}
+        disabled={disable}
+        onClick={disable ? undefined : click()}
+        className={classes}
+      >
+        {children}
+      </Tag>
+    );
+  }
+}
+
+Button.propTypes = {
   type: PropTypes.oneOf("a", "button", "submit", "reset"),
   color: PropTypes.oneOf(
     "white",
@@ -32,76 +96,13 @@ const propTypes = {
   className: PropTypes.string,
   click: PropTypes.func,
   href: PropTypes.string,
-  children: PropTypes.node,
+  children: PropTypes.node
   // innerRef: PropTypes.oneOfType([PropTypes.object, PropTypes.func, PropTypes.string]),
 };
 
-const defaultProps = {
+Button.defaultProps = {
   type: "a",
-  color: "white",
+  color: "white"
 };
-
-class Button extends Component {
-  // handleEvent = () => {
-  //   console.log(this.props);
-  // };
-
-  render() {
-    let {
-      type,
-      color,
-      size,
-      fullwidth,
-      outline,
-      invert,
-      round,
-      hover,
-      focus,
-      active,
-      loading,
-      isStatic,
-      disable,
-      className,
-      click,
-      href,
-      children
-    } = this.props;
-
-    if type == "submit"
-    let Tag = isStatic ? "span" : "a";
-
-    let classes = cc([
-      { className },
-      "button",
-      {
-        [`is-${color}`]: color,
-        [`is-${size}`]: size,
-        "is-fullwidth": fullwidth,
-        "is-outlined": outline,
-        "is-inverted": invert,
-        "is-rounded": round,
-        "is-hovered": hover,
-        "is-focused": focus,
-        "is-active": active,
-        "is-loading": loading,
-        "is-static": isStatic
-      }
-    ]);
-
-    return (
-      <Button
-        // {...props}
-        disabled={disable}
-        onClick={disable ? undefined : click()}
-        className={classes}
-      >
-        {children}
-      </Button>
-    );
-  }
-}
-
-Button.propTypes = propTypes;
-Button.defaultProps = defaultProps;
 
 export default Button;
