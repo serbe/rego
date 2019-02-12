@@ -93,7 +93,7 @@ Button.propTypes = {
     "warning",
     "danger"
   ),
-  size: PropTypes.oneOf("small", "medium", "large"),
+  size: PropTypes.oneOf("small", "normal", "medium", "large"),
   fullwidth: PropTypes.bool,
   outline: PropTypes.bool,
   invert: PropTypes.bool,
