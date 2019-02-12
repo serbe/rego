@@ -1,7 +1,7 @@
-import { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-export default class BulmaPagination extends Component {
+export default class Pagination extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

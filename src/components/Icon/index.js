@@ -1,8 +1,8 @@
-import { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import cc from "classcat";
 
-class Icon extends Component {
+class Icon extends React.Component {
   render() {
     const { children, className, color, size, icon } = this.props;
 

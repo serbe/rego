@@ -1,8 +1,8 @@
-import { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import cc from "classcat";
 
-class Control extends Component {
+class Control extends React.Component {
   render() {
     const {
       children,

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import Button from 'components/Button'
@@ -9,7 +9,7 @@ function toggleOpen() {
   };
 }
 
-export default class NavBar extends Component {
+export default class NavBar extends React.Component {
   static contextTypes = {
     router: PropTypes.object
   }

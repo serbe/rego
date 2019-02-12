@@ -1,8 +1,8 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import cc from 'classcat';
 
-export default class componentName extends PureComponent {
+export default class componentName extends React.Component {
   static propTypes = {
 		className: PropTypes.string,
 		// onClick: PropTypes.func,
