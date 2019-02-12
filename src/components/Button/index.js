@@ -4,6 +4,23 @@ import cc from "classcat";
 // import BulmaIcon from 'components/BulmaIcon';
 
 class Button extends Component {
+  constructor(props) {
+    super(props);
+
+    this.onClick = this.onClick.bind(this);
+  }
+
+  onClick(e) {
+    if (this.props.disabled) {
+      e.preventDefault();
+      return;
+    }
+
+    if (this.props.onClick) {
+      this.props.onClick(e);
+    }
+  }
+
   render() {
     let {
       type,
@@ -20,8 +37,7 @@ class Button extends Component {
       isStatic,
       disable,
       className,
-      click,
-      href,
+      // href,
       children
     } = this.props;
 
@@ -52,9 +68,8 @@ class Button extends Component {
 
     return (
       <Tag
-        // {...props}
         disabled={disable}
-        onClick={disable ? undefined : click()}
+        onClick={this.onClick}
         className={classes}
       >
         {children}
@@ -90,7 +105,7 @@ Button.propTypes = {
   isStatic: PropTypes.bool,
   disable: PropTypes.bool,
   className: PropTypes.string,
-  click: PropTypes.func,
+  onClick: PropTypes.func,
   href: PropTypes.string,
   children: PropTypes.node
   // innerRef: PropTypes.oneOfType([PropTypes.object, PropTypes.func, PropTypes.string]),
