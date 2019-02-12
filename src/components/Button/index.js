@@ -1,9 +1,8 @@
-import { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import cc from "classcat";
-// import BulmaIcon from 'components/BulmaIcon';
 
-class Button extends Component {
+class Button extends React.Component {
   constructor(props) {
     super(props);
 
@@ -37,7 +36,6 @@ class Button extends Component {
       isStatic,
       disable,
       className,
-      // href,
       children
     } = this.props;
 
