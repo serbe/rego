@@ -71,12 +71,8 @@ class Button extends React.Component {
       }
     }
 
-
-
     return (
-      <Tag disabled={disable} onClick={this.onClick} className={classes}>
-
-      </Tag>
+      <Tag/>
     );
   }
 }

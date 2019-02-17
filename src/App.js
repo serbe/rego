@@ -1,6 +1,6 @@
 import React from 'react';
 import BulmaNavBar from './components/NavBar'
-import Main from './containers/Main'
+import Router from './containers/Router'
 // import logo from 'images/logo.svg';
 import './App.css';
 
@@ -9,7 +9,14 @@ class App extends React.Component {
     return (
       <div className="App">
         <BulmaNavBar/>
-        <Main />
+        <section className="section pt1">
+          <Router />
+        </section>
+        <footer className="footer bot">
+          <div className="container">
+            <div className="content has-text-centered">© 2019 Сочи</div>
+          </div>
+        </footer>
       </div>
     );
   }

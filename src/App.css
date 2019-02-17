@@ -1,1 +1,10 @@
 @import '~bulma/css/bulma.css';
+
+.pt1 {
+  padding-top: 1rem !important;
+}
+
+.bot {
+  background-color: white !important;
+  padding: 6rem 1.5rem 3rem !important;
+}
