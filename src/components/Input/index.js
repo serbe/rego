@@ -23,42 +23,42 @@ class Input extends React.Component {
 
   render() {
     let {
-      type,
+      className,
       color,
-      size,
-      round,
-      hover,
-      focus,
-      loading,
       disable,
-      readonly,
-      isStatic,
+      focus,
+      hover,
       iconLeft,
       iconRight,
-      value,
+      isStatic,
+      loading,
       placeholder,
-      className
+      readonly,
+      round,
+      size,
+      type,
+      value,
     } = this.props;
 
     let divClasses = cc([
       "control",
       {
-        [`is-${size}`]: size,
         "has-icons-left": iconLeft,
         "has-icons-right": iconRight,
-        "is-loading": loading
+        "is-loading": loading,
+        [`is-${size}`]: size,
       }
     ]);
     let inputClasses = cc([
       { className },
       "input",
       {
+        "is-focused": focus,
+        "is-hovered": hover,
+        "is-rounded": round,
+        "is-static": isStatic,
         [`is-${color}`]: color,
         [`is-${size}`]: size,
-        "is-rounded": round,
-        "is-hovered": hover,
-        "is-focused": focus,
-        "is-static": isStatic
       }
     ]);
     let LeftIcon = null;
@@ -73,13 +73,13 @@ class Input extends React.Component {
     return (
       <div className={divClasses}>
         <input
+          className={inputClasses}
+          disabled={disable}
+          onClick={this.onClick}
+          placeholder={placeholder}
+          readonly={readonly}
           type={type}
           value={value}
-          placeholder={placeholder}
-          disabled={disable}
-          readonly={readonly}
-          className={inputClasses}
-          onClick={this.onClick}
         />
         <LeftIcon />
         <RightIcon />
@@ -89,22 +89,22 @@ class Input extends React.Component {
 }
 
 Input.propTypes = {
-  type: PropTypes.oneOf("text", "password", "email", "tel"),
-  color: PropTypes.oneOf("primary", "info", "success", "warning", "danger"),
-  size: PropTypes.oneOf("small", "normal", "medium", "large"),
-  round: PropTypes.bool,
-  hover: PropTypes.bool,
-  focus: PropTypes.bool,
-  loading: PropTypes.bool,
+  className: PropTypes.string,
+  color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"]),
   disable: PropTypes.bool,
-  readonly: PropTypes.bool,
-  isStatic: PropTypes.bool,
+  focus: PropTypes.bool,
+  hover: PropTypes.bool,
   iconLeft: PropTypes.string,
   iconRight: PropTypes.string,
-  value: PropTypes.string,
+  isStatic: PropTypes.bool,
+  loading: PropTypes.bool,
+  onClick: PropTypes.func,
   placeholder: PropTypes.string,
-  className: PropTypes.string,
-  onClick: PropTypes.func
+  readonly: PropTypes.bool,
+  round: PropTypes.bool,
+  size: PropTypes.oneOf(["small", "normal", "medium", "large"]),
+  type: PropTypes.oneOf(["text", "password", "email", "tel"]),
+  value: PropTypes.string,
 };
 
 Input.defaultProps = {

@@ -4,34 +4,34 @@ import cc from "classcat";
 
 export default class BulmaTable extends React.Component {
   static propTypes = {
+    bordered: PropTypes.bool,
     children: PropTypes.node,
     className: PropTypes.string,
-    bordered: PropTypes.bool,
-    striped: PropTypes.bool,
-    narrow: PropTypes.bool,
+    fullwidth: PropTypes.bool,
     hoverable: PropTypes.bool,
-    fullwidth: PropTypes.bool
+    narrow: PropTypes.bool,
+    striped: PropTypes.bool,
   };
 
   static defaultProps = {
+    bordered: false,
     children: null,
     className: "",
-    bordered: false,
-    striped: false,
-    narrow: false,
+    fullwidth: false,
     hoverable: false,
-    fullwidth: false
+    narrow: false,
+    striped: false,
   };
 
   render() {
     const {
+      bordered,
       children,
       className,
-      bordered,
-      striped,
-      narrow,
-      hoverable,
       fullwidth,
+      hoverable,
+      narrow,
+      striped,
       ...props
     } = this.props;
 
@@ -43,10 +43,10 @@ export default class BulmaTable extends React.Component {
           "button",
           {
             "is-bordered": bordered,
-            "is-striped": striped,
-            "is-narrow": narrow,
+            "is-fullwidth": fullwidth,
             "is-hoverable": hoverable,
-            "is-fullwidth": fullwidth
+            "is-narrow": narrow,
+            "is-striped": striped,
           }
         ])}
       >

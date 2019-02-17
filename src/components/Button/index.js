@@ -23,88 +23,94 @@ class Button extends React.Component {
 
   render() {
     let {
-      type,
-      color,
-      size,
-      fullwidth,
-      outline,
-      invert,
-      round,
-      hover,
-      focus,
       active,
-      loading,
-      isStatic,
-      disable,
+      children,
       className,
-      children
+      color,
+      disable,
+      focus,
+      fullwidth,
+      hover,
+      href,
+      invert,
+      isStatic,
+      loading,
+      outline,
+      round,
+      size,
+      type,
     } = this.props;
-
-    let Tag = type;
-    if (isStatic) {
-      Tag = "span";
-    } else if (type === "submit" || type === "reset") {
-      Tag = "input";
-      // this.setState({inputType: type});
-    }
 
     let classes = cc([
       { className },
       "button",
       {
+        "is-active": active,
+        "is-focused": focus,
+        "is-fullwidth": fullwidth,
+        "is-hovered": hover,
+        "is-inverted": invert,
+        "is-loading": loading,
+        "is-outlined": outline,
+        "is-rounded": round,
+        "is-static": isStatic,
         [`is-${color}`]: color,
         [`is-${size}`]: size,
-        "is-fullwidth": fullwidth,
-        "is-outlined": outline,
-        "is-inverted": invert,
-        "is-rounded": round,
-        "is-hovered": hover,
-        "is-focused": focus,
-        "is-active": active,
-        "is-loading": loading,
-        "is-static": isStatic
       }
     ]);
 
+    const Tag = () => {
+      if (isStatic) {
+        return <span disabled={disable} onClick={this.onClick} className={classes}>{children}</span>
+      } else if (type === "submit" || type === "reset") {
+        return <input type={type} disabled={disable} onClick={this.onClick} className={classes}>{children}</input>
+      } else if (type === "a") {
+        return <a href={href} disabled={disable} onClick={this.onClick} className={classes}>{children}</a>
+      } else {
+        return <button disabled={disable} onClick={this.onClick} className={classes}>{children}</button>
+      }
+    }
+
+
+
     return (
-      <Tag disabled={disable} onClick={this.onClick} className={classes} type={(type === "submit" || type === "reset") ? type : false}>
-        {children}
+      <Tag disabled={disable} onClick={this.onClick} className={classes}>
+
       </Tag>
     );
   }
 }
 
 Button.propTypes = {
-  type: PropTypes.oneOf("a", "button", "submit", "reset"),
-  color: PropTypes.oneOf(
-    "white",
-    "light",
-    "dark",
-    "text",
+  type: PropTypes.oneOf(["a", "button", "submit", "reset"]),
+  color: PropTypes.oneOf([
     "black",
-    "primary",
-    "link",
+    "danger",
+    "dark",
     "info",
+    "light",
+    "link",
+    "primary",
     "success",
+    "text",
     "warning",
-    "danger"
-  ),
-  size: PropTypes.oneOf("small", "normal", "medium", "large"),
-  fullwidth: PropTypes.bool,
-  outline: PropTypes.bool,
-  invert: PropTypes.bool,
-  round: PropTypes.bool,
-  hover: PropTypes.bool,
-  focus: PropTypes.bool,
+    "white",
+  ]),
   active: PropTypes.bool,
-  loading: PropTypes.bool,
-  isStatic: PropTypes.bool,
-  disable: PropTypes.bool,
+  children: PropTypes.node,
   className: PropTypes.string,
-  onClick: PropTypes.func,
+  disable: PropTypes.bool,
+  focus: PropTypes.bool,
+  fullwidth: PropTypes.bool,
+  hover: PropTypes.bool,
   href: PropTypes.string,
-  children: PropTypes.node
-  // innerRef: PropTypes.oneOfType([PropTypes.object, PropTypes.func, PropTypes.string]),
+  invert: PropTypes.bool,
+  isStatic: PropTypes.bool,
+  loading: PropTypes.bool,
+  onClick: PropTypes.func,
+  outline: PropTypes.bool,
+  round: PropTypes.bool,
+  size: PropTypes.oneOf(["small", "normal", "medium", "large"]),
 };
 
 Button.defaultProps = {

@@ -11,8 +11,8 @@ class Icon extends React.Component {
       "icon",
       {
         [`has-text-${color}`]: color,
-        [`is-${size}`]: size,
         [`is-${position}`]: position,
+        [`is-${size}`]: size,
       }
     ]);
 
@@ -27,12 +27,12 @@ class Icon extends React.Component {
 }
 
 Icon.propTypes = {
-  color: PropTypes.oneOf("info", "success", "warning", "danger"),
-  size: PropTypes.oneOf("small", "normal", "medium", "large"),
-  position: PropTypes.oneOf("left", "right"),
-  icon: PropTypes.string.isRequired,
   children: PropTypes.node,
-  className: PropTypes.string
+  className: PropTypes.string,
+  color: PropTypes.oneOf(["info", "success", "warning", "danger"]),
+  icon: PropTypes.string.isRequired,
+  position: PropTypes.oneOf(["left", "right"]),
+  size: PropTypes.oneOf(["small", "normal", "medium", "large"]),
 };
 
 export default Icon;
