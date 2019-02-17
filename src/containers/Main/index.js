@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom'
-import Home from './containers/Home'
-import Contacts from './containers/Contacts'
+import Home from '../Home'
+import Contacts from '../Contacts'
 
 class Main extends React.Component {
   // constructor(props) {

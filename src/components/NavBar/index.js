@@ -1,7 +1,8 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
-import Button from 'components/Button'
+import Button from '../Button'
 
 function toggleOpen() {
   return (previousState, currentProps) => {

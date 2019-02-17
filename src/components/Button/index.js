@@ -6,6 +6,7 @@ class Button extends React.Component {
   constructor(props) {
     super(props);
 
+    // this.state = {inputType: ""};
     this.onClick = this.onClick.bind(this);
   }
 
@@ -44,6 +45,7 @@ class Button extends React.Component {
       Tag = "span";
     } else if (type === "submit" || type === "reset") {
       Tag = "input";
+      // this.setState({inputType: type});
     }
 
     let classes = cc([
@@ -65,11 +67,7 @@ class Button extends React.Component {
     ]);
 
     return (
-      <Tag
-        disabled={disable}
-        onClick={this.onClick}
-        className={classes}
-      >
+      <Tag disabled={disable} onClick={this.onClick} className={classes} type={(type === "submit" || type === "reset") ? type : false}>
         {children}
       </Tag>
     );
