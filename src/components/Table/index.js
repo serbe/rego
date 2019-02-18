@@ -2,26 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import cc from "classcat";
 
-export default class BulmaTable extends React.Component {
-  static propTypes = {
-    bordered: PropTypes.bool,
-    children: PropTypes.node,
-    className: PropTypes.string,
-    fullwidth: PropTypes.bool,
-    hoverable: PropTypes.bool,
-    narrow: PropTypes.bool,
-    striped: PropTypes.bool,
-  };
-
-  static defaultProps = {
-    bordered: false,
-    children: null,
-    className: "",
-    fullwidth: false,
-    hoverable: false,
-    narrow: false,
-    striped: false,
-  };
+class Table extends React.Component {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     page: this.props.currentPage
+  //   };
+  // }
 
   render() {
     const {
@@ -31,27 +18,43 @@ export default class BulmaTable extends React.Component {
       fullwidth,
       hoverable,
       narrow,
-      striped,
-      ...props
+      striped
     } = this.props;
 
-    return (
-      <table
-        {...props}
-        className={cc([
-          { className },
-          "button",
-          {
-            "is-bordered": bordered,
-            "is-fullwidth": fullwidth,
-            "is-hoverable": hoverable,
-            "is-narrow": narrow,
-            "is-striped": striped,
-          }
-        ])}
-      >
-        {children}
-      </table>
-    );
+    const classes = cc([
+      { className },
+      "button",
+      {
+        "is-bordered": bordered,
+        "is-fullwidth": fullwidth,
+        "is-hoverable": hoverable,
+        "is-narrow": narrow,
+        "is-striped": striped
+      }
+    ]);
+
+    return <table className={classes}>{children}</table>;
   }
 }
+
+Table.propTypes = {
+  bordered: PropTypes.bool,
+  children: PropTypes.node,
+  className: PropTypes.string,
+  fullwidth: PropTypes.bool,
+  hoverable: PropTypes.bool,
+  narrow: PropTypes.bool,
+  striped: PropTypes.bool
+};
+
+// Table.defaultProps = {
+//   bordered: false,
+//   children: null,
+//   className: "",
+//   fullwidth: false,
+//   hoverable: false,
+//   narrow: false,
+//   striped: false,
+// };
+
+export default Table;

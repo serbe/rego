@@ -1,12 +1,10 @@
-import React from "react";
 import PropTypes from "prop-types";
+import React from "react";
 import cc from "classcat";
 
 class Button extends React.Component {
   constructor(props) {
     super(props);
-
-    // this.state = {inputType: ""};
     this.onClick = this.onClick.bind(this);
   }
 
@@ -41,7 +39,7 @@ class Button extends React.Component {
       type,
     } = this.props;
 
-    let classes = cc([
+    const classes = cc([
       { className },
       "button",
       {

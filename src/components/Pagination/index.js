@@ -1,45 +1,31 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-export default class Pagination extends React.Component {
+class Pagination extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      page: this.props.currentPage,
+      page: this.props.currentPage
     };
   }
 
-  static defaultProps = {
-    len: 0,
-		currentPage: 0,
-		maxRows: 0,
-		size: '',
-	};
-
-	static propTypes = {
-    len: PropTypes.number.isRequired,
-    currentPage: PropTypes.number.isRequired,
-		maxRows: PropTypes.number.isRequired,
-		size: PropTypes.string,
-  };
-
-	render() {
+  render() {
     let maxNumber = () => {
       if (this.props.len % this.props.maxRows === 0) {
-        return this.props.len / this.props.maxRows | 0
+        return (this.props.len / this.props.maxRows) | 0;
       }
-      return (this.props.len / this.props.maxRows | 0) + 1
-    }
+      return ((this.props.len / this.props.maxRows) | 0) + 1;
+    };
 
     let value = () => {
       if (this.state.page > this.props.max) {
-        this.paginationClick(this.props.max)
+        this.paginationClick(this.props.max);
       }
-      return this.state.page
-    }
+      return this.state.page;
+    };
 
-		return (
-      <div></div>
+    return (
+      <div />
       // <nav class="pagination is-centered" v-if="max > 1" ref="pagination" :class="sizeClass" key="Pagination">
       //   <a class="pagination-previous" v-if="value > 1" @click="onClick(value - 1)" key="PaginationPrev">Назад</a>
       //   <a class="pagination-next" v-if="value < max" @click="onClick(value + 1)" key="PaginationNext">Далее</a>
@@ -67,6 +53,22 @@ export default class Pagination extends React.Component {
       //     </li>
       //   </ul>
       // </nav>
-		);
-	}
+    );
+  }
 }
+
+Pagination.propTypes = {
+  len: PropTypes.number.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  maxRows: PropTypes.number.isRequired,
+  size: PropTypes.string
+};
+
+// Pagination.defaultProps = {
+//   len: 0,
+//   currentPage: 0,
+//   maxRows: 0
+//   // size: '',
+// };
+
+export default Pagination;

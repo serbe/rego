@@ -1,12 +1,12 @@
-import React from "react";
 import PropTypes from "prop-types";
+import React from "react";
 import cc from "classcat";
 
 class Icon extends React.Component {
   render() {
     const { children, className, color, size, position, icon } = this.props;
 
-    let spanClasses = cc([
+    const spanClasses = cc([
       { className },
       "icon",
       {
@@ -16,7 +16,7 @@ class Icon extends React.Component {
       }
     ]);
 
-    let iClasses = cc(["fas", { [`fa-${icon}`]: icon }]);
+    const iClasses = cc(["fas", { [`fa-${icon}`]: icon }]);
 
     return (
       <span className={spanClasses}>

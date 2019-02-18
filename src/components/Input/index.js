@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import cc from "classcat";
 import Icon from "./components/Icon";
+import PropTypes from "prop-types";
+import React from "react";
+import cc from "classcat";
 
 class Input extends React.Component {
   constructor(props) {
@@ -22,7 +22,7 @@ class Input extends React.Component {
   }
 
   render() {
-    let {
+    const {
       className,
       color,
       disable,
@@ -37,19 +37,19 @@ class Input extends React.Component {
       round,
       size,
       type,
-      value,
+      value
     } = this.props;
 
-    let divClasses = cc([
+    const divClasses = cc([
       "control",
       {
         "has-icons-left": iconLeft,
         "has-icons-right": iconRight,
         "is-loading": loading,
-        [`is-${size}`]: size,
+        [`is-${size}`]: size
       }
     ]);
-    let inputClasses = cc([
+    const inputClasses = cc([
       { className },
       "input",
       {
@@ -58,17 +58,23 @@ class Input extends React.Component {
         "is-rounded": round,
         "is-static": isStatic,
         [`is-${color}`]: color,
-        [`is-${size}`]: size,
+        [`is-${size}`]: size
       }
     ]);
-    let LeftIcon = null;
-    if (iconLeft) {
-      LeftIcon = <Icon position={"left"} icon={iconLeft} />;
-    }
-    let RightIcon = null;
-    if (iconRight) {
-      RightIcon = <Icon position={"right"} icon={iconRight} />;
-    }
+    const LeftIcon = () => {
+      if (iconLeft) {
+        return <Icon position={"left"} icon={iconLeft} />;
+      } else {
+        return null;
+      }
+    };
+    const RightIcon = () => {
+      if (iconRight) {
+        return <Icon position={"right"} icon={iconRight} />;
+      } else {
+        return null;
+      }
+    };
 
     return (
       <div className={divClasses}>
@@ -104,7 +110,7 @@ Input.propTypes = {
   round: PropTypes.bool,
   size: PropTypes.oneOf(["small", "normal", "medium", "large"]),
   type: PropTypes.oneOf(["text", "password", "email", "tel"]),
-  value: PropTypes.string,
+  value: PropTypes.string
 };
 
 Input.defaultProps = {
