@@ -8,3 +8,11 @@
   background-color: white !important;
   padding: 6rem 1.5rem 3rem !important;
 }
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.w12 {
+  max-width: 120px;
+}

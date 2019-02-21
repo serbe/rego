@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import Button from "../Button";
+// import Button from "../Button";
 import PropTypes from "prop-types";
 import React from "react";
 import cc from "classcat";
@@ -11,7 +11,7 @@ function toggleOpen() {
   };
 }
 
-export default class NavBar extends React.Component {
+class NavBar extends React.Component {
   static contextTypes = {
     router: PropTypes.object
   };
@@ -180,13 +180,12 @@ export default class NavBar extends React.Component {
                     <div className="navbar-item">
                       <div className="field">
                         <p className="control">
-                          <Button
-                            color="info"
+                          <button
+                            className="button is-info"
                             onClick={this.handleToggle}
-                            key="user"
                           >
                             Выход
-                          </Button>
+                          </button>
                         </p>
                       </div>
                     </div>
@@ -202,3 +201,5 @@ export default class NavBar extends React.Component {
     );
   }
 }
+
+export default NavBar;
