@@ -23,7 +23,7 @@ class Table extends React.Component {
 
     const classes = cc([
       { className },
-      "button",
+      "table",
       {
         "is-bordered": bordered,
         "is-fullwidth": fullwidth,

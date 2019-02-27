@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-// import Button from "../Button";
+import Button from "../Button";
 import PropTypes from "prop-types";
 import React from "react";
 import cc from "classcat";
@@ -180,12 +180,12 @@ class NavBar extends React.Component {
                     <div className="navbar-item">
                       <div className="field">
                         <p className="control">
-                          <button
-                            className="button is-info"
+                          <Button
+                            color="info"
                             onClick={this.handleToggle}
                           >
                             Выход
-                          </button>
+                          </Button>
                         </p>
                       </div>
                     </div>

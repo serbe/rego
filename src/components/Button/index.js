@@ -1,14 +1,14 @@
 import PropTypes from "prop-types";
-import React from "react";
+import React, {useState} from "react";
 import cc from "classcat";
 
-class Button extends React.Component {
-  constructor(props) {
-    super(props);
-    this.onClick = this.onClick.bind(this);
-  }
+function Button(props) {
+  // constructor(props) {
+  //   super(props);
+  //   this.onClick = this.onClick.bind(this);
+  // }
 
-  onClick(e) {
+  function onClick(e) {
     if (this.props.disabled) {
       e.preventDefault();
       return;
@@ -19,60 +19,58 @@ class Button extends React.Component {
     }
   }
 
-  render() {
-    let {
-      active,
-      children,
-      className,
-      color,
-      disable,
-      focus,
-      fullwidth,
-      hover,
-      href,
-      invert,
-      isStatic,
-      loading,
-      outline,
-      round,
-      size,
-      type,
-    } = this.props;
+  let {
+    active,
+    children,
+    className,
+    color,
+    disable,
+    focus,
+    fullwidth,
+    hover,
+    href,
+    invert,
+    isStatic,
+    loading,
+    outline,
+    round,
+    size,
+    type,
+  } = this.props;
 
-    const classes = cc([
-      { className },
-      "button",
-      {
-        "is-active": active,
-        "is-focused": focus,
-        "is-fullwidth": fullwidth,
-        "is-hovered": hover,
-        "is-inverted": invert,
-        "is-loading": loading,
-        "is-outlined": outline,
-        "is-rounded": round,
-        "is-static": isStatic,
-        [`is-${color}`]: color,
-        [`is-${size}`]: size,
-      }
-    ]);
-
-    const Tag = () => {
-      if (isStatic) {
-        return <span disabled={disable} onClick={this.onClick} className={classes}>{children}</span>
-      } else if (type === "submit" || type === "reset") {
-        return <input type={type} disabled={disable} onClick={this.onClick} className={classes}>{children}</input>
-      } else if (type === "a") {
-        return <a href={href} disabled={disable} onClick={this.onClick} className={classes}>{children}</a>
-      } else {
-        return <button disabled={disable} onClick={this.onClick} className={classes}>{children}</button>
-      }
+  const classes = cc([
+    { className },
+    "button",
+    {
+      "is-active": active,
+      "is-focused": focus,
+      "is-fullwidth": fullwidth,
+      "is-hovered": hover,
+      "is-inverted": invert,
+      "is-loading": loading,
+      "is-outlined": outline,
+      "is-rounded": round,
+      "is-static": isStatic,
+      [`is-${color}`]: color,
+      [`is-${size}`]: size,
     }
+  ]);
 
-    return (
-      <Tag/>
-    );
+  const Tag = () => {
+    if (isStatic) {
+      return <span disabled={disable} onClick={this.onClick} className={classes}>{children}</span>
+    } else if (type === "submit" || type === "reset") {
+      return <input type={type} disabled={disable} onClick={this.onClick} className={classes}>{children}</input>
+    } else if (type === "a") {
+      return <a href={href} disabled={disable} onClick={this.onClick} className={classes}>{children}</a>
+    } else {
+      return <button disabled={disable} onClick={this.onClick} className={classes}>{children}</button>
+    }
   }
+
+  return (
+    <Tag/>
+  );
 }
 
 Button.propTypes = {

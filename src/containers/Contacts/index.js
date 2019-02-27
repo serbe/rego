@@ -50,11 +50,11 @@ class Contacts extends React.Component {
           list.push(contacts[i]);
         }
         const short = list.map((item) => <tr key={item.id}>
-          <td>{item.name}</td>
-          <td>{item.company_name}</td>
-          <td>{item.post_name}</td>
-          <td>{formatPhones(item.phones)}</td>
-          <td>{formatPhones(item.faxes)}</td>
+          <td className="">{item.name}</td>
+          <td className="is-hidden-mobile">{item.company_name}</td>
+          <td className="is-hidden-touch">{item.post_name}</td>
+          <td className="w12">{formatPhones(item.phones)}</td>
+          <td className="is-hidden-mobile w12">{formatPhones(item.faxes)}</td>
         </tr>);
         return short;
       } else {
@@ -76,10 +76,10 @@ class Contacts extends React.Component {
 
     return (
       <div className="container">
-        <table className="table is-bordered">
+        <table className="table is-bordered is-fullwidth">
           <tbody>
             <tr>
-              <th>Фамилия Имя Отчество</th>
+              <th className="">Фамилия Имя Отчество</th>
               <th className="is-hidden-mobile">Организация</th>
               <th className="is-hidden-touch">Должность</th>
               <th className="w12">Телефон</th>
