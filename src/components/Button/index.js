@@ -1,24 +1,25 @@
 import PropTypes from "prop-types";
-import React, {useState} from "react";
+import React, {Component} from "react";
 import cc from "classcat";
 
-function Button(props) {
+class Button extends Component {
   // constructor(props) {
   //   super(props);
-  //   this.onClick = this.onClick.bind(this);
+  //   // this.onClick = this.onClick.bind(this);
   // }
 
-  function onClick(e) {
-    if (this.props.disabled) {
-      e.preventDefault();
-      return;
-    }
+  // function onClick(e) {
+  //   if (this.props.disabled) {
+  //     e.preventDefault();
+  //     return;
+  //   }
 
-    if (this.props.onClick) {
-      this.props.onClick(e);
-    }
-  }
+  //   if (this.props.onClick) {
+  //     this.props.onClick(e);
+  //   }
+  // }
 
+  render () {
   let {
     active,
     children,
@@ -36,6 +37,7 @@ function Button(props) {
     round,
     size,
     type,
+    onClick,
   } = this.props;
 
   const classes = cc([
@@ -58,19 +60,20 @@ function Button(props) {
 
   const Tag = () => {
     if (isStatic) {
-      return <span disabled={disable} onClick={this.onClick} className={classes}>{children}</span>
+      return <span disabled={disable} onClick={onClick} className={classes}>{children}</span>
     } else if (type === "submit" || type === "reset") {
-      return <input type={type} disabled={disable} onClick={this.onClick} className={classes}>{children}</input>
+      return <input type={type} disabled={disable} onClick={onClick} className={classes}>{children}</input>
     } else if (type === "a") {
-      return <a href={href} disabled={disable} onClick={this.onClick} className={classes}>{children}</a>
+      return <a href={href} disabled={disable} onClick={onClick} className={classes}>{children}</a>
     } else {
-      return <button disabled={disable} onClick={this.onClick} className={classes}>{children}</button>
+      return <button disabled={disable} onClick={onClick} className={classes}>{children}</button>
     }
   }
 
   return (
     <Tag/>
   );
+  }
 }
 
 Button.propTypes = {

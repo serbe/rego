@@ -1,6 +1,6 @@
 import React from 'react';
 
-import BulmaNavBar from './components/NavBar'
+import NavBar from './components/NavBar'
 import Router from './containers/Router'
 
 import './App.css';
@@ -9,7 +9,7 @@ export class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <BulmaNavBar/>
+        <NavBar/>
         <section className="section pt1">
           <Router />
         </section>

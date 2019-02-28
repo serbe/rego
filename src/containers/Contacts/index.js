@@ -51,10 +51,10 @@ class Contacts extends React.Component {
         }
         const short = list.map((item) => <tr key={item.id}>
           <td className="">{item.name}</td>
-          <td className="is-hidden-mobile">{item.company_name}</td>
-          <td className="is-hidden-touch">{item.post_name}</td>
-          <td className="w12">{formatPhones(item.phones)}</td>
-          <td className="is-hidden-mobile w12">{formatPhones(item.faxes)}</td>
+          <td className="">{item.company_name}</td>
+          <td className="">{item.post_name}</td>
+          <td className="">{formatPhones(item.phones)}</td>
+          <td className="">{formatPhones(item.faxes)}</td>
         </tr>);
         return short;
       } else {
@@ -77,11 +77,20 @@ class Contacts extends React.Component {
     return (
       <div className="container">
         <table className="table is-bordered is-fullwidth">
+          <thead>
+            <tr>
+              <th className="m4">Фамилия Имя Отчество</th>
+              <th className="m4 is-hidden-mobile">Организация</th>
+              <th className="m4 is-hidden-touch">Должность</th>
+              <th className="w12">Телефон</th>
+              <th className="is-hidden-mobile w12">Факс</th>
+            </tr>
+          </thead>
           <tbody>
             <tr>
-              <th className="">Фамилия Имя Отчество</th>
-              <th className="is-hidden-mobile">Организация</th>
-              <th className="is-hidden-touch">Должность</th>
+              <th className="m4">Фамилия Имя Отчество</th>
+              <th className="m4 is-hidden-mobile">Организация</th>
+              <th className="m4 is-hidden-touch">Должность</th>
               <th className="w12">Телефон</th>
               <th className="is-hidden-mobile w12">Факс</th>
             </tr>
