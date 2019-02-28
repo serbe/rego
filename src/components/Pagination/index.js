@@ -28,7 +28,7 @@ function Pagination(props) {
     ]);
 
     return (
-      <nav v-if="max > 1" ref="pagination" className={this.navClasses} key="Pagination">
+      <nav v-if="max > 1" ref="pagination" className={navClasses} key="Pagination">
         <a className="pagination-previous" v-if="value > 1" onClick="onClick(value - 1)" key="PaginationPrev">Назад</a>
         <a className="pagination-next" v-if="value < max" onClick="onClick(value + 1)" key="PaginationNext">Далее</a>
         <ul className="pagination-list">

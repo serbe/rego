@@ -75,25 +75,18 @@ class Contacts extends React.Component {
     };
 
     return (
-      <div className="container">
-        <table className="table is-bordered is-fullwidth">
+      <div className="uk-container">
+        <table className="uk-table uk-table-divider uk-table-small uk-table-middle">
           <thead>
             <tr>
-              <th className="m4">Фамилия Имя Отчество</th>
-              <th className="m4 is-hidden-mobile">Организация</th>
-              <th className="m4 is-hidden-touch">Должность</th>
-              <th className="w12">Телефон</th>
-              <th className="is-hidden-mobile w12">Факс</th>
+              <th className="uk-width-1-4">Фамилия Имя Отчество</th>
+              <th className="uk-width-1-4 is-hidden-mobile">Организация</th>
+              <th className="uk-width-1-4 is-hidden-touch">Должность</th>
+              <th className="uk-table-shrink">Телефон</th>
+              <th className="is-hidden-mobile uk-table-shrink">Факс</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th className="m4">Фамилия Имя Отчество</th>
-              <th className="m4 is-hidden-mobile">Организация</th>
-              <th className="m4 is-hidden-touch">Должность</th>
-              <th className="w12">Телефон</th>
-              <th className="is-hidden-mobile w12">Факс</th>
-            </tr>
             <Content />
           </tbody>
         </table>

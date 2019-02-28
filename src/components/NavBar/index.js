@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import Button from "../Button";
 import PropTypes from "prop-types";
 import React from "react";
-import cc from "classcat";
 import { NavLink } from "react-router-dom";
+
+import "./navbar.css"
 
 function toggleOpen() {
   return (previousState, currentProps) => {
@@ -41,162 +41,122 @@ class NavBar extends React.Component {
   // }
 
   render() {
-    const navBurgerClass = cc([
-      "navbar-burger",
-      "burger",
-      {
-        "is-active": !this.state.open
-      }
-    ]);
-    const navMenuClass = cc([
-      "navbar-menu",
-      {
-        "is-active": !this.state.open
-      }
-    ]);
-
     return (
-      <div className="container">
-        <nav className="navbar">
-          <div className="navbar-brand">
+      <div className="uk-navbar-container e-navbar">
+        <div className="uk-container uk-container-expand">
+          <nav className="uk-navbar-container" uk-navbar="true  ">
             {this.state.auth ? (
               <React.Fragment>
-                <NavLink to="/" className="navbar-item">
-                  ЕДДС
-                </NavLink>
-                <NavLink to="/contacts" className="navbar-item">
-                  Контакты
-                </NavLink>
-                <NavLink to="/companies" className="navbar-item">
-                  Организации
-                </NavLink>
+                <div className="uk-navbar-left">
+                  <NavLink to="/" className="uk-navbar-item uk-logo">
+                    ЕДДС
+                  </NavLink>
+                  <ul className="uk-navbar-nav">
+                    <li>
+                      <NavLink to="/contacts">Контакты</NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="/companies">Организации</NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="/sirens">Сирены</NavLink>
+                    </li>
+                    <li>
+                      <a href="#">Справочники</a>
+                      <div className="uk-navbar-dropdown">
+                        <ul className="uk-nav uk-navbar-dropdown-nav">
+                          <li>
+                            <NavLink
+                              to="/departments"
+                              onClick={this.handleToggle}
+                            >
+                              Отделы
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink
+                              to="/educations"
+                              onClick={this.handleToggle}
+                            >
+                              Обучение
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink to="/kinds" onClick={this.handleToggle}>
+                              Типы
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink to="/posts" onClick={this.handleToggle}>
+                              Должности
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink
+                              to="/practices"
+                              onClick={this.handleToggle}
+                            >
+                              Учения
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink to="/ranks" onClick={this.handleToggle}>
+                              Чины
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink to="/scopes" onClick={this.handleToggle}>
+                              Сферы
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink
+                              to="/certificates"
+                              onClick={this.handleToggle}
+                            >
+                              Удостоверения
+                            </NavLink>
+                          </li>
+                          <li className="uk-nav-divider" />
+                          <li>
+                            <NavLink
+                              to="/sirentypes"
+                              onClick={this.handleToggle}
+                            >
+                              Типы сирен
+                            </NavLink>
+                          </li>
+                        </ul>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div className="uk-navbar-right">
+                  <ul className="uk-navbar-nav">
+                    <li>
+                      <a href="#">name</a>
+                      <div className="uk-navbar-dropdown">
+                        <div className="uk-navbar-item">
+                          <button className="uk-button uk-button-default">
+                            Выход
+                          </button>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
               </React.Fragment>
             ) : (
-              <NavLink
-                to="/login"
-                className="navbar-item"
-                key="NavbarNotLogged"
-              >
-                Авторизация
-              </NavLink>
-            )}
-            <div
-              className={navBurgerClass}
-              data-target="navMenu"
-              onClick={this.handleToggle}
-            >
-              <span />
-              <span />
-              <span />
-            </div>
-          </div>
-
-          <div id="navMenu" className={navMenuClass}>
-            <div className="navbar-start">
-              {this.state.auth ? (
-                <React.Fragment>
-                  <NavLink to="/sirens" className="navbar-item">
-                    Сирены
+              <div className="uk-navbar-left">
+                <ul className="uk-navbar-nav">
+                  <NavLink to="/login" key="NavbarNotLogged">
+                    Авторизация
                   </NavLink>
-                  <div className="navbar-item has-dropdown is-hoverable">
-                    <a className="navbar-link">Справочники</a>
-                    <div className="navbar-dropdown">
-                      <NavLink
-                        to="/departments"
-                        className="navbar-item"
-                        onClick={this.handleToggle}
-                      >
-                        Отделы
-                      </NavLink>
-                      <NavLink
-                        to="/educations"
-                        className="navbar-item"
-                        onClick={this.handleToggle}
-                      >
-                        Обучение
-                      </NavLink>
-                      <NavLink
-                        to="/kinds"
-                        className="navbar-item"
-                        onClick={this.handleToggle}
-                      >
-                        Типы
-                      </NavLink>
-                      <NavLink
-                        to="/posts"
-                        className="navbar-item"
-                        onClick={this.handleToggle}
-                      >
-                        Должности
-                      </NavLink>
-                      <NavLink
-                        to="/practices"
-                        className="navbar-item"
-                        onClick={this.handleToggle}
-                      >
-                        Учения
-                      </NavLink>
-                      <NavLink
-                        to="/ranks"
-                        className="navbar-item"
-                        onClick={this.handleToggle}
-                      >
-                        Чины
-                      </NavLink>
-                      <NavLink
-                        to="/scopes"
-                        className="navbar-item"
-                        onClick={this.handleToggle}
-                      >
-                        Сферы
-                      </NavLink>
-                      <NavLink
-                        to="/certificates"
-                        className="navbar-item"
-                        onClick={this.handleToggle}
-                      >
-                        Удостоверения
-                      </NavLink>
-                      <hr className="navbar-divider" />
-                      <NavLink
-                        to="/sirentypes"
-                        className="navbar-item"
-                        onClick={this.handleToggle}
-                      >
-                        Типы сирен
-                      </NavLink>
-                    </div>
-                  </div>
-                </React.Fragment>
-              ) : (
-                <React.Fragment />
-              )}
-            </div>
-            <div className="navbar-end">
-              <div className="navbar-item has-dropdown is-hoverable">
-                <a className="navbar-link"> name </a>
-                <div className="navbar-dropdown is-right">
-                  {this.state.auth ? (
-                    <div className="navbar-item">
-                      <div className="field">
-                        <p className="control">
-                          <Button
-                            color="info"
-                            onClick={this.handleToggle}
-                          >
-                            Выход
-                          </Button>
-                        </p>
-                      </div>
-                    </div>
-                  ) : (
-                    <React.Fragment />
-                  )}
-                </div>
+                </ul>
               </div>
-            </div>
-          </div>
-        </nav>
+            )}
+          </nav>
+        </div>
       </div>
     );
   }
