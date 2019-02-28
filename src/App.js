@@ -8,17 +8,15 @@ import './App.css';
 export class App extends React.Component {
   render() {
     return (
-      <div className="App">
+      <React.Fragment>
         <NavBar/>
-        <section className="section pt1">
+        <div className="row">
           <Router />
-        </section>
-        <footer className="footer bot">
-          <div className="container">
-            <div className="content has-text-centered">© 2019 Сочи</div>
-          </div>
+        </div>
+        <footer className="footer">
+          <p>© 2019 Сочи</p>
         </footer>
-      </div>
+      </React.Fragment>
     );
   }
 }

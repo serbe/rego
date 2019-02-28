@@ -42,7 +42,7 @@ class NavBar extends React.Component {
 
   render() {
     return (
-      <div className="uk-navbar-container e-navbar">
+      <header className="row">
         <div className="uk-container uk-container-expand">
           <nav className="uk-navbar-container" uk-navbar="true  ">
             {this.state.auth ? (
@@ -157,7 +157,7 @@ class NavBar extends React.Component {
             )}
           </nav>
         </div>
-      </div>
+      </header>
     );
   }
 }
