@@ -1,4 +1,4 @@
-import Icon from "./components/Icon";
+import Icon from "./icon";
 import PropTypes from "prop-types";
 import React from "react";
 import cc from "classcat";
