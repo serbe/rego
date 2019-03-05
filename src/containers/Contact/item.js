@@ -37,6 +37,16 @@ ContactForm = reduxForm({
   // validate,
 })(ContactForm);
 
+const fetchContact = (id) => fetch(`http://localhost:9090/edds/api/contacts/${id}`)
+  .then(res => res.json())
+  .then(response => {
+    console.log('Success:', response.title)
+    return { data: response };
+  })
+  .catch(({ response }) => {
+    return { err: response.err };
+  })
+
 export class Contact extends Component {
   constructor(props) {
     super(props);
@@ -49,34 +59,30 @@ export class Contact extends Component {
       isLoaded: false,
       posts: [],
       posts_go: [],
-      ranks: []
+      ranks: [],
+      requestTimeout: false,
     };
   }
 
-  // componentDidMount() {
-  //   fetch(`http://localhost:9090/edds/api/contacts/${this.state.id}`)
-  //     .then(res => res.json())
-  //     .then(
-  //       result => {
-  //         this.setState({
-  //           isLoaded: true,
-  //           contact: result.contact,
-  //           contacts: result.contacts,
-  //           departments: result.departments,
-  //           posts: result.posts,
-  //           posts_go: result.posts_go,
-  //           ranks: result.ranks
-  //         });
-  //       },
-  //       error => {
-  //         console.log(error);
-  //         this.setState({
-  //           isLoaded: true,
-  //           error
-  //         });
-  //       }
-  //     );
-  // }
+  componentDidMount() {
+    fetchContact(this.state.id).then((result) => {
+      if (result.data) {
+        this.setState({
+          isLoaded: true,
+          contact: result.data.contact,
+          contacts: result.data.contacts,
+          departments: result.data.departments,
+          posts: result.data.posts,
+          posts_go: result.data.posts_go,
+          ranks: result.data.ranks
+        });
+      };
+      this.setState({
+        isLoaded: true,
+        error: result.data.error
+      });
+    });
+  }
 
   handleSignIn = values => {
     console.log(values);
