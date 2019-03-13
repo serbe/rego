@@ -1,26 +1,26 @@
 import React, { Component } from "react";
-import { reduxForm, Field } from "redux-form";
+import { Form, Field } from 'react-final-form'
 // import Field from "../../components/field";
 
 // import { Link } from "react-router-dom";
 
-let ContactForm = props => {
-  const { handleSubmit } = props;
-  return (
-    <form onSubmit={handleSubmit} className="form">
-      <div className="field">
-        <label className="label">Полное имя</label>
-        <Field
-          className="input"
-          name="contactName"
-          component="input"
-          type="text"
-          placeholder="Полное имя"
-        />
-      </div>
-    </form>
-  );
-};
+// let ContactForm = props => {
+//   const { handleSubmit } = props;
+//   return (
+//     <form onSubmit={handleSubmit} className="contactForm">
+//       <div className="field">
+//         <label className="label">Полное имя</label>
+//         {/* <Field
+//           className="input"
+//           name="contactName"
+//           component="input"
+//           type="text"
+//           placeholder="Полное имя"
+//         /> */}
+//       </div>
+//     </form>
+//   );
+// };
 
 // const renderField = ({ input, label, type, meta: { touched, error, warning } }) => (
 //   <div>
@@ -32,10 +32,10 @@ let ContactForm = props => {
 //   </div>
 // )
 
-ContactForm = reduxForm({
-  form: "signIn"
-  // validate,
-})(ContactForm);
+// ContactForm = reduxForm({
+//   form: "contactForm"
+//   // validate,
+// })(ContactForm);
 
 const fetchContact = (id) => fetch(`http://localhost:9090/edds/api/contacts/${id}`)
   .then(res => res.json())
@@ -103,7 +103,7 @@ export class Contact extends Component {
 
     return (
       <div className="container">
-        <ContactForm onSubmit={this.handleSignIn} />
+        {/* <ContactForm onSubmit={this.handleSignIn} /> */}
       </div>
     );
   }
