@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Form, Field } from 'react-final-form'
+import Input from "../../components/input";
+// import { Form, Field } from 'react-final-form'
 // import Field from "../../components/field";
 
 // import { Link } from "react-router-dom";
@@ -37,15 +38,16 @@ import { Form, Field } from 'react-final-form'
 //   // validate,
 // })(ContactForm);
 
-const fetchContact = (id) => fetch(`http://localhost:9090/edds/api/contacts/${id}`)
-  .then(res => res.json())
-  .then(response => {
-    console.log('Success:', response.title)
-    return { data: response };
-  })
-  .catch(({ response }) => {
-    return { err: response.err };
-  })
+const fetchContact = id =>
+  fetch(`http://localhost:9090/edds/api/contacts/${id}`)
+    .then(res => res.json())
+    .then(response => {
+      console.log("Success:", response.title);
+      return { data: response };
+    })
+    .catch(({ response }) => {
+      return { err: response.err };
+    });
 
 export class Contact extends Component {
   constructor(props) {
@@ -60,12 +62,12 @@ export class Contact extends Component {
       posts: [],
       posts_go: [],
       ranks: [],
-      requestTimeout: false,
+      requestTimeout: false
     };
   }
 
   componentDidMount() {
-    fetchContact(this.state.id).then((result) => {
+    fetchContact(this.state.id).then(result => {
       if (result.data) {
         this.setState({
           isLoaded: true,
@@ -76,7 +78,7 @@ export class Contact extends Component {
           posts_go: result.data.posts_go,
           ranks: result.data.ranks
         });
-      };
+      }
       this.setState({
         isLoaded: true,
         error: result.data.error
@@ -101,9 +103,24 @@ export class Contact extends Component {
     //   // ranks
     // ] = this.state;
 
+    const Form = () => {
+      if (!this.state.isLoaded) {
+        return <div />;
+      } else {
+        return (
+          <form id="contact">
+            <div className="field">
+              <label className="label">Полное имя</label>
+              <Input iconLeft="user" value={this.state.contact.name} placeholder="Полное имя" />
+            </div>
+          </form>
+        );
+      }
+    };
+
     return (
       <div className="container">
-        {/* <ContactForm onSubmit={this.handleSignIn} /> */}
+        <Form />
       </div>
     );
   }
