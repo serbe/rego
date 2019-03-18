@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import Input from "../../components/input";
+// import Input from "../../components/input";
 // import { Form, Field } from 'react-final-form'
-// import Field from "../../components/field";
+import Field from "../../components/field";
 
 // import { Link } from "react-router-dom";
 
@@ -43,10 +43,14 @@ const fetchContact = id =>
     .then(res => res.json())
     .then(response => {
       console.log("Success:", response.title);
-      return { data: response };
+      return {
+        data: response
+      };
     })
     .catch(({ response }) => {
-      return { err: response.err };
+      return {
+        err: response.err
+      };
     });
 
 export class Contact extends Component {
@@ -104,18 +108,18 @@ export class Contact extends Component {
     // ] = this.state;
 
     const Form = () => {
-      if (!this.state.isLoaded) {
-        return <div />;
-      } else {
-        return (
-          <form id="contact">
-            <div className="field">
-              <label className="label">Полное имя</label>
-              <Input iconLeft="user" value={this.state.contact.name} placeholder="Полное имя" />
-            </div>
-          </form>
-        );
-      }
+      return !this.state.isLoaded ? (
+        <div />
+      ) : (
+        <form id="contact">
+          <Field
+            label
+            iconLeft="user"
+            value={this.state.contact.name}
+            placeholder="Полное имя"
+          />
+        </form>
+      );
     };
 
     return (
