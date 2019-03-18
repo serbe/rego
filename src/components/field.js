@@ -4,12 +4,6 @@ import React, {Component} from "react";
 // import cc from "classcat";
 
 class Field extends Component {
-  constructor(props) {
-    super(props);
-
-    this.onClick = this.onClick.bind(this);
-  }
-
   render() {
     const {
       className,
@@ -32,7 +26,7 @@ class Field extends Component {
     } = this.props;
     const Label = () => {
       if (label) {
-        if (label !== "") {
+        if (label !== true) {
           return <label className="label">{label}</label>
         } else {
           return <label className="label">{placeholder}</label>
@@ -77,7 +71,7 @@ Field.propTypes = {
   iconLeft: PropTypes.string,
   iconRight: PropTypes.string,
   isStatic: PropTypes.bool,
-  label: PropTypes.string,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   loading: PropTypes.bool,
   onClick: PropTypes.func,
   placeholder: PropTypes.string,

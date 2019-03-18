@@ -133,7 +133,7 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
-  type: "a",
+  type: "button",
   color: "white"
 };
 

@@ -4,23 +4,6 @@ import React from "react";
 import cc from "classcat";
 
 class Input extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.onClick = this.onClick.bind(this);
-  }
-
-  onClick(e) {
-    if (this.props.disabled) {
-      e.preventDefault();
-      return;
-    }
-
-    if (this.props.onClick) {
-      this.props.onClick(e);
-    }
-  }
-
   render() {
     const {
       className,
@@ -32,6 +15,7 @@ class Input extends React.Component {
       iconRight,
       isStatic,
       loading,
+      onClick,
       placeholder,
       readonly,
       round,
@@ -81,11 +65,11 @@ class Input extends React.Component {
         <input
           className={inputClasses}
           disabled={disable}
-          onClick={this.onClick}
+          onClick={onClick}
           placeholder={placeholder}
-          readonly={readonly}
+          readOnly={readonly}
           type={type}
-          value={value}
+          defaultValue={value}
         />
         <LeftIcon />
         <RightIcon />
