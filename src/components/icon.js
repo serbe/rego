@@ -1,5 +1,6 @@
-import PropTypes from "prop-types";
 import React from "react";
+
+import PropTypes from "prop-types";
 import cc from "classcat";
 
 class Icon extends React.Component {

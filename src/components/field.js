@@ -1,6 +1,7 @@
+import React, {Component} from "react";
+
 import Input from "./input";
 import PropTypes from "prop-types";
-import React, {Component} from "react";
 // import cc from "classcat";
 
 class Field extends Component {

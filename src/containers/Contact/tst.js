@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import Field from "../../components/field";
 // import { Link } from "react-router-dom";
+
+import Field from "../../components/field";
 
 export class Contact extends Component {
   constructor(props) {
