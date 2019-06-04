@@ -4,7 +4,7 @@ import Input from "./input";
 import PropTypes from "prop-types";
 // import cc from "classcat";
 
-class Field extends Component {
+class FormField extends Component {
   render() {
     const {
       className,
@@ -63,7 +63,7 @@ class Field extends Component {
   }
 }
 
-Field.propTypes = {
+FormField.propTypes = {
   className: PropTypes.string,
   color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"]),
   disable: PropTypes.bool,
@@ -83,8 +83,8 @@ Field.propTypes = {
   value: PropTypes.string
 };
 
-Field.defaultProps = {
+FormField.defaultProps = {
   type: "text"
 };
 
-export default Field;
+export default FormField;

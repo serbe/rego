@@ -1,27 +1,41 @@
 import React, { Component } from "react";
 // import Input from "../../components/input";
-// import { Form, Field } from 'react-final-form'
-import Field from "../../components/field";
+import { Formik, Form, Field } from "formik";
+import FormField from "../../components/formfield";
+import { ContactSchema } from "../../models/contact";
 
 // import { Link } from "react-router-dom";
 
-// let ContactForm = props => {
-//   const { handleSubmit } = props;
-//   return (
-//     <form onSubmit={handleSubmit} className="contactForm">
-//       <div className="field">
-//         <label className="label">Полное имя</label>
-//         {/* <Field
-//           className="input"
-//           name="contactName"
-//           component="input"
-//           type="text"
-//           placeholder="Полное имя"
-//         /> */}
-//       </div>
-//     </form>
-//   );
-// };
+let ContactForm = () => (
+  <Formik
+    initialValues={{
+      firstName: "",
+      lastName: "",
+      email: ""
+    }}
+    validationSchema={ContactSchema}
+    onSubmit={values => {
+      // same shape as initial values
+      console.log(values);
+    }}
+  >
+    {({ errors, touched }) => (
+      <Form>
+        <Field name="firstName" />
+        {errors.firstName && touched.firstName ? (
+          <div>{errors.firstName}</div>
+        ) : null}
+        <Field name="lastName" />
+        {errors.lastName && touched.lastName ? (
+          <div>{errors.lastName}</div>
+        ) : null}
+        <Field name="email" type="email" />
+        {errors.email && touched.email ? <div>{errors.email}</div> : null}
+        <button type="submit">Submit</button>
+      </Form>
+    )}
+  </Formik>
+);
 
 // const renderField = ({ input, label, type, meta: { touched, error, warning } }) => (
 //   <div>
@@ -112,7 +126,7 @@ export class Contact extends Component {
         <div />
       ) : (
         <form id="contact">
-          <Field
+          <FormField
             label
             iconLeft="user"
             value={this.state.contact.name}
@@ -125,6 +139,7 @@ export class Contact extends Component {
     return (
       <div className="container">
         <Form />
+        <ContactForm />
       </div>
     );
   }
