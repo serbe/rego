@@ -1,31 +1,31 @@
 import {array, object, number, string, date} from 'yup';
-import { EmailSchema } from './email';
-import { PhoneSchema } from './phone';
-import { FaxSchema } from './fax';
-import { SelectItemSchema } from './selectitem';
+import { EmailScheme } from './email';
+import { PhoneScheme } from './phone';
+import { FaxScheme } from './fax';
+import { SelectItemScheme } from './selectitem';
 
-export const ContactSchema = object({
+export const ContactScheme = object({
     id: number().positive().integer(),
     name: string().required(),
     address: string(),
     birthday: date(),
-    company: SelectItemSchema,
+    company: SelectItemScheme,
     company_id: number().positive().integer(),
-    post: SelectItemSchema,
+    post: SelectItemScheme,
     post_id: number().integer(),
-    department: SelectItemSchema,
+    department: SelectItemScheme,
     department_id: number().positive().integer(),
-    post_go: SelectItemSchema,
+    post_go: SelectItemScheme,
     post_go_id: number().positive().integer(),
-    rank: SelectItemSchema,
+    rank: SelectItemScheme,
     rank_id: number().positive().integer(),
-    emails: array().of(EmailSchema),
-    phones: array().of(PhoneSchema),
-    faxes: array().of(FaxSchema),
+    emails: array().of(EmailScheme),
+    phones: array().of(PhoneScheme),
+    faxes: array().of(FaxScheme),
     note: string(),
 });
 
-export const ContactListSchema = object({
+export const ContactListScheme = object({
   id: number().positive().integer(),
   name: string().required(),
   company_id: number().positive().integer(),
@@ -35,7 +35,7 @@ export const ContactListSchema = object({
   faxes: array().of(string()),
 });
 
-export const ContactItemSchema = object({
+export const ContactItemScheme = object({
   id: number().positive().integer(),
   name: string().required(),
   department_name: string(),

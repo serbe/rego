@@ -2,7 +2,7 @@ import React, { Component } from "react";
 // import Input from "../../components/input";
 import { Formik, Form, Field } from "formik";
 import FormField from "../../components/formfield";
-import { ContactSchema } from "../../models/contact";
+import { ContactScheme } from "../../models/contact";
 
 // import { Link } from "react-router-dom";
 
@@ -13,7 +13,7 @@ let ContactForm = () => (
       lastName: "",
       email: ""
     }}
-    validationSchema={ContactSchema}
+    validationScheme={ContactScheme}
     onSubmit={values => {
       // same shape as initial values
       console.log(values);

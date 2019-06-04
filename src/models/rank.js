@@ -1,6 +1,7 @@
 import { object, number, string } from 'yup';
 
-export const EmailScheme = object({
+export const RankScheme = object({
   id: number().positive().integer(),
-  email: string().email(),
+  name: string().required(),
+  note: string(),
 });
