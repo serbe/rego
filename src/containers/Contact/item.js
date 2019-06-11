@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 // import Input from "../../components/input";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import FormField from "../../components/formfield";
 import { ContactScheme } from "../../models/contact";
 
@@ -9,9 +9,24 @@ import { ContactScheme } from "../../models/contact";
 let ContactForm = () => (
   <Formik
     initialValues={{
-      firstName: "",
-      lastName: "",
-      email: ""
+      id: 0,
+      name: "",
+      address: "",
+      birthday: "",
+      company: {},
+      company_id: 0,
+      post: {},
+      post_id: 0,
+      department: {},
+      department_id: 0,
+      post_go: {},
+      post_go_id: 0,
+      rank: {},
+      rank_id: 0,
+      emails: [],
+      phones: [],
+      faxes: [],
+      note: "",
     }}
     validationScheme={ContactScheme}
     onSubmit={values => {
@@ -21,16 +36,17 @@ let ContactForm = () => (
   >
     {({ errors, touched }) => (
       <Form>
-        <Field name="firstName" />
-        {errors.firstName && touched.firstName ? (
-          <div>{errors.firstName}</div>
+        <Field name="name" />
+        <ErrorMessage name="name" component="div" />
+        {errors.name && touched.name ? (
+          <div>{errors.name}</div>
         ) : null}
-        <Field name="lastName" />
-        {errors.lastName && touched.lastName ? (
-          <div>{errors.lastName}</div>
+        <Field name="address" />
+        {errors.address && touched.address ? (
+          <div>{errors.address}</div>
         ) : null}
-        <Field name="email" type="email" />
-        {errors.email && touched.email ? <div>{errors.email}</div> : null}
+        <Field name="birthday" />
+        {errors.birthday && touched.birthday ? <div>{errors.birthday}</div> : null}
         <button type="submit">Submit</button>
       </Form>
     )}
