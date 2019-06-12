@@ -1,57 +1,57 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 // import Input from "../../components/input";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+// import { Formik, Form, Field, ErrorMessage } from "formik";
 import FormField from "../../components/formfield";
-import { ContactScheme } from "../../models/contact";
+// import { ContactScheme } from "../../models/contact";
 
 // import { Link } from "react-router-dom";
 
-let ContactForm = () => (
-  <Formik
-    initialValues={{
-      id: 0,
-      name: "",
-      address: "",
-      birthday: "",
-      company: {},
-      company_id: 0,
-      post: {},
-      post_id: 0,
-      department: {},
-      department_id: 0,
-      post_go: {},
-      post_go_id: 0,
-      rank: {},
-      rank_id: 0,
-      emails: [],
-      phones: [],
-      faxes: [],
-      note: "",
-    }}
-    validationScheme={ContactScheme}
-    onSubmit={values => {
-      // same shape as initial values
-      console.log(values);
-    }}
-  >
-    {({ errors, touched }) => (
-      <Form>
-        <Field name="name" />
-        <ErrorMessage name="name" component="div" />
-        {errors.name && touched.name ? (
-          <div>{errors.name}</div>
-        ) : null}
-        <Field name="address" />
-        {errors.address && touched.address ? (
-          <div>{errors.address}</div>
-        ) : null}
-        <Field name="birthday" />
-        {errors.birthday && touched.birthday ? <div>{errors.birthday}</div> : null}
-        <button type="submit">Submit</button>
-      </Form>
-    )}
-  </Formik>
-);
+// let ContactForm = () => (
+//   <Formik
+//     initialValues={{
+//       id: 0,
+//       name: "",
+//       address: "",
+//       birthday: "",
+//       company: {},
+//       company_id: 0,
+//       post: {},
+//       post_id: 0,
+//       department: {},
+//       department_id: 0,
+//       post_go: {},
+//       post_go_id: 0,
+//       rank: {},
+//       rank_id: 0,
+//       emails: [],
+//       phones: [],
+//       faxes: [],
+//       note: "",
+//     }}
+//     validationScheme={ContactScheme}
+//     onSubmit={values => {
+//       // same shape as initial values
+//       console.log(values);
+//     }}
+//   >
+//     {({ errors, touched }) => (
+//       <Form>
+//         <Field name="name" />
+//         <ErrorMessage name="name" component="div" />
+//         {errors.name && touched.name ? (
+//           <div>{errors.name}</div>
+//         ) : null}
+//         <Field name="address" />
+//         {errors.address && touched.address ? (
+//           <div>{errors.address}</div>
+//         ) : null}
+//         <Field name="birthday" />
+//         {errors.birthday && touched.birthday ? <div>{errors.birthday}</div> : null}
+//         <button type="submit">Submit</button>
+//       </Form>
+//     )}
+//   </Formik>
+// );
 
 // const renderField = ({ input, label, type, meta: { touched, error, warning } }) => (
 //   <div>
@@ -82,6 +82,58 @@ const fetchContact = id =>
         err: response.err
       };
     });
+
+const AddUserForm = props => {
+  const initialFormState = {
+    id: 0,
+    name: "",
+    address: "",
+    birthday: "",
+    company: {},
+    company_id: 0,
+    post: {},
+    post_id: 0,
+    department: {},
+    department_id: 0,
+    post_go: {},
+    post_go_id: 0,
+    rank: {},
+    rank_id: 0,
+    emails: [],
+    phones: [],
+    faxes: [],
+    note: "",
+  }
+
+  // используем useState и передаем в качестве начального значения объект - initialFormState
+  const [contact, setContact] = useState(initialFormState)
+
+  const handleInputChange = event => {
+    const { name, value } = event.currentTarget
+    setContact({ ...contact, [name]: value })
+  }
+
+  return (
+    <form>
+      <label>Имя</label>
+      <input
+        type="text"
+        name="name"
+        value={contact.name}
+        onChange={handleInputChange}
+      />
+      <label>Адрес</label>
+      <input
+        type="text"
+        name="address"
+        value={contact.address}
+        onChange={handleInputChange}
+      />
+      <button>Add new user</button>
+    </form>
+  )
+}
+
 
 export class Contact extends Component {
   constructor(props) {
@@ -155,7 +207,7 @@ export class Contact extends Component {
     return (
       <div className="container">
         <Form />
-        <ContactForm />
+        <AddUserForm />
       </div>
     );
   }
