@@ -1,28 +1,23 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import { BrowserRouter } from "react-router-dom";
-// import { Provider } from 'react-redux';
-// import { createStore, combineReducers } from 'redux';
-// import { reducer as formReducer } from 'redux-form';
-
-import "./index.scss";
-import './index.css';
 import * as serviceWorker from "./serviceWorker";
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { App } from "./App";
+import { BrowserRouter } from "react-router-dom";
+import { ThemeProvider } from '@material-ui/styles';
 
-// const rootReducer = combineReducers({
-  // form: formReducer,
-// });
-
-// const store = createStore(rootReducer);
+// import "./index.scss";
+// import './index.css';
 
 ReactDOM.render(
-  // <Provider store={store}>
+  <ThemeProvider>
+    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+    <CssBaseline />
     <BrowserRouter>
       <App />
     </BrowserRouter>,
-  // </Provider>,
+  </ThemeProvider>,
   document.getElementById("root")
 );
 
