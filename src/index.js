@@ -2,22 +2,18 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import * as serviceWorker from "./serviceWorker";
-import CssBaseline from '@material-ui/core/CssBaseline';
 import { App } from "./App";
 import { BrowserRouter } from "react-router-dom";
-import { ThemeProvider } from '@material-ui/styles';
 
-// import "./index.scss";
-// import './index.css';
+import "./index.scss";
+import './index.css';
 
 ReactDOM.render(
-  <ThemeProvider>
-    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-    <CssBaseline />
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>,
-  </ThemeProvider>,
+  <React.Fragment>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+  </React.Fragment>,
   document.getElementById("root")
 );
 

@@ -1,57 +1,71 @@
 import React, { Component, useState } from "react";
 // import Input from "../../components/input";
-// import { Formik, Form, Field, ErrorMessage } from "formik";
+import { withFormik } from "formik";
 import FormField from "../../components/formfield";
-// import { ContactScheme } from "../../models/contact";
+import { ContactScheme } from "../../models/contact";
 
 // import { Link } from "react-router-dom";
 
-// let ContactForm = () => (
-//   <Formik
-//     initialValues={{
-//       id: 0,
-//       name: "",
-//       address: "",
-//       birthday: "",
-//       company: {},
-//       company_id: 0,
-//       post: {},
-//       post_id: 0,
-//       department: {},
-//       department_id: 0,
-//       post_go: {},
-//       post_go_id: 0,
-//       rank: {},
-//       rank_id: 0,
-//       emails: [],
-//       phones: [],
-//       faxes: [],
-//       note: "",
-//     }}
-//     validationScheme={ContactScheme}
-//     onSubmit={values => {
-//       // same shape as initial values
-//       console.log(values);
-//     }}
-//   >
-//     {({ errors, touched }) => (
-//       <Form>
-//         <Field name="name" />
-//         <ErrorMessage name="name" component="div" />
-//         {errors.name && touched.name ? (
-//           <div>{errors.name}</div>
-//         ) : null}
-//         <Field name="address" />
-//         {errors.address && touched.address ? (
-//           <div>{errors.address}</div>
-//         ) : null}
-//         <Field name="birthday" />
-//         {errors.birthday && touched.birthday ? <div>{errors.birthday}</div> : null}
-//         <button type="submit">Submit</button>
-//       </Form>
-//     )}
-//   </Formik>
-// );
+    // initialValues={{
+    //   id: 0,
+    //   name: "",
+    //   address: "",
+    //   birthday: "",
+    //   company: {},
+    //   company_id: 0,
+    //   post: {},
+    //   post_id: 0,
+    //   department: {},
+    //   department_id: 0,
+    //   post_go: {},
+    //   post_go_id: 0,
+    //   rank: {},
+    //   rank_id: 0,
+    //   emails: [],
+    //   phones: [],
+    //   faxes: [],
+    //   note: "",
+    // }}
+
+const FormikForm = props => {
+  const {
+    values,
+    touched,
+    errors,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+  } = props;
+  return (
+    <form onSubmit={handleSubmit}>
+      <FormField
+        label
+        iconLeft="user"
+        value={values.name}
+        placeholder="Полное имя"
+        onBlur={handleBlur}
+        onChange={handleChange}
+      />
+      <FormField
+        label
+        iconLeft="address"
+        value={values.address}
+        placeholder="Адрес"
+        onBlur={handleBlur}
+        onChange={handleChange}
+      />
+      <input
+        type="text"
+        onChange={handleChange}
+        onBlur={handleBlur}
+        value={values.name}
+        name="name"
+      />
+      {errors.name && touched.name && <div id="feedback">{errors.name}</div>}
+      <button type="submit">Submit</button>
+    </form>
+  );
+};
 
 // const renderField = ({ input, label, type, meta: { touched, error, warning } }) => (
 //   <div>
@@ -63,10 +77,6 @@ import FormField from "../../components/formfield";
 //   </div>
 // )
 
-// ContactForm = reduxForm({
-//   form: "contactForm"
-//   // validate,
-// })(ContactForm);
 
 const fetchContact = id =>
   fetch(`http://localhost:9090/edds/api/contacts/${id}`)
@@ -103,15 +113,15 @@ const AddUserForm = props => {
     phones: [],
     faxes: [],
     note: "",
-  }
+  };
 
   // используем useState и передаем в качестве начального значения объект - initialFormState
-  const [contact, setContact] = useState(initialFormState)
+  const [contact, setContact] = useState(initialFormState);
 
   const handleInputChange = event => {
-    const { name, value } = event.currentTarget
+    const { name, value } = event.currentTarget;
     setContact({ ...contact, [name]: value })
-  }
+  };
 
   return (
     <form>
@@ -132,7 +142,7 @@ const AddUserForm = props => {
       <button>Add new user</button>
     </form>
   )
-}
+};
 
 
 export class Contact extends Component {
@@ -199,15 +209,34 @@ export class Contact extends Component {
             iconLeft="user"
             value={this.state.contact.name}
             placeholder="Полное имя"
+            onChange={this.handleInputChange}
           />
         </form>
       );
     };
 
+    const CF = withFormik({
+      mapPropsToValues: () => (this.state.contact),
+      validationSchema: ContactScheme,
+      handleSubmit: (values) => {
+        console.log(values);
+      },
+      displayName: 'BasicForm',
+    })(FormikForm);
+
+    const ContactForm = () => {
+      return !this.state.isLoaded ? (
+        <div>Loading...</div>
+      ) : (
+        <CF />
+      )
+    }
+
     return (
       <div className="container">
         <Form />
         <AddUserForm />
+        <ContactForm />
       </div>
     );
   }

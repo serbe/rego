@@ -3,7 +3,6 @@ import React from "react";
 import Router from "./containers/Router";
 
 import "./App.css";
-import "typeface-roboto";
 
 export class App extends React.Component {
   render() {

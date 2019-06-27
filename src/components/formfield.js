@@ -35,7 +35,7 @@ class FormField extends Component {
       } else {
         return null;
       }
-    }
+    };
 
     return (
       <div className="field">

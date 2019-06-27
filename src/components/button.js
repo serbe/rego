@@ -62,7 +62,7 @@ class Button extends Component {
     const Tag = () => {
       if (isStatic) {
         return (
-          <span disabled={disable} onClick={onClick} className={classes}>
+          <span onClick={onClick} className={classes}>
             {children}
           </span>
         );
@@ -81,7 +81,6 @@ class Button extends Component {
         return (
           <a
             href={href}
-            disabled={disable}
             onClick={onClick}
             className={classes}
           >

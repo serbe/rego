@@ -48,7 +48,7 @@ export class Contacts extends Component {
         for (let i = 0; i < 50; i++) {
           list.push(contacts[i]);
         }
-        const short = list.map(item => (
+        return list.map(item => (
           <tr key={item.id}>
             <td><Link to={"/contacts/" + item.id} className="has-text-dark">{item.name}</Link></td>
             <td className="is-hidden-mobile"><Link to={"/companies/" + item.company_id} className="has-text-dark">{item.company_name}</Link></td>
@@ -59,7 +59,6 @@ export class Contacts extends Component {
             </td>
           </tr>
         ));
-        return short;
       } else {
         return null;
       }
