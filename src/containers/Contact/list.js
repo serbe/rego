@@ -12,7 +12,7 @@ export class Contacts extends Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:9090/edds/api/contacts")
+    fetch("/edds/api/contacts")
       .then(res => res.json())
       .then(
         result => {

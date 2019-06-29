@@ -79,7 +79,7 @@ const FormikForm = props => {
 
 
 const fetchContact = id =>
-  fetch(`http://localhost:9090/edds/api/contacts/${id}`)
+  fetch(`/edds/api/contacts/${id}`)
     .then(res => res.json())
     .then(response => {
       console.log("Success:", response.title);
