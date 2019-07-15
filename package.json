@@ -3,10 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "bulma": "^0.7.5",
+    "antd": "^3.20.3",
     "classcat": "^4.0.2",
-    "formik": "^1.5.7",
-    "http-proxy-middleware": "^0.19.1",
+    "formik": "^1.5.8",
     "node-sass": "^4.12.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
@@ -31,5 +30,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "http-proxy-middleware": "^0.19.1"
+  }
 }
