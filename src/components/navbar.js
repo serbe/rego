@@ -7,11 +7,11 @@ import { Button, Icon, Menu } from "antd";
 
 const { SubMenu } = Menu;
 
-function toggleOpen() {
-  return (previousState, currentProps) => {
-    return { ...previousState, open: !previousState.open };
-  };
-}
+// function toggleOpen() {
+//   return (previousState, currentProps) => {
+//     return { ...previousState, open: !previousState.open };
+//   };
+// }
 
 class NavBar extends Component {
   static contextTypes = {
@@ -31,9 +31,9 @@ class NavBar extends Component {
   //   this.setState({logged: logged});
   // };
 
-  onClick = () => {
-    this.setState(toggleOpen());
-  };
+  // onClick = () => {
+  //   this.setState(toggleOpen());
+  // };
 
   // handleClose = () => this.setState({open: false});
 
