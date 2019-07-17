@@ -64,7 +64,7 @@ export class Contacts extends Component {
         key: "faxes",
         render: text => formatPhones(text)
       }
-    ]
+    ];
 
     const formatPhones = items => {
       if (items) {

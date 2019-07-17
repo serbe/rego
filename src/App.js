@@ -9,9 +9,9 @@ import "./App.css";
 export class App extends React.Component {
   render() {
     return (
-      <Layout style={{maxWidth: 960, marginLeft: 'auto', marginRight: 'auto'}}>
+      <Layout style={{maxWidth: 1024, marginLeft: 'auto', marginRight: 'auto'}}>
         <NavBar />
-        <Layout>
+        <Layout style={{marginTop: 20, marginBottom: 20}}>
           <Router />
         </Layout>
         <footer className="footer">

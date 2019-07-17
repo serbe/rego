@@ -230,7 +230,7 @@ export class Contact extends Component {
       ) : (
         <CF />
       )
-    }
+    };
 
     return (
       <div className="container">
