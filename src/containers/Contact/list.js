@@ -45,7 +45,8 @@ export class Contacts extends Component {
       {
         title: "Организация",
         dataIndex: "company_name",
-        key: "company_name"
+        key: "company_name",
+        render: (text, row) => <Link to={{pathname: `/api/go/company/item/${row.company_id}`}}>{text}</Link>
       },
       {
         title: "Должность",
@@ -79,12 +80,8 @@ export class Contacts extends Component {
         return (
           <div>Error: {error.message}</div>
         );
-      } else if (!isLoaded) {
-        return (
-          <div>Loading...</div>
-        );
       } else {
-        return <Table columns={columns} dataSource={contacts} rowKey="id" size="small" bordered pagination={{pageSize:20, showSizeChanger: true, hideOnSinglePage: true}} />;
+        return <Table columns={columns} dataSource={contacts} loading={!isLoaded} rowKey="id" bordered pagination={{pageSize:20, showSizeChanger: true, hideOnSinglePage: true}} />;
       }
     };
 

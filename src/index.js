@@ -9,11 +9,9 @@ import "./index.scss";
 import './index.css';
 
 ReactDOM.render(
-  <React.Fragment>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-  </React.Fragment>,
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
   document.getElementById("root")
 );
 

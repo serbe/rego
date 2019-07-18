@@ -9,17 +9,19 @@ import "./App.css";
 export class App extends React.Component {
   render() {
     return (
-      <Layout style={{maxWidth: 1024, marginLeft: 'auto', marginRight: 'auto'}}>
+      <div>
+      {/* <Layout style={{maxWidth: 1024, marginLeft: 'auto', marginRight: 'auto'}}> */}
         <NavBar />
-        <Layout style={{marginTop: 20, marginBottom: 20}}>
+        {/* <Layout style={{marginTop: 20, marginBottom: 20}}> */}
           <Router />
-        </Layout>
+        {/* </Layout> */}
         <footer className="footer">
           <div className="container has-text-centered">
             <p>© 2019 Сочи</p>
           </div>
         </footer>
-      </Layout>
+      {/* </Layout> */}
+      </div>
     );
   }
 }
