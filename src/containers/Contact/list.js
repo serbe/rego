@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import { Link } from "react-router-dom";
-import { Table } from "antd";
+// import { Table } from "antd";
 
 export class Contacts extends Component {
   constructor(props) {
@@ -81,7 +81,8 @@ export class Contacts extends Component {
           <div>Error: {error.message}</div>
         );
       } else {
-        return <Table columns={columns} dataSource={contacts} loading={!isLoaded} rowKey="id" bordered pagination={{pageSize:20, showSizeChanger: true, hideOnSinglePage: true}} />;
+        // return <Table columns={columns} dataSource={contacts} loading={!isLoaded} rowKey="id" bordered pagination={{pageSize:20, showSizeChanger: true, hideOnSinglePage: true}} />;
+        return <div>{isLoaded}</div>
       }
     };
 
