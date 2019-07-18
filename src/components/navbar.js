@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
 
 import PropTypes from "prop-types";
 import { Button, Icon, Menu } from "antd";
+import { NavLink } from "react-router-dom";
 
 const { SubMenu } = Menu;
 
@@ -46,7 +46,6 @@ class NavBar extends Component {
     return (
       <Menu mode="horizontal">
         <Menu.Item key="home">
-
           <NavLink
             activeClassName="is-active"
             className="navbar-item"
@@ -88,7 +87,12 @@ class NavBar extends Component {
           </NavLink>
         </Menu.Item>
         <SubMenu
-          title={<span className="submenu-title-wrapper"><Icon type="database" />Справочники</span>}
+          title={
+            <span className="submenu-title-wrapper">
+              <Icon type="database" />
+              Справочники
+            </span>
+          }
         >
           <Menu.Item key="departments">
             <NavLink

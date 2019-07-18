@@ -1,6 +1,5 @@
 import React from "react";
 import Router from "./containers/Router";
-import { Layout } from "antd";
 import NavBar from "./components/navbar";
 
 import 'antd/dist/antd.css';

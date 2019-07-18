@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Table } from "antd";
 
@@ -40,13 +40,21 @@ export class Contacts extends Component {
         title: "Фамилия Имя Отчество",
         dataIndex: "name",
         key: "name",
-        render: (text, row) => <Link to={{pathname: `/api/go/contact/item/${row.id}`}}>{text}</Link>
+        render: (text, row) => (
+          <Link to={{ pathname: `/api/go/contact/item/${row.id}` }}>
+            {text}
+          </Link>
+        )
       },
       {
         title: "Организация",
         dataIndex: "company_name",
         key: "company_name",
-        render: (text, row) => <Link to={{pathname: `/api/go/company/item/${row.company_id}`}}>{text}</Link>
+        render: (text, row) => (
+          <Link to={{ pathname: `/api/go/company/item/${row.company_id}` }}>
+            {text}
+          </Link>
+        )
       },
       {
         title: "Должность",
@@ -77,16 +85,25 @@ export class Contacts extends Component {
 
     const Content = () => {
       if (error) {
-        return (
-          <div>Error: {error.message}</div>
-        );
+        return <div>Error: {error.message}</div>;
       } else {
-        return <Table columns={columns} dataSource={contacts} loading={!isLoaded} rowKey="id" bordered pagination={{pageSize:20, showSizeChanger: true, hideOnSinglePage: true}} />;
+        return (
+          <Table
+            columns={columns}
+            dataSource={contacts}
+            loading={!isLoaded}
+            rowKey="id"
+            bordered
+            pagination={{
+              pageSize: 20,
+              showSizeChanger: true,
+              hideOnSinglePage: true
+            }}
+          />
+        );
       }
     };
 
-    return (
-      <Content />
-    );
+    return <Content />;
   }
 }
