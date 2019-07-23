@@ -1,5 +1,8 @@
 import React, { Component, useState } from "react";
-// import { ContactScheme } from "../../models/contact";
+// import Input from "../../components/input";
+import { withFormik } from "formik";
+import FormField from "../../components/formfield";
+import { ContactScheme } from "../../models/contact";
 
 // import { Link } from "react-router-dom";
 
@@ -35,7 +38,7 @@ const FormikForm = props => {
   } = props;
   return (
     <form onSubmit={handleSubmit}>
-      <input
+      <FormField
         label
         iconLeft="user"
         value={values.name}
@@ -43,7 +46,7 @@ const FormikForm = props => {
         onBlur={handleBlur}
         onChange={handleChange}
       />
-      <input
+      <FormField
         label
         iconLeft="address"
         value={values.address}
@@ -76,7 +79,7 @@ const FormikForm = props => {
 
 
 const fetchContact = id =>
-  fetch(`/edds/api/contacts/${id}`)
+  fetch(`/api/go/contact/${id}`)
     .then(res => res.json())
     .then(response => {
       console.log("Success:", response.title);
@@ -201,7 +204,7 @@ export class Contact extends Component {
         <div />
       ) : (
         <form id="contact">
-          <input
+          <FormField
             label
             iconLeft="user"
             value={this.state.contact.name}
@@ -212,13 +215,22 @@ export class Contact extends Component {
       );
     };
 
+    const CF = withFormik({
+      mapPropsToValues: () => (this.state.contact),
+      validationSchema: ContactScheme,
+      handleSubmit: (values) => {
+        console.log(values);
+      },
+      displayName: 'BasicForm',
+    })(FormikForm);
+
     const ContactForm = () => {
       return !this.state.isLoaded ? (
         <div>Loading...</div>
       ) : (
-        <FormikForm />
+        <CF />
       )
-    };
+    }
 
     return (
       <div className="container">

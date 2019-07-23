@@ -1,19 +1,25 @@
+import NavBar from "./components/navbar";
 import React from "react";
 import Router from "./containers/Router";
-import NavBar from "./components/navbar";
+
+import "./App.css";
 
 export class App extends React.Component {
   render() {
     return (
-      <div>
+      <React.Fragment>
         <NavBar />
-        <Router />
+        <section className="section">
+          <div className="container">
+            <Router />
+          </div>
+        </section>
         <footer className="footer">
           <div className="container has-text-centered">
             <p>© 2019 Сочи</p>
           </div>
         </footer>
-      </div>
+      </React.Fragment>
     );
   }
 }

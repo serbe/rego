@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import { Link } from "react-router-dom";
-// import { Table } from "antd";
 
 export class Contacts extends Component {
   constructor(props) {
@@ -35,38 +34,6 @@ export class Contacts extends Component {
   render() {
     const { error, isLoaded, contacts } = this.state;
 
-    const columns = [
-      {
-        title: "Фамилия Имя Отчество",
-        dataIndex: "name",
-        key: "name",
-        render: (text, row) => <Link to={{pathname: `/api/go/contact/item/${row.id}`}}>{text}</Link>
-      },
-      {
-        title: "Организация",
-        dataIndex: "company_name",
-        key: "company_name",
-        render: (text, row) => <Link to={{pathname: `/api/go/company/item/${row.company_id}`}}>{text}</Link>
-      },
-      {
-        title: "Должность",
-        dataIndex: "post_name",
-        key: "post_name"
-      },
-      {
-        title: "Телефон",
-        dataIndex: "phones",
-        key: "phones",
-        render: text => formatPhones(text)
-      },
-      {
-        title: "Факс",
-        dataIndex: "faxes",
-        key: "faxes",
-        render: text => formatPhones(text)
-      }
-    ];
-
     const formatPhones = items => {
       if (items) {
         return items.map((item, index) => <div key={index}>{item}</div>);
@@ -75,19 +42,63 @@ export class Contacts extends Component {
       }
     };
 
+    const Rows = () => {
+      if (contacts) {
+        let list = [];
+        for (let i = 0; i < 50; i++) {
+          list.push(contacts[i]);
+        }
+        return list.map(item => (
+          <tr key={item.id}>
+            <td><Link to={"/contacts/" + item.id} className="has-text-dark">{item.name}</Link></td>
+            <td className="is-hidden-mobile"><Link to={"/companies/" + item.company_id} className="has-text-dark">{item.company_name}</Link></td>
+            <td className="is-hidden-touch">{item.post_name}</td>
+            <td className="phone">{formatPhones(item.phones)}</td>
+            <td className="phone is-hidden-touch">
+              {formatPhones(item.faxes)}
+            </td>
+          </tr>
+        ));
+      } else {
+        return null;
+      }
+    };
+
     const Content = () => {
       if (error) {
         return (
-          <div>Error: {error.message}</div>
+          <tr>
+            <td>Error: {error.message}</td>
+          </tr>
+        );
+      } else if (!isLoaded) {
+        return (
+          <tr>
+            <td>Loading...</td>
+          </tr>
         );
       } else {
-        // return <Table columns={columns} dataSource={contacts} loading={!isLoaded} rowKey="id" bordered pagination={{pageSize:20, showSizeChanger: true, hideOnSinglePage: true}} />;
-        return <div>{isLoaded}</div>
+        return <Rows />;
       }
     };
 
     return (
-      <Content />
+      <div className="">
+        <table className="table is-narrow is-fullwidth">
+          <thead>
+            <tr>
+              <th>Фамилия Имя Отчество</th>
+              <th className="is-hidden-mobile">Организация</th>
+              <th className="is-hidden-touch">Должность</th>
+              <th className="phone">Телефон</th>
+              <th className="phone is-hidden-touch">Факс</th>
+            </tr>
+          </thead>
+          <tbody>
+            <Content />
+          </tbody>
+        </table>
+      </div>
     );
   }
 }
