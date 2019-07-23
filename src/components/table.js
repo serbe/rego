@@ -2,6 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import cc from "classcat";
 
+const split = items => {
+  if (items) {
+    return items.foreach((item, index) => <div key={index}>{item}</div>);
+  } else {
+    return null;
+  }
+};
+
 class Table extends React.Component {
   render() {
     const {
@@ -13,8 +21,7 @@ class Table extends React.Component {
       narrow,
       striped,
       data,
-      columns,
-      names
+      columns
     } = this.props;
 
     const classes = cc([
@@ -42,8 +49,12 @@ Table.propTypes = {
   narrow: PropTypes.bool,
   striped: PropTypes.bool,
   data: PropTypes.array,
-  columns: PropTypes.array,
-  names: PropTypes.array
+  columns: PropTypes.arrayOf(PropTypes.shape({
+    field: PropTypes.string.isRequired,
+    label: PropTypes.string,
+    witdh: PropTypes.string,
+    type: PropTypes.oneOf("array")
+  }))
 };
 
 // Table.defaultProps = {

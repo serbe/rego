@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import { Link } from "react-router-dom";
+import { Table } from "../../components/table";
 
 export class Contacts extends Component {
   constructor(props) {
@@ -84,6 +85,7 @@ export class Contacts extends Component {
 
     return (
       <div className="">
+        <Table data={contacts} />
         <table className="table is-narrow is-fullwidth">
           <thead>
             <tr>
