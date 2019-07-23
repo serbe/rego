@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 
 import clsx from "clsx";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
 import Button from "@material-ui/core/Button";
@@ -20,6 +20,7 @@ import Paper from "@material-ui/core/Paper";
 import Link from "@material-ui/core/Link";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import KitchenIcon from "@material-ui/icons/Kitchen";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -27,6 +28,7 @@ import Icon from "@material-ui/core/Icon";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import NotificationsIcon from "@material-ui/icons/Notifications";
+import Router from "../containers/Router";
 
 // import PropTypes from "prop-types";
 
@@ -42,78 +44,55 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: "flex"
   },
-  toolbar: {
-    paddingRight: 24 // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 8px",
-    ...theme.mixins.toolbar
-  },
   appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(["width", "margin"], {
+    transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
     })
   },
   appBarShift: {
-    marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
+    marginLeft: drawerWidth,
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
     })
   },
   menuButton: {
-    marginRight: 36
+    marginRight: theme.spacing(2)
   },
-  menuButtonHidden: {
+  hide: {
     display: "none"
   },
-  title: {
-    flexGrow: 1
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0
   },
   drawerPaper: {
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
+    width: drawerWidth
   },
-  drawerPaperClose: {
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
+  drawerHeader: {
+    display: "flex",
+    alignItems: "center",
+    padding: "0 8px",
+    ...theme.mixins.toolbar,
+    justifyContent: "flex-end"
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
     }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9)
-    }
+    marginLeft: -drawerWidth
   },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    height: "100vh",
-    overflow: "auto"
-  },
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4)
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column"
-  },
-  fixedHeight: {
-    height: 240
+  contentShift: {
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen
+    }),
+    marginLeft: 0
   }
 }));
 
@@ -246,68 +225,112 @@ const topItem = (
 
 export default function NavBar() {
   const classes = useStyles();
-  const auth = true;
-  const logged = true;
-  const [open, setOpen] = React.useState(true);
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
 
-  const handleDrawerOpen = () => {
+  function handleDrawerOpen() {
     setOpen(true);
-  };
-  const handleDrawerClose = () => {
+  }
+
+  function handleDrawerClose() {
     setOpen(false);
-  };
+  }
 
   return (
     <div className={classes.root}>
+      <CssBaseline />
       <AppBar
-        position="absolute"
-        className={clsx(classes.appBar, open && classes.appBarShift)}
+        position="fixed"
+        className={clsx(classes.appBar, {
+          [classes.appBarShift]: open
+        })}
       >
-        <Toolbar className={classes.toolbar}>
+        <Toolbar>
           <IconButton
-            edge="start"
             color="inherit"
             aria-label="Open drawer"
             onClick={handleDrawerOpen}
-            className={clsx(
-              classes.menuButton,
-              open && classes.menuButtonHidden
-            )}
+            edge="start"
+            className={clsx(classes.menuButton, open && classes.hide)}
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            className={classes.title}
-          >
-            Dashboard
+          <Typography variant="h6" noWrap>
+            Persistent drawer
           </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+          <Typography variant="h6" noWrap>
+      <NavLink
+        activeClassName="is-active"
+        className="navbar-item"
+        exact={true}
+        to="/"
+      >
+        ЕДДС
+      </NavLink>
+      </Typography>
+      <Typography variant="h6" noWrap>
+      <NavLink
+        activeClassName="is-active"
+        className="navbar-item"
+        to="/contacts"
+      >
+        <ListItem type="contacts" />
+        Контакты
+      </NavLink>
+    </Typography>
+    <Typography variant="h6" noWrap>
+      <NavLink
+        activeClassName="is-active"
+        className="navbar-item"
+        to="/companies"
+      >
+        <ListItemIcon type="bank" />
+        Организации
+      </NavLink>
+    </Typography>
+    <Typography variant="h6" noWrap>
+      <NavLink activeClassName="is-active" className="navbar-item" to="/sirens">
+        <ListItemIcon type="wifi" />
+        Сирены
+      </NavLink>
+    </Typography>
         </Toolbar>
       </AppBar>
 
       <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose)
-        }}
+        className={classes.drawer}
+        variant="persistent"
+        anchor="left"
         open={open}
+        classes={{
+          paper: classes.drawerPaper
+        }}
       >
-        <div className={classes.toolbarIcon}>
+        <div className={classes.drawerHeader}>
           <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
+            {theme.direction === "ltr" ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
           </IconButton>
         </div>
         <Divider />
         <List>{drawerListItems}</List>
       </Drawer>
+      <main
+        className={clsx(classes.content, {
+          [classes.contentShift]: open
+        })}
+      >
+        <div className={classes.drawerHeader} />
+        <Router />
+        <footer className="footer">
+          <div className="container has-text-centered">
+            <p>© 2019 Сочи</p>
+          </div>
+        </footer>
+      </main>
     </div>
   );
 }
