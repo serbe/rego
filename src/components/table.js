@@ -11,7 +11,10 @@ class Table extends React.Component {
       fullwidth,
       hoverable,
       narrow,
-      striped
+      striped,
+      data,
+      columns,
+      names
     } = this.props;
 
     const classes = cc([
@@ -37,7 +40,10 @@ Table.propTypes = {
   fullwidth: PropTypes.bool,
   hoverable: PropTypes.bool,
   narrow: PropTypes.bool,
-  striped: PropTypes.bool
+  striped: PropTypes.bool,
+  data: PropTypes.array,
+  columns: PropTypes.array,
+  names: PropTypes.array
 };
 
 // Table.defaultProps = {
