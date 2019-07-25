@@ -59,7 +59,7 @@ export class Contacts extends Component {
         <Table
           data={contacts}
           columns={columns}
-          loaded={!isLoaded}
+          loaded={isLoaded}
           hoverable
           narrow
         />
