@@ -1,12 +1,12 @@
-import React, {Component} from "react";
-import { Link } from "react-router-dom";
-import { Table } from "../../components/table";
+import React, { Component } from "react";
+// import { Link } from "react-router-dom";
+import Table from "../../components/table";
 
 export class Contacts extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: null,
+      // error: null,
       isLoaded: false,
       contacts: []
     };
@@ -33,73 +33,36 @@ export class Contacts extends Component {
   }
 
   render() {
-    const { error, isLoaded, contacts } = this.state;
+    const { isLoaded, contacts } = this.state;
 
-    const formatPhones = items => {
-      if (items) {
-        return items.map((item, index) => <div key={index}>{item}</div>);
-      } else {
-        return null;
-      }
-    };
-
-    const Rows = () => {
-      if (contacts) {
-        let list = [];
-        for (let i = 0; i < 50; i++) {
-          list.push(contacts[i]);
-        }
-        return list.map(item => (
-          <tr key={item.id}>
-            <td><Link to={"/contacts/" + item.id} className="has-text-dark">{item.name}</Link></td>
-            <td className="is-hidden-mobile"><Link to={"/companies/" + item.company_id} className="has-text-dark">{item.company_name}</Link></td>
-            <td className="is-hidden-touch">{item.post_name}</td>
-            <td className="phone">{formatPhones(item.phones)}</td>
-            <td className="phone is-hidden-touch">
-              {formatPhones(item.faxes)}
-            </td>
-          </tr>
-        ));
-      } else {
-        return null;
-      }
-    };
-
-    const Content = () => {
-      if (error) {
-        return (
-          <tr>
-            <td>Error: {error.message}</td>
-          </tr>
-        );
-      } else if (!isLoaded) {
-        return (
-          <tr>
-            <td>Loading...</td>
-          </tr>
-        );
-      } else {
-        return <Rows />;
-      }
-    };
+    const columns = [
+      {
+        field: "name",
+        label: "Фамилия Имя Отчество",
+        link_base: "/contacts/",
+        link_field: "id"
+      },
+      {
+        field: "company_name",
+        label: "Организация",
+        link_base: "/compaines/",
+        link_field: "company_id",
+        c_name: "is-hidden-mobile"
+      },
+      { field: "post_name", label: "Должность", c_name: "is-hidden-touch" },
+      { field: "phones", label: "Телефон", array: true },
+      { field: "faxes", label: "Факс", array: true, c_name: "is-hidden-touch" }
+    ];
 
     return (
       <div className="">
-        <Table data={contacts} />
-        <table className="table is-narrow is-fullwidth">
-          <thead>
-            <tr>
-              <th>Фамилия Имя Отчество</th>
-              <th className="is-hidden-mobile">Организация</th>
-              <th className="is-hidden-touch">Должность</th>
-              <th className="phone">Телефон</th>
-              <th className="phone is-hidden-touch">Факс</th>
-            </tr>
-          </thead>
-          <tbody>
-            <Content />
-          </tbody>
-        </table>
+        <Table
+          data={contacts}
+          columns={columns}
+          loaded={!isLoaded}
+          hoverable
+          narrow
+        />
       </div>
     );
   }

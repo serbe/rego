@@ -6,26 +6,26 @@ import { ContactScheme } from "../../models/contact";
 
 // import { Link } from "react-router-dom";
 
-    // initialValues={{
-    //   id: 0,
-    //   name: "",
-    //   address: "",
-    //   birthday: "",
-    //   company: {},
-    //   company_id: 0,
-    //   post: {},
-    //   post_id: 0,
-    //   department: {},
-    //   department_id: 0,
-    //   post_go: {},
-    //   post_go_id: 0,
-    //   rank: {},
-    //   rank_id: 0,
-    //   emails: [],
-    //   phones: [],
-    //   faxes: [],
-    //   note: "",
-    // }}
+// initialValues={{
+//   id: 0,
+//   name: "",
+//   address: "",
+//   birthday: "",
+//   company: {},
+//   company_id: 0,
+//   post: {},
+//   post_id: 0,
+//   department: {},
+//   department_id: 0,
+//   post_go: {},
+//   post_go_id: 0,
+//   rank: {},
+//   rank_id: 0,
+//   emails: [],
+//   phones: [],
+//   faxes: [],
+//   note: "",
+// }}
 
 const FormikForm = props => {
   const {
@@ -34,7 +34,7 @@ const FormikForm = props => {
     errors,
     handleChange,
     handleBlur,
-    handleSubmit,
+    handleSubmit
   } = props;
   return (
     <form onSubmit={handleSubmit}>
@@ -77,7 +77,6 @@ const FormikForm = props => {
 //   </div>
 // )
 
-
 const fetchContact = id =>
   fetch(`/api/go/contact/${id}`)
     .then(res => res.json())
@@ -112,7 +111,7 @@ const AddUserForm = props => {
     emails: [],
     phones: [],
     faxes: [],
-    note: "",
+    note: ""
   };
 
   // используем useState и передаем в качестве начального значения объект - initialFormState
@@ -120,7 +119,7 @@ const AddUserForm = props => {
 
   const handleInputChange = event => {
     const { name, value } = event.currentTarget;
-    setContact({ ...contact, [name]: value })
+    setContact({ ...contact, [name]: value });
   };
 
   return (
@@ -141,9 +140,8 @@ const AddUserForm = props => {
       />
       <button>Add new user</button>
     </form>
-  )
+  );
 };
-
 
 export class Contact extends Component {
   constructor(props) {
@@ -216,21 +214,17 @@ export class Contact extends Component {
     };
 
     const CF = withFormik({
-      mapPropsToValues: () => (this.state.contact),
+      mapPropsToValues: () => this.state.contact,
       validationSchema: ContactScheme,
-      handleSubmit: (values) => {
+      handleSubmit: values => {
         console.log(values);
       },
-      displayName: 'BasicForm',
+      displayName: "BasicForm"
     })(FormikForm);
 
     const ContactForm = () => {
-      return !this.state.isLoaded ? (
-        <div>Loading...</div>
-      ) : (
-        <CF />
-      )
-    }
+      return !this.state.isLoaded ? <div>Loading...</div> : <CF />;
+    };
 
     return (
       <div className="container">
