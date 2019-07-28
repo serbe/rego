@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import PropTypes from "prop-types";
-import cc from "classcat";
+import clsx from "clsx";
 
 function Pagination(props) {
   const [currentPage, setCurrentPage] = useState(this.props.currentPage);
@@ -19,7 +19,7 @@ function Pagination(props) {
       return this.state.page;
     };
 
-    const navClasses = cc([
+    const navClasses = clsx([
       "pagination",
       "is-centered",
       {

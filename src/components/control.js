@@ -1,7 +1,7 @@
 import React from "react";
 
 import PropTypes from "prop-types";
-import cc from "classcat";
+import clsx from "clsx";
 
 class Control extends React.Component {
   render() {
@@ -31,7 +31,7 @@ class Control extends React.Component {
         {...props}
         // disabled={disabled}
         // onClick={disabled ? undefined : onClick}
-        className={cc([
+        className={clsx([
           { className },
           "control",
           {

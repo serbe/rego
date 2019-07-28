@@ -25,15 +25,10 @@ const Table = props => {
     paginate
   } = props;
 
-  const [per_page, setPerPage] = useState(20);
+  let per_page = paginate ? paginate : 20;
   // eslint-disable-next-line
-  const [search, setSearch] = useState("");
-  // eslint-disable-next-line
-  const [current_page, setCurrentPage] = useState(0);
-
-  if (paginate) {
-    setPerPage(paginate);
-  }
+  // const [search, setSearch] = useState("");
+  let current_page = 0;
 
   const classes = clsx([
     { className },
@@ -128,7 +123,7 @@ Table.propTypes = {
       array: PropTypes.bool,
       link_base: PropTypes.string,
       link_field: PropTypes.string,
-      c_name: PropTypes.string
+      class_name: PropTypes.string
     })
   ),
   loaded: PropTypes.bool,
