@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import clsx from "clsx";
 
 const splitArray = items => {
@@ -26,8 +26,7 @@ const Table = props => {
   } = props;
 
   let per_page = paginate ? paginate : 20;
-  // eslint-disable-next-line
-  // const [search, setSearch] = useState("");
+  let search = "";
   let current_page = 0;
 
   const classes = clsx([

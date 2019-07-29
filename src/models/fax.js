@@ -1,7 +1,9 @@
-import { object, number, string, boolean } from 'yup';
+import { object, number, string, boolean } from "yup";
 
 export const FaxScheme = object({
-  id: number().positive().integer(),
+  id: number()
+    .positive()
+    .integer(),
   phone: string(),
-  fax: boolean(),
+  fax: boolean()
 });

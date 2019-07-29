@@ -54,15 +54,15 @@ export class Contact extends Component {
 
     return (
       <div class="container">
-      <form id="contact">
-      <Field
-          value={contact.name}
-          label="Полное имя"
-          placeholder="Полное имя"
-          iconLeft="user"
-        ></Field>
+        <form id="contact">
+          <Field
+            value={contact.name}
+            label="Полное имя"
+            placeholder="Полное имя"
+            iconLeft="user"
+          />
 
-        {/* <bulma-select
+          {/* <bulma-select
           :list="companies"
           :selected-item="contact.company"
           label="Организация"
@@ -71,7 +71,7 @@ export class Contact extends Component {
           iconLeft="building"
         ></bulma-select> */}
 
-        {/* <div class="columns">
+          {/* <div class="columns">
           <div class="column is-half">
             <bulma-select
               :list="posts"
@@ -95,7 +95,7 @@ export class Contact extends Component {
           </div>
         </div> */}
 
-        {/* <div class="columns">
+          {/* <div class="columns">
           <div class="column is-half">
             <bulma-select
               :list="posts_go"
@@ -119,7 +119,7 @@ export class Contact extends Component {
           </div>
         </div> */}
 
-        {/* <div class="columns">
+          {/* <div class="columns">
           <div class="column is-one-third">
             <bulma-date
               v-model="contact.birthday"
@@ -128,7 +128,7 @@ export class Contact extends Component {
           </div>
         </div> */}
 
-        {/* <div class="columns">
+          {/* <div class="columns">
           <div class="column">
             <Field></Field>
               <label class="label">Электронный адрес</label>
@@ -178,9 +178,9 @@ export class Contact extends Component {
               ></bulma-input>
             </div>
           </div> */}
-        {/* </div> */}
+          {/* </div> */}
 
-        {/* <div class="field" v-if="contact.practices" key="practices">
+          {/* <div class="field" v-if="contact.practices" key="practices">
           <label class="label">Тренировки</label>
           <bulma-input
             v-for="practice in contact.practices"
@@ -198,14 +198,14 @@ export class Contact extends Component {
           ></bulma-input>
         </div> */}
 
-        <Field
-          label="Заметка"
-          placeholder="Заметка"
-          iconLeft="comment"
-          value={contact.note}
-        ></Field>
+          <Field
+            label="Заметка"
+            placeholder="Заметка"
+            iconLeft="comment"
+            value={contact.note}
+          />
 
-        {/* <div class="field is-grouped is-grouped-centered">
+          {/* <div class="field is-grouped is-grouped-centered">
           <div class="control">
             <bulma-button
               text="Сохранить"
@@ -224,8 +224,8 @@ export class Contact extends Component {
             ></bulma-button>
           </div>
         </div> */}
-      </form>
-    </div>
+        </form>
+      </div>
     );
   }
 }

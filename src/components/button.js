@@ -79,11 +79,7 @@ class Button extends Component {
         );
       } else if (type === "a") {
         return (
-          <a
-            href={href}
-            onClick={onClick}
-            className={classes}
-          >
+          <a href={href} onClick={onClick} className={classes}>
             {children}
           </a>
         );

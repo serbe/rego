@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 
 import Input from "./input";
 import PropTypes from "prop-types";
@@ -28,9 +28,9 @@ class FormField extends Component {
     const Label = () => {
       if (label) {
         if (label !== true) {
-          return <label className="label">{label}</label>
+          return <label className="label">{label}</label>;
         } else {
-          return <label className="label">{placeholder}</label>
+          return <label className="label">{placeholder}</label>;
         }
       } else {
         return null;
