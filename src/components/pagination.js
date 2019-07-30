@@ -1,102 +1,104 @@
-import React, { useState } from "react";
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 
-function Pagination(props) {
-  const [currentPage, setCurrentPage] = useState(this.props.currentPage);
+export const Pagination = props => {
+  const { current_page, last_page, callback, size } = props;
 
-  let maxNumber = () => {
-    if (this.props.len % this.props.maxRows === 0) {
-      return (this.props.len / this.props.maxRows) | 0;
-    }
-    return ((this.props.len / this.props.maxRows) | 0) + 1;
+  const Prev = () => {
+    return current_page > 1 ? (
+      <a
+        className="pagination-previous"
+        onClick={() => callback(current_page - 1)}
+        key="PaginationPrev"
+        href="#"
+      >
+        Назад
+      </a>
+    ) : null;
   };
 
-  let value = () => {
-    if (this.state.page > this.props.max) {
-      this.paginationClick(this.props.max);
-    }
-    return this.state.page;
+  const Next = () => {
+    return current_page < last_page ? (
+      <a
+        className="pagination-next"
+        onClick={() => callback(current_page + 1)}
+        key="PaginationNext"
+      >
+        Далее
+      </a>
+    ) : null;
+  };
+
+  const PaginationLink = ({ check, index, link, ellipsis }) => {
+    const Tag = () => {
+      return ellipsis ? (
+        <span className="pagination-ellipsis">"&hellip;"</span>
+      ) : (
+        <a
+          className={
+            link === current_page
+              ? "pagination-link is-current"
+              : "pagination-link"
+          }
+          onClick={link === current_page ? null : () => callback(link)}
+        >
+          {link}
+        </a>
+      );
+    };
+    return check ? (
+      <li key={`li${index}`}>
+        <Tag />
+      </li>
+    ) : null;
   };
 
   const navClasses = clsx([
     "pagination",
     "is-centered",
     {
-      [`is-${this.props.size}`]: this.props.size
+      [`is-${size}`]: null
     }
   ]);
 
   return (
-    <nav
-      v-if="max > 1"
-      ref="pagination"
-      className={navClasses}
-      key="Pagination"
-    >
-      <a
-        className="pagination-previous"
-        v-if="value > 1"
-        onClick="onClick(value - 1)"
-        key="PaginationPrev"
-      >
-        Назад
-      </a>
-      <a
-        className="pagination-next"
-        v-if="value < max"
-        onClick="onClick(value + 1)"
-        key="PaginationNext"
-      >
-        Далее
-      </a>
-      <ul className="pagination-list">
-        <li v-if="value !== 1" key="li1">
-          <a className="pagination-link" onClick="onClick(1)">
-            1
-          </a>
-        </li>
-        <li v-if="value > 3" key="li2">
-          <span className="pagination-ellipsis">&hellip;</span>
-        </li>
-        <li v-if="value > 2" key="li3">
-          <a className="pagination-link" onClick="onClick(value - 1)">
-            {value - 1}
-          </a>
-        </li>
-        <li>
-          <a className="pagination-link is-current">{{ value }}</a>
-        </li>
-        <li v-if="value < max - 1" key="li4">
-          <a className="pagination-link" onClick="onClick(value + 1)">
-            {value + 1}
-          </a>
-        </li>
-        <li v-if="value < max - 2" key="li5">
-          <span className="pagination-ellipsis">&hellip;</span>
-        </li>
-        <li v-if="value != max" key="li6">
-          <a className="pagination-link" onClick="onClick(max)">
-            {this.props.max}
-          </a>
-        </li>
+    <nav className={navClasses} key="nav">
+      <Prev />
+      <Next />
+      <ul className="pagination-list" key="ul">
+        <PaginationLink check={current_page !== 1} index={1} link={1} />
+        <PaginationLink check={current_page > 3} index={2} ellipsis />
+        <PaginationLink
+          check={current_page > 2}
+          index={3}
+          link={current_page - 1}
+        />
+        <PaginationLink check index={4} link={current_page} />
+        <PaginationLink
+          check={current_page < last_page - 1}
+          index={5}
+          link={current_page + 1}
+        />
+        <PaginationLink
+          check={current_page < last_page - 2}
+          index={6}
+          ellipsis
+        />
+        <PaginationLink
+          check={current_page !== last_page}
+          index={7}
+          link={last_page}
+        />
       </ul>
     </nav>
   );
-}
-
-Pagination.propTypes = {
-  len: PropTypes.number.isRequired,
-  currentPage: PropTypes.number.isRequired,
-  maxRows: PropTypes.number.isRequired,
-  size: PropTypes.oneOf(["small", "normal", "medium", "large"])
 };
 
-// Pagination.defaultProps = {
-//   len: 0,
-//   currentPage: 0,
-//   maxRows: 0
-//   // size: '',
-// };
-
-export default Pagination;
+Pagination.propTypes = {
+  current_page: PropTypes.number.isRequired,
+  last_page: PropTypes.number.isRequired,
+  callback: PropTypes.func.isRequired,
+  size: PropTypes.oneOf(["small", "normal", "medium", "large"])
+};

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import clsx from "clsx";
+import { Pagination } from "./pagination";
 
 const splitArray = items => {
   if (items) {
@@ -11,99 +12,133 @@ const splitArray = items => {
   }
 };
 
-const Table = props => {
-  const {
-    bordered,
-    className,
-    fullwidth,
-    hoverable,
-    narrow,
-    striped,
-    data,
-    columns,
-    loaded,
-    paginate
-  } = props;
+export class Table extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      current_page: 0
+    };
+  }
 
-  let per_page = paginate ? paginate : 20;
-  let search = "";
-  let current_page = 0;
+  render() {
+    const {
+      bordered,
+      className,
+      fullwidth,
+      hoverable,
+      narrow,
+      striped,
+      data,
+      columns,
+      loaded,
+      paginate
+    } = this.props;
 
-  const classes = clsx([
-    { className },
-    "table",
-    {
-      "is-bordered": bordered,
-      "is-fullwidth": fullwidth,
-      "is-hoverable": hoverable,
-      "is-narrow": narrow,
-      "is-striped": striped
-    }
-  ]);
+    let per_page = paginate ? paginate : 20;
+    let search = "";
 
-  const Heading = () => {
-    return (
-      <thead>
-        <tr>
-          {columns.map((item, key) => (
-            <th key={key} className={item.c_name}>
-              {item.label}
-            </th>
-          ))}
-        </tr>
-      </thead>
-    );
-  };
+    let filtered_len = 0;
 
-  const Row = row => {
-    return columns.map((item, key) => (
-      <td key={key} className={item.c_name}>
-        {item.link_field && item.link_base ? (
-          <Link to={item.link_base + row[item.link_field]}>
-            {item.array ? splitArray(row[item.field]) : row[item.field]}
-          </Link>
-        ) : item.array ? (
-          splitArray(row[item.field])
-        ) : (
-          row[item.field]
-        )}
-      </td>
-    ));
-  };
+    const classes = clsx([
+      { className },
+      "table",
+      {
+        "is-bordered": bordered,
+        "is-fullwidth": fullwidth,
+        "is-hoverable": hoverable,
+        "is-narrow": narrow,
+        "is-striped": striped
+      }
+    ]);
 
-  const Rows = () => {
-    return filteredData().map(row => <tr key={row.id}>{Row(row)}</tr>);
-  };
-
-  const TBody = () => {
-    if (data && data.length > 0) {
+    const Heading = () => {
       return (
-        <tbody>
-          <Rows />
-        </tbody>
+        <thead>
+          <tr>
+            {columns.map((item, key) => (
+              <th key={key} className={item.c_name}>
+                {item.label}
+              </th>
+            ))}
+          </tr>
+        </thead>
       );
-    } else {
-      return null;
-    }
-  };
+    };
 
-  const filteredData = () => {
-    if (search !== "") {
-      return data;
-    } else {
-      return data.slice(current_page * per_page, (current_page + 1) * per_page);
-    }
-  };
+    const Row = row => {
+      return columns.map((item, key) => (
+        <td key={key} className={item.c_name}>
+          {item.link_field && item.link_base ? (
+            <Link to={item.link_base + row[item.link_field]}>
+              {item.array ? splitArray(row[item.field]) : row[item.field]}
+            </Link>
+          ) : item.array ? (
+            splitArray(row[item.field])
+          ) : (
+            row[item.field]
+          )}
+        </td>
+      ));
+    };
 
-  return !loaded ? (
-    <div>Loading data</div>
-  ) : (
-    <table className={classes}>
-      <Heading />
-      <TBody />
-    </table>
-  );
-};
+    const Rows = () => {
+      return filteredData().map(row => <tr key={row.id}>{Row(row)}</tr>);
+    };
+
+    const TBody = () => {
+      if (data && data.length > 0) {
+        return (
+          <tbody>
+            <Rows />
+          </tbody>
+        );
+      } else {
+        return null;
+      }
+    };
+
+    const filteredData = () => {
+      if (search !== "") {
+        filtered_len = data.length;
+        return data;
+      } else {
+        const slice_data = data.slice(
+          this.state.current_page * per_page,
+          (this.state.current_page + 1) * per_page
+        );
+        filtered_len = data.length;
+        return slice_data;
+      }
+    };
+
+    const Paginate = () => {
+      return paginate && filtered_len / per_page > 2 ? (
+        <Pagination
+          current_page={this.state.current_page + 1}
+          last_page={Math.ceil(filtered_len / per_page + 1)}
+          callback={receiveChildValue}
+          size="small"
+        />
+      ) : null;
+    };
+
+    const receiveChildValue = value => {
+      this.setState(() => ({ current_page: value - 1 }));
+    };
+
+    return !loaded ? (
+      <div>Loading data</div>
+    ) : (
+      <div>
+        <table className={classes}>
+          <Heading />
+          <TBody />
+        </table>
+        <Paginate />
+      </div>
+    );
+  }
+}
 
 Table.propTypes = {
   bordered: PropTypes.bool,
@@ -128,5 +163,3 @@ Table.propTypes = {
   loaded: PropTypes.bool,
   paginate: PropTypes.number
 };
-
-export default Table;

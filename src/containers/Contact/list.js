@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 // import { Link } from "react-router-dom";
-import Table from "../../components/table";
+import { Table } from "../../components/table";
 
 export class Contacts extends Component {
   constructor(props) {
@@ -62,6 +62,7 @@ export class Contacts extends Component {
           loaded={isLoaded}
           hoverable
           narrow
+          paginate={20}
         />
       </div>
     );
