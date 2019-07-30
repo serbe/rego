@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import clsx from "clsx";
 
 export const Pagination = props => {
-  const { current_page, last_page, callback, size } = props;
+  const { current_page, last_page, callback, rounded, size } = props;
 
   const Prev = () => {
     return current_page > 1 ? (
@@ -58,7 +58,8 @@ export const Pagination = props => {
   const navClasses = clsx([
     "pagination",
     "is-centered",
-    {size} ? `is-${size}` : null
+    {size} ? `is-${size}` : null,
+    [{"is-rounded": {rounded}}]
   ]);
 
   return (
@@ -98,5 +99,6 @@ Pagination.propTypes = {
   current_page: PropTypes.number.isRequired,
   last_page: PropTypes.number.isRequired,
   callback: PropTypes.func.isRequired,
+  rounded: PropTypes.bool,
   size: PropTypes.oneOf(["small", "normal", "medium", "large"])
 };

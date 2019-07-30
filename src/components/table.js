@@ -117,6 +117,7 @@ export class Table extends Component {
           current_page={this.state.current_page + 1}
           last_page={Math.ceil(filtered_len / per_page)}
           callback={receiveChildValue}
+          rounded
         />
       ) : null;
     };
