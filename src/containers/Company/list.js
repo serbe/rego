@@ -1,23 +1,23 @@
 import React, { Component } from "react";
 import { Table } from "../../components/table";
 
-export class Contacts extends Component {
+export class Companies extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoaded: false,
-      contacts: []
+      compaines: []
     };
   }
 
   componentDidMount() {
-    fetch("/api/go/contact/list")
+    fetch("/api/go/company/list")
       .then(res => res.json())
       .then(
         result => {
           this.setState({
             isLoaded: true,
-            contacts: result.data.ContactList
+            compaines: result.data.CompanyList
           });
         },
         error => {
@@ -31,31 +31,44 @@ export class Contacts extends Component {
   }
 
   render() {
-    const { isLoaded, contacts } = this.state;
+    const { isLoaded, compaines } = this.state;
 
     const columns = [
       {
         field: "name",
-        label: "Фамилия Имя Отчество",
-        link_base: "/contacts/",
+        label: "Наименование",
+        link_base: "/compaines/",
         link_field: "id"
       },
       {
-        field: "company_name",
-        label: "Организация",
-        link_base: "/compaines/",
-        link_field: "company_id",
+        field: "address",
+        label: "Адрес",
+        c_name: "is-hidden-touch"
+      },
+      {
+        field: "scope_name",
+        label: "Сфера деятельности",
         c_name: "is-hidden-mobile"
       },
-      { field: "post_name", label: "Должность", c_name: "is-hidden-touch" },
       { field: "phones", label: "Телефоны", array: true },
-      { field: "faxes", label: "Факсы", array: true, c_name: "is-hidden-touch" }
+      {
+        field: "faxes",
+        label: "Факсы",
+        array: true,
+        c_name: "is-hidden-touch"
+      },
+      {
+        field: "practices",
+        label: "Тренировки",
+        array: true,
+        c_name: "is-hidden-touch"
+      }
     ];
 
     return (
       <div className="">
         <Table
-          data={contacts}
+          data={compaines}
           columns={columns}
           loaded={isLoaded}
           hoverable
