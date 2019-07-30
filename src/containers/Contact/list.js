@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Table } from "../../components/table";
+import { ContactListSchemeArray } from "../../models/contact";
 
 export class Contacts extends Component {
   constructor(props) {
@@ -15,10 +16,20 @@ export class Contacts extends Component {
       .then(res => res.json())
       .then(
         result => {
-          this.setState({
-            isLoaded: true,
-            contacts: result.data.ContactList
-          });
+          ContactListSchemeArray.isValid(result.data.ContactList)
+            .then(() => {
+              this.setState({
+                isLoaded: true,
+                contacts: result.data.ContactList
+              });
+            })
+            .catch(error => {
+              console.log(error);
+              this.setState({
+                isLoaded: true,
+                error
+              });
+            });
         },
         error => {
           console.log(error);

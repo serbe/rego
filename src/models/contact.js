@@ -49,6 +49,8 @@ export const ContactListScheme = object({
   faxes: array().of(string())
 });
 
+export const ContactListSchemeArray = array().of(ContactListScheme);
+
 export const ContactItemScheme = object({
   id: number()
     .positive()
