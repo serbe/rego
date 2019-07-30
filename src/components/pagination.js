@@ -58,9 +58,7 @@ export const Pagination = props => {
   const navClasses = clsx([
     "pagination",
     "is-centered",
-    {
-      [`is-${size}`]: null
-    }
+    {size} ? `is-${size}` : null
   ]);
 
   return (

@@ -115,9 +115,8 @@ export class Table extends Component {
       return paginate && filtered_len / per_page > 2 ? (
         <Pagination
           current_page={this.state.current_page + 1}
-          last_page={Math.ceil(filtered_len / per_page + 1)}
+          last_page={Math.ceil(filtered_len / per_page)}
           callback={receiveChildValue}
-          size="small"
         />
       ) : null;
     };
