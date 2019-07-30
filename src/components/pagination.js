@@ -34,7 +34,7 @@ export const Pagination = props => {
   const PaginationLink = ({ check, index, link, ellipsis }) => {
     const Tag = () => {
       return ellipsis ? (
-        <span className="pagination-ellipsis">"&hellip;"</span>
+        <span className="pagination-ellipsis">&hellip;</span>
       ) : (
         <a
           className={
