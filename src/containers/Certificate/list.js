@@ -1,24 +1,23 @@
 import React, { Component } from "react";
 import { Table } from "../../components/table";
-// import { ContactListSchemeArray } from "../../models/contact";
 
-export class Contacts extends Component {
+export class Certificates extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoaded: false,
-      contacts: []
+      certificates: []
     };
   }
 
   componentDidMount() {
-    fetch("/api/go/contact/list")
+    fetch("/api/go/certificate/list")
       .then(res => res.json())
       .then(
         result => {
           this.setState({
             isLoaded: true,
-            contacts: result.data.ContactList
+            certificates: result.data.CertificateList
           });
         },
         error => {
@@ -32,31 +31,38 @@ export class Contacts extends Component {
   }
 
   render() {
-    const { isLoaded, contacts } = this.state;
+    const { isLoaded, certificates } = this.state;
 
     const columns = [
       {
-        field: "name",
-        label: "Фамилия Имя Отчество",
-        link_base: "/contacts/",
+        field: "num",
+        label: "Номер",
+        link_base: "/certificates/",
         link_field: "id"
       },
       {
+        field: "contact_name",
+        label: "Фамилия Имя Отчество"
+      },
+      {
         field: "company_name",
-        label: "Организация",
-        link_base: "/compaines/",
+        label: "Учебно-методический центр",
+        link_base: "/companies/",
         link_field: "company_id",
         c_name: "is-hidden-mobile"
       },
-      { field: "post_name", label: "Должность", c_name: "is-hidden-touch" },
-      { field: "phones", label: "Телефоны", array: true },
-      { field: "faxes", label: "Факсы", array: true, c_name: "is-hidden-touch" }
+      { field: "cert_date", label: "Дата" },
+      {
+        field: "note",
+        label: "Заметка",
+        c_name: "is-hidden-mobile"
+      }
     ];
 
     return (
       <div className="">
         <Table
-          data={contacts}
+          data={certificates}
           columns={columns}
           loaded={isLoaded}
           hoverable

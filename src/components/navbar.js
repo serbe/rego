@@ -1,17 +1,18 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
+import clsx from "clsx";
 
 import Button from "./button";
 import PropTypes from "prop-types";
 
 function toggleOpen() {
   return (previousState, currentProps) => {
-    return { ...previousState, open: !previousState.open };
+    return { ...previousState, active: !previousState.active };
   };
 }
 
-class NavBar extends Component {
+export class NavBar extends Component {
   static contextTypes = {
     router: PropTypes.object
   };
@@ -19,6 +20,7 @@ class NavBar extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      active: false,
       auth: true,
       logged: true,
       open: false
@@ -29,7 +31,7 @@ class NavBar extends Component {
   //   this.setState({logged: logged});
   // };
 
-  onClick = () => {
+  handleToggle = () => {
     this.setState(toggleOpen());
   };
 
@@ -41,6 +43,14 @@ class NavBar extends Component {
   // }
 
   render() {
+    const navMenu = () => {
+      return clsx([
+        "navbar-item",
+        "has-dropdown",
+        "is-hoverable"
+      ]);
+    };
+
     return (
       <nav
         aria-label="main navigation"
@@ -97,7 +107,7 @@ class NavBar extends Component {
                     Сирены
                   </NavLink>
 
-                  <div className="navbar-item has-dropdown is-hoverable">
+                  <div className={navMenu()}>
                     <a href="#" className="navbar-link">
                       Справочники
                     </a>
@@ -208,5 +218,3 @@ class NavBar extends Component {
     );
   }
 }
-
-export default NavBar;

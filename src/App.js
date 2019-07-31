@@ -1,4 +1,4 @@
-import NavBar from "./components/navbar";
+import { NavBar } from "./components/navbar";
 import React from "react";
 import Router from "./containers/Router";
 
