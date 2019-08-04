@@ -18,6 +18,7 @@ class FormField extends Component {
       label,
       loading,
       onClick,
+      onChange,
       placeholder,
       readonly,
       round,
@@ -51,6 +52,7 @@ class FormField extends Component {
           isStatic={isStatic}
           loading={loading}
           onClick={onClick}
+          onChange={onChange}
           placeholder={placeholder}
           readonly={readonly}
           round={round}
@@ -75,6 +77,7 @@ FormField.propTypes = {
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   loading: PropTypes.bool,
   onClick: PropTypes.func,
+  onChange: PropTypes.func,
   placeholder: PropTypes.string,
   readonly: PropTypes.bool,
   round: PropTypes.bool,
