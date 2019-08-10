@@ -1,25 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
+import { NavBar } from "./components/navbar";
+import Router from "./containers/Router";
+
 import './App.css';
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      <NavBar />
+      <section className="section">
+        <div className="container">
+          <Router />
+        </div>
+      </section>
+      <footer className="footer">
+        <div className="container has-text-centered">
+          <p>© 2019 Сочи</p>
+        </div>
+      </footer>
+    </React.Fragment>
   );
 }
 

@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-"@types/jest": "24.0.17",
+    "@types/jest": "24.0.17",
     "@types/node": "12.7.1",
     "@types/react": "16.9.1",
     "@types/react-dom": "16.8.5",
+    "@types/react-router-dom": "^4.3.4",
     "bulma": "^0.7.5",
     "clsx": "^1.0.4",
     "formik": "^1.5.8",
@@ -15,10 +16,10 @@
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-scripts": "3.1.0",
-    "typescript": "3.5.3",
     "react-router-dom": "^5.0.1",
+    "react-scripts": "3.1.0",
     "source-map-explorer": "^2.0.1",
+    "typescript": "3.5.3",
     "yup": "^0.27.0"
   },
   "scripts": {
@@ -31,11 +32,10 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "browserslist": [
+  "browserslist": {
     "production": [
       ">0.2%",
       "not dead",
-
       "not op_mini all"
     ],
     "development": [
@@ -43,4 +43,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  }
 }
