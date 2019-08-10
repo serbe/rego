@@ -1,9 +1,44 @@
 import React, { Component } from "react";
 
-import PropTypes from "prop-types";
 import clsx from "clsx";
 
-class Button extends Component {
+interface IButtonProps {
+  type: "a" | "button" | "submit" | "reset";
+  color:
+  | "black"
+  | "danger"
+  | "dark"
+  | "info"
+  | "light"
+  | "link"
+  | "primary"
+  | "success"
+  | "text"
+  | "warning"
+  | "white";
+  active: boolean;
+  children: JSX.Element;
+  className: string;
+  disable: boolean;
+  focus: boolean;
+  fullwidth: boolean;
+  hover: boolean;
+  href: string;
+  invert: boolean;
+  isStatic: boolean;
+  loading: boolean;
+  onClick?: any;
+  outline: boolean;
+  round: boolean;
+  size: "small" | "normal" | "medium" | "large";
+}
+
+export class Button extends Component<IButtonProps> {
+  static defaultProps: Partial<IButtonProps> = {
+    type: "button",
+    color: "white"
+  }
+
   // constructor(props) {
   //   super(props);
   //   // this.onClick = this.onClick.bind(this);
@@ -21,7 +56,7 @@ class Button extends Component {
   // }
 
   render() {
-    let {
+    const {
       active,
       children,
       className,
@@ -95,42 +130,3 @@ class Button extends Component {
     return <Tag />;
   }
 }
-
-Button.propTypes = {
-  type: PropTypes.oneOf(["a", "button", "submit", "reset"]),
-  color: PropTypes.oneOf([
-    "black",
-    "danger",
-    "dark",
-    "info",
-    "light",
-    "link",
-    "primary",
-    "success",
-    "text",
-    "warning",
-    "white"
-  ]),
-  active: PropTypes.bool,
-  children: PropTypes.node,
-  className: PropTypes.string,
-  disable: PropTypes.bool,
-  focus: PropTypes.bool,
-  fullwidth: PropTypes.bool,
-  hover: PropTypes.bool,
-  href: PropTypes.string,
-  invert: PropTypes.bool,
-  isStatic: PropTypes.bool,
-  loading: PropTypes.bool,
-  onClick: PropTypes.func,
-  outline: PropTypes.bool,
-  round: PropTypes.bool,
-  size: PropTypes.oneOf(["small", "normal", "medium", "large"])
-};
-
-Button.defaultProps = {
-  type: "button",
-  color: "white"
-};
-
-export default Button;
