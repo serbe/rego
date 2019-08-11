@@ -1,16 +1,13 @@
-import React, { Component } from "react";
+import React from "react";
 import { Table } from "../../components/table";
-// import { ContactListSchemeArray } from "../../models/contact";
+import { ContactList } from "../../models/contact";
 
-export class Contacts extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoaded: false,
-      contacts: []
-    };
-  }
+interface IContactsState {
+  isLoaded: boolean;
+  contacts: Array<ContactList>;
+}
 
+export class Contacts extends React.Component<{}, IContactsState> {
   componentDidMount() {
     fetch("/api/go/contact/list")
       .then(res => res.json())
@@ -24,8 +21,7 @@ export class Contacts extends Component {
         error => {
           console.log(error);
           this.setState({
-            isLoaded: true,
-            error
+            isLoaded: true
           });
         }
       );

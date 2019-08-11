@@ -3,7 +3,27 @@ import React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 
-class Control extends React.Component {
+interface IControlProps {
+  children: Element;
+  className?: string;
+  // onClick: PropTypes.func,
+  isP?: boolean;
+  // color: PropTypes.oneOf('white', 'light', 'dark', 'text', 'primary', 'link', 'info', 'success', 'warning', 'danger'),
+  size?: "small" | "medium" | "large";
+  leftIcon?: string;
+  rightIcon?: string;
+  // outlined: PropTypes.bool,
+  // inverted: PropTypes.bool,
+  // rounded: PropTypes.bool,
+  // hovered: PropTypes.bool,
+  // focused: PropTypes.bool,
+  // active: PropTypes.bool,
+  loading?: boolean;
+  // isStatic: PropTypes.bool,
+  // disabled: PropTypes.bool
+}
+
+export class Control extends React.Component<IControlProps> {
   render() {
     const {
       children,
@@ -74,25 +94,3 @@ class Control extends React.Component {
 // 	// isStatic: false,
 // 	// disabled: false
 // };
-
-Control.propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.string,
-  // onClick: PropTypes.func,
-  isP: PropTypes.bool,
-  // color: PropTypes.oneOf('white', 'light', 'dark', 'text', 'primary', 'link', 'info', 'success', 'warning', 'danger'),
-  size: PropTypes.oneOf("small", "medium", "large"),
-  leftIcon: PropTypes.string,
-  rightIcon: PropTypes.string,
-  // outlined: PropTypes.bool,
-  // inverted: PropTypes.bool,
-  // rounded: PropTypes.bool,
-  // hovered: PropTypes.bool,
-  // focused: PropTypes.bool,
-  // active: PropTypes.bool,
-  loading: PropTypes.bool
-  // isStatic: PropTypes.bool,
-  // disabled: PropTypes.bool
-};
-
-export default Control;

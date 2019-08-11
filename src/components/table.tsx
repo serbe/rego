@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import clsx from "clsx";
 import { Pagination } from "./pagination";
 
-const splitArray = items => {
+const splitArray = (items: Array<string>) => {
   if (items) {
     return items.map((item, index) => <div key={index}>{item}</div>);
   } else {
@@ -12,8 +12,34 @@ const splitArray = items => {
   }
 };
 
-export class Table extends Component {
-  constructor(props) {
+interface ITableProps {
+  bordered?: boolean;
+  children?: Element;
+  className?: string;
+  fullwidth?: boolean;
+  hoverable?: boolean;
+  narrow?: boolean;
+  striped?: boolean;
+  data: Array<any>;
+  columns: Array<{
+    field: string;
+    label?: string;
+    witdh?: string;
+    array?: boolean;
+    link_base?: string;
+    link_field?: string;
+    c_name?: string;
+  }>;
+  loaded?: boolean;
+  paginate?: number;
+}
+
+interface ITableState {
+  current_page: number;
+}
+
+export class Table extends Component<ITableProps, ITableState> {
+  constructor(props: ITableProps) {
     super(props);
     this.state = {
       current_page: 0
@@ -65,7 +91,7 @@ export class Table extends Component {
       );
     };
 
-    const Row = row => {
+    const Row = (row: any) => {
       return columns.map((item, key) => (
         <td key={key} className={item.c_name}>
           {item.link_field && item.link_base ? (
@@ -81,15 +107,15 @@ export class Table extends Component {
       ));
     };
 
-    const Rows = () => {
-      return filteredData().map(row => <tr key={row.id}>{Row(row)}</tr>);
+    let Rows = (data: any) => {
+      return data.map((row: any) => <tr key={row.id}>{Row(row)}</tr>);
     };
 
     const TBody = () => {
       if (data && data.length > 0) {
         return (
           <tbody>
-            <Rows />
+            <Rows data={filteredData()}/>
           </tbody>
         );
       } else {
@@ -122,7 +148,7 @@ export class Table extends Component {
       ) : null;
     };
 
-    const receiveChildValue = value => {
+    const receiveChildValue = (value: number) => {
       this.setState(() => ({ current_page: value - 1 }));
     };
 
@@ -139,27 +165,3 @@ export class Table extends Component {
     );
   }
 }
-
-Table.propTypes = {
-  bordered: PropTypes.bool,
-  children: PropTypes.node,
-  className: PropTypes.string,
-  fullwidth: PropTypes.bool,
-  hoverable: PropTypes.bool,
-  narrow: PropTypes.bool,
-  striped: PropTypes.bool,
-  data: PropTypes.array,
-  columns: PropTypes.arrayOf(
-    PropTypes.shape({
-      field: PropTypes.string.isRequired,
-      label: PropTypes.string,
-      witdh: PropTypes.string,
-      array: PropTypes.bool,
-      link_base: PropTypes.string,
-      link_field: PropTypes.string,
-      class_name: PropTypes.string
-    })
-  ),
-  loaded: PropTypes.bool,
-  paginate: PropTypes.number
-};

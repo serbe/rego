@@ -1,10 +1,33 @@
-import React, { Component } from "react";
+import React from "react";
 
-import Input from "./input";
-import PropTypes from "prop-types";
-// import clsx from "clsx";
+import { Input } from "./input";
 
-class FormField extends Component {
+interface IFormFieldProps {
+  className: string;
+  color?: "primary" | "info" | "success" | "warning" | "danger";
+  disable?: boolean;
+  focus?: boolean;
+  hover?: boolean;
+  iconLeft?: string;
+  iconRight?: string;
+  isStatic?: boolean;
+  label?: string | boolean;
+  loading?: boolean;
+  onClick?: Function;
+  onChange?: Function;
+  placeholder?: string;
+  readonly?: boolean;
+  round?: boolean;
+  size?: "small" | "normal" | "medium" | "large";
+  type?: "text" | "password" | "email" | "tel";
+  value: string;
+}
+
+export class FormField extends React.Component<IFormFieldProps> {
+  static defaultProps: Partial<IFormFieldProps> = {
+    type: "text"
+  };
+
   render() {
     const {
       className,
@@ -64,30 +87,3 @@ class FormField extends Component {
     );
   }
 }
-
-FormField.propTypes = {
-  className: PropTypes.string,
-  color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"]),
-  disable: PropTypes.bool,
-  focus: PropTypes.bool,
-  hover: PropTypes.bool,
-  iconLeft: PropTypes.string,
-  iconRight: PropTypes.string,
-  isStatic: PropTypes.bool,
-  label: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  loading: PropTypes.bool,
-  onClick: PropTypes.func,
-  onChange: PropTypes.func,
-  placeholder: PropTypes.string,
-  readonly: PropTypes.bool,
-  round: PropTypes.bool,
-  size: PropTypes.oneOf(["small", "normal", "medium", "large"]),
-  type: PropTypes.oneOf(["text", "password", "email", "tel"]),
-  value: PropTypes.string
-};
-
-FormField.defaultProps = {
-  type: "text"
-};
-
-export default FormField;

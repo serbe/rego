@@ -1,24 +1,29 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { Component } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import clsx from "clsx";
-
-import Button from "./button";
-import PropTypes from "prop-types";
+import { Button } from "./button";
 
 function toggleOpen() {
-  return (previousState, currentProps) => {
+  return (previousState: { active: any; }, _currentProps: any) => {
     return { ...previousState, active: !previousState.active };
   };
 }
 
-export class NavBar extends Component {
-  static contextTypes = {
-    router: PropTypes.object
-  };
+interface INavBarState {
+  active: boolean,
+      auth: boolean,
+      logged: boolean,
+      open: boolean
+}
 
-  constructor(props, context) {
-    super(props, context);
+export class NavBar extends React.Component<{}, INavBarState> {
+  // static contextTypes = {
+  //   router: PropTypes.object
+  // };
+
+  constructor() {
+    super({});
     this.state = {
       active: false,
       auth: true,

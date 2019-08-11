@@ -1,2 +1,2 @@
-export { Contact } from "./item.js";
-export { Contacts } from "./list.js";
+export { Contact } from "./item";
+export { Contacts } from "./list";

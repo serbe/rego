@@ -1,59 +1,49 @@
-import React, { Component } from "react";
+import React from "react";
+import { RouteComponentProps } from "react-router";
 // import Input from "../../components/input";
 // import { withFormik } from "formik";
-import FormField from "../../components/formfield";
-// import { ContactScheme } from "../../models/contact";
+import { FormField } from "../../components/formfield";
+import { Contact } from "../../models/contact";
+import { SelectItem } from "../../models/selectitem";
 
 // import { Link } from "react-router-dom";
 
-const fetchContact = id =>
-  fetch(`/api/go/contact/item/${id}`)
-    .then(res => res.json())
-    .then(response => {
-      return {
-        data: response.data
-      };
-    })
-    .catch(({ response }) => {
-      return {
-        err: response.err
-      };
-    });
+interface IContactState {
+  contact: Contact;
+  contacts: Array<SelectItem>;
+  departments: Array<SelectItem>;
+  error: boolean;
+  id: string;
+  isLoaded: boolean;
+  posts: Array<SelectItem>;
+  posts_go: Array<SelectItem>;
+  ranks: Array<SelectItem>;
+  requestTimeout: false;
+};
 
-export class Contact extends Component {
-  constructor(props) {
+interface IRouteParams {contact: string};
+
+const fetchContact = (id: string) =>
+  {
+    return fetch(`/api/go/contact/item/${id}`)
+      .then(res => res.json())
+      .then(response => {
+        return {
+          data: response.data
+        };
+      })
+      .catch(({ response }) => {
+        return {
+          err: response.err
+        };
+      });
+  };
+
+export class ContactItem extends React.Component<RouteComponentProps<IRouteParams>, IContactState> {
+  constructor(props: RouteComponentProps<IRouteParams>) {
     super(props);
-    this.state = {
-      contact: {
-        id: 0,
-        name: "",
-        address: "",
-        birthday: "",
-        company: {},
-        company_id: 0,
-        post: {},
-        post_id: 0,
-        department: {},
-        department_id: 0,
-        post_go: {},
-        post_go_id: 0,
-        rank: {},
-        rank_id: 0,
-        emails: [],
-        phones: [],
-        faxes: [],
-        note: ""
-      },
-      contacts: [],
-      departments: [],
-      error: null,
-      id: this.props.match.params.contact,
-      isLoaded: false,
-      posts: [],
-      posts_go: [],
-      ranks: [],
-      requestTimeout: false
-    };
+
+    this.setState({id: this.props.match.params.contact});
   }
 
   componentDidMount() {
@@ -62,7 +52,7 @@ export class Contact extends Component {
         console.log(result.data);
         this.setState({
           isLoaded: true,
-          contact: result.data.Contact,
+          contact: result.data.Contact
           // contacts: result.data.contacts,
           // departments: result.data.departments,
           // posts: result.data.posts,
@@ -77,14 +67,14 @@ export class Contact extends Component {
     });
   }
 
-  handleSignIn = values => {
+  handleSignIn = (values: any) => {
     console.log(values);
   };
 
-  handleName = value => {
+  handleName = (value: any) => {
     console.log(value);
-    this.setState({contact: {name: value}});
-  }
+    this.setState({ contact: { name: value } });
+  };
 
   render() {
     // const [

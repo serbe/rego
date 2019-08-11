@@ -5,19 +5,19 @@ import clsx from "clsx";
 interface IButtonProps {
   type: "a" | "button" | "submit" | "reset";
   color:
-  | "black"
-  | "danger"
-  | "dark"
-  | "info"
-  | "light"
-  | "link"
-  | "primary"
-  | "success"
-  | "text"
-  | "warning"
-  | "white";
+    | "black"
+    | "danger"
+    | "dark"
+    | "info"
+    | "light"
+    | "link"
+    | "primary"
+    | "success"
+    | "text"
+    | "warning"
+    | "white";
   active: boolean;
-  children: JSX.Element;
+  children: string;
   className: string;
   disable: boolean;
   focus: boolean;
@@ -37,7 +37,7 @@ export class Button extends Component<IButtonProps> {
   static defaultProps: Partial<IButtonProps> = {
     type: "button",
     color: "white"
-  }
+  };
 
   // constructor(props) {
   //   super(props);

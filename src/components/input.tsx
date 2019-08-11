@@ -1,10 +1,32 @@
 import React from "react";
-
 import Icon from "./icon";
-import PropTypes from "prop-types";
 import clsx from "clsx";
 
-class Input extends React.Component {
+interface IInputProps {
+  className?: string,
+  color?: "primary" | "info" | "success" | "warning" | "danger",
+  disable?: boolean,
+  focus?: boolean,
+  hover?: boolean,
+  iconLeft?: string,
+  iconRight?: string,
+  isStatic?: boolean,
+  loading?: boolean,
+  onClick?: any,
+  onChange?: any,
+  placeholder?: string,
+  readonly?: boolean,
+  round?: boolean,
+  size?: "small" | "normal" | "medium" | "large",
+  type?: "text" | "password" | "email" | "tel",
+  value?: string
+};
+
+export class Input extends React.Component<IInputProps> {
+  static defaultProps: Partial<IInputProps> = {
+    type: "text"
+  }
+
   render() {
     const {
       className,
@@ -17,6 +39,7 @@ class Input extends React.Component {
       isStatic,
       loading,
       onClick,
+      onChange,
       placeholder,
       readonly,
       round,
@@ -67,6 +90,7 @@ class Input extends React.Component {
           className={inputClasses}
           disabled={disable}
           onClick={onClick}
+          onChange={onChange}
           placeholder={placeholder}
           readOnly={readonly}
           type={type}
@@ -78,28 +102,3 @@ class Input extends React.Component {
     );
   }
 }
-
-Input.propTypes = {
-  className: PropTypes.string,
-  color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"]),
-  disable: PropTypes.bool,
-  focus: PropTypes.bool,
-  hover: PropTypes.bool,
-  iconLeft: PropTypes.string,
-  iconRight: PropTypes.string,
-  isStatic: PropTypes.bool,
-  loading: PropTypes.bool,
-  onClick: PropTypes.func,
-  placeholder: PropTypes.string,
-  readonly: PropTypes.bool,
-  round: PropTypes.bool,
-  size: PropTypes.oneOf(["small", "normal", "medium", "large"]),
-  type: PropTypes.oneOf(["text", "password", "email", "tel"]),
-  value: PropTypes.string
-};
-
-Input.defaultProps = {
-  type: "text"
-};
-
-export default Input;
