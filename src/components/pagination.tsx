@@ -1,13 +1,29 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
-import PropTypes from "prop-types";
 import clsx from "clsx";
 
-export const Pagination = props => {
+interface PaginationProps {
+  current_page: number;
+  last_page: number;
+  callback: any;
+  rounded?: boolean;
+  size?: "small" | "normal" | "medium" | "large";
+}
+
+type PaginationLinkProps = {
+  check: boolean;
+  index: number;
+  link?: number;
+  ellipsis?: boolean;
+};
+
+export const Pagination: React.FC<PaginationProps> = (
+  props: PaginationProps
+) => {
   const { current_page, last_page, callback, rounded, size } = props;
 
-  const Prev = () => {
-    return current_page > 1 ? (
+  const Prev = () =>
+    current_page > 1 ? (
       <a
         className="pagination-previous"
         onClick={() => callback(current_page - 1)}
@@ -17,10 +33,9 @@ export const Pagination = props => {
         Назад
       </a>
     ) : null;
-  };
 
-  const Next = () => {
-    return current_page < last_page ? (
+  const Next = () =>
+    current_page < last_page ? (
       <a
         className="pagination-next"
         onClick={() => callback(current_page + 1)}
@@ -29,9 +44,13 @@ export const Pagination = props => {
         Далее
       </a>
     ) : null;
-  };
 
-  const PaginationLink = ({ check, index, link, ellipsis }) => {
+  const PaginationLink = ({
+    check,
+    index,
+    link,
+    ellipsis
+  }: PaginationLinkProps) => {
     const Tag = () => {
       return ellipsis ? (
         <span className="pagination-ellipsis">&hellip;</span>
@@ -42,7 +61,7 @@ export const Pagination = props => {
               ? "pagination-link is-current"
               : "pagination-link"
           }
-          onClick={link === current_page ? null : () => callback(link)}
+          onClick={() => (link === current_page ? null : () => callback(link))}
         >
           {link}
         </a>
@@ -58,8 +77,8 @@ export const Pagination = props => {
   const navClasses = clsx([
     "pagination",
     "is-centered",
-    {size} ? `is-${size}` : null,
-    [{"is-rounded": {rounded}}]
+    { size } ? `is-${size}` : null,
+    [{ "is-rounded": { rounded } }]
   ]);
 
   return (
@@ -93,12 +112,4 @@ export const Pagination = props => {
       </ul>
     </nav>
   );
-};
-
-Pagination.propTypes = {
-  current_page: PropTypes.number.isRequired,
-  last_page: PropTypes.number.isRequired,
-  callback: PropTypes.func.isRequired,
-  rounded: PropTypes.bool,
-  size: PropTypes.oneOf(["small", "normal", "medium", "large"])
 };

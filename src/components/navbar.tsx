@@ -1,39 +1,50 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
+import React  from "react";
+
 import clsx from "clsx";
+import { NavLink } from "react-router-dom";
+import { Button } from "./button";
 
-import Button from "./button";
-import PropTypes from "prop-types";
+// function toggleOpen() {
+//   return (previousState, currentProps) => {
+//     return { ...previousState, active: !previousState.active };
+//   };
+// }
 
-function toggleOpen() {
-  return (previousState, currentProps) => {
-    return { ...previousState, active: !previousState.active };
-  };
-}
+// interface NavBarState {
+//   active: boolean,
+//       auth: boolean,
+//       logged: boolean,
+//       open: boolean
+// }
 
-export class NavBar extends Component {
-  static contextTypes = {
-    router: PropTypes.object
-  };
+export const NavBar: React.FC<{}> = () => {
+  const auth = true;
+  // const [active, setActive] = React.useState(false);
+  // const [auth, setAuth] = React.useState(true);
+  // const [logged, setLogged] = React.useState(true);
+  // const [open, setOpen] = React.useState(false);
+  // static contextTypes = {
+  //   router: PropTypes.object
+  // };
 
-  constructor(props, context) {
-    super(props, context);
-    this.state = {
-      active: false,
-      auth: true,
-      logged: true,
-      open: false
-    };
-  }
+  // constructor(p: {}) {
+  //   super(p);
+  //   this.state = {
+  //     active: false,
+  //     auth: true,
+  //     logged: true,
+  //     open: false
+  //   };
+  // }
 
   // handleChange = (event, logged) => {
   //   this.setState({logged: logged});
   // };
 
-  handleToggle = () => {
-    this.setState(toggleOpen());
-  };
+  // handleToggle = () => {
+  //   this.setState(toggleOpen());
+  // };
 
   // handleClose = () => this.setState({open: false});
 
@@ -42,8 +53,8 @@ export class NavBar extends Component {
   //   this.context.router.history.push(uri);
   // }
 
-  render() {
-    const navMenu = () => {
+
+    const navMenuStyle = () => {
       return clsx([
         "navbar-item",
         "has-dropdown",
@@ -58,7 +69,7 @@ export class NavBar extends Component {
         role="navigation"
       >
         <div className="container">
-          {this.state.auth ? (
+          {auth ? (
             <React.Fragment>
               <div className="navbar-brand">
                 <NavLink
@@ -107,7 +118,7 @@ export class NavBar extends Component {
                     Сирены
                   </NavLink>
 
-                  <div className={navMenu()}>
+                  <div className={navMenuStyle()}>
                     <a href="#" className="navbar-link">
                       Справочники
                     </a>
@@ -115,7 +126,7 @@ export class NavBar extends Component {
                       <NavLink
                         activeClassName="is-active"
                         className="navbar-item"
-                        onClick={this.handleToggle}
+                        // onClick={this.handleToggle}
                         to="/departments"
                       >
                         Отделы
@@ -123,7 +134,7 @@ export class NavBar extends Component {
                       <NavLink
                         activeClassName="is-active"
                         className="navbar-item"
-                        onClick={this.handleToggle}
+                        // onClick={this.handleToggle}
                         to="/educations"
                       >
                         Обучение
@@ -131,7 +142,7 @@ export class NavBar extends Component {
                       <NavLink
                         activeClassName="is-active"
                         className="navbar-item"
-                        onClick={this.handleToggle}
+                        // onClick={this.handleToggle}
                         to="/kinds"
                       >
                         Типы
@@ -139,7 +150,7 @@ export class NavBar extends Component {
                       <NavLink
                         activeClassName="is-active"
                         className="navbar-item"
-                        onClick={this.handleToggle}
+                        // onClick={this.handleToggle}
                         to="/posts"
                       >
                         Должности
@@ -147,7 +158,7 @@ export class NavBar extends Component {
                       <NavLink
                         activeClassName="is-active"
                         className="navbar-item"
-                        onClick={this.handleToggle}
+                        // onClick={this.handleToggle}
                         to="/practices"
                       >
                         Учения
@@ -155,7 +166,7 @@ export class NavBar extends Component {
                       <NavLink
                         activeClassName="is-active"
                         className="navbar-item"
-                        onClick={this.handleToggle}
+                        // onClick={this.handleToggle}
                         to="/ranks"
                       >
                         Чины
@@ -163,7 +174,7 @@ export class NavBar extends Component {
                       <NavLink
                         activeClassName="is-active"
                         className="navbar-item"
-                        onClick={this.handleToggle}
+                        // onClick={this.handleToggle}
                         to="/scopes"
                       >
                         Сферы
@@ -171,7 +182,7 @@ export class NavBar extends Component {
                       <NavLink
                         activeClassName="is-active"
                         className="navbar-item"
-                        onClick={this.handleToggle}
+                        // onClick={this.handleToggle}
                         to="/certificates"
                       >
                         Удостоверения
@@ -180,7 +191,7 @@ export class NavBar extends Component {
                       <NavLink
                         activeClassName="is-active"
                         className="navbar-item"
-                        onClick={this.handleToggle}
+                        // onClick={this.handleToggle}
                         to="/sirentypes"
                       >
                         Типы сирен
@@ -217,4 +228,3 @@ export class NavBar extends Component {
       </nav>
     );
   }
-}

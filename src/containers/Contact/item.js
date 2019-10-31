@@ -1,9 +1,9 @@
 import React, { Component } from "react";
+
 // import Input from "../../components/input";
 // import { withFormik } from "formik";
-import FormField from "../../components/formfield";
+// import { FormField } from "../../components/formfield";
 // import { ContactScheme } from "../../models/contact";
-
 // import { Link } from "react-router-dom";
 
 const fetchContact = id =>
@@ -62,7 +62,7 @@ export class Contact extends Component {
         console.log(result.data);
         this.setState({
           isLoaded: true,
-          contact: result.data.Contact,
+          contact: result.data.Contact
           // contacts: result.data.contacts,
           // departments: result.data.departments,
           // posts: result.data.posts,
@@ -81,10 +81,10 @@ export class Contact extends Component {
     console.log(values);
   };
 
-  handleName = value => {
-    console.log(value);
-    this.setState({contact: {name: value}});
-  }
+  handleName = event => {
+    // console.log(event.target.value);
+    this.setState({ contact: { name: event.target.value } });
+  };
 
   render() {
     // const [
@@ -104,13 +104,19 @@ export class Contact extends Component {
         <div />
       ) : (
         <form id="contact">
-          <FormField
-            label
-            iconLeft="user"
-            value={this.state.contact.name}
-            placeholder="Полное имя"
-            onChange={this.handleName}
-          />
+          <div className="field">
+            <label className="label">Полное имя</label>
+            <div className="control">
+              <input
+                className="input"
+                value={this.state.contact.name}
+                placeholder="Полное имя"
+                onChange={this.handleName}
+                id="userid"
+                key="user"
+              />
+            </div>
+          </div>
         </form>
       );
     };

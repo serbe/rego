@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
+import React from "react";
 import clsx from "clsx";
+
+import { Link } from "react-router-dom";
 import { Pagination } from "./pagination";
 
-const splitArray = items => {
+const splitArray = (items: any[]) => {
   if (items) {
     return items.map((item, index) => <div key={index}>{item}</div>);
   } else {
@@ -12,15 +12,33 @@ const splitArray = items => {
   }
 };
 
-export class Table extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      current_page: 0
-    };
-  }
+type Column = {
+  field: string,
+  label?: string,
+  witdh?: string,
+  array?: boolean,
+  link_base?: string,
+  link_field?: string,
+  class_name?: string
+}
 
-  render() {
+interface TableProps {
+  bordered?: boolean,
+  children?: React.ReactNode;
+  className?: string,
+  fullwidth?: boolean,
+  hoverable?: boolean,
+  narrow?: boolean,
+  striped?: boolean,
+  data: any[],
+  columns: Column[],
+  loaded?: boolean,
+  paginate?: number
+};
+
+export const Table: React.FC<TableProps> = (props: TableProps) => {
+  const [current_page, setCurrentPage] = React.useState(0);
+
     const {
       bordered,
       className,
@@ -32,7 +50,7 @@ export class Table extends Component {
       columns,
       loaded,
       paginate
-    } = this.props;
+    } = props;
 
     let per_page = paginate ? paginate : 20;
     let search = "";
@@ -138,28 +156,3 @@ export class Table extends Component {
       </div>
     );
   }
-}
-
-Table.propTypes = {
-  bordered: PropTypes.bool,
-  children: PropTypes.node,
-  className: PropTypes.string,
-  fullwidth: PropTypes.bool,
-  hoverable: PropTypes.bool,
-  narrow: PropTypes.bool,
-  striped: PropTypes.bool,
-  data: PropTypes.array,
-  columns: PropTypes.arrayOf(
-    PropTypes.shape({
-      field: PropTypes.string.isRequired,
-      label: PropTypes.string,
-      witdh: PropTypes.string,
-      array: PropTypes.bool,
-      link_base: PropTypes.string,
-      link_field: PropTypes.string,
-      class_name: PropTypes.string
-    })
-  ),
-  loaded: PropTypes.bool,
-  paginate: PropTypes.number
-};

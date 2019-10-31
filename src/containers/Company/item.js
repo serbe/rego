@@ -1,7 +1,7 @@
 import React, { Component, useState } from "react";
 // import Input from "../../components/input";
 import { withFormik } from "formik";
-import FormField from "../../components/formfield";
+import { FormField } from "../../components/formfield";
 import { ContactScheme } from "../../models/contact";
 
 // import { Link } from "react-router-dom";
