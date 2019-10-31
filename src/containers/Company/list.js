@@ -43,25 +43,25 @@ export class Companies extends Component {
       {
         field: "address",
         label: "Адрес",
-        c_name: "is-hidden-touch"
+        class_name: "is-hidden-touch"
       },
       {
         field: "scope_name",
         label: "Сфера деятельности",
-        c_name: "is-hidden-mobile"
+        class_name: "is-hidden-mobile"
       },
       { field: "phones", label: "Телефоны", array: true },
       {
         field: "faxes",
         label: "Факсы",
         array: true,
-        c_name: "is-hidden-touch"
+        class_name: "is-hidden-touch"
       },
       {
         field: "practices",
         label: "Тренировки",
         array: true,
-        c_name: "is-hidden-touch"
+        class_name: "is-hidden-touch"
       }
     ];
 

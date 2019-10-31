@@ -70,7 +70,7 @@ export const NavBar: React.FC<{}> = () => {
       >
         <div className="container">
           {auth ? (
-            <React.Fragment>
+            <>
               <div className="navbar-brand">
                 <NavLink
                   activeClassName="is-active"
@@ -212,7 +212,7 @@ export const NavBar: React.FC<{}> = () => {
                   </div>
                 </div>
               </div>
-            </React.Fragment>
+            </>
           ) : (
             <div className="navbar-brand">
               <NavLink

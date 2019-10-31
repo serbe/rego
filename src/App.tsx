@@ -1,11 +1,11 @@
 import React from 'react';
-import Router from "./containers/Router";
+import { Router } from "./containers/Router";
 import { NavBar } from "./components/navbar";
 import './App.css';
 
 const App: React.FC = () => {
   return (
-    <React.Fragment>
+    <>
       <NavBar />
       <section className="section">
         <div className="container">
@@ -17,7 +17,7 @@ const App: React.FC = () => {
           <p>© 2019 Сочи</p>
         </div>
       </footer>
-    </React.Fragment>
+    </>
   );
 }
 
