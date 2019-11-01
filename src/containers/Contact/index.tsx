@@ -1,2 +1,2 @@
-export { Contact } from "./item";
+export { ContactItem } from "./item";
 export { Contacts } from "./list";
