@@ -4,9 +4,9 @@ import clsx from "clsx";
 import { Icon } from "./icon";
 
 interface InputProps {
-  type: "text" | "password" | "email" | "tel";
-  color: "primary" | "info" | "success" | "warning" | "danger";
-  size: "small" | "normal" | "medium" | "large";
+  type?: "text" | "password" | "email" | "tel";
+  color?: "primary" | "info" | "success" | "warning" | "danger";
+  size?: "small" | "normal" | "medium" | "large";
   rounded?: boolean;
   hovered?: boolean;
   focused?: boolean;
@@ -20,10 +20,12 @@ interface InputProps {
   onClick?: React.MouseEvent<HTMLElement>;
   onChange?: React.MouseEvent<HTMLElement>;
   placeholder?: string;
-  value: string;
-  label?: string;
+  name?: string;
+  value?: string;
+  label?: string | boolean;
   error?: string;
   pattern?: string;
+  inputRef?: any;
 }
 
 export const Input: React.FC<InputProps> = (props: InputProps) => {
@@ -44,10 +46,12 @@ export const Input: React.FC<InputProps> = (props: InputProps) => {
     onClick,
     onChange,
     placeholder,
+    name,
     value,
     label,
     error,
-    pattern
+    pattern,
+    inputRef
   } = props;
   const divClasses = clsx([
     "control",
@@ -79,7 +83,7 @@ export const Input: React.FC<InputProps> = (props: InputProps) => {
     }
   };
   const isError = () => {
-    if (value !== "" && pattern) {
+    if (value && value !== "" && pattern) {
       const patt = new RegExp(pattern);
       return !patt.test(value);
     }
@@ -115,7 +119,9 @@ export const Input: React.FC<InputProps> = (props: InputProps) => {
           onChange={() => onChange}
           placeholder={placeholder}
           readOnly={readonly}
-          value={value}
+          name={name}
+          defaultValue={value}
+          ref={inputRef}
         />
         <LeftIcon />
         <RightIcon />
