@@ -22,7 +22,7 @@ export const Companies: React.FC<{}> = () => {
     {
       field: "name",
       label: "Наименование",
-      link_base: "/compaines/",
+      link_base: "/companies/",
       link_field: "id"
     },
     {
