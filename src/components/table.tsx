@@ -48,7 +48,6 @@ export const Table: React.FC<TableProps> = (props: TableProps) => {
     data,
     columns,
     className,
-    loaded,
     paginate
   } = props;
 
@@ -128,8 +127,8 @@ export const Table: React.FC<TableProps> = (props: TableProps) => {
     }
   };
 
-  const Paginate = () => {
-    return paginate && filtered_len / per_page > 2 ? (
+  const Paginate = () =>
+    paginate && filtered_len / per_page > 2 ? (
       <Pagination
         current_page={current_page + 1}
         last_page={Math.ceil(filtered_len / per_page)}
@@ -137,13 +136,12 @@ export const Table: React.FC<TableProps> = (props: TableProps) => {
         rounded
       />
     ) : null;
-  };
 
   const receiveChildValue = (value: number) => {
     setCurrentPage(value - 1);
   };
 
-  return !loaded ? (
+  return !data ? (
     <div>Loading data</div>
   ) : (
     <div>
