@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
+import useForm from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { Input } from "../../components/input";
 import { Button } from "../../components/button";
-import useForm from "react-hook-form";
 import { Company } from "../../models/company";
-
-// import { Link } from "react-router-dom";
 
 // initialValues={{
 //   id: 0,
@@ -27,71 +25,6 @@ import { Company } from "../../models/company";
 //   faxes: [],
 //   note: "",
 // }}
-
-// const FormikForm = props => {
-//   const {
-//     values,
-//     touched,
-//     errors,
-//     handleChange,
-//     handleBlur,
-//     handleSubmit
-//   } = props;
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <FormField
-//         label
-//         iconLeft="user"
-//         value={values.name}
-//         placeholder="Полное имя"
-//         onBlur={handleBlur}
-//         onChange={handleChange}
-//       />
-//       <FormField
-//         label
-//         iconLeft="address"
-//         value={values.address}
-//         placeholder="Адрес"
-//         onBlur={handleBlur}
-//         onChange={handleChange}
-//       />
-//       <input
-//         type="text"
-//         onChange={handleChange}
-//         onBlur={handleBlur}
-//         value={values.name}
-//         name="name"
-//       />
-//       {errors.name && touched.name && <div id="feedback">{errors.name}</div>}
-//       <button type="submit">Submit</button>
-//     </form>
-//   );
-// };
-
-// const renderField = ({ input, label, type, meta: { touched, error, warning } }) => (
-//   <div>
-//     <div className="control">
-//       <label className="field">{label}</label>
-//       <input className="input" {...input} placeholder={label} type={type}/>
-//       {touched && ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
-//     </div>
-//   </div>
-// )
-
-// const fetchContact = id =>
-//   fetch(`/api/go/contact/${id}`)
-//     .then(res => res.json())
-//     .then(response => {
-//       console.log("Success:", response.title);
-//       return {
-//         data: response
-//       };
-//     })
-//     .catch(({ response }) => {
-//       return {
-//         err: response.err
-//       };
-//     });
 
 // const AddUserForm = props => {
 //   const initialFormState = {
@@ -115,41 +48,6 @@ import { Company } from "../../models/company";
 //     note: ""
 //   };
 
-//   // используем useState и передаем в качестве начального значения объект - initialFormState
-//   const [contact, setContact] = useState(initialFormState);
-
-//   const handleInputChange = event => {
-//     const { name, value } = event.currentTarget;
-//     setContact({ ...contact, [name]: value });
-//   };
-
-//   return (
-//     <form>
-//       <label>Имя</label>
-//       <input
-//         type="text"
-//         name="name"
-//         value={contact.name}
-//         onChange={handleInputChange}
-//       />
-//       <label>Адрес</label>
-//       <input
-//         type="text"
-//         name="address"
-//         value={contact.address}
-//         onChange={handleInputChange}
-//       />
-//       <button>Add new user</button>
-//     </form>
-//   );
-// };
-
-// interface CompanyRouterProps {
-//   company: string;
-// }
-
-// interface CompanyProps extends RouteComponentProps<CompanyRouterProps> {}
-
 export const CompanyItem: React.FC<{}> = () => {
   let { id } = useParams();
   const [hasError, setErrors] = useState(false);
@@ -168,88 +66,6 @@ export const CompanyItem: React.FC<{}> = () => {
   });
 
   const { register, handleSubmit, watch, errors } = useForm();
-  // const onSubmit = data => { console.log(data) };
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     contact: null,
-  //     contacts: [],
-  //     departments: [],
-  //     error: null,
-  //     id: this.props.match.params.contact,
-  //     isLoaded: false,
-  //     posts: [],
-  //     posts_go: [],
-  //     ranks: [],
-  //     requestTimeout: false
-  //   };
-  // }
-
-  // componentDidMount() {
-  //   fetchContact(this.state.id).then(result => {
-  //     if (result.data) {
-  //       this.setState({
-  //         isLoaded: true,
-  //         contact: result.data.contact,
-  //         contacts: result.data.contacts,
-  //         departments: result.data.departments,
-  //         posts: result.data.posts,
-  //         posts_go: result.data.posts_go,
-  //         ranks: result.data.ranks
-  //       });
-  //     }
-  //     this.setState({
-  //       isLoaded: true,
-  //       error: result.data.error
-  //     });
-  //   });
-  // }
-
-  // handleSignIn = values => {
-  //   console.log(values);
-  // };
-
-  // const [
-  //   contact
-  //   // contacts,
-  //   // departments,
-  //   // error,
-  //   // id,
-  //   // isLoaded,
-  //   // posts,
-  //   // posts_go,
-  //   // ranks
-  // ] = this.state;
-
-  // const Form = () => {
-  //   return !this.state.isLoaded ? (
-  //     <div />
-  //   ) : (
-  //     <form id="contact">
-  //       <FormField
-  //         label
-  //         iconLeft="user"
-  //         value={this.state.contact.name}
-  //         placeholder="Полное имя"
-  //         onChange={this.handleInputChange}
-  //       />
-  //     </form>
-  //   );
-  // };
-
-  // const CF = withFormik({
-  //   mapPropsToValues: () => this.state.contact,
-  //   validationSchema: ContactScheme,
-  //   handleSubmit: values => {
-  //     console.log(values);
-  //   },
-  //   displayName: "BasicForm"
-  // })(FormikForm);
-
-  // const ContactForm = () => {
-  //   return !this.state.isLoaded ? <div>Loading...</div> : <CF />;
-  // };
-
   const onSubmit = (data: any) => {
     console.log(data);
   };
