@@ -10,9 +10,9 @@ export const Router: React.FC<{}> = () => (
     <Switch>
       <Route exact={true} path="/" component={Home} />
       <Route exact={true} path="/contacts" component={Contacts} />
-      <Route exact={true} path="/contacts/:contact" component={ContactItem} />
+      <Route exact={true} path="/contacts/:id" component={ContactItem} />
       <Route exact={true} path="/companies" component={Companies} />
-      <Route exact={true} path="/companies/:company" component={CompanyItem} />
+      <Route exact={true} path="/companies/:id" component={CompanyItem} />
       <Route exact={true} path="/certificates" component={Certificates} />
     </Switch>
   </Suspense>
