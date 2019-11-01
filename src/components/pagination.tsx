@@ -5,7 +5,7 @@ import clsx from "clsx";
 interface PaginationProps {
   current_page: number;
   last_page: number;
-  callback: any;
+  callback: (num: number) => void;
   rounded?: boolean;
   size?: "small" | "normal" | "medium" | "large";
 }
@@ -61,7 +61,7 @@ export const Pagination: React.FC<PaginationProps> = (
               ? "pagination-link is-current"
               : "pagination-link"
           }
-          onClick={() => (link === current_page ? null : () => callback(link))}
+          onClick={() => (link ? callback(link) : null)}
         >
           {link}
         </a>
