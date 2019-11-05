@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import clsx from "clsx";
 
 import { Link } from "react-router-dom";
@@ -37,7 +37,7 @@ interface TableProps {
 }
 
 export const Table: React.FC<TableProps> = (props: TableProps) => {
-  const [current_page, setCurrentPage] = React.useState(0);
+  const [current_page, setCurrentPage] = useState(0);
 
   const {
     bordered,
