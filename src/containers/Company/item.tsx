@@ -3,7 +3,9 @@ import useForm from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { Input } from "../../components/input";
 import { Button } from "../../components/button";
+import { Select } from "../../components/select";
 import { Company } from "../../models/company";
+import { SelectItem } from "../../models/selectitem";
 
 // initialValues={{
 //   id: 0,
@@ -26,44 +28,43 @@ import { Company } from "../../models/company";
 //   note: "",
 // }}
 
-// const AddUserForm = props => {
-//   const initialFormState = {
-//     id: 0,
-//     name: "",
-//     address: "",
-//     birthday: "",
-//     company: {},
-//     company_id: 0,
-//     post: {},
-//     post_id: 0,
-//     department: {},
-//     department_id: 0,
-//     post_go: {},
-//     post_go_id: 0,
-//     rank: {},
-//     rank_id: 0,
-//     emails: [],
-//     phones: [],
-//     faxes: [],
-//     note: ""
-//   };
-
 export const CompanyItem: React.FC<{}> = () => {
   let { id } = useParams();
   const [hasError, setErrors] = useState(false);
   const [company, setCompany] = useState<Company>();
+  const [scope, setScope] = useState<SelectItem>();
+  const [scopes, setScopes] = useState<SelectItem[]>();
 
   async function fetchData() {
-    const res = await fetch(`/api/go/company/item/${id}`);
-    res
+    const resCompany = await fetch(`/api/go/company/item/${id}`);
+    resCompany
       .json()
       .then(res => setCompany(res.data["Company"]))
       .catch(err => setErrors(err));
   }
 
+  async function fetchScopes() {
+    const resScopes = await fetch(`/api/go/scope/select`);
+    resScopes
+        .json()
+        .then(res => setScopes(res.data["SelectItem"]))
+        .catch(err => setErrors(err));
+  }
+
   useEffect(() => {
     fetchData();
-  });
+  }, []);
+
+  useEffect(() => {
+    fetchScopes();
+  }, []);
+
+  useEffect(() => {
+    if (company && scopes) {
+      setScope(scopes.find(v => v.id === company.scope_id));
+    }
+    console.log(company, scopes);
+  }, [company, scopes]);
 
   const { register, handleSubmit, watch, errors } = useForm();
   const onSubmit = (data: any) => {
@@ -83,6 +84,8 @@ export const CompanyItem: React.FC<{}> = () => {
             iconLeft="building"
           />
 
+          {scope ? <Select list={scopes} selected={scope} itemName="scope"/> : null}
+
           {/* <bulma-select
       :list="scopes"
       :selected-item="company.scope"
@@ -92,14 +95,14 @@ export const CompanyItem: React.FC<{}> = () => {
       iconLeft="tag"
     ></bulma-select> */}
 
-          <Input
+          {/* <Input
             name="address"
             value={company.address}
             inputRef={register}
             label
             placeholder="Адрес"
             iconLeft="address-card"
-          />
+          /> */}
 
           {/* <div className="columns">
       <div className="column">
@@ -183,14 +186,14 @@ export const CompanyItem: React.FC<{}> = () => {
       ></Input>
     </div> */}
 
-          <Input
+          {/* <Input
             name="note"
             value={company.note}
             inputRef={register}
             label
             placeholder="Заметка"
             iconLeft="sticky-note"
-          />
+          /> */}
 
           <div className="field is-grouped is-grouped-centered">
             <div className="control">
