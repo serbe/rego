@@ -84,7 +84,7 @@ export const CompanyItem: React.FC<{}> = () => {
             iconLeft="building"
           />
 
-          {scope ? <Select list={scopes} selected={scope} itemName="scope"/> : null}
+          {scope ? <Select list={scopes} selected={scope} itemName="scope" label="Сфера деятельности"/> : null}
 
           {/* <bulma-select
       :list="scopes"
