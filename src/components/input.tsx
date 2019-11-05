@@ -53,6 +53,7 @@ export const Input: React.FC<InputProps> = (props: InputProps) => {
     pattern,
     inputRef
   } = props;
+
   const divClasses = clsx([
     "control",
     {
@@ -61,9 +62,9 @@ export const Input: React.FC<InputProps> = (props: InputProps) => {
       [`is-${size}`]: size
     }
   ]);
-  let cn = className;
+
   const inputClasses = clsx([
-    { cn },
+    { className },
     "input",
     {
       [`is-${color}`]: color,
@@ -75,13 +76,17 @@ export const Input: React.FC<InputProps> = (props: InputProps) => {
       "is-static": isStatic
     }
   ]);
+
   const getLabel = () => {
-    if (label && placeholder && label === "") {
+    if (typeof label === "string") {
+      return label;
+    } else if (label && placeholder) {
       return placeholder;
     } else {
-      return label;
+      return undefined;
     }
   };
+
   const isError = () => {
     if (value && value !== "" && pattern) {
       const patt = new RegExp(pattern);
@@ -89,12 +94,10 @@ export const Input: React.FC<InputProps> = (props: InputProps) => {
     }
     return false;
   };
+
   const Label = () =>
-    getLabel ? (
-      <label className="label" key="InputLabel">
-        {getLabel}
-      </label>
-    ) : null;
+    getLabel ? <label className="label">{getLabel()}</label> : null;
+
   const Error = () =>
     isError ? (
       <p className="help is-danger" key="InputError">
@@ -104,6 +107,7 @@ export const Input: React.FC<InputProps> = (props: InputProps) => {
 
   const LeftIcon = () =>
     iconLeft ? <Icon position={"left"} icon={iconLeft} /> : null;
+
   const RightIcon = () =>
     iconRight ? <Icon position={"right"} icon={iconRight} /> : null;
 
