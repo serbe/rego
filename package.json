@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@types/jest": "24.0.21",
-    "@types/node": "12.12.4",
+    "@types/node": "12.12.5",
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.3",
     "@types/react-router-dom": "^5.1.2",
@@ -14,7 +14,7 @@
     "node-sass": "^4.13.0",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
-    "react-hook-form": "^3.26.4",
+    "react-hook-form": "^3.26.5",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
     "source-map-explorer": "^2.1.0",
@@ -24,8 +24,7 @@
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": "react-app"
