@@ -4,6 +4,8 @@ import clsx from "clsx";
 import { Icon } from "./icon";
 import { SelectItem } from "../models/selectitem";
 
+import "./select.css";
+
 interface SelectProps {
   selected: SelectItem;
   iconLeft?: string;
@@ -58,9 +60,10 @@ export const Select: React.FC<SelectProps> = (props: SelectProps) => {
   ]);
 
   const Label = () => (
-    <label className="label" key="SelectLabel">
-      {label && placeholder ? placeholder : label}
-    </label>
+    label ?
+      <label className="label" key="SelectLabel">
+        {label}
+      </label> : null
   );
 
   const IconLeft = () =>
@@ -92,7 +95,7 @@ export const Select: React.FC<SelectProps> = (props: SelectProps) => {
         className="select-item"
         key={item.id}
         onClick={() => selectItem(item)}
-        // mousedown={mousedownItem}
+      // mousedown={mousedownItem}
       >
         {item.name}
       </div>
@@ -103,6 +106,10 @@ export const Select: React.FC<SelectProps> = (props: SelectProps) => {
   const SelectBox = () =>
     opened ? (
       <div className="select-box" key="SelectOpened">
+        <div
+          className="select-item"
+          onClick={() => selectItem({ id: 0, name: '' })}
+        ></div>
         <SelectList />
       </div>
     ) : null;
@@ -162,13 +169,13 @@ export const Select: React.FC<SelectProps> = (props: SelectProps) => {
           ref={selectRef}
           className={inputClasses}
           placeholder={placeholder === "" && label ? label : placeholder}
-          defaultValue={loaded ? searchText : item.name}
+          defaultValue={loaded ? searchText : item().name}
           onInput={e => onInput(e)}
           onBlur={onBlur}
         />
         <IconLeft />
         <IconRight />
-        {/* <SelectBox /> */}
+        <SelectBox />
       </div>
     </div>
   );
