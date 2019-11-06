@@ -63,13 +63,18 @@ export const CompanyItem: React.FC<{}> = () => {
     if (company && scopes) {
       setScope(scopes.find(v => v.id === company.scope_id));
     }
-    console.log(company, scopes);
   }, [company, scopes]);
 
   const { register, handleSubmit, watch, errors } = useForm();
   const onSubmit = (data: any) => {
     console.log(data);
   };
+
+  const Scopes = () => (
+    scopes && scope
+    ? <Select list={scopes} selected={scope} itemName="scope" label="Сфера деятельности"/>
+    : null
+  )
 
   return (
     <div className="container mw768">
@@ -84,7 +89,7 @@ export const CompanyItem: React.FC<{}> = () => {
             iconLeft="building"
           />
 
-          {scope ? <Select list={scopes} selected={scope} itemName="scope" label="Сфера деятельности"/> : null}
+          <Scopes />
 
           {/* <bulma-select
       :list="scopes"
