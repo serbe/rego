@@ -1,4 +1,4 @@
-import React from "react";
+import React, {ReactNode, FC} from "react";
 import clsx from "clsx";
 
 type MainColors = "primary" | "info" | "success" | "warning" | "danger";
@@ -7,7 +7,7 @@ const main_colors = ["primary", "info", "success", "warning", "danger"];
 
 interface ButtonProps {
   type?: "a" | "button" | "submit" | "reset";
-  color: "white" | "light" | "dark" | "black" | "text" | "link" | MainColors;
+  color?: "white" | "light" | "dark" | "black" | "text" | "link" | MainColors;
   light?: boolean;
   dark?: boolean;
   size?: "small" | "normal" | "medium" | "large";
@@ -23,11 +23,11 @@ interface ButtonProps {
   disable?: boolean;
   className?: string;
   href?: string;
-  onClick?: React.MouseEvent<HTMLElement>;
-  children: React.ReactNode;
+  onClick?: any;
+  children: ReactNode;
 }
 
-export const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
+export const Button: FC<ButtonProps> = (props: ButtonProps) => {
   const {
     type,
     color,
@@ -81,7 +81,7 @@ export const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
         <input
           type={type}
           disabled={disable}
-          onClick={() => onClick}
+          onClick={onClick}
           className={classes}
         >
           {children}
@@ -89,13 +89,13 @@ export const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
       );
     } else if (type === "a") {
       return (
-        <a href={href} onClick={() => onClick} className={classes}>
+        <a href={href} onClick={onClick} className={classes}>
           {children}
         </a>
       );
     } else {
       return (
-        <button disabled={disable} onClick={() => onClick} className={classes}>
+        <button disabled={disable} onClick={onClick} className={classes}>
           {children}
         </button>
       );

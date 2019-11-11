@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, FC} from "react";
 import clsx from "clsx";
 
 import { Link } from "react-router-dom";
@@ -36,7 +36,7 @@ interface TableProps {
   paginate?: number;
 }
 
-export const Table: React.FC<TableProps> = (props: TableProps) => {
+export const Table: FC<TableProps> = (props: TableProps) => {
   const [current_page, setCurrentPage] = useState(0);
 
   const {

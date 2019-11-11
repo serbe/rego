@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FC } from "react";
 import { Table } from "../../components/table";
 import { CompanyList } from "../../models/company";
 
-export const Companies: React.FC<{}> = () => {
+export const Companies: FC<{}> = () => {
   const [hasError, setErrors] = useState(false);
   const [companies, setCompanies] = useState<CompanyList[]>([]);
 

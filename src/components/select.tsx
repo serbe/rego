@@ -1,4 +1,4 @@
-import React, { useState, SyntheticEvent, useRef, useEffect } from "react";
+import React, { useState, SyntheticEvent, useEffect, FC } from "react";
 import clsx from "clsx";
 
 import { Icon } from "./icon";
@@ -16,9 +16,10 @@ interface SelectProps {
   label?: string;
   list: SelectItem[];
   itemName: string;
+  inputRef?: any;
 }
 
-export const Select: React.FC<SelectProps> = (props: SelectProps) => {
+export const Select: FC<SelectProps> = (props: SelectProps) => {
   const {
     selected,
     iconLeft,
@@ -28,27 +29,34 @@ export const Select: React.FC<SelectProps> = (props: SelectProps) => {
     state,
     label,
     list,
-    itemName
+    itemName,
+    inputRef
   } = props;
 
-  const selectRef = useRef(null);
+  if (list[0].id !== 0) {
+    list.unshift({ id: 0, name: "" });
+  }
 
-  const [opened, setOpened] = useState(true);
-  const [searchText, setSearchText] = useState("");
-  // const [mousedown, setMousedown] = useState(false);
-  const [placeholder, setPlaceholder] = useState("");
+  const [opened, setOpened] = useState(false);
   const [item, setItem] = useState(selected);
+  const [filteredList, setFilteredList] = useState(list);
 
   useEffect(() => {
-    if (selected) {
-      console.log("selected", selected);
-      setSearchText(selected.name);
-    }
-  }, [selected]);
+    let f_list =
+      item.name.length > 0
+        ? list.filter(
+            list_item =>
+              list_item.name === "" ||
+              list_item.name.match(new RegExp(item.name, "i"))
+          )
+        : list;
+    setFilteredList(f_list);
+  }, [item.name, list]);
 
-  useEffect(() => {
-    console.log("useEffect item", item);
-  }, [item]);
+  const onInput = (event: SyntheticEvent) => {
+    let target = event.target as HTMLInputElement;
+    setItem({ id: 0, name: target.value });
+  };
 
   const controlClasses = clsx([
     "control",
@@ -70,12 +78,12 @@ export const Select: React.FC<SelectProps> = (props: SelectProps) => {
     }
   ]);
 
-  const Label = () => (
-    label ?
+  const Label = () =>
+    label ? (
       <label className="label" key="SelectLabel">
         {label}
-      </label> : null
-  );
+      </label>
+    ) : null;
 
   const IconLeft = () =>
     iconLeft ? (
@@ -100,89 +108,37 @@ export const Select: React.FC<SelectProps> = (props: SelectProps) => {
     ) : null;
 
   const SelectList = () => {
-    const filterlist = listWithFilter();
-    const items = filterlist ? filterlist.map((item, _index) => (
+    const items = filteredList.map((item, _index) => (
       <div
-        className="select-item"
+        className="select-item input"
         key={item.id}
-        onClick={() => selectItem(item)}
-      // mousedown={mousedownItem}
+        onClick={() => setItem(item)}
       >
         {item.name}
       </div>
-    )) : null;
+    ));
     return <>{items}</>;
   };
 
   const SelectBox = () =>
     opened ? (
       <div className="select-box" key="SelectOpened">
-        <div
-          className="select-item"
-          onClick={() => selectItem({ id: 0, name: '' })}
-        ></div>
         <SelectList />
       </div>
     ) : null;
 
-  const listWithFilter = (): SelectItem[] | null =>
-    list ? searchText.length > 0
-      ? list.filter(item => item.name.match(new RegExp(searchText, "i")))
-      : list : null;
-
-  // const item = (): SelectItem =>
-  //   selected ? { id: selected.id, name: selected.name } : { id: 0, name: "" };
-
-  const openOptions = () => {
-    // this.$refs.vueSelect.focus();
-    setSearchText("");
-    setPlaceholder(selected ? selected.name : "");
-    setOpened(true);
-    // setMousedown(false);
-  };
-
-  const closeOptions = () => {
-    setOpened(false);
-  };
-
-  // const mousedownItem = () => {
-  //   setMousedown(true);
-  // };
-
-  const selectItem = (item: SelectItem) => {
-    console.log(item);
-    setItem(item);
-    closeOptions();
-    // if (this.itemName) {
-    //   this.$emit("select", item, this.itemName);
-    // } else {
-    //   this.$emit("select", item);
-    // }
-  };
-
-  const onBlur = () => {
-    // if (!mousedown) {
-      // setSearchText(selected ? selected.name : "");
-      closeOptions();
-    // }
-  };
-
-  const onInput = (event: SyntheticEvent) => {
-    let target = event.target as HTMLInputElement;
-    setItem({ id: 0, name: target.value });
-  };
-
   return (
     <div className="field">
       <Label />
-      <div className={controlClasses} onClick={() => openOptions()}>
+      <div className={controlClasses} onClick={() => setOpened(true)}>
         <input
-          ref={selectRef}
+          ref={inputRef}
+          name={itemName}
           className={inputClasses}
-          placeholder={placeholder === "" && label ? label : placeholder}
+          placeholder={selected.name}
           value={item.name}
           onChange={e => onInput(e)}
-          onBlur={onBlur}
+          onBlur={() => setTimeout(() => setOpened(false), 300)}
         />
         <IconLeft />
         <IconRight />
@@ -190,8 +146,4 @@ export const Select: React.FC<SelectProps> = (props: SelectProps) => {
       </div>
     </div>
   );
-};
-
-Select.defaultProps = {
-  selected: { id: 0, name: "" }
 };

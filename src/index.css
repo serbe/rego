@@ -20,3 +20,7 @@ table {
 .phone {
   width: 110px;
 }
+
+.mw768 {
+  max-width: 768px;
+}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {FC, ReactNode} from "react";
 import clsx from "clsx";
 
 interface IconProps {
@@ -6,11 +6,11 @@ interface IconProps {
   size?: "small" | "normal" | "medium" | "large";
   icon: string;
   position: "left" | "right";
-  children?: React.ReactNode;
+  children?: ReactNode;
   className?: string;
 }
 
-export const Icon: React.FC<IconProps> = (props: IconProps) => {
+export const Icon: FC<IconProps> = (props: IconProps) => {
   const { color, size, icon, position, children, className } = props;
 
   const spanClasses = clsx([

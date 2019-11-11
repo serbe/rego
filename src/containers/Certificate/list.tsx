@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FC } from "react";
 import { Table } from "../../components/table";
 import { CertificateList } from "../../models/certificate";
 
-export const Certificates: React.FC<{}> = () => {
+export const Certificates: FC<{}> = () => {
   const [hasError, setErrors] = useState(false);
   const [certificates, setCertificates] = useState<CertificateList[]>([]);
 

@@ -1,11 +1,11 @@
 import Home from "../Home";
-import React, { Suspense } from "react";
+import React, { Suspense, FC } from "react";
 import { ContactItem, Contacts } from "../Contact";
 import { CompanyItem, Companies } from "../Company";
 import { Certificates } from "../Certificate";
 import { Switch, Route } from "react-router-dom";
 
-export const Router: React.FC<{}> = () => (
+export const Router: FC<{}> = () => (
   <Suspense fallback={<div>Loading...</div>}>
     <Switch>
       <Route exact={true} path="/" component={Home} />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FC } from "react";
 import { useParams } from "react-router-dom";
 import { Contact } from "../../models/contact";
 
@@ -6,7 +6,7 @@ import { Contact } from "../../models/contact";
 //   let { id } = useParams();
 // };
 
-export const ContactItem: React.FC<{}> = () => {
+export const ContactItem: FC<{}> = () => {
   const [hasError, setErrors] = useState(false);
   const [contact, setContacts] = useState<Contact>();
 

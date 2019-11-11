@@ -1,4 +1,4 @@
-import React from "react";
+import React, {FC, MouseEvent, } from "react";
 import clsx from "clsx";
 
 import { Icon } from "./icon";
@@ -17,8 +17,9 @@ interface InputProps {
   iconLeft?: string;
   iconRight?: string;
   className?: string;
-  onClick?: React.MouseEvent<HTMLElement>;
-  onChange?: React.MouseEvent<HTMLElement>;
+  onClick?: MouseEvent<HTMLElement>;
+  onChange?: MouseEvent<HTMLElement>;
+  onBlur?: any;
   placeholder?: string;
   name?: string;
   value?: string;
@@ -28,7 +29,7 @@ interface InputProps {
   inputRef?: any;
 }
 
-export const Input: React.FC<InputProps> = (props: InputProps) => {
+export const Input: FC<InputProps> = (props: InputProps) => {
   const {
     type,
     color,
@@ -45,6 +46,7 @@ export const Input: React.FC<InputProps> = (props: InputProps) => {
     className,
     onClick,
     onChange,
+    onBlur,
     placeholder,
     name,
     value,
@@ -121,6 +123,7 @@ export const Input: React.FC<InputProps> = (props: InputProps) => {
           disabled={disabled}
           onClick={() => onClick}
           onChange={() => onChange}
+          onBlur={onBlur}
           placeholder={placeholder}
           readOnly={readonly}
           name={name}

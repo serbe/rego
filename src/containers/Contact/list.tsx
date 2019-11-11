@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FC } from "react";
 import { Table } from "../../components/table";
 import { ContactList } from "../../models/contact";
 
-export const Contacts: React.FC<{}> = () => {
+export const Contacts: FC<{}> = () => {
   const [hasError, setErrors] = useState(false);
   const [contacts, setContacts] = useState<ContactList[]>([]);
 

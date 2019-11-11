@@ -1,39 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FC } from "react";
+import { NavLink } from "react-router-dom";
 import useForm from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { Input } from "../../components/input";
 import { Button } from "../../components/button";
 import { Select } from "../../components/select";
 import { Company } from "../../models/company";
-import { SelectItem } from "../../models/selectitem";
+import { SelectItem, addEmptyStr, numToStr } from "../../models/selectitem";
 
-// initialValues={{
-//   id: 0,
-//   name: "",
-//   address: "",
-//   birthday: "",
-//   company: {},
-//   company_id: 0,
-//   post: {},
-//   post_id: 0,
-//   department: {},
-//   department_id: 0,
-//   post_go: {},
-//   post_go_id: 0,
-//   rank: {},
-//   rank_id: 0,
-//   emails: [],
-//   phones: [],
-//   faxes: [],
-//   note: "",
-// }}
-
-export const CompanyItem: React.FC<{}> = () => {
+export const CompanyItem: FC<{}> = () => {
   let { id } = useParams();
-  const [hasError, setErrors] = useState(false);
+  const [hasError, setErrors] = useState();
   const [company, setCompany] = useState<Company>();
   const [scope, setScope] = useState<SelectItem>();
   const [scopes, setScopes] = useState<SelectItem[]>();
+  const [emails, setEmails] = useState<string[]>();
+  const [phones, setPhones] = useState<string[]>();
+  const [faxes, setFaxes] = useState<string[]>();
 
   async function fetchData() {
     const resCompany = await fetch(`/api/go/company/item/${id}`);
@@ -46,9 +29,9 @@ export const CompanyItem: React.FC<{}> = () => {
   async function fetchScopes() {
     const resScopes = await fetch(`/api/go/scope/select`);
     resScopes
-        .json()
-        .then(res => setScopes(res.data["SelectItem"]))
-        .catch(err => setErrors(err));
+      .json()
+      .then(res => setScopes(res.data["SelectItem"]))
+      .catch(err => setErrors(err));
   }
 
   useEffect(() => {
@@ -62,23 +45,121 @@ export const CompanyItem: React.FC<{}> = () => {
   useEffect(() => {
     if (company && scopes) {
       setScope(scopes.find(v => v.id === company.scope_id));
+      setEmails(addEmptyStr(company.emails));
+      setPhones(addEmptyStr(numToStr(company.phones)));
+      setFaxes(addEmptyStr(numToStr(company.faxes)));
     }
   }, [company, scopes]);
 
   const { register, handleSubmit, watch, errors } = useForm();
+
   const onSubmit = (data: any) => {
     console.log(data);
   };
 
-  const Scopes = () => (
-    scopes && scope
-    ? <Select list={scopes} selected={scope} itemName="scope" label="Сфера деятельности"/>
-    : null
-  )
+  const Scopes = () =>
+    scopes && scope ? (
+      <Select
+        list={scopes}
+        selected={scope}
+        itemName="scope"
+        label="Сфера деятельности"
+        inputRef={register}
+      />
+    ) : null;
+
+  const Emails = () =>
+    emails ? (
+      <>
+        {emails.map((email, index) => (
+          <Input
+            key={`email${index}`}
+            name={`email[${index}]`}
+            value={email}
+            type="email"
+            placeholder="Электронный адрес"
+            iconLeft="envelope"
+            inputRef={register}
+            // onBlur={setEmails(addEmptyStr(emails))}
+            // @blur="onBlur('emails', 'email')"
+            // pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"
+            // error="Неправильный email"
+          ></Input>
+        ))}
+      </>
+    ) : null;
+
+  const Phones = () =>
+    phones ? (
+      <>
+        {phones.map((phone, index) => (
+          <Input
+            key={`phone${index}`}
+            name={`phone[${index}]`}
+            value={phone}
+            type="tel"
+            placeholder="Телефон"
+            iconLeft="phone"
+            inputRef={register}
+            // @blur="onBlur('phones', 'phone')"
+          ></Input>
+        ))}
+      </>
+    ) : null;
+
+  const Faxes = () =>
+    faxes ? (
+      <>
+        {faxes.map((fax, index) => (
+          <Input
+            key={`fax${index}`}
+            name={`fax[${index}]`}
+            value={fax}
+            type="tel"
+            placeholder="Факс"
+            iconLeft="phone"
+            inputRef={register}
+            // @blur="onBlur('faxes', 'phone')"
+          ></Input>
+        ))}
+      </>
+    ) : null;
+
+  const Practices = () =>
+    company && company.practices ? (
+      <div className="field" key="practices">
+        <label className="label">Тренировки</label>
+        {company.practices.map((practice, index) => (
+          <NavLink key={`practice${index}`} to={`/practice/${practice.id}`}>
+            <Input
+              value={`${practice.date_str} - ${practice.kind_name} - ${practice.topic}`}
+              iconLeft="history"
+              readonly
+            ></Input>
+          </NavLink>
+        ))}
+      </div>
+    ) : null;
+
+  const Contacts = () =>
+    company && company.contacts ? (
+      <div className="field" key="contacts">
+        <label className="label">Сотрудники</label>
+        {company.contacts.map((contact, index) => (
+          <NavLink key={`contact${index}`} to={`/contact/${contact.id}`}>
+            <Input
+              value={`${contact.name} - ${contact.post_name}`}
+              iconLeft="user"
+              readonly
+            ></Input>
+          </NavLink>
+        ))}
+      </div>
+    ) : null;
 
   return (
     <div className="container mw768">
-      {company ? (
+      {!hasError && company ? (
         <div>
           <Input
             name="name"
@@ -91,119 +172,54 @@ export const CompanyItem: React.FC<{}> = () => {
 
           <Scopes />
 
-          {/* <bulma-select
-      :list="scopes"
-      :selected-item="company.scope"
-      item-name="scope"
-      label="Сфера деятельности"
-      @select="onSelect"
-      iconLeft="tag"
-    ></bulma-select> */}
-
-          {/* <Input
+          <Input
             name="address"
             value={company.address}
             inputRef={register}
             label
             placeholder="Адрес"
             iconLeft="address-card"
-          /> */}
+          />
 
-          {/* <div className="columns">
-      <div className="column">
-        <div className="field">
-          <label className="label">Электронный адрес</label>
+          <div className="columns">
+            <div className="column">
+              <div className="field">
+                <label className="label">Электронный адрес</label>
+                <Emails />
+              </div>
+            </div>
+
+            <div className="column">
+              <div className="field">
+                <label className="label">Телефон</label>
+                <Phones />
+              </div>
+            </div>
+
+            <div className="column">
+              <div className="field">
+                <label className="label">Факс</label>
+                <Faxes />
+              </div>
+            </div>
+          </div>
+
+          <Practices />
+
+          <Contacts />
+
           <Input
-            v-for="(email, index) in company.emails"
-            :key="index"
-            value={company.emails[index]}
-            type="email"
-            placeholder="Электронный адрес"
-            iconLeft="envelope"
-            autocomplete="email"
-            @blur="onBlur('emails', 'email')"
-            pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"
-            error="Неправильный email"
-          ></Input>
-        </div>
-      </div>
-
-      <div className="column">
-        <div className="field">
-          <label className="label">Телефон</label>
-          <Input
-            v-for="(phone, index) in company.phones"
-            :key="index"
-            value={company.phones[index]}
-            type="tel"
-            placeholder="Телефон"
-            iconLeft="phone"
-            autocomplete="tel"
-            @blur="onBlur('phones', 'phone')"
-          ></Input>
-        </div>
-      </div>
-
-      <div className="column">
-        <div className="field">
-          <label className="label">Факс</label>
-          <Input
-            v-for="(fax, index) in company.faxes"
-            :key="index"
-            value={company.faxes[index]}
-            type="tel"
-            placeholder="Факс"
-            iconLeft="phone"
-            autocomplete="tel"
-            @blur="onBlur('faxes', 'phone')"
-          ></Input>
-        </div>
-      </div>
-    </div>
-
-    <div className="field" v-if="company.practices.length > 0" key="practices">
-      <label className="label">Тренировки</label>
-      <Input
-        v-for="practice in company.practices"
-        :key="practice.id"
-        :value="
-          practice.date_str +
-            ' - ' +
-            practice.kind_name +
-            ' - ' +
-            practice.topic
-        "
-        :hyper="'/practice/' + practice.id"
-        iconLeft="history"
-        readonly
-      ></Input>
-    </div>
-
-    <div className="field" v-if="company.contacts.length > 0" key="contacts">
-      <label className="label">Сотрудники</label>
-      <Input
-        v-for="contact in company.contacts"
-        :key="contact.id"
-        :value="contact.name + ' - ' + contact.post_name"
-        :hyper="'/contact/' + contact.id"
-        iconLeft="user"
-        readonly
-      ></Input>
-    </div> */}
-
-          {/* <Input
             name="note"
             value={company.note}
             inputRef={register}
             label
             placeholder="Заметка"
             iconLeft="sticky-note"
-          /> */}
+          />
 
           <div className="field is-grouped is-grouped-centered">
             <div className="control">
               <Button
-                // text=""
                 color="primary"
                 // @click="submit"
               >
@@ -211,26 +227,26 @@ export const CompanyItem: React.FC<{}> = () => {
               </Button>
             </div>
             <div className="control">
-              {/* <Button text="Закрыть" v-on:click.once="close"></Button> */}
-              {/* </div> */}
-              <div className="control">
-                <Button
-                  // text="Удалить"
-                  color="danger"
-                  // onclick="return confirm('Вы действительно хотите удалить эту запись?');"
-                >
-                  Удалить
-                </Button>
-              </div>
+              <Button>Закрыть</Button>
+            </div>
+            <div className="control">
+              <Button
+                color="danger"
+                // onClick={() => {return confirm('Вы действительно хотите удалить эту запись?')}}
+              >
+                Удалить
+              </Button>
             </div>
           </div>
 
           <button className="button" onClick={handleSubmit(onSubmit)}>
             on submit
           </button>
+          <Button className="button" onClick={handleSubmit(onSubmit)}>
+            on submit
+          </Button>
         </div>
       ) : null}
     </div>
   );
 };
-// }

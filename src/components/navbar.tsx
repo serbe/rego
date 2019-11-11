@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React  from "react";
+import React, {FC}  from "react";
 
 import clsx from "clsx";
 import { NavLink } from "react-router-dom";
@@ -18,12 +18,12 @@ import { Button } from "./button";
 //       open: boolean
 // }
 
-export const NavBar: React.FC<{}> = () => {
+export const NavBar: FC<{}> = () => {
   const auth = true;
-  // const [active, setActive] = React.useState(false);
-  // const [auth, setAuth] = React.useState(true);
-  // const [logged, setLogged] = React.useState(true);
-  // const [open, setOpen] = React.useState(false);
+  // const [active, setActive] = useState(false);
+  // const [auth, setAuth] = useState(true);
+  // const [logged, setLogged] = useState(true);
+  // const [open, setOpen] = useState(false);
   // static contextTypes = {
   //   router: PropTypes.object
   // };

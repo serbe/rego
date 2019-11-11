@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import React, {FC} from "react";
 import clsx from "clsx";
 
 interface PaginationProps {
@@ -17,7 +17,7 @@ type PaginationLinkProps = {
   ellipsis?: boolean;
 };
 
-export const Pagination: React.FC<PaginationProps> = (
+export const Pagination: FC<PaginationProps> = (
   props: PaginationProps
 ) => {
   const { current_page, last_page, callback, rounded, size } = props;
