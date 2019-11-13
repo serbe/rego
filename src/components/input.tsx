@@ -1,4 +1,4 @@
-import React, {FC, MouseEvent, } from "react";
+import React, { FC, MouseEvent, ChangeEvent } from "react";
 import clsx from "clsx";
 
 import { Icon } from "./icon";
@@ -18,7 +18,7 @@ interface InputProps {
   iconRight?: string;
   className?: string;
   onClick?: MouseEvent<HTMLElement>;
-  onChange?: MouseEvent<HTMLElement>;
+  onChange?: ((event: ChangeEvent<HTMLInputElement>) => void);
   onBlur?: any;
   placeholder?: string;
   name?: string;
@@ -92,7 +92,7 @@ export const Input: FC<InputProps> = (props: InputProps) => {
   const isError = () => {
     if (value && value !== "" && pattern) {
       const patt = new RegExp(pattern);
-      return !patt.test(value);
+      return !patt.test(String(value).toLowerCase());
     }
     return false;
   };
@@ -122,7 +122,7 @@ export const Input: FC<InputProps> = (props: InputProps) => {
           type={type}
           disabled={disabled}
           onClick={() => onClick}
-          onChange={() => onChange}
+          onChange={onChange}
           onBlur={onBlur}
           placeholder={placeholder}
           readOnly={readonly}
