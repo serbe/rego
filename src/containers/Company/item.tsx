@@ -1,6 +1,5 @@
-import React, { useState, useEffect, FC } from "react";
+import React, { useState, useEffect, FC, ChangeEvent } from "react";
 import { NavLink } from "react-router-dom";
-import useForm from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { Input } from "../../components/input";
 import { Button } from "../../components/button";
@@ -14,24 +13,61 @@ export const CompanyItem: FC<{}> = () => {
   const [company, setCompany] = useState<Company>();
   const [scope, setScope] = useState<SelectItem>();
   const [scopes, setScopes] = useState<SelectItem[]>();
-  const [emails, setEmails] = useState<string[]>();
-  const [phones, setPhones] = useState<string[]>();
-  const [faxes, setFaxes] = useState<string[]>();
+  const [emails, setEmails] = useState([""]);
+  const [phones, setPhones] = useState([""]);
+  const [faxes, setFaxes] = useState([""]);
+
+  const handleEmails = (key: number, value: string) => {
+    let newEmails = emails;
+    newEmails[key] = value;
+    setEmails(newEmails);
+  }
+
+  const blurEmails = () => {
+    let newEmails = addEmptyStr(emails);
+    setEmails(newEmails);
+  }
+
+  const handlePhones = (key: number, value: string) => {
+    let newPhones = phones;
+    newPhones[key] = value;
+    setPhones(newPhones);
+  }
+
+  const blurPhones = () => {
+    let newPhones = addEmptyStr(phones);
+    setPhones(newPhones);
+  }
+
+  const handleFaxes = (key: number, value: string) => {
+    let newFaxes = phones;
+    newFaxes[key] = value;
+    setFaxes(newFaxes);
+  }
+
+  const blurFaxes = () => {
+    let newFaxes = addEmptyStr(faxes);
+    setFaxes(newFaxes);
+  }
 
   async function fetchData() {
-    const resCompany = await fetch(`/api/go/company/item/${id}`);
-    resCompany
-      .json()
-      .then(res => setCompany(res.data["Company"]))
-      .catch(err => setErrors(err));
+    try {
+      const resCompany = await fetch(`/api/go/company/item/${id}`);
+      const companyJson = await resCompany.json();
+      setCompany(companyJson.data["Company"]);
+    } catch (err) {
+      setErrors(err);
+    }
   }
 
   async function fetchScopes() {
-    const resScopes = await fetch(`/api/go/scope/select`);
-    resScopes
-      .json()
-      .then(res => setScopes(res.data["SelectItem"]))
-      .catch(err => setErrors(err));
+    try {
+      const resScopes = await fetch(`/api/go/scope/select`);
+      const scopesJson = await resScopes.json();
+      setScopes(scopesJson.data["SelectItem"]);
+    } catch (err) {
+      setErrors(err);
+    }
   }
 
   useEffect(() => {
@@ -51,12 +87,6 @@ export const CompanyItem: FC<{}> = () => {
     }
   }, [company, scopes]);
 
-  const { register, handleSubmit, watch, errors } = useForm();
-
-  const onSubmit = (data: any) => {
-    console.log(data);
-  };
-
   const Scopes = () =>
     scopes && scope ? (
       <Select
@@ -64,7 +94,7 @@ export const CompanyItem: FC<{}> = () => {
         selected={scope}
         itemName="scope"
         label="Сфера деятельности"
-        inputRef={register}
+        // inputRef={register}
       />
     ) : null;
 
@@ -73,17 +103,17 @@ export const CompanyItem: FC<{}> = () => {
       <>
         {emails.map((email, index) => (
           <Input
-            key={`email${index}`}
+            key={`email[${index}]`}
             name={`email[${index}]`}
             value={email}
             type="email"
             placeholder="Электронный адрес"
             iconLeft="envelope"
-            inputRef={register}
-            // onBlur={setEmails(addEmptyStr(emails))}
-            // @blur="onBlur('emails', 'email')"
-            // pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"
+            // inputRef={register}
+            onBlur={blurEmails}
+            // pattern='/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
             // error="Неправильный email"
+            onChange={(e: any) => handleEmails(index, e.currentTarget.value)}
           ></Input>
         ))}
       </>
@@ -100,8 +130,9 @@ export const CompanyItem: FC<{}> = () => {
             type="tel"
             placeholder="Телефон"
             iconLeft="phone"
-            inputRef={register}
-            // @blur="onBlur('phones', 'phone')"
+            // inputRef={register}
+            onBlur={blurPhones}
+            onChange={(e: any) => handlePhones(index, e.currentTarget.value)}
           ></Input>
         ))}
       </>
@@ -118,8 +149,9 @@ export const CompanyItem: FC<{}> = () => {
             type="tel"
             placeholder="Факс"
             iconLeft="phone"
-            inputRef={register}
-            // @blur="onBlur('faxes', 'phone')"
+            // inputRef={register}
+            onBlur={blurFaxes}
+            onChange={(e: any) => handleFaxes(index, e.currentTarget.value)}
           ></Input>
         ))}
       </>
@@ -164,10 +196,11 @@ export const CompanyItem: FC<{}> = () => {
           <Input
             name="name"
             value={company.name}
-            inputRef={register}
+            // inputRef={register}
             label
             placeholder="Наименование организации"
             iconLeft="building"
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setCompany({...company, name: e.currentTarget.value})}
           />
 
           <Scopes />
@@ -175,10 +208,11 @@ export const CompanyItem: FC<{}> = () => {
           <Input
             name="address"
             value={company.address}
-            inputRef={register}
+            // inputRef={register}
             label
             placeholder="Адрес"
             iconLeft="address-card"
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setCompany({...company, address: e.currentTarget.value})}
           />
 
           <div className="columns">
@@ -211,10 +245,11 @@ export const CompanyItem: FC<{}> = () => {
           <Input
             name="note"
             value={company.note}
-            inputRef={register}
+            // inputRef={register}
             label
             placeholder="Заметка"
             iconLeft="sticky-note"
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setCompany({...company, note: e.currentTarget.value})}
           />
 
           <div className="field is-grouped is-grouped-centered">
@@ -239,12 +274,12 @@ export const CompanyItem: FC<{}> = () => {
             </div>
           </div>
 
-          <button className="button" onClick={handleSubmit(onSubmit)}>
+          {/* <button className="button" onClick={handleSubmit(onSubmit)}>
             on submit
           </button>
           <Button className="button" onClick={handleSubmit(onSubmit)}>
             on submit
-          </Button>
+          </Button> */}
         </div>
       ) : null}
     </div>
