@@ -1,4 +1,4 @@
-import React, {FC, ReactNode} from "react";
+import React, { FC, ReactNode } from "react";
 import clsx from "clsx";
 
 interface IconProps {

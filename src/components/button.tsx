@@ -1,13 +1,20 @@
-import React, {ReactNode, FC} from "react";
+import React, { ReactNode, FC, MouseEvent } from "react";
 import clsx from "clsx";
 
-type MainColors = "primary" | "info" | "success" | "warning" | "danger";
+type MainColorsType = "primary" | "info" | "success" | "warning" | "danger";
 
-const main_colors = ["primary", "info", "success", "warning", "danger"];
+const mainColors = ["primary", "info", "success", "warning", "danger"];
 
 interface ButtonProps {
   type?: "a" | "button" | "submit" | "reset";
-  color?: "white" | "light" | "dark" | "black" | "text" | "link" | MainColors;
+  color?:
+    | "white"
+    | "light"
+    | "dark"
+    | "black"
+    | "text"
+    | "link"
+    | MainColorsType;
   light?: boolean;
   dark?: boolean;
   size?: "small" | "normal" | "medium" | "large";
@@ -23,7 +30,7 @@ interface ButtonProps {
   disable?: boolean;
   className?: string;
   href?: string;
-  onClick?: any;
+  onClick?: (event: MouseEvent<HTMLElement>) => void;
   children: ReactNode;
 }
 
@@ -54,8 +61,8 @@ export const Button: FC<ButtonProps> = (props: ButtonProps) => {
     "button",
     {
       [`is-${color}`]: color,
-      "is-light": color && light && main_colors.includes(color),
-      "is-dark": color && dark && main_colors.includes(color),
+      "is-light": color && light && mainColors.includes(color),
+      "is-dark": color && dark && mainColors.includes(color),
       [`is-${size}`]: size,
       "is-fullwidth": fullwidth,
       "is-outlined": outlined,
@@ -69,10 +76,10 @@ export const Button: FC<ButtonProps> = (props: ButtonProps) => {
     }
   ]);
 
-  const Tag = () => {
+  const Tag = (): JSX.Element => {
     if (isStatic) {
       return (
-        <span onClick={() => onClick} className={classes}>
+        <span onClick={onClick} className={classes}>
           text
         </span>
       );

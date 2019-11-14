@@ -42,19 +42,19 @@ export const Select: FC<SelectProps> = (props: SelectProps) => {
   const [filteredList, setFilteredList] = useState(list);
 
   useEffect(() => {
-    let f_list =
+    const fList =
       item.name.length > 0
         ? list.filter(
-            list_item =>
-              list_item.name === "" ||
-              list_item.name.match(new RegExp(item.name, "i"))
+            listItem =>
+              listItem.name === "" ||
+              listItem.name.match(new RegExp(item.name, "i"))
           )
         : list;
-    setFilteredList(f_list);
+    setFilteredList(fList);
   }, [item.name, list]);
 
-  const onInput = (event: SyntheticEvent) => {
-    let target = event.target as HTMLInputElement;
+  const onInput = (event: SyntheticEvent): void => {
+    const target = event.target as HTMLInputElement;
     setItem({ id: 0, name: target.value });
   };
 
@@ -78,14 +78,14 @@ export const Select: FC<SelectProps> = (props: SelectProps) => {
     }
   ]);
 
-  const Label = () =>
+  const Label = (): JSX.Element | null =>
     label ? (
       <label className="label" key="SelectLabel">
         {label}
       </label>
     ) : null;
 
-  const IconLeft = () =>
+  const IconLeft = (): JSX.Element | null =>
     iconLeft ? (
       <Icon
         icon={iconLeft}
@@ -96,7 +96,7 @@ export const Select: FC<SelectProps> = (props: SelectProps) => {
       />
     ) : null;
 
-  const IconRight = () =>
+  const IconRight = (): JSX.Element | null =>
     iconRight ? (
       <Icon
         icon={iconRight}
@@ -107,12 +107,12 @@ export const Select: FC<SelectProps> = (props: SelectProps) => {
       />
     ) : null;
 
-  const SelectList = () => {
-    const items = filteredList.map((item, _index) => (
+  const SelectList = (): JSX.Element => {
+    const items = filteredList.map(item => (
       <div
         className="select-item input"
         key={item.id}
-        onClick={() => setItem(item)}
+        onClick={(): void => setItem(item)}
       >
         {item.name}
       </div>
@@ -120,7 +120,7 @@ export const Select: FC<SelectProps> = (props: SelectProps) => {
     return <>{items}</>;
   };
 
-  const SelectBox = () =>
+  const SelectBox = (): JSX.Element | null =>
     opened ? (
       <div className="select-box" key="SelectOpened">
         <SelectList />
@@ -130,15 +130,17 @@ export const Select: FC<SelectProps> = (props: SelectProps) => {
   return (
     <div className="field">
       <Label />
-      <div className={controlClasses} onClick={() => setOpened(true)}>
+      <div className={controlClasses} onClick={(): void => setOpened(true)}>
         <input
           ref={inputRef}
           name={itemName}
           className={inputClasses}
           placeholder={selected.name}
           value={item.name}
-          onChange={e => onInput(e)}
-          onBlur={() => setTimeout(() => setOpened(false), 300)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+            onInput(e)
+          }
+          onBlur={(): NodeJS.Timeout => setTimeout(() => setOpened(false), 300)}
         />
         <IconLeft />
         <IconRight />

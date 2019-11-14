@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/jest": "24.0.22",
+    "@types/jest": "24.0.23",
     "@types/node": "12.12.7",
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.4",
@@ -17,17 +17,24 @@
     "react-hook-form": "^3.27.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
-    "source-map-explorer": "^2.1.0",
+    "source-map-explorer": "^2.1.1",
     "typescript": "3.7.2"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test"
+    "test": "react-scripts test",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": ["react-app", "plugin:jsx-a11y/recommended"],
+    "plugins": ["jsx-a11y"],
+    "rules": {
+      "jsx-a11y/click-events-have-key-events": "off",
+      "jsx-a11y/no-static-element-interactions": "off",
+      "jsx-a11y/label-has-associated-control": "off"
+    }
   },
   "browserslist": {
     "production": [

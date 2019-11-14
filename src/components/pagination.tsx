@@ -1,10 +1,9 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import React, {FC} from "react";
+import React, { FC } from "react";
 import clsx from "clsx";
 
 interface PaginationProps {
-  current_page: number;
-  last_page: number;
+  currentPage: number;
+  lastPage: number;
   callback: (num: number) => void;
   rounded?: boolean;
   size?: "small" | "normal" | "medium" | "large";
@@ -17,29 +16,28 @@ type PaginationLinkProps = {
   ellipsis?: boolean;
 };
 
-export const Pagination: FC<PaginationProps> = (
-  props: PaginationProps
-) => {
-  const { current_page, last_page, callback, rounded, size } = props;
+export const Pagination: FC<PaginationProps> = (props: PaginationProps) => {
+  const { currentPage, lastPage, callback, rounded, size } = props;
 
-  const Prev = () =>
-    current_page > 1 ? (
+  const Prev = (): JSX.Element | null =>
+    currentPage > 1 ? (
       <a
         className="pagination-previous"
-        onClick={() => callback(current_page - 1)}
+        onClick={(): void => callback(currentPage - 1)}
         key="PaginationPrev"
-        href="#"
+        href="#prev"
       >
         Назад
       </a>
     ) : null;
 
-  const Next = () =>
-    current_page < last_page ? (
+  const Next = (): JSX.Element | null =>
+    currentPage < lastPage ? (
       <a
         className="pagination-next"
-        onClick={() => callback(current_page + 1)}
+        onClick={(): void => callback(currentPage + 1)}
         key="PaginationNext"
+        href="#next"
       >
         Далее
       </a>
@@ -50,18 +48,19 @@ export const Pagination: FC<PaginationProps> = (
     index,
     link,
     ellipsis
-  }: PaginationLinkProps) => {
-    const Tag = () => {
+  }: PaginationLinkProps): JSX.Element | null => {
+    const Tag = (): JSX.Element => {
       return ellipsis ? (
         <span className="pagination-ellipsis">&hellip;</span>
       ) : (
         <a
           className={
-            link === current_page
+            link === currentPage
               ? "pagination-link is-current"
               : "pagination-link"
           }
-          onClick={() => (link ? callback(link) : null)}
+          onClick={(): void | null => (link ? callback(link) : null)}
+          href="#link"
         >
           {link}
         </a>
@@ -86,28 +85,24 @@ export const Pagination: FC<PaginationProps> = (
       <Prev />
       <Next />
       <ul className="pagination-list" key="ul">
-        <PaginationLink check={current_page !== 1} index={1} link={1} />
-        <PaginationLink check={current_page > 3} index={2} ellipsis />
+        <PaginationLink check={currentPage !== 1} index={1} link={1} />
+        <PaginationLink check={currentPage > 3} index={2} ellipsis />
         <PaginationLink
-          check={current_page > 2}
+          check={currentPage > 2}
           index={3}
-          link={current_page - 1}
+          link={currentPage - 1}
         />
-        <PaginationLink check index={4} link={current_page} />
+        <PaginationLink check index={4} link={currentPage} />
         <PaginationLink
-          check={current_page < last_page - 1}
+          check={currentPage < lastPage - 1}
           index={5}
-          link={current_page + 1}
+          link={currentPage + 1}
         />
+        <PaginationLink check={currentPage < lastPage - 2} index={6} ellipsis />
         <PaginationLink
-          check={current_page < last_page - 2}
-          index={6}
-          ellipsis
-        />
-        <PaginationLink
-          check={current_page !== last_page}
+          check={currentPage !== lastPage}
           index={7}
-          link={last_page}
+          link={lastPage}
         />
       </ul>
     </nav>

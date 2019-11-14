@@ -1,4 +1,4 @@
-import React, {useState, FC} from "react";
+import React, { useState, FC } from "react";
 import clsx from "clsx";
 
 import { Link } from "react-router-dom";
@@ -37,7 +37,7 @@ interface TableProps {
 }
 
 export const Table: FC<TableProps> = (props: TableProps) => {
-  const [current_page, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
 
   const {
     bordered,
@@ -51,10 +51,28 @@ export const Table: FC<TableProps> = (props: TableProps) => {
     paginate
   } = props;
 
-  let per_page = paginate ? paginate : 20;
-  let search = "";
+  const itemsOnPage = paginate ? paginate : 20;
+  const search = "";
 
-  let filtered_len = 0;
+  let filteredLen = 0;
+
+  const filteredData = (): any[] => {
+    if (search !== "") {
+      filteredLen = data.length;
+      return data;
+    } else {
+      const sliceData = data.slice(
+        currentPage * itemsOnPage,
+        (currentPage + 1) * itemsOnPage
+      );
+      filteredLen = data.length;
+      return sliceData;
+    }
+  };
+
+  const receiveChildValue = (value: number): void => {
+    setCurrentPage(value - 1);
+  };
 
   const classes = clsx([
     { className },
@@ -71,7 +89,7 @@ export const Table: FC<TableProps> = (props: TableProps) => {
   const Heading = (): JSX.Element => (
     <thead>
       <tr>
-        {columns.map((item, key) => (
+        {columns.map<JSX.Element>((item: Column, key: number) => (
           <th key={key} className={item.class_name}>
             {item.label}
           </th>
@@ -106,40 +124,22 @@ export const Table: FC<TableProps> = (props: TableProps) => {
     </>
   );
 
-  const TBody = () =>
+  const TBody = (): JSX.Element | null =>
     data && data.length > 0 ? (
       <tbody>
         <Rows />
       </tbody>
     ) : null;
 
-  const filteredData = () => {
-    if (search !== "") {
-      filtered_len = data.length;
-      return data;
-    } else {
-      const slice_data = data.slice(
-        current_page * per_page,
-        (current_page + 1) * per_page
-      );
-      filtered_len = data.length;
-      return slice_data;
-    }
-  };
-
-  const Paginate = () =>
-    paginate && filtered_len / per_page > 2 ? (
+  const Paginate = (): JSX.Element | null =>
+    paginate && filteredLen / itemsOnPage > 2 ? (
       <Pagination
-        current_page={current_page + 1}
-        last_page={Math.ceil(filtered_len / per_page)}
+        currentPage={currentPage + 1}
+        lastPage={Math.ceil(filteredLen / itemsOnPage)}
         callback={receiveChildValue}
         rounded
       />
     ) : null;
-
-  const receiveChildValue = (value: number) => {
-    setCurrentPage(value - 1);
-  };
 
   return !data ? (
     <div>Loading data</div>

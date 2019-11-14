@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent, ChangeEvent } from "react";
+import React, { FC, MouseEvent, ChangeEvent, FormEvent } from "react";
 import clsx from "clsx";
 
 import { Icon } from "./icon";
@@ -17,9 +17,9 @@ interface InputProps {
   iconLeft?: string;
   iconRight?: string;
   className?: string;
-  onClick?: MouseEvent<HTMLElement>;
-  onChange?: ((event: ChangeEvent<HTMLInputElement>) => void);
-  onBlur?: any;
+  onClick?: (event: MouseEvent<HTMLElement>) => void;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (event: FormEvent<HTMLInputElement>) => void;
   placeholder?: string;
   name?: string;
   value?: string;
@@ -79,7 +79,7 @@ export const Input: FC<InputProps> = (props: InputProps) => {
     }
   ]);
 
-  const getLabel = () => {
+  const getLabel = (): string | undefined => {
     if (typeof label === "string") {
       return label;
     } else if (label && placeholder) {
@@ -89,7 +89,7 @@ export const Input: FC<InputProps> = (props: InputProps) => {
     }
   };
 
-  const isError = () => {
+  const isError = (): boolean => {
     if (value && value !== "" && pattern) {
       const patt = new RegExp(pattern);
       return !patt.test(String(value).toLowerCase());
@@ -97,20 +97,20 @@ export const Input: FC<InputProps> = (props: InputProps) => {
     return false;
   };
 
-  const Label = () =>
+  const Label = (): JSX.Element | null =>
     getLabel ? <label className="label">{getLabel()}</label> : null;
 
-  const Error = () =>
+  const Error = (): JSX.Element | null =>
     isError ? (
       <p className="help is-danger" key="InputError">
         {error}
       </p>
     ) : null;
 
-  const LeftIcon = () =>
+  const LeftIcon = (): JSX.Element | null =>
     iconLeft ? <Icon position={"left"} icon={iconLeft} /> : null;
 
-  const RightIcon = () =>
+  const RightIcon = (): JSX.Element | null =>
     iconRight ? <Icon position={"right"} icon={iconRight} /> : null;
 
   return (
@@ -121,7 +121,7 @@ export const Input: FC<InputProps> = (props: InputProps) => {
           className={inputClasses}
           type={type}
           disabled={disabled}
-          onClick={() => onClick}
+          onClick={onClick}
           onChange={onChange}
           onBlur={onBlur}
           placeholder={placeholder}

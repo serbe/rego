@@ -8,7 +8,7 @@ import { Company } from "../../models/company";
 import { SelectItem, addEmptyStr, numToStr } from "../../models/selectitem";
 
 export const CompanyItem: FC<{}> = () => {
-  let { id } = useParams();
+  const { id } = useParams();
   const [hasError, setErrors] = useState();
   const [company, setCompany] = useState<Company>();
   const [scope, setScope] = useState<SelectItem>();
@@ -17,64 +17,64 @@ export const CompanyItem: FC<{}> = () => {
   const [phones, setPhones] = useState([""]);
   const [faxes, setFaxes] = useState([""]);
 
-  const handleEmails = (key: number, value: string) => {
-    let newEmails = emails;
+  const handleEmails = (key: number, value: string): void => {
+    const newEmails = emails;
     newEmails[key] = value;
     setEmails(newEmails);
   }
 
-  const blurEmails = () => {
-    let newEmails = addEmptyStr(emails);
+  const blurEmails = (): void => {
+    const newEmails = addEmptyStr(emails);
     setEmails(newEmails);
   }
 
-  const handlePhones = (key: number, value: string) => {
-    let newPhones = phones;
+  const handlePhones = (key: number, value: string): void => {
+    const newPhones = phones;
     newPhones[key] = value;
     setPhones(newPhones);
   }
 
-  const blurPhones = () => {
-    let newPhones = addEmptyStr(phones);
+  const blurPhones = (): void => {
+    const newPhones = addEmptyStr(phones);
     setPhones(newPhones);
   }
 
-  const handleFaxes = (key: number, value: string) => {
-    let newFaxes = phones;
+  const handleFaxes = (key: number, value: string): void => {
+    const newFaxes = phones;
     newFaxes[key] = value;
     setFaxes(newFaxes);
   }
 
-  const blurFaxes = () => {
-    let newFaxes = addEmptyStr(faxes);
+  const blurFaxes = (): void => {
+    const newFaxes = addEmptyStr(faxes);
     setFaxes(newFaxes);
   }
 
-  async function fetchData() {
-    try {
-      const resCompany = await fetch(`/api/go/company/item/${id}`);
-      const companyJson = await resCompany.json();
-      setCompany(companyJson.data["Company"]);
-    } catch (err) {
-      setErrors(err);
-    }
-  }
-
-  async function fetchScopes() {
-    try {
-      const resScopes = await fetch(`/api/go/scope/select`);
-      const scopesJson = await resScopes.json();
-      setScopes(scopesJson.data["SelectItem"]);
-    } catch (err) {
-      setErrors(err);
-    }
-  }
-
   useEffect(() => {
+    async function fetchData(): Promise<void> {
+      try {
+        const resCompany = await fetch(`/api/go/company/item/${id}`);
+        const companyJson = await resCompany.json();
+        setCompany(companyJson.data["Company"]);
+      } catch (err) {
+        setErrors(err);
+      }
+    }
+
     fetchData();
-  }, []);
+  }, [id]);
 
   useEffect(() => {
+    async function fetchScopes(): Promise<void> {
+      try {
+        const resScopes = await fetch(`/api/go/scope/select`);
+        const scopesJson = await resScopes.json();
+        setScopes(scopesJson.data["SelectItem"]);
+      } catch (err) {
+        setErrors(err);
+      }
+    }
+
     fetchScopes();
   }, []);
 
@@ -87,7 +87,33 @@ export const CompanyItem: FC<{}> = () => {
     }
   }, [company, scopes]);
 
-  const Scopes = () =>
+  // const Submit = () => {
+  //   if (company && scopes && scope) {
+  //     let values = {
+  //       id: company.id,
+  //       name: company.name,
+  //       address: company.address,
+  //       scope_id: scopes.filter((item) => item.name === scope.name).map((item) => item.id)[0],
+  //       note: company.note,
+  //       emails: emails.filter((value) => value !== ""),
+  //       phones: phones.filter((value) => value !== "").map((value) => parseInt(value, 10)),
+  //       faxes: faxes.filter((value) => value !== "").map((value) => parseInt(value, 10)),
+  //     };
+
+  //     // Object.keys(values).forEach((key) => {
+  //     //   if (
+  //     //     !Array.isArray(values[key]) &&
+  //     //     (values[key] === undefined || values[key] === "")
+  //     //   ) {
+  //     //     delete values[key];
+  //     //   }
+  //     // });
+
+  //     // this.close();
+  //   }
+  // }
+
+  const Scopes = (): JSX.Element | null =>
     scopes && scope ? (
       <Select
         list={scopes}
@@ -98,7 +124,7 @@ export const CompanyItem: FC<{}> = () => {
       />
     ) : null;
 
-  const Emails = () =>
+  const Emails = (): JSX.Element | null =>
     emails ? (
       <>
         {emails.map((email, index) => (
@@ -113,13 +139,13 @@ export const CompanyItem: FC<{}> = () => {
             onBlur={blurEmails}
             // pattern='/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
             // error="Неправильный email"
-            onChange={(e: any) => handleEmails(index, e.currentTarget.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>): void => handleEmails(index, e.currentTarget.value)}
           ></Input>
         ))}
       </>
     ) : null;
 
-  const Phones = () =>
+  const Phones = (): JSX.Element | null =>
     phones ? (
       <>
         {phones.map((phone, index) => (
@@ -132,13 +158,13 @@ export const CompanyItem: FC<{}> = () => {
             iconLeft="phone"
             // inputRef={register}
             onBlur={blurPhones}
-            onChange={(e: any) => handlePhones(index, e.currentTarget.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>): void => handlePhones(index, e.currentTarget.value)}
           ></Input>
         ))}
       </>
     ) : null;
 
-  const Faxes = () =>
+  const Faxes = (): JSX.Element | null =>
     faxes ? (
       <>
         {faxes.map((fax, index) => (
@@ -151,13 +177,13 @@ export const CompanyItem: FC<{}> = () => {
             iconLeft="phone"
             // inputRef={register}
             onBlur={blurFaxes}
-            onChange={(e: any) => handleFaxes(index, e.currentTarget.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>): void => handleFaxes(index, e.currentTarget.value)}
           ></Input>
         ))}
       </>
     ) : null;
 
-  const Practices = () =>
+  const Practices = (): JSX.Element | null =>
     company && company.practices ? (
       <div className="field" key="practices">
         <label className="label">Тренировки</label>
@@ -173,7 +199,7 @@ export const CompanyItem: FC<{}> = () => {
       </div>
     ) : null;
 
-  const Contacts = () =>
+  const Contacts = (): JSX.Element | null =>
     company && company.contacts ? (
       <div className="field" key="contacts">
         <label className="label">Сотрудники</label>
@@ -200,7 +226,7 @@ export const CompanyItem: FC<{}> = () => {
             label
             placeholder="Наименование организации"
             iconLeft="building"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setCompany({...company, name: e.currentTarget.value})}
+            onChange={(e: ChangeEvent<HTMLInputElement>): void => setCompany({...company, name: e.currentTarget.value})}
           />
 
           <Scopes />
@@ -212,7 +238,7 @@ export const CompanyItem: FC<{}> = () => {
             label
             placeholder="Адрес"
             iconLeft="address-card"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setCompany({...company, address: e.currentTarget.value})}
+            onChange={(e: ChangeEvent<HTMLInputElement>): void => setCompany({...company, address: e.currentTarget.value})}
           />
 
           <div className="columns">
@@ -249,7 +275,7 @@ export const CompanyItem: FC<{}> = () => {
             label
             placeholder="Заметка"
             iconLeft="sticky-note"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setCompany({...company, note: e.currentTarget.value})}
+            onChange={(e: ChangeEvent<HTMLInputElement>): void => setCompany({...company, note: e.currentTarget.value})}
           />
 
           <div className="field is-grouped is-grouped-centered">
