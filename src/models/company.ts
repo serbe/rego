@@ -1,5 +1,5 @@
-import { PracticeList } from "./practice";
-import { ContactShort } from "./contact";
+import { PracticeList } from './practice';
+import { ContactShort } from './contact';
 
 export type Company = {
   id: number;

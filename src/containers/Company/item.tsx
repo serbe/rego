@@ -1,11 +1,11 @@
-import React, { useState, useEffect, FC, ChangeEvent } from "react";
-import { NavLink } from "react-router-dom";
-import { useParams } from "react-router-dom";
-import { Input } from "../../components/input";
-import { Button } from "../../components/button";
-import { Select } from "../../components/select";
-import { Company } from "../../models/company";
-import { SelectItem, addEmptyStr, numToStr } from "../../models/selectitem";
+import React, { useState, useEffect, FC, ChangeEvent } from 'react';
+import { NavLink } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Input } from '../../components/input';
+import { Button } from '../../components/button';
+import { Select } from '../../components/select';
+import { Company } from '../../models/company';
+import { SelectItem, addEmptyStr, numToStr } from '../../models/selectitem';
 
 export const CompanyItem: FC<{}> = () => {
   const { id } = useParams();
@@ -13,49 +13,49 @@ export const CompanyItem: FC<{}> = () => {
   const [company, setCompany] = useState<Company>();
   const [scope, setScope] = useState<SelectItem>();
   const [scopes, setScopes] = useState<SelectItem[]>();
-  const [emails, setEmails] = useState([""]);
-  const [phones, setPhones] = useState([""]);
-  const [faxes, setFaxes] = useState([""]);
+  const [emails, setEmails] = useState(['']);
+  const [phones, setPhones] = useState(['']);
+  const [faxes, setFaxes] = useState(['']);
 
   const handleEmails = (key: number, value: string): void => {
     const newEmails = emails;
     newEmails[key] = value;
     setEmails(newEmails);
-  }
+  };
 
   const blurEmails = (): void => {
     const newEmails = addEmptyStr(emails);
     setEmails(newEmails);
-  }
+  };
 
   const handlePhones = (key: number, value: string): void => {
     const newPhones = phones;
     newPhones[key] = value;
     setPhones(newPhones);
-  }
+  };
 
   const blurPhones = (): void => {
     const newPhones = addEmptyStr(phones);
     setPhones(newPhones);
-  }
+  };
 
   const handleFaxes = (key: number, value: string): void => {
     const newFaxes = phones;
     newFaxes[key] = value;
     setFaxes(newFaxes);
-  }
+  };
 
   const blurFaxes = (): void => {
     const newFaxes = addEmptyStr(faxes);
     setFaxes(newFaxes);
-  }
+  };
 
   useEffect(() => {
     async function fetchData(): Promise<void> {
       try {
         const resCompany = await fetch(`/api/go/company/item/${id}`);
         const companyJson = await resCompany.json();
-        setCompany(companyJson.data["Company"]);
+        setCompany(companyJson.data['Company']);
       } catch (err) {
         setErrors(err);
       }
@@ -69,7 +69,7 @@ export const CompanyItem: FC<{}> = () => {
       try {
         const resScopes = await fetch(`/api/go/scope/select`);
         const scopesJson = await resScopes.json();
-        setScopes(scopesJson.data["SelectItem"]);
+        setScopes(scopesJson.data['SelectItem']);
       } catch (err) {
         setErrors(err);
       }
@@ -139,7 +139,9 @@ export const CompanyItem: FC<{}> = () => {
             onBlur={blurEmails}
             // pattern='/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
             // error="Неправильный email"
-            onChange={(e: ChangeEvent<HTMLInputElement>): void => handleEmails(index, e.currentTarget.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+              handleEmails(index, e.currentTarget.value)
+            }
           ></Input>
         ))}
       </>
@@ -158,7 +160,9 @@ export const CompanyItem: FC<{}> = () => {
             iconLeft="phone"
             // inputRef={register}
             onBlur={blurPhones}
-            onChange={(e: ChangeEvent<HTMLInputElement>): void => handlePhones(index, e.currentTarget.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+              handlePhones(index, e.currentTarget.value)
+            }
           ></Input>
         ))}
       </>
@@ -177,7 +181,9 @@ export const CompanyItem: FC<{}> = () => {
             iconLeft="phone"
             // inputRef={register}
             onBlur={blurFaxes}
-            onChange={(e: ChangeEvent<HTMLInputElement>): void => handleFaxes(index, e.currentTarget.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+              handleFaxes(index, e.currentTarget.value)
+            }
           ></Input>
         ))}
       </>
@@ -226,7 +232,9 @@ export const CompanyItem: FC<{}> = () => {
             label
             placeholder="Наименование организации"
             iconLeft="building"
-            onChange={(e: ChangeEvent<HTMLInputElement>): void => setCompany({...company, name: e.currentTarget.value})}
+            onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+              setCompany({ ...company, name: e.currentTarget.value })
+            }
           />
 
           <Scopes />
@@ -238,7 +246,9 @@ export const CompanyItem: FC<{}> = () => {
             label
             placeholder="Адрес"
             iconLeft="address-card"
-            onChange={(e: ChangeEvent<HTMLInputElement>): void => setCompany({...company, address: e.currentTarget.value})}
+            onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+              setCompany({ ...company, address: e.currentTarget.value })
+            }
           />
 
           <div className="columns">
@@ -275,7 +285,9 @@ export const CompanyItem: FC<{}> = () => {
             label
             placeholder="Заметка"
             iconLeft="sticky-note"
-            onChange={(e: ChangeEvent<HTMLInputElement>): void => setCompany({...company, note: e.currentTarget.value})}
+            onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+              setCompany({ ...company, note: e.currentTarget.value })
+            }
           />
 
           <div className="field is-grouped is-grouped-centered">

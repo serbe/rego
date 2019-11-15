@@ -1,23 +1,16 @@
-import React, { ReactNode, FC, MouseEvent } from "react";
-import clsx from "clsx";
+import React, { ReactNode, FC, MouseEvent } from 'react';
+import clsx from 'clsx';
 
-type MainColorsType = "primary" | "info" | "success" | "warning" | "danger";
+type MainColorsType = 'primary' | 'info' | 'success' | 'warning' | 'danger';
 
-const mainColors = ["primary", "info", "success", "warning", "danger"];
+const mainColors = ['primary', 'info', 'success', 'warning', 'danger'];
 
 interface ButtonProps {
-  type?: "a" | "button" | "submit" | "reset";
-  color?:
-    | "white"
-    | "light"
-    | "dark"
-    | "black"
-    | "text"
-    | "link"
-    | MainColorsType;
+  type?: 'a' | 'button' | 'submit' | 'reset';
+  color?: 'white' | 'light' | 'dark' | 'black' | 'text' | 'link' | MainColorsType;
   light?: boolean;
   dark?: boolean;
-  size?: "small" | "normal" | "medium" | "large";
+  size?: 'small' | 'normal' | 'medium' | 'large';
   fullwidth?: boolean;
   outlined?: boolean;
   inverted?: boolean;
@@ -54,26 +47,26 @@ export const Button: FC<ButtonProps> = (props: ButtonProps) => {
     className,
     href,
     onClick,
-    children
+    children,
   } = props;
   const classes = clsx([
     { className },
-    "button",
+    'button',
     {
       [`is-${color}`]: color,
-      "is-light": color && light && mainColors.includes(color),
-      "is-dark": color && dark && mainColors.includes(color),
+      'is-light': color && light && mainColors.includes(color),
+      'is-dark': color && dark && mainColors.includes(color),
       [`is-${size}`]: size,
-      "is-fullwidth": fullwidth,
-      "is-outlined": outlined,
-      "is-inverted": inverted,
-      "is-rounded": rounded,
-      "is-hovered": hovered,
-      "is-focused": focused,
-      "is-active": active,
-      "is-loading": loading,
-      "is-static": isStatic
-    }
+      'is-fullwidth': fullwidth,
+      'is-outlined': outlined,
+      'is-inverted': inverted,
+      'is-rounded': rounded,
+      'is-hovered': hovered,
+      'is-focused': focused,
+      'is-active': active,
+      'is-loading': loading,
+      'is-static': isStatic,
+    },
   ]);
 
   const Tag = (): JSX.Element => {
@@ -83,18 +76,13 @@ export const Button: FC<ButtonProps> = (props: ButtonProps) => {
           text
         </span>
       );
-    } else if (type === "submit" || type === "reset") {
+    } else if (type === 'submit' || type === 'reset') {
       return (
-        <input
-          type={type}
-          disabled={disable}
-          onClick={onClick}
-          className={classes}
-        >
+        <input type={type} disabled={disable} onClick={onClick} className={classes}>
           {children}
         </input>
       );
-    } else if (type === "a") {
+    } else if (type === 'a') {
       return (
         <a href={href} onClick={onClick} className={classes}>
           {children}
@@ -113,6 +101,6 @@ export const Button: FC<ButtonProps> = (props: ButtonProps) => {
 };
 
 Button.defaultProps = {
-  type: "button",
-  color: "white"
+  type: 'button',
+  color: 'white',
 };

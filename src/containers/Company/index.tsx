@@ -1,2 +1,2 @@
-export { CompanyItem } from "./item";
-export { Companies } from "./list";
+export { CompanyItem } from './item';
+export { Companies } from './list';

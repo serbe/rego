@@ -1,8 +1,8 @@
-import React, { useState, FC } from "react";
-import clsx from "clsx";
+import React, { useState, FC } from 'react';
+import clsx from 'clsx';
 
-import { Link } from "react-router-dom";
-import { Pagination } from "./pagination";
+import { Link } from 'react-router-dom';
+import { Pagination } from './pagination';
 
 const splitArray = (items: any[]): JSX.Element | null =>
   items ? (
@@ -48,23 +48,20 @@ export const Table: FC<TableProps> = (props: TableProps) => {
     data,
     columns,
     className,
-    paginate
+    paginate,
   } = props;
 
   const itemsOnPage = paginate ? paginate : 20;
-  const search = "";
+  const search = '';
 
   let filteredLen = 0;
 
   const filteredData = (): any[] => {
-    if (search !== "") {
+    if (search !== '') {
       filteredLen = data.length;
       return data;
     } else {
-      const sliceData = data.slice(
-        currentPage * itemsOnPage,
-        (currentPage + 1) * itemsOnPage
-      );
+      const sliceData = data.slice(currentPage * itemsOnPage, (currentPage + 1) * itemsOnPage);
       filteredLen = data.length;
       return sliceData;
     }
@@ -76,14 +73,14 @@ export const Table: FC<TableProps> = (props: TableProps) => {
 
   const classes = clsx([
     { className },
-    "table",
+    'table',
     {
-      "is-bordered": bordered,
-      "is-fullwidth": fullwidth,
-      "is-hoverable": hoverable,
-      "is-narrow": narrow,
-      "is-striped": striped
-    }
+      'is-bordered': bordered,
+      'is-fullwidth': fullwidth,
+      'is-hoverable': hoverable,
+      'is-narrow': narrow,
+      'is-striped': striped,
+    },
   ]);
 
   const Heading = (): JSX.Element => (

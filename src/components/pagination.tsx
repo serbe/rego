@@ -1,12 +1,12 @@
-import React, { FC } from "react";
-import clsx from "clsx";
+import React, { FC } from 'react';
+import clsx from 'clsx';
 
 interface PaginationProps {
   currentPage: number;
   lastPage: number;
   callback: (num: number) => void;
   rounded?: boolean;
-  size?: "small" | "normal" | "medium" | "large";
+  size?: 'small' | 'normal' | 'medium' | 'large';
 }
 
 type PaginationLinkProps = {
@@ -47,18 +47,14 @@ export const Pagination: FC<PaginationProps> = (props: PaginationProps) => {
     check,
     index,
     link,
-    ellipsis
+    ellipsis,
   }: PaginationLinkProps): JSX.Element | null => {
     const Tag = (): JSX.Element => {
       return ellipsis ? (
         <span className="pagination-ellipsis">&hellip;</span>
       ) : (
         <a
-          className={
-            link === currentPage
-              ? "pagination-link is-current"
-              : "pagination-link"
-          }
+          className={link === currentPage ? 'pagination-link is-current' : 'pagination-link'}
           onClick={(): void | null => (link ? callback(link) : null)}
           href="#link"
         >
@@ -74,10 +70,10 @@ export const Pagination: FC<PaginationProps> = (props: PaginationProps) => {
   };
 
   const navClasses = clsx([
-    "pagination",
-    "is-centered",
+    'pagination',
+    'is-centered',
     { size } ? `is-${size}` : null,
-    [{ "is-rounded": { rounded } }]
+    [{ 'is-rounded': { rounded } }],
   ]);
 
   return (
@@ -87,23 +83,11 @@ export const Pagination: FC<PaginationProps> = (props: PaginationProps) => {
       <ul className="pagination-list" key="ul">
         <PaginationLink check={currentPage !== 1} index={1} link={1} />
         <PaginationLink check={currentPage > 3} index={2} ellipsis />
-        <PaginationLink
-          check={currentPage > 2}
-          index={3}
-          link={currentPage - 1}
-        />
+        <PaginationLink check={currentPage > 2} index={3} link={currentPage - 1} />
         <PaginationLink check index={4} link={currentPage} />
-        <PaginationLink
-          check={currentPage < lastPage - 1}
-          index={5}
-          link={currentPage + 1}
-        />
+        <PaginationLink check={currentPage < lastPage - 1} index={5} link={currentPage + 1} />
         <PaginationLink check={currentPage < lastPage - 2} index={6} ellipsis />
-        <PaginationLink
-          check={currentPage !== lastPage}
-          index={7}
-          link={lastPage}
-        />
+        <PaginationLink check={currentPage !== lastPage} index={7} link={lastPage} />
       </ul>
     </nav>
   );

@@ -1,12 +1,12 @@
-import React, { FC, MouseEvent, ChangeEvent, FormEvent } from "react";
-import clsx from "clsx";
+import React, { FC, MouseEvent, ChangeEvent, FormEvent } from 'react';
+import clsx from 'clsx';
 
-import { Icon } from "./icon";
+import { Icon } from './icon';
 
 interface InputProps {
-  type?: "text" | "password" | "email" | "tel";
-  color?: "primary" | "info" | "success" | "warning" | "danger";
-  size?: "small" | "normal" | "medium" | "large";
+  type?: 'text' | 'password' | 'email' | 'tel';
+  color?: 'primary' | 'info' | 'success' | 'warning' | 'danger';
+  size?: 'small' | 'normal' | 'medium' | 'large';
   rounded?: boolean;
   hovered?: boolean;
   focused?: boolean;
@@ -53,34 +53,34 @@ export const Input: FC<InputProps> = (props: InputProps) => {
     label,
     error,
     pattern,
-    inputRef
+    inputRef,
   } = props;
 
   const divClasses = clsx([
-    "control",
+    'control',
     {
-      "has-icons-left": iconLeft,
-      "has-icons-right": iconRight,
-      [`is-${size}`]: size
-    }
+      'has-icons-left': iconLeft,
+      'has-icons-right': iconRight,
+      [`is-${size}`]: size,
+    },
   ]);
 
   const inputClasses = clsx([
     { className },
-    "input",
+    'input',
     {
       [`is-${color}`]: color,
       [`is-${size}`]: size,
-      "is-rounded": rounded,
-      "is-hovered": hovered,
-      "is-focused": focused,
-      "is-loading": loading,
-      "is-static": isStatic
-    }
+      'is-rounded': rounded,
+      'is-hovered': hovered,
+      'is-focused': focused,
+      'is-loading': loading,
+      'is-static': isStatic,
+    },
   ]);
 
   const getLabel = (): string | undefined => {
-    if (typeof label === "string") {
+    if (typeof label === 'string') {
       return label;
     } else if (label && placeholder) {
       return placeholder;
@@ -90,7 +90,7 @@ export const Input: FC<InputProps> = (props: InputProps) => {
   };
 
   const isError = (): boolean => {
-    if (value && value !== "" && pattern) {
+    if (value && value !== '' && pattern) {
       const patt = new RegExp(pattern);
       return !patt.test(String(value).toLowerCase());
     }
@@ -108,10 +108,10 @@ export const Input: FC<InputProps> = (props: InputProps) => {
     ) : null;
 
   const LeftIcon = (): JSX.Element | null =>
-    iconLeft ? <Icon position={"left"} icon={iconLeft} /> : null;
+    iconLeft ? <Icon position={'left'} icon={iconLeft} /> : null;
 
   const RightIcon = (): JSX.Element | null =>
-    iconRight ? <Icon position={"right"} icon={iconRight} /> : null;
+    iconRight ? <Icon position={'right'} icon={iconRight} /> : null;
 
   return (
     <div className="field">
@@ -139,5 +139,5 @@ export const Input: FC<InputProps> = (props: InputProps) => {
 };
 
 Input.defaultProps = {
-  type: "text"
+  type: 'text',
 };

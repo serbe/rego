@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
-import { Router } from "./containers/Router";
-import { NavBar } from "./components/navbar";
+import { Router } from './containers/Router';
+import { NavBar } from './components/navbar';
 import './App.css';
 
 const App: FC = () => {
@@ -19,6 +19,6 @@ const App: FC = () => {
       </footer>
     </>
   );
-}
+};
 
 export default App;

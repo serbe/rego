@@ -1,11 +1,11 @@
-import React, { FC, ReactNode } from "react";
-import clsx from "clsx";
+import React, { FC, ReactNode } from 'react';
+import clsx from 'clsx';
 
 interface IconProps {
-  color?: "info" | "success" | "warning" | "danger";
-  size?: "small" | "normal" | "medium" | "large";
+  color?: 'info' | 'success' | 'warning' | 'danger';
+  size?: 'small' | 'normal' | 'medium' | 'large';
   icon: string;
-  position: "left" | "right";
+  position: 'left' | 'right';
   children?: ReactNode;
   className?: string;
 }
@@ -15,15 +15,15 @@ export const Icon: FC<IconProps> = (props: IconProps) => {
 
   const spanClasses = clsx([
     { className },
-    "icon",
+    'icon',
     {
       [`has-text-${color}`]: color,
       [`is-${position}`]: position,
-      [`is-${size}`]: size
-    }
+      [`is-${size}`]: size,
+    },
   ]);
 
-  const iClasses = clsx(["fas", `fa-${icon}`]);
+  const iClasses = clsx(['fas', `fa-${icon}`]);
 
   return (
     <span className={spanClasses}>

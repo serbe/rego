@@ -1,8 +1,8 @@
-import React, { FC } from "react";
+import React, { FC } from 'react';
 
-import clsx from "clsx";
-import { NavLink } from "react-router-dom";
-import { Button } from "./button";
+import clsx from 'clsx';
+import { NavLink } from 'react-router-dom';
+import { Button } from './button';
 
 // function toggleOpen() {
 //   return (previousState, currentProps) => {
@@ -53,25 +53,16 @@ export const NavBar: FC<{}> = () => {
   // }
 
   const navMenuStyle = (): string => {
-    return clsx(["navbar-item", "has-dropdown", "is-hoverable"]);
+    return clsx(['navbar-item', 'has-dropdown', 'is-hoverable']);
   };
 
   return (
-    <nav
-      aria-label="main navigation"
-      className="navbar is-dark"
-      role="navigation"
-    >
+    <nav aria-label="main navigation" className="navbar is-dark" role="navigation">
       <div className="container">
         {auth ? (
           <>
             <div className="navbar-brand">
-              <NavLink
-                activeClassName="is-active"
-                className="navbar-item"
-                exact={true}
-                to="/"
-              >
+              <NavLink activeClassName="is-active" className="navbar-item" exact={true} to="/">
                 ЕДДС
               </NavLink>
 
@@ -91,25 +82,13 @@ export const NavBar: FC<{}> = () => {
 
             <div id="navbarData" className="navbar-menu">
               <div className="navbar-start">
-                <NavLink
-                  activeClassName="is-active"
-                  className="navbar-item"
-                  to="/contacts"
-                >
+                <NavLink activeClassName="is-active" className="navbar-item" to="/contacts">
                   Контакты
                 </NavLink>
-                <NavLink
-                  activeClassName="is-active"
-                  className="navbar-item"
-                  to="/companies"
-                >
+                <NavLink activeClassName="is-active" className="navbar-item" to="/companies">
                   Организации
                 </NavLink>
-                <NavLink
-                  activeClassName="is-active"
-                  className="navbar-item"
-                  to="/sirens"
-                >
+                <NavLink activeClassName="is-active" className="navbar-item" to="/sirens">
                   Сирены
                 </NavLink>
 

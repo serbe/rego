@@ -1,17 +1,17 @@
-import React, { useState, SyntheticEvent, useEffect, FC } from "react";
-import clsx from "clsx";
+import React, { useState, SyntheticEvent, useEffect, FC } from 'react';
+import clsx from 'clsx';
 
-import { Icon } from "./icon";
-import { SelectItem } from "../models/selectitem";
+import { Icon } from './icon';
+import { SelectItem } from '../models/selectitem';
 
-import "./select.css";
+import './select.css';
 
 interface SelectProps {
   selected: SelectItem;
   iconLeft?: string;
   iconRight?: string;
-  color?: "primary" | "info" | "success" | "warning" | "danger";
-  size?: "small" | "normal" | "medium" | "large";
+  color?: 'primary' | 'info' | 'success' | 'warning' | 'danger';
+  size?: 'small' | 'normal' | 'medium' | 'large';
   state?: string;
   label?: string;
   list: SelectItem[];
@@ -30,11 +30,11 @@ export const Select: FC<SelectProps> = (props: SelectProps) => {
     label,
     list,
     itemName,
-    inputRef
+    inputRef,
   } = props;
 
   if (list[0].id !== 0) {
-    list.unshift({ id: 0, name: "" });
+    list.unshift({ id: 0, name: '' });
   }
 
   const [opened, setOpened] = useState(false);
@@ -45,9 +45,7 @@ export const Select: FC<SelectProps> = (props: SelectProps) => {
     const fList =
       item.name.length > 0
         ? list.filter(
-            listItem =>
-              listItem.name === "" ||
-              listItem.name.match(new RegExp(item.name, "i"))
+            listItem => listItem.name === '' || listItem.name.match(new RegExp(item.name, 'i')),
           )
         : list;
     setFilteredList(fList);
@@ -59,23 +57,23 @@ export const Select: FC<SelectProps> = (props: SelectProps) => {
   };
 
   const controlClasses = clsx([
-    "control",
-    "is-expanded",
-    "select",
-    "is-fullwidth",
+    'control',
+    'is-expanded',
+    'select',
+    'is-fullwidth',
     {
-      "has-icons-left": iconLeft,
-      "has-icons-right": iconRight
-    }
+      'has-icons-left': iconLeft,
+      'has-icons-right': iconRight,
+    },
   ]);
 
   const inputClasses = clsx([
-    "input",
+    'input',
     {
       [`is-${color}`]: color,
       [`is-${size}`]: size,
-      [`is-${state}`]: state
-    }
+      [`is-${state}`]: state,
+    },
   ]);
 
   const Label = (): JSX.Element | null =>
@@ -90,7 +88,7 @@ export const Select: FC<SelectProps> = (props: SelectProps) => {
       <Icon
         icon={iconLeft}
         position="left"
-        color={color !== "primary" ? color : undefined}
+        color={color !== 'primary' ? color : undefined}
         size={size}
         key="SelectIconLeft"
       />
@@ -101,7 +99,7 @@ export const Select: FC<SelectProps> = (props: SelectProps) => {
       <Icon
         icon={iconRight}
         position="right"
-        color={color !== "primary" ? color : undefined}
+        color={color !== 'primary' ? color : undefined}
         size={size}
         key="SelectIconRight"
       />
@@ -109,11 +107,7 @@ export const Select: FC<SelectProps> = (props: SelectProps) => {
 
   const SelectList = (): JSX.Element => {
     const items = filteredList.map(item => (
-      <div
-        className="select-item input"
-        key={item.id}
-        onClick={(): void => setItem(item)}
-      >
+      <div className="select-item input" key={item.id} onClick={(): void => setItem(item)}>
         {item.name}
       </div>
     ));
@@ -137,9 +131,7 @@ export const Select: FC<SelectProps> = (props: SelectProps) => {
           className={inputClasses}
           placeholder={selected.name}
           value={item.name}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-            onInput(e)
-          }
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onInput(e)}
           onBlur={(): NodeJS.Timeout => setTimeout(() => setOpened(false), 300)}
         />
         <IconLeft />
