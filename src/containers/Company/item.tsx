@@ -5,7 +5,8 @@ import { Input } from '../../components/input';
 import { Button } from '../../components/button';
 import { Select } from '../../components/select';
 import { Company } from '../../models/company';
-import { SelectItem, addEmptyStr, numToStr } from '../../models/selectitem';
+import { SelectItem } from '../../models/selectitem';
+import { addEmptyStr, numToStr } from '../../models/list_utils';
 
 export const CompanyItem: FC<{}> = () => {
   const { id } = useParams();
@@ -228,7 +229,7 @@ export const CompanyItem: FC<{}> = () => {
           <Input
             name="name"
             value={company.name}
-            // inputRef={register}
+            // inputRef={ref}
             label
             placeholder="Наименование организации"
             iconLeft="building"

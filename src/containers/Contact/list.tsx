@@ -6,7 +6,7 @@ export const Contacts: FC<{}> = () => {
   const [hasError, setErrors] = useState(false);
   const [contacts, setContacts] = useState<ContactList[]>([]);
 
-  async function fetchData() {
+  async function fetchData(): Promise<void> {
     const res = await fetch('/api/go/contact/list');
     res
       .json()
@@ -22,23 +22,23 @@ export const Contacts: FC<{}> = () => {
     {
       field: 'name',
       label: 'Фамилия Имя Отчество',
-      link_base: '/contacts/',
-      link_field: 'id',
+      linkBase: '/contacts/',
+      linkField: 'id',
     },
     {
       field: 'company_name',
       label: 'Организация',
-      link_base: '/compaines/',
-      link_field: 'company_id',
-      class_name: 'is-hidden-mobile',
+      linkBase: '/compaines/',
+      linkField: 'company_id',
+      className: 'is-hidden-mobile',
     },
-    { field: 'post_name', label: 'Должность', class_name: 'is-hidden-touch' },
+    { field: 'post_name', label: 'Должность', className: 'is-hidden-touch' },
     { field: 'phones', label: 'Телефоны', array: true },
     {
       field: 'faxes',
       label: 'Факсы',
       array: true,
-      class_name: 'is-hidden-touch',
+      className: 'is-hidden-touch',
     },
   ];
 

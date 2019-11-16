@@ -3,6 +3,7 @@ import clsx from 'clsx';
 
 import { Link } from 'react-router-dom';
 import { Pagination } from './pagination';
+import { Column } from '../models/list_utils';
 
 const splitArray = (items: any[]): JSX.Element | null =>
   items ? (
@@ -12,16 +13,6 @@ const splitArray = (items: any[]): JSX.Element | null =>
       ))}
     </>
   ) : null;
-
-type Column = {
-  field: string;
-  label?: string;
-  witdh?: string;
-  array?: boolean;
-  link_base?: string;
-  link_field?: string;
-  class_name?: string;
-};
 
 interface TableProps {
   bordered?: boolean;
@@ -87,7 +78,7 @@ export const Table: FC<TableProps> = (props: TableProps) => {
     <thead>
       <tr>
         {columns.map<JSX.Element>((item: Column, key: number) => (
-          <th key={key} className={item.class_name}>
+          <th key={key} className={item.className}>
             {item.label}
           </th>
         ))}
@@ -98,9 +89,9 @@ export const Table: FC<TableProps> = (props: TableProps) => {
   const Row = (row: any): JSX.Element | null => (
     <>
       {columns.map((item, key) => (
-        <td key={key} className={item.class_name}>
-          {item.link_field && item.link_base ? (
-            <Link to={item.link_base + row[item.link_field]}>
+        <td key={key} className={item.className}>
+          {item.linkField && item.linkBase ? (
+            <Link to={item.linkBase + row[item.linkField]}>
               {item.array ? splitArray(row[item.field]) : row[item.field]}
             </Link>
           ) : item.array ? (

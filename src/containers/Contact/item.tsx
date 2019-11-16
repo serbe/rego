@@ -10,9 +10,9 @@ export const ContactItem: FC<{}> = () => {
   const [hasError, setErrors] = useState(false);
   const [contact, setContacts] = useState<Contact>();
 
-  let { id } = useParams();
+  const { id } = useParams();
 
-  async function fetchData() {
+  async function fetchData(): Promise<void> {
     const res = await fetch(`/api/go/contact/item/${id}`);
     res
       .json()
@@ -33,7 +33,7 @@ export const ContactItem: FC<{}> = () => {
   //   this.setState({ contact: { name: event.target.value } });
   // };
 
-  const Form = () => (
+  const Form = (): JSX.Element => (
     <form id="contact">
       <div className="field">
         <label className="label">Полное имя</label>

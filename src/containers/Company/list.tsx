@@ -6,7 +6,7 @@ export const Companies: FC<{}> = () => {
   const [hasError, setErrors] = useState(false);
   const [companies, setCompanies] = useState<CompanyList[]>([]);
 
-  async function fetchData() {
+  async function fetchData(): Promise<void> {
     const res = await fetch('/api/go/company/list');
     res
       .json()
@@ -18,35 +18,36 @@ export const Companies: FC<{}> = () => {
     fetchData();
   }, []);
 
+  const isHiddenTouch = 'is-hidden-touch';
   const columns = [
     {
       field: 'name',
       label: 'Наименование',
-      link_base: '/companies/',
-      link_field: 'id',
+      linkBase: '/companies/',
+      linkField: 'id',
     },
     {
       field: 'address',
       label: 'Адрес',
-      class_name: 'is-hidden-touch',
+      className: isHiddenTouch,
     },
     {
       field: 'scope_name',
       label: 'Сфера деятельности',
-      class_name: 'is-hidden-mobile',
+      className: 'is-hidden-mobile',
     },
     { field: 'phones', label: 'Телефоны', array: true },
     {
       field: 'faxes',
       label: 'Факсы',
       array: true,
-      class_name: 'is-hidden-touch',
+      className: isHiddenTouch,
     },
     {
       field: 'practices',
       label: 'Тренировки',
       array: true,
-      class_name: 'is-hidden-touch',
+      className: isHiddenTouch,
     },
   ];
 

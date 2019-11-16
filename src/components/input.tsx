@@ -26,7 +26,11 @@ interface InputProps {
   label?: string | boolean;
   error?: string;
   pattern?: string;
-  inputRef?: any;
+  inputRef?: {
+    <T>(initialValue: T): React.MutableRefObject<T>;
+    <T>(initialValue: T | null): React.RefObject<T>;
+    <T = undefined>(): React.MutableRefObject<T | undefined>;
+  };
 }
 
 export const Input: FC<InputProps> = (props: InputProps) => {

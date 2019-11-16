@@ -22,8 +22,8 @@ export const Certificates: FC<{}> = () => {
     {
       field: 'num',
       label: 'Номер',
-      link_base: '/certificates/',
-      link_field: 'id',
+      linkBase: '/certificates/',
+      linkField: 'id',
     },
     {
       field: 'contact_name',
@@ -32,15 +32,15 @@ export const Certificates: FC<{}> = () => {
     {
       field: 'company_name',
       label: 'Учебно-методический центр',
-      link_base: '/companies/',
-      link_field: 'company_id',
-      class_name: 'is-hidden-mobile',
+      linkBase: '/companies/',
+      linkField: 'company_id',
+      className: 'is-hidden-mobile',
     },
     { field: 'cert_date', label: 'Дата' },
     {
       field: 'note',
       label: 'Заметка',
-      class_name: 'is-hidden-mobile',
+      className: 'is-hidden-mobile',
     },
   ];
 
