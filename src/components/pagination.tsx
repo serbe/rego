@@ -16,10 +16,10 @@ type PaginationLinkProps = {
   ellipsis?: boolean;
 };
 
-export const Pagination: FC<PaginationProps> = (props: PaginationProps) => {
-  const { currentPage, lastPage, callback, rounded, size } = props;
+export const Pagination: FC<PaginationProps> = (properties: PaginationProps) => {
+  const { currentPage, lastPage, callback, rounded, size } = properties;
 
-  const Prev = (): JSX.Element | null =>
+  const Previous = (): JSX.Element | null =>
     currentPage > 1 ? (
       <a
         className="pagination-previous"
@@ -72,13 +72,13 @@ export const Pagination: FC<PaginationProps> = (props: PaginationProps) => {
   const navClasses = clsx([
     'pagination',
     'is-centered',
-    { size } ? `is-${size}` : null,
+    size ? `is-${size}` : null,
     [{ 'is-rounded': { rounded } }],
   ]);
 
   return (
     <nav className={navClasses} key="nav">
-      <Prev />
+      <Previous />
       <Next />
       <ul className="pagination-list" key="ul">
         <PaginationLink check={currentPage !== 1} index={1} link={1} />

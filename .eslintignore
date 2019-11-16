@@ -1,0 +1,10 @@
+/.git
+/docs/.next
+/coverage
+/docs/export
+/tmp
+build
+node_modules
+/src/setupProxy.js
+/src/serviceWorker.js
+/src/react-app-env.d.ts

@@ -1,21 +1,17 @@
 import React, { useState, useEffect, FC } from 'react';
+
 import { Table } from '../../components/table';
 import { ContactList } from '../../models/contact';
+import { fetchData } from '../../helpers/utils';
 
 export const Contacts: FC<{}> = () => {
   const [hasError, setErrors] = useState(false);
   const [contacts, setContacts] = useState<ContactList[]>([]);
 
-  async function fetchData(): Promise<void> {
-    const res = await fetch('/api/go/contact/list');
-    res
-      .json()
-      .then(res => setContacts(res.data['ContactList']))
-      .catch(err => setErrors(err));
-  }
-
   useEffect(() => {
-    fetchData();
+    fetchData('/api/go/contact/list')
+      .then(response => setContacts(response.data.ContactList))
+      .catch(error => setErrors(error));
   }, []);
 
   const columns = [

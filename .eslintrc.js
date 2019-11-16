@@ -1,21 +1,24 @@
 module.exports = {
-  parser: '@typescript-eslint/parser',
+  // parser: '@typescript-eslint/parser',
   extends: [
+    'airbnb-typescript',
     'plugin:@typescript-eslint/recommended',
-    'plugin:react/recommended',
+    'plugin:eslint-comments/recommended',
+    'plugin:jest/recommended',
+    'plugin:promise/recommended',
+    'plugin:unicorn/recommended',
     'prettier',
-    'plugin:jsx-a11y/recommended',
-    'plugin:sonarjs/recommended',
-    'plugin:array-func/recommended',
+    'prettier/react',
+    'prettier/@typescript-eslint',
   ],
-  parserOptions: {
-    ecmaVersion: 2018,
-    sourceType: 'module',
-  },
-  plugins: ['react-hooks', 'prettier', 'jsx-a11y', 'sonarjs'],
+  // parserOptions: {
+  //   ecmaVersion: 2018,
+  //   sourceType: 'module',
+  //   project: './tsconfig.json',
+  // },
+  plugins: ['@typescript-eslint', 'eslint-comments', 'jest', 'promise', 'unicorn'],
   rules: {
     curly: 'error',
-    'prettier/prettier': 'error',
     'jsx-a11y/click-events-have-key-events': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',
     'jsx-a11y/label-has-associated-control': 'off',
@@ -26,14 +29,21 @@ module.exports = {
     // '@typescript-eslint/no-object-literal-type-assertion': 'off',
     // 'react-hooks/rules-of-hooks': 'error',
     // 'react-hooks/exhaustive-deps': 'error',
-    'sonarjs/cognitive-complexity': 'warn',
+    'unicorn/filename-case': 'warn',
     'react/prop-types': 'warn',
+    'import/prefer-default-export': 'off',
+    'react/no-array-index-key': 'warn',
   },
   settings: {
     react: {
       pragma: 'React',
-      version: '16.9',
+      version: 'detect',
     },
+  },
+  env: {
+    node: true,
+    browser: true,
+    jest: true,
   },
 };
 

@@ -16,14 +16,14 @@ interface SelectProps {
   label?: string;
   list: SelectItem[];
   itemName: string;
-  inputRef?: {
+  inputReference?: {
     <T>(initialValue: T): React.MutableRefObject<T>;
     <T>(initialValue: T | null): React.RefObject<T>;
     <T = undefined>(): React.MutableRefObject<T | undefined>;
   };
 }
 
-export const Select: FC<SelectProps> = (props: SelectProps) => {
+export const Select: FC<SelectProps> = (properties: SelectProps) => {
   const {
     selected,
     iconLeft,
@@ -34,8 +34,8 @@ export const Select: FC<SelectProps> = (props: SelectProps) => {
     label,
     list,
     itemName,
-    inputRef,
-  } = props;
+    inputReference,
+  } = properties;
 
   if (list[0].id !== 0) {
     list.unshift({ id: 0, name: '' });
@@ -110,9 +110,9 @@ export const Select: FC<SelectProps> = (props: SelectProps) => {
     ) : null;
 
   const SelectList = (): JSX.Element => {
-    const items = filteredList.map(item => (
-      <div className="select-item input" key={item.id} onClick={(): void => setItem(item)}>
-        {item.name}
+    const items = filteredList.map(ListItem => (
+      <div className="select-item input" key={ListItem.id} onClick={(): void => setItem(ListItem)}>
+        {ListItem.name}
       </div>
     ));
     return <>{items}</>;
@@ -130,12 +130,12 @@ export const Select: FC<SelectProps> = (props: SelectProps) => {
       <Label />
       <div className={controlClasses} onClick={(): void => setOpened(true)}>
         <input
-          ref={inputRef}
+          ref={inputReference}
           name={itemName}
           className={inputClasses}
           placeholder={selected.name}
           value={item.name}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onInput(e)}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>): void => onInput(event)}
           onBlur={(): NodeJS.Timeout => setTimeout(() => setOpened(false), 300)}
         />
         <IconLeft />

@@ -27,7 +27,7 @@ interface ButtonProps {
   children: ReactNode;
 }
 
-export const Button: FC<ButtonProps> = (props: ButtonProps) => {
+export const Button: FC<ButtonProps> = (properties: ButtonProps) => {
   const {
     type,
     color,
@@ -48,7 +48,7 @@ export const Button: FC<ButtonProps> = (props: ButtonProps) => {
     href,
     onClick,
     children,
-  } = props;
+  } = properties;
   const classes = clsx([
     { className },
     'button',
@@ -76,25 +76,24 @@ export const Button: FC<ButtonProps> = (props: ButtonProps) => {
           text
         </span>
       );
-    } else if (type === 'submit' || type === 'reset') {
+    }
+    if (type === 'submit' || type === 'reset') {
       return (
-        <input type={type} disabled={disable} onClick={onClick} className={classes}>
-          {children}
-        </input>
+        <input type={type} disabled={disable} onClick={onClick} className={classes} />
       );
-    } else if (type === 'a') {
+    }
+    if (type === 'a') {
       return (
         <a href={href} onClick={onClick} className={classes}>
           {children}
         </a>
       );
-    } else {
-      return (
-        <button disabled={disable} onClick={onClick} className={classes}>
-          {children}
-        </button>
-      );
     }
+    return (
+      <button type="button" disabled={disable} onClick={onClick} className={classes}>
+        {children}
+      </button>
+    );
   };
 
   return <Tag />;

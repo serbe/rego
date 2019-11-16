@@ -3,13 +3,13 @@ import clsx from 'clsx';
 
 import { Link } from 'react-router-dom';
 import { Pagination } from './pagination';
-import { Column } from '../models/list_utils';
+import { Column } from '../models/column';
 
 const splitArray = (items: any[]): JSX.Element | null =>
   items ? (
     <>
-      {items.map((item, index) => (
-        <div key={index}>{item}</div>
+      {items.map(arrayItem => (
+        <div>{arrayItem}</div>
       ))}
     </>
   ) : null;
@@ -27,7 +27,7 @@ interface TableProps {
   paginate?: number;
 }
 
-export const Table: FC<TableProps> = (props: TableProps) => {
+export const Table: FC<TableProps> = (properties: TableProps) => {
   const [currentPage, setCurrentPage] = useState(0);
 
   const {
@@ -40,22 +40,21 @@ export const Table: FC<TableProps> = (props: TableProps) => {
     columns,
     className,
     paginate,
-  } = props;
+  } = properties;
 
-  const itemsOnPage = paginate ? paginate : 20;
+  const itemsOnPage = paginate || 20;
   const search = '';
 
-  let filteredLen = 0;
+  let filteredLength = 0;
 
   const filteredData = (): any[] => {
     if (search !== '') {
-      filteredLen = data.length;
+      filteredLength = data.length;
       return data;
-    } else {
-      const sliceData = data.slice(currentPage * itemsOnPage, (currentPage + 1) * itemsOnPage);
-      filteredLen = data.length;
-      return sliceData;
     }
+    const sliceData = data.slice(currentPage * itemsOnPage, (currentPage + 1) * itemsOnPage);
+    filteredLength = data.length;
+    return sliceData;
   };
 
   const receiveChildValue = (value: number): void => {
@@ -77,28 +76,32 @@ export const Table: FC<TableProps> = (props: TableProps) => {
   const Heading = (): JSX.Element => (
     <thead>
       <tr>
-        {columns.map<JSX.Element>((item: Column, key: number) => (
-          <th key={key} className={item.className}>
-            {item.label}
-          </th>
+        {columns.map<JSX.Element>((item: Column) => (
+          <th className={item.className}>{item.label}</th>
         ))}
       </tr>
     </thead>
   );
 
+  const RowTd = (row: any, column: Column): any => {
+    if (column.linkField && column.linkBase) {
+      return (
+        <Link to={column.linkBase + row[column.linkField]}>
+          {column.array ? splitArray(row[column.field]) : row[column.field]}
+        </Link>
+      );
+    }
+    if (column.array) {
+      return splitArray(row[column.field]);
+    }
+    return row[column.field];
+  };
+
   const Row = (row: any): JSX.Element | null => (
     <>
-      {columns.map((item, key) => (
-        <td key={key} className={item.className}>
-          {item.linkField && item.linkBase ? (
-            <Link to={item.linkBase + row[item.linkField]}>
-              {item.array ? splitArray(row[item.field]) : row[item.field]}
-            </Link>
-          ) : item.array ? (
-            splitArray(row[item.field])
-          ) : (
-            row[item.field]
-          )}
+      {columns.map(column => (
+        <td className={column.className}>
+          <RowTd />
         </td>
       ))}
     </>
@@ -106,8 +109,8 @@ export const Table: FC<TableProps> = (props: TableProps) => {
 
   const Rows = (): JSX.Element => (
     <>
-      {filteredData().map((item, index) => (
-        <tr key={index}>{Row(item)}</tr>
+      {filteredData().map(item => (
+        <tr>{Row(item)}</tr>
       ))}
     </>
   );
@@ -120,10 +123,10 @@ export const Table: FC<TableProps> = (props: TableProps) => {
     ) : null;
 
   const Paginate = (): JSX.Element | null =>
-    paginate && filteredLen / itemsOnPage > 2 ? (
+    paginate && filteredLength / itemsOnPage > 2 ? (
       <Pagination
         currentPage={currentPage + 1}
-        lastPage={Math.ceil(filteredLen / itemsOnPage)}
+        lastPage={Math.ceil(filteredLength / itemsOnPage)}
         callback={receiveChildValue}
         rounded
       />

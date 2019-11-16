@@ -1,6 +1,8 @@
 import React, { useState, useEffect, FC } from 'react';
 import { useParams } from 'react-router-dom';
+
 import { Contact } from '../../models/contact';
+import { fetchData } from '../../helpers/utils';
 
 // const get_id = () => {
 //   let { id } = useParams();
@@ -12,16 +14,12 @@ export const ContactItem: FC<{}> = () => {
 
   const { id } = useParams();
 
-  async function fetchData(): Promise<void> {
-    const res = await fetch(`/api/go/contact/item/${id}`);
-    res
-      .json()
-      .then(res => setContacts(res.data['Contact']))
-      .catch(err => setErrors(err));
-  }
-
   useEffect(() => {
-    fetchData();
+    if (id) {
+      fetchData(`/api/go/contact/item/${id}`)
+        .then(response => setContacts(response.data.Contact))
+        .catch(error => setErrors(error));
+    }
   }, []);
 
   // handleSignIn = values => {

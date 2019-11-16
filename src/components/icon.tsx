@@ -10,8 +10,8 @@ interface IconProps {
   className?: string;
 }
 
-export const Icon: FC<IconProps> = (props: IconProps) => {
-  const { color, size, icon, position, children, className } = props;
+export const Icon: FC<IconProps> = (properties: IconProps) => {
+  const { color, size, icon, position, children, className } = properties;
 
   const spanClasses = clsx([
     { className },

@@ -1,3 +1,5 @@
+/* eslint-disable eslint-comments/disable-enable-pair */
+/* eslint-disable unicorn/filename-case */
 // This optional code is used to register a service worker.
 // register() is not called by default.
 

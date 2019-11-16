@@ -1,21 +1,17 @@
 import React, { useState, useEffect, FC } from 'react';
+
 import { Table } from '../../components/table';
 import { CompanyList } from '../../models/company';
+import { fetchData } from '../../helpers/utils';
 
 export const Companies: FC<{}> = () => {
   const [hasError, setErrors] = useState(false);
   const [companies, setCompanies] = useState<CompanyList[]>([]);
 
-  async function fetchData(): Promise<void> {
-    const res = await fetch('/api/go/company/list');
-    res
-      .json()
-      .then(res => setCompanies(res.data['CompanyList']))
-      .catch(err => setErrors(err));
-  }
-
   useEffect(() => {
-    fetchData();
+    fetchData('/api/go/company/list')
+      .then(response => setCompanies(response.data.CompanyList))
+      .catch(error => setErrors(error));
   }, []);
 
   const isHiddenTouch = 'is-hidden-touch';

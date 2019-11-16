@@ -26,14 +26,14 @@ interface InputProps {
   label?: string | boolean;
   error?: string;
   pattern?: string;
-  inputRef?: {
+  inputReference?: {
     <T>(initialValue: T): React.MutableRefObject<T>;
     <T>(initialValue: T | null): React.RefObject<T>;
     <T = undefined>(): React.MutableRefObject<T | undefined>;
   };
 }
 
-export const Input: FC<InputProps> = (props: InputProps) => {
+export const Input: FC<InputProps> = (properties: InputProps) => {
   const {
     type,
     color,
@@ -57,8 +57,8 @@ export const Input: FC<InputProps> = (props: InputProps) => {
     label,
     error,
     pattern,
-    inputRef,
-  } = props;
+    inputReference,
+  } = properties;
 
   const divClasses = clsx([
     'control',
@@ -86,11 +86,11 @@ export const Input: FC<InputProps> = (props: InputProps) => {
   const getLabel = (): string | undefined => {
     if (typeof label === 'string') {
       return label;
-    } else if (label && placeholder) {
-      return placeholder;
-    } else {
-      return undefined;
     }
+    if (label && placeholder) {
+      return placeholder;
+    }
+    return undefined;
   };
 
   const isError = (): boolean => {
@@ -112,10 +112,10 @@ export const Input: FC<InputProps> = (props: InputProps) => {
     ) : null;
 
   const LeftIcon = (): JSX.Element | null =>
-    iconLeft ? <Icon position={'left'} icon={iconLeft} /> : null;
+    iconLeft ? <Icon position="left" icon={iconLeft} /> : null;
 
   const RightIcon = (): JSX.Element | null =>
-    iconRight ? <Icon position={'right'} icon={iconRight} /> : null;
+    iconRight ? <Icon position="right" icon={iconRight} /> : null;
 
   return (
     <div className="field">
@@ -132,7 +132,7 @@ export const Input: FC<InputProps> = (props: InputProps) => {
           readOnly={readonly}
           name={name}
           defaultValue={value}
-          ref={inputRef}
+          ref={inputReference}
         />
         <LeftIcon />
         <RightIcon />

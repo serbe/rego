@@ -1,21 +1,17 @@
 import React, { useState, useEffect, FC } from 'react';
+
 import { Table } from '../../components/table';
 import { CertificateList } from '../../models/certificate';
+import { fetchData } from '../../helpers/utils';
 
 export const Certificates: FC<{}> = () => {
   const [hasError, setErrors] = useState(false);
   const [certificates, setCertificates] = useState<CertificateList[]>([]);
 
-  async function fetchData() {
-    const res = await fetch('/api/go/certificate/list');
-    res
-      .json()
-      .then(res => setCertificates(res.data['CertificateList']))
-      .catch(err => setErrors(err));
-  }
-
   useEffect(() => {
-    fetchData();
+    fetchData('/api/go/certificate/list')
+      .then(response => setCertificates(response.data.CertificateList))
+      .catch(error => setErrors(error));
   }, []);
 
   const columns = [

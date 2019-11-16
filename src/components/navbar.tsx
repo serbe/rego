@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
-
 import clsx from 'clsx';
 import { NavLink } from 'react-router-dom';
+
 import { Button } from './button';
 
 // function toggleOpen() {
@@ -16,6 +16,10 @@ import { Button } from './button';
 //       logged: boolean,
 //       open: boolean
 // }
+
+const navMenuStyle = (): string => {
+  return clsx(['navbar-item', 'has-dropdown', 'is-hoverable']);
+};
 
 export const NavBar: FC<{}> = () => {
   const auth = true;
@@ -52,17 +56,13 @@ export const NavBar: FC<{}> = () => {
   //   this.context.router.history.push(uri);
   // }
 
-  const navMenuStyle = (): string => {
-    return clsx(['navbar-item', 'has-dropdown', 'is-hoverable']);
-  };
-
   return (
     <nav aria-label="main navigation" className="navbar is-dark" role="navigation">
       <div className="container">
         {auth ? (
           <>
             <div className="navbar-brand">
-              <NavLink activeClassName="is-active" className="navbar-item" exact={true} to="/">
+              <NavLink activeClassName="is-active" className="navbar-item" exact to="/">
                 ЕДДС
               </NavLink>
 
