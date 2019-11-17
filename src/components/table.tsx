@@ -8,8 +8,8 @@ import { Column } from '../models/column';
 const splitArray = (items: any[]): JSX.Element | null =>
   items ? (
     <>
-      {items.map(arrayItem => (
-        <div>{arrayItem}</div>
+      {items.map((arrayItem, index) => (
+        <div key={`div${index}`}>{arrayItem}</div>
       ))}
     </>
   ) : null;
@@ -76,32 +76,29 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
   const Heading = (): JSX.Element => (
     <thead>
       <tr>
-        {columns.map<JSX.Element>((item: Column) => (
-          <th className={item.className}>{item.label}</th>
+        {columns.map<JSX.Element>((column: Column, index: number) => (
+          <th key={`th${index}`} className={column.className}>
+            {column.label}
+          </th>
         ))}
       </tr>
     </thead>
   );
 
-  const RowTd = (row: any, column: Column): any => {
-    if (column.linkField && column.linkBase) {
-      return (
-        <Link to={column.linkBase + row[column.linkField]}>
-          {column.array ? splitArray(row[column.field]) : row[column.field]}
-        </Link>
-      );
-    }
-    if (column.array) {
-      return splitArray(row[column.field]);
-    }
-    return row[column.field];
-  };
+  const Td = (field: any, isArray: boolean | undefined): JSX.Element | null =>
+    isArray ? splitArray(field) : field;
 
   const Row = (row: any): JSX.Element | null => (
     <>
-      {columns.map(column => (
-        <td className={column.className}>
-          <RowTd />
+      {columns.map((column: Column, index: number) => (
+        <td key={`td${row.id}${index}`} className={column.className}>
+          {column.linkField && column.linkBase ? (
+            <Link to={column.linkBase + row[column.linkField]}>
+              {Td(row[column.field], column.array)}
+            </Link>
+          ) : (
+            Td(row[column.field], column.array)
+          )}
         </td>
       ))}
     </>
@@ -109,8 +106,8 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
 
   const Rows = (): JSX.Element => (
     <>
-      {filteredData().map(item => (
-        <tr>{Row(item)}</tr>
+      {filteredData().map((item, index) => (
+        <tr key={`tr${item.id}${index}`}>{Row(item)}</tr>
       ))}
     </>
   );

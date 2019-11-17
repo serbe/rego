@@ -1,5 +1,3 @@
-/* eslint-disable eslint-comments/disable-enable-pair */
-/* eslint-disable unicorn/filename-case */
 import React, { FC } from 'react';
 
 import { Router } from './containers/Router';
