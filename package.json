@@ -18,7 +18,8 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
     "source-map-explorer": "^2.1.1",
-    "typescript": "3.7.2"
+    "typescript": "3.7.2",
+    "ws": "^7.2.0"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
@@ -44,7 +45,6 @@
     "eslint-config-airbnb-typescript": "^6.3.0",
     "eslint-config-prettier": "^6.6.0",
     "eslint-formatter-pretty": "^3.0.0",
-    "eslint-plugin-eslint-comments": "^3.1.2",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jest": "^23.0.4",
     "eslint-plugin-jsx-a11y": "^6.2.3",

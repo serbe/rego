@@ -3,7 +3,6 @@ module.exports = {
   extends: [
     'airbnb-typescript',
     'plugin:@typescript-eslint/recommended',
-    'plugin:eslint-comments/recommended',
     'plugin:jest/recommended',
     'plugin:promise/recommended',
     'plugin:unicorn/recommended',
@@ -16,7 +15,7 @@ module.exports = {
   //   sourceType: 'module',
   //   project: './tsconfig.json',
   // },
-  plugins: ['@typescript-eslint', 'eslint-comments', 'jest', 'promise', 'unicorn'],
+  plugins: ['@typescript-eslint', 'jest', 'promise', 'unicorn'],
   rules: {
     curly: 'error',
     'jsx-a11y/click-events-have-key-events': 'off',

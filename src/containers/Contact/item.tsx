@@ -17,7 +17,9 @@ export const ContactItem: FC<{}> = () => {
   useEffect(() => {
     if (id) {
       fetchData(`/api/go/contact/item/${id}`)
-        .then(response => setContacts(response.data.Contact))
+        .then(response =>
+          response.data.Contact ? setContacts(response.data.Contact) : setErrors(true),
+        )
         .catch(error => setErrors(error));
     }
   }, []);

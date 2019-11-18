@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import clsx from 'clsx';
 import { NavLink } from 'react-router-dom';
 
@@ -22,39 +22,15 @@ const navMenuStyle = (): string => {
 };
 
 export const NavBar: FC<{}> = () => {
-  const auth = true;
-  // const [active, setActive] = useState(false);
   // const [auth, setAuth] = useState(true);
-  // const [logged, setLogged] = useState(true);
-  // const [open, setOpen] = useState(false);
-  // static contextTypes = {
-  //   router: PropTypes.object
-  // };
+  const auth = true;
+  const [open, setOpen] = useState(false);
 
-  // constructor(p: {}) {
-  //   super(p);
-  //   this.state = {
-  //     active: false,
-  //     auth: true,
-  //     logged: true,
-  //     open: false
-  //   };
-  // }
+  const openClassName = (cn: string): string => (open ? `${cn} is-active` : cn);
 
-  // handleChange = (event, logged) => {
-  //   this.setState({logged: logged});
-  // };
-
-  // handleToggle = () => {
-  //   this.setState(toggleOpen());
-  // };
-
-  // handleClose = () => this.setState({open: false});
-
-  // handleLink = (e, uri) => {
-  //   // e.preventDefault();
-  //   this.context.router.history.push(uri);
-  // }
+  const handleToggle = (): void => {
+    setOpen(!open);
+  };
 
   return (
     <nav aria-label="main navigation" className="navbar is-dark" role="navigation">
@@ -73,6 +49,7 @@ export const NavBar: FC<{}> = () => {
                 className="navbar-burger burger"
                 data-target="navbarData"
                 role="button"
+                onClick={handleToggle}
               >
                 <span aria-hidden="true" />
                 <span aria-hidden="true" />
@@ -80,15 +57,30 @@ export const NavBar: FC<{}> = () => {
               </a>
             </div>
 
-            <div id="navbarData" className="navbar-menu">
+            <div id="navbarData" className={openClassName('navbar-menu')}>
               <div className="navbar-start">
-                <NavLink activeClassName="is-active" className="navbar-item" to="/contacts">
+                <NavLink
+                  activeClassName="is-active"
+                  className="navbar-item"
+                  to="/contacts"
+                  onClick={handleToggle}
+                >
                   Контакты
                 </NavLink>
-                <NavLink activeClassName="is-active" className="navbar-item" to="/companies">
+                <NavLink
+                  activeClassName="is-active"
+                  className="navbar-item"
+                  to="/companies"
+                  onClick={handleToggle}
+                >
                   Организации
                 </NavLink>
-                <NavLink activeClassName="is-active" className="navbar-item" to="/sirens">
+                <NavLink
+                  activeClassName="is-active"
+                  className="navbar-item"
+                  to="/sirens"
+                  onClick={handleToggle}
+                >
                   Сирены
                 </NavLink>
 
@@ -100,7 +92,7 @@ export const NavBar: FC<{}> = () => {
                     <NavLink
                       activeClassName="is-active"
                       className="navbar-item"
-                      // onClick={this.handleToggle}
+                      onClick={handleToggle}
                       to="/departments"
                     >
                       Отделы
@@ -108,7 +100,7 @@ export const NavBar: FC<{}> = () => {
                     <NavLink
                       activeClassName="is-active"
                       className="navbar-item"
-                      // onClick={this.handleToggle}
+                      onClick={handleToggle}
                       to="/educations"
                     >
                       Обучение
@@ -116,7 +108,7 @@ export const NavBar: FC<{}> = () => {
                     <NavLink
                       activeClassName="is-active"
                       className="navbar-item"
-                      // onClick={this.handleToggle}
+                      onClick={handleToggle}
                       to="/kinds"
                     >
                       Типы
@@ -124,7 +116,7 @@ export const NavBar: FC<{}> = () => {
                     <NavLink
                       activeClassName="is-active"
                       className="navbar-item"
-                      // onClick={this.handleToggle}
+                      onClick={handleToggle}
                       to="/posts"
                     >
                       Должности
@@ -132,7 +124,7 @@ export const NavBar: FC<{}> = () => {
                     <NavLink
                       activeClassName="is-active"
                       className="navbar-item"
-                      // onClick={this.handleToggle}
+                      onClick={handleToggle}
                       to="/practices"
                     >
                       Учения
@@ -140,7 +132,7 @@ export const NavBar: FC<{}> = () => {
                     <NavLink
                       activeClassName="is-active"
                       className="navbar-item"
-                      // onClick={this.handleToggle}
+                      onClick={handleToggle}
                       to="/ranks"
                     >
                       Чины
@@ -148,7 +140,7 @@ export const NavBar: FC<{}> = () => {
                     <NavLink
                       activeClassName="is-active"
                       className="navbar-item"
-                      // onClick={this.handleToggle}
+                      onClick={handleToggle}
                       to="/scopes"
                     >
                       Сферы
@@ -156,7 +148,7 @@ export const NavBar: FC<{}> = () => {
                     <NavLink
                       activeClassName="is-active"
                       className="navbar-item"
-                      // onClick={this.handleToggle}
+                      onClick={handleToggle}
                       to="/certificates"
                     >
                       Удостоверения
@@ -165,7 +157,7 @@ export const NavBar: FC<{}> = () => {
                     <NavLink
                       activeClassName="is-active"
                       className="navbar-item"
-                      // onClick={this.handleToggle}
+                      onClick={handleToggle}
                       to="/sirentypes"
                     >
                       Типы сирен
@@ -175,7 +167,7 @@ export const NavBar: FC<{}> = () => {
               </div>
               <div className="navbar-end">
                 <div className="navbar-item has-dropdown is-hoverable">
-                  <a href="#user" className="navbar-link">
+                  <a href="#user" className="navbar-link" onClick={handleToggle}>
                     name
                   </a>
                   <div className="navbar-dropdown is-right">

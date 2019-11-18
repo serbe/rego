@@ -1,3 +1,26 @@
+import { Company, CompanyList } from '../models/company';
+import { Contact, ContactList } from '../models/contact';
+import { Certificate, CertificateList } from '../models/certificate';
+import { SelectItem } from '../models/selectitem';
+
+export interface JsonData {
+  data: {
+    Contact?: Contact;
+    ContactList?: ContactList[];
+    Company?: Company;
+    CompanyList?: CompanyList[];
+    Certificate: Certificate;
+    CertificateList: CertificateList[];
+    SelectItem: SelectItem[];
+  };
+}
+
+export interface Response {
+  data: JsonData;
+  error?: string;
+  ok: boolean;
+}
+
 export const addEmptyString = (values: string[] | undefined): string[] => {
   let list: string[] = [];
   if (values) {
@@ -15,7 +38,7 @@ export const numberToString = (values: number[] | undefined): string[] => {
   return list;
 };
 
-export async function fetchData(uri: string): Promise<any> {
+export async function fetchData(uri: string): Promise<JsonData> {
   try {
     const response = await fetch(uri);
     const responseJson = await response.json();
