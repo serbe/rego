@@ -11,7 +11,7 @@ export const Companies: FC<{}> = () => {
   useEffect(() => {
     fetchData('/api/go/company/list')
       .then(response =>
-        response.data.CompanyList ? setCompanies(response.data.CompanyList) : setErrors(true),
+        response.CompanyList ? setCompanies(response.CompanyList) : setErrors(true),
       )
       .catch(error => setErrors(error));
   }, []);

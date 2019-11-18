@@ -3,16 +3,32 @@ import { Contact, ContactList } from '../models/contact';
 import { Certificate, CertificateList } from '../models/certificate';
 import { SelectItem } from '../models/selectitem';
 
+// export type stringsTypes =
+//   | 'Contact'
+//   | 'ContactList'
+//   | 'Company'
+//   | 'CompanyList'
+//   | 'Certificate'
+//   | 'CertificateList'
+//   | 'SelectItem';
+
+// export type Data =
+//   | Contact
+//   | ContactList[]
+//   | Company
+//   | CompanyList[]
+//   | Certificate
+//   | CertificateList[]
+//   | SelectItem[];
+
 export interface JsonData {
-  data: {
-    Contact?: Contact;
-    ContactList?: ContactList[];
-    Company?: Company;
-    CompanyList?: CompanyList[];
-    Certificate: Certificate;
-    CertificateList: CertificateList[];
-    SelectItem: SelectItem[];
-  };
+  Contact?: Contact;
+  ContactList?: ContactList[];
+  Company?: Company;
+  CompanyList?: CompanyList[];
+  Certificate: Certificate;
+  CertificateList: CertificateList[];
+  SelectItem: SelectItem[];
 }
 
 export interface Response {
@@ -41,8 +57,8 @@ export const numberToString = (values: number[] | undefined): string[] => {
 export async function fetchData(uri: string): Promise<JsonData> {
   try {
     const response = await fetch(uri);
-    const responseJson = await response.json();
-    return responseJson;
+    const responseJson: Response = await response.json();
+    return responseJson.data;
   } catch (error) {
     return error;
   }

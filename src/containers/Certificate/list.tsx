@@ -10,7 +10,9 @@ export const Certificates: FC<{}> = () => {
 
   useEffect(() => {
     fetchData('/api/go/certificate/list')
-      .then(response => setCertificates(response.data.CertificateList))
+      .then(response =>
+        response.CertificateList ? setCertificates(response.CertificateList) : setErrors(true),
+      )
       .catch(error => setErrors(error));
   }, []);
 

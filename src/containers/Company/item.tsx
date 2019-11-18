@@ -54,7 +54,9 @@ export const CompanyItem: FC<{}> = () => {
   useEffect(() => {
     if (id) {
       fetchData(`/api/go/company/item/${id}`)
-        .then(responseJson => setCompany(responseJson.data.Company))
+        .then(responseJson =>
+          responseJson.Company ? setCompany(responseJson.Company) : setErrors(true),
+        )
         .catch(error => setErrors(error));
     }
   }, [id]);
@@ -62,7 +64,9 @@ export const CompanyItem: FC<{}> = () => {
   useEffect(() => {
     if (id) {
       fetchData(`/api/go/scope/select`)
-        .then(responseJson => setScopes(responseJson.data.SelectItem))
+        .then(responseJson =>
+          responseJson.SelectItem ? setScopes(responseJson.SelectItem) : setErrors(true),
+        )
         .catch(error => setErrors(error));
     }
   }, [id]);
