@@ -163,12 +163,12 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
   return !data ? (
     <div>Loading data</div>
   ) : (
-    <div>
+    <>
       <table className={classes}>
         <Heading />
         <TBody />
       </table>
       <Paginate />
-    </div>
+    </>
   );
 };
