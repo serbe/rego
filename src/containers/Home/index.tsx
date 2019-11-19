@@ -54,6 +54,7 @@ const educationColumns: Column[] = [
     linkBase: '/education/',
     linkField: 'id',
     fieldFunc: tinyDate,
+    className: 'w65',
   },
   {
     field: 'contact_name',
@@ -105,7 +106,6 @@ export const Home: FC<{}> = () => {
               rowClass={educationRowClass}
               columns={educationColumns}
               narrow
-              striped
               fullwidth
               nohead
             />
@@ -116,7 +116,6 @@ export const Home: FC<{}> = () => {
               rowClass={practiceRowClass}
               columns={practiceColumns}
               narrow
-              striped
               fullwidth
               nohead
             />

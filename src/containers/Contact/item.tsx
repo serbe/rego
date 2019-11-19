@@ -4,10 +4,6 @@ import { useParams } from 'react-router-dom';
 import { Contact } from '../../models/contact';
 import { fetchData } from '../../helpers/utils';
 
-// const get_id = () => {
-//   let { id } = useParams();
-// };
-
 export const ContactItem: FC<{}> = () => {
   const [hasError, setErrors] = useState(false);
   const [contact, setContacts] = useState<Contact>();
@@ -21,15 +17,6 @@ export const ContactItem: FC<{}> = () => {
         .catch(error => setErrors(error));
     }
   }, []);
-
-  // handleSignIn = values => {
-  //   console.log(values);
-  // };
-
-  // handleName = event => {
-  //   // console.log(event.target.value);
-  //   this.setState({ contact: { name: event.target.value } });
-  // };
 
   const Form = (): JSX.Element => (
     <form id="contact">
