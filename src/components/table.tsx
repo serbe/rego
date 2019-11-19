@@ -15,10 +15,9 @@ export type Column = {
   className?: string;
 };
 
-export type RowClass = {
-  className?: string;
-  rowFunc?: (value: string) => string;
-  rowFuncField?: string;
+export type RowClassFunc = {
+  rowFunc: (value: string) => string;
+  rowFuncField: string;
 };
 
 const splitArray = (items: any[]): JSX.Element | null =>
@@ -38,29 +37,15 @@ interface TableProps {
   fullwidth?: boolean;
   data: any[];
   columns: Column[];
-  rowClass?: RowClass;
+  rowClass?: RowClassFunc;
   className?: string;
   loaded?: boolean;
   paginate?: number;
   nohead?: boolean;
 }
 
-const tableRowClass = (row: RowClass, field: string): string | undefined => {
-  if (row.rowFunc && row.rowFuncField && row.rowFunc) {
-    if (row.className) {
-      return `${row.className} ${row.rowFunc(field)}`;
-    }
-    return `${row.rowFunc(field)}`;
-  }
-  if (row.className) {
-    return `${row.className}`;
-  }
-  return undefined;
-};
-
 export const Table: FC<TableProps> = (properties: TableProps) => {
   const [currentPage, setCurrentPage] = useState(0);
-  const [useRowClass, setUseRowClass] = useState(false);
 
   const {
     bordered,
@@ -75,10 +60,6 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
     nohead,
     rowClass,
   } = properties;
-
-  if (rowClass && (rowClass.className || (rowClass.rowFunc && rowClass.rowFuncField))) {
-    setUseRowClass(true);
-  }
 
   const itemsOnPage = paginate || 20;
   const search = '';
@@ -152,7 +133,12 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
   const TableAllRows = (): JSX.Element => (
     <>
       {filteredData().map((item, index) => (
-        <tr className={useRowClass ? tableRowClass(rowClass, item)} key={`tr${item.id}${index}`}>{TableRow(item)}</tr>
+        <tr
+          className={rowClass ? rowClass.rowFunc(item[rowClass.rowFuncField]) : undefined}
+          key={`tr${item.id}${index}`}
+        >
+          {TableRow(item)}
+        </tr>
       ))}
     </>
   );
