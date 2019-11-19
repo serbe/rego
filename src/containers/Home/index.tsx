@@ -1,10 +1,9 @@
 import React, { useState, useEffect, FC } from 'react';
-import { Link } from 'react-router-dom';
 
 import { EducationShort } from '../../models/education';
 import { PracticeShort } from '../../models/practice';
 import { fetchData } from '../../helpers/utils';
-import { Column, Table } from '../../components/table';
+import { Column, Table, RowClassFunc } from '../../components/table';
 
 import './home.css';
 
@@ -49,6 +48,30 @@ const practiceColumns: Column[] = [
   },
 ];
 
+const educationColumns: Column[] = [
+  {
+    field: 'start_date',
+    linkBase: '/education/',
+    linkField: 'id',
+    fieldFunc: tinyDate,
+  },
+  {
+    field: 'contact_name',
+    linkBase: '/contact/',
+    linkField: 'contact_id',
+  },
+];
+
+const practiceRowClass: RowClassFunc = {
+  rowFunc: trClass,
+  rowFuncField: 'date_of_practice',
+};
+
+const educationRowClass: RowClassFunc = {
+  rowFunc: trClass,
+  rowFuncField: 'start_date',
+};
+
 export const Home: FC<{}> = () => {
   const [hasError, setErrors] = useState();
   const [educations, setEducations] = useState<EducationShort[]>([]);
@@ -70,59 +93,6 @@ export const Home: FC<{}> = () => {
       .catch(error => setErrors(error));
   }, []);
 
-  const EducationTr = () =>
-    educations ? (
-      <>
-        {educations.map((item: EducationShort, index: number) => (
-          <tr key={index} className={trClass(item.start_date)}>
-            <td>
-              <Link to={`/education/${item.id}`}>{tinyDate(item.start_date)}</Link>
-            </td>
-            <td>
-              <Link to={`/contact/${item.contact_id}`}>{item.contact_name}</Link>
-            </td>
-          </tr>
-        ))}
-      </>
-    ) : null;
-
-  const Educations = (): JSX.Element | null =>
-    educations ? (
-      <table className="table is-narrow is-striped is-fullwith" key="educations">
-        <tbody>
-          <EducationTr />
-        </tbody>
-      </table>
-    ) : null;
-
-  const PracticeTr = (): JSX.Element | null =>
-    practices ? (
-      <>
-        {practices.map((item: PracticeShort, index: number) => (
-          <tr key={index} className={trClass(item.date_of_practice)}>
-            <td className="w65">
-              <Link to={`/practice/${item.id}`}>{tinyDate(item.date_of_practice)}</Link>
-            </td>
-            <td className="w35 is-centered">
-              <Link to={`/practice/${item.id}`}>{item.kind_short_name}</Link>
-            </td>
-            <td>
-              <Link to={`/company/${item.company_id}`}>{item.company_name}</Link>
-            </td>
-          </tr>
-        ))}
-      </>
-    ) : null;
-
-  const Practices = (): JSX.Element | null =>
-    practices ? (
-      <table className="table is-narrow is-striped is-fullwith" key="practices">
-        <tbody>
-          <PracticeTr />
-        </tbody>
-      </table>
-    ) : null;
-
   return hasError ? (
     <div>No data</div>
   ) : (
@@ -130,10 +100,26 @@ export const Home: FC<{}> = () => {
       <div className="content has-text-centered">
         <div className="columns">
           <div className="column is-one-third">
-            <Table data={practices} columns={practiceColumns} is-narrow is-striped is-fullwith />
+            <Table
+              data={educations}
+              rowClass={educationRowClass}
+              columns={educationColumns}
+              narrow
+              striped
+              fullwidth
+              nohead
+            />
           </div>
           <div className="column is-one-third is-offset-one-third">
-            <Practices />
+            <Table
+              data={practices}
+              rowClass={practiceRowClass}
+              columns={practiceColumns}
+              narrow
+              striped
+              fullwidth
+              nohead
+            />
           </div>
         </div>
       </div>
