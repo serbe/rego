@@ -22,7 +22,7 @@ export type EducationList = {
 
 export type EducationShort = {
   id: number;
-  contact_id?: number;
-  contact_name?: string;
-  start_date?: string;
+  contact_id: number;
+  contact_name: string;
+  start_date: string;
 };

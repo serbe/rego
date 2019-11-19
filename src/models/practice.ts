@@ -21,9 +21,9 @@ export type PracticeList = {
 
 export type PracticeShort = {
   id: number;
-  company_id?: number;
-  company_name?: string;
-  kind_id?: number;
-  kind_short_name?: string;
-  date_of_practice?: string;
+  company_id: number;
+  company_name: string;
+  kind_id: number;
+  kind_short_name: string;
+  date_of_practice: string;
 };

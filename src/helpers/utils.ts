@@ -2,24 +2,8 @@ import { Company, CompanyList } from '../models/company';
 import { Contact, ContactList } from '../models/contact';
 import { Certificate, CertificateList } from '../models/certificate';
 import { SelectItem } from '../models/selectitem';
-
-// export type stringsTypes =
-//   | 'Contact'
-//   | 'ContactList'
-//   | 'Company'
-//   | 'CompanyList'
-//   | 'Certificate'
-//   | 'CertificateList'
-//   | 'SelectItem';
-
-// export type Data =
-//   | Contact
-//   | ContactList[]
-//   | Company
-//   | CompanyList[]
-//   | Certificate
-//   | CertificateList[]
-//   | SelectItem[];
+import { EducationShort } from '../models/education';
+import { PracticeShort } from '../models/practice';
 
 export interface JsonData {
   Contact?: Contact;
@@ -29,6 +13,8 @@ export interface JsonData {
   Certificate: Certificate;
   CertificateList: CertificateList[];
   SelectItem: SelectItem[];
+  EducationShort: EducationShort[];
+  PracticeShort: PracticeShort[];
 }
 
 export interface Response {

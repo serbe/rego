@@ -1,7 +1,7 @@
 import React, { Suspense, FC } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import Home from '../Home';
+import { Home } from '../Home';
 import { ContactItem, Contacts } from '../Contact';
 import { CompanyItem, Companies } from '../Company';
 import { Certificates } from '../Certificate';

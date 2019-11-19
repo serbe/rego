@@ -1,9 +1,25 @@
 import React, { useState, FC } from 'react';
+import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 
-import { Link } from 'react-router-dom';
 import { Pagination } from './pagination';
-import { Column } from '../models/column';
+
+export type Column = {
+  field: string;
+  fieldFunc?: (value: string) => string;
+  label?: string;
+  witdh?: string;
+  array?: boolean;
+  linkBase?: string;
+  linkField?: string;
+  className?: string;
+};
+
+export type RowClass = {
+  className?: string;
+  rowFunc?: (value: string) => string;
+  rowFuncField?: string;
+};
 
 const splitArray = (items: any[]): JSX.Element | null =>
   items ? (
@@ -22,13 +38,29 @@ interface TableProps {
   fullwidth?: boolean;
   data: any[];
   columns: Column[];
+  rowClass?: RowClass;
   className?: string;
   loaded?: boolean;
   paginate?: number;
+  nohead?: boolean;
 }
+
+const tableRowClass = (row: RowClass, field: string): string | undefined => {
+  if (row.rowFunc && row.rowFuncField && row.rowFunc) {
+    if (row.className) {
+      return `${row.className} ${row.rowFunc(field)}`;
+    }
+    return `${row.rowFunc(field)}`;
+  }
+  if (row.className) {
+    return `${row.className}`;
+  }
+  return undefined;
+};
 
 export const Table: FC<TableProps> = (properties: TableProps) => {
   const [currentPage, setCurrentPage] = useState(0);
+  const [useRowClass, setUseRowClass] = useState(false);
 
   const {
     bordered,
@@ -40,7 +72,13 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
     columns,
     className,
     paginate,
+    nohead,
+    rowClass,
   } = properties;
+
+  if (rowClass && (rowClass.className || (rowClass.rowFunc && rowClass.rowFuncField))) {
+    setUseRowClass(true);
+  }
 
   const itemsOnPage = paginate || 20;
   const search = '';
@@ -73,41 +111,48 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
     },
   ]);
 
-  const Heading = (): JSX.Element => (
-    <thead>
-      <tr>
-        {columns.map<JSX.Element>((column: Column, index: number) => (
-          <th key={`th${index}`} className={column.className}>
-            {column.label}
-          </th>
-        ))}
-      </tr>
-    </thead>
-  );
+  const Heading = (): JSX.Element | null =>
+    nohead ? null : (
+      <thead>
+        <tr>
+          {columns.map<JSX.Element>((column: Column, index: number) => (
+            <th key={`th${index}`} className={column.className}>
+              {column.label}
+            </th>
+          ))}
+        </tr>
+      </thead>
+    );
 
   const Td = (field: any, isArray: boolean | undefined): JSX.Element | null =>
     isArray ? splitArray(field) : field;
 
-  const Row = (row: any): JSX.Element | null => (
+  const TableRow = (row: any): JSX.Element | null => (
     <>
       {columns.map((column: Column, index: number) => (
         <td key={`td${row.id}${index}`} className={column.className}>
           {column.linkField && column.linkBase ? (
             <Link to={column.linkBase + row[column.linkField]}>
-              {Td(row[column.field], column.array)}
+              {Td(
+                column.fieldFunc ? column.fieldFunc(row[column.field]) : row[column.field],
+                column.array,
+              )}
             </Link>
           ) : (
-            Td(row[column.field], column.array)
+            Td(
+              column.fieldFunc ? column.fieldFunc(row[column.field]) : row[column.field],
+              column.array,
+            )
           )}
         </td>
       ))}
     </>
   );
 
-  const Rows = (): JSX.Element => (
+  const TableAllRows = (): JSX.Element => (
     <>
       {filteredData().map((item, index) => (
-        <tr key={`tr${item.id}${index}`}>{Row(item)}</tr>
+        <tr className={useRowClass ? tableRowClass(rowClass, item)} key={`tr${item.id}${index}`}>{TableRow(item)}</tr>
       ))}
     </>
   );
@@ -115,7 +160,7 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
   const TBody = (): JSX.Element | null =>
     data && data.length > 0 ? (
       <tbody>
-        <Rows />
+        <TableAllRows />
       </tbody>
     ) : null;
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FC } from 'react';
 
-import { Table } from '../../components/table';
+import { Table, Column } from '../../components/table';
 import { CompanyList } from '../../models/company';
 import { fetchData } from '../../helpers/utils';
 
@@ -17,7 +17,7 @@ export const Companies: FC<{}> = () => {
   }, []);
 
   const isHiddenTouch = 'is-hidden-touch';
-  const columns = [
+  const columns: Column[] = [
     {
       field: 'name',
       label: 'Наименование',
