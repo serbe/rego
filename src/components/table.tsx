@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 
 import { Pagination } from './pagination';
+import { ModelsList } from '../models/lists';
 
 export type Column = {
   field: string;
@@ -20,14 +21,17 @@ export type RowClassFunc = {
   rowFuncField: string;
 };
 
-const splitArray = (items: any[]): JSX.Element | null =>
-  items ? (
-    <>
-      {items.map((arrayItem, index) => (
-        <div key={`div${index}`}>{arrayItem}</div>
-      ))}
-    </>
-  ) : null;
+// function getProperty<T, K extends keyof T>(object: T, key: K) {
+//   return object[key];
+// }
+
+const splitArray = (items: string[]): JSX.Element => (
+  <>
+    {items.map((arrayItem, index) => (
+      <div key={`div${index}`}>{arrayItem}</div>
+    ))}
+  </>
+);
 
 interface TableProps {
   bordered?: boolean;
@@ -35,7 +39,7 @@ interface TableProps {
   narrow?: boolean;
   hoverable?: boolean;
   fullwidth?: boolean;
-  data: any[];
+  data: ModelsList[];
   columns: Column[];
   rowClass?: RowClassFunc;
   className?: string;
@@ -66,7 +70,7 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
 
   let filteredLength = 0;
 
-  const filteredData = (): any[] => {
+  const filteredData = (): ModelsList[] => {
     if (search !== '') {
       filteredLength = data.length;
       return data;
@@ -105,8 +109,8 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
       </thead>
     );
 
-  const Td = (field: any, isArray: boolean | undefined): JSX.Element | null =>
-    isArray ? splitArray(field) : field;
+  const Td = (field: string[] | string, isArray: boolean | undefined): JSX.Element =>
+    isArray && field && Array.isArray(field) ? splitArray(field) : <>field</>;
 
   const TableRow = (row: any): JSX.Element | null => (
     <>
@@ -134,7 +138,7 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
     <>
       {filteredData().map((item, index) => (
         <tr
-          className={rowClass ? rowClass.rowFunc(item[rowClass.rowFuncField]) : undefined}
+          className={rowClass ? rowClass.rowFunc((item as any)[rowClass.rowFuncField]) : undefined}
           key={`tr${item.id}${index}`}
         >
           {TableRow(item)}
