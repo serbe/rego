@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { EducationShort } from '../../models/education';
 import { PracticeShort } from '../../models/practice';
 import { fetchData } from '../../helpers/utils';
-import { Grid, Container, Table, Menu } from 'semantic-ui-react';
 
 import './home.css';
 
@@ -50,55 +49,53 @@ export const Home: FC<{}> = () => {
   }, []);
 
   const EducationTable = (): JSX.Element => (
-    <Table celled>
-      <Table.Body>
+    <table className="border-collapse border-2 border-gray-500 table-auto">
+      <tbody>
         {educations.map((row, index) => (
-          <Table.Row key={index} className={trClass(row.start_date)}>
-            <Table.Cell>
+          <tr key={index} className={trClass(row.start_date)}>
+            <td className="border px-2 py-2">
               <Link to={`/education/${row.id}`}>{tinyDate(row.start_date)}</Link>
-            </Table.Cell>
-            <Table.Cell>
+            </td>
+            <td className="border px-2 py-2">
               <Link to={`/contact/${row.contact_id}`}>{row.contact_name}</Link>
-            </Table.Cell>
-          </Table.Row>
+            </td>
+          </tr>
         ))}
-      </Table.Body>
-    </Table>
+      </tbody>
+    </table>
   );
 
   const PracticeTable = (): JSX.Element => (
-    <Table celled>
-      <Table.Body>
+    <table className="border-collapse border-2 border-gray-500 table-auto">
+      <tbody>
         {practices.map((row, index) => (
-          <Table.Row key={index} className={trClass(row.date_of_practice)}>
-            <Table.Cell>
+          <tr key={index} className={trClass(row.date_of_practice)}>
+            <td className="border px-2 py-2">
               <Link to={`/practice/${row.id}`}>{tinyDate(row.date_of_practice)}</Link>
-            </Table.Cell>
-            <Table.Cell>
+            </td>
+            <td className="border px-2 py-2">
               <Link to={`/kind/${row.kind_id}`}>{row.kind_short_name}</Link>
-            </Table.Cell>
-            <Table.Cell>
+            </td>
+            <td className="border px-2 py-2">
               <Link to={`/company/${row.company_id}`}>{row.company_name}</Link>
-            </Table.Cell>
-          </Table.Row>
+            </td>
+          </tr>
         ))}
-      </Table.Body>
-    </Table>
+      </tbody>
+    </table>
   );
 
   return hasError ? (
     <div>No data</div>
   ) : (
-    <Grid columns={3} divided>
-      <Grid.Row>
-        <Grid.Column>
-          <EducationTable />
-        </Grid.Column>
-        <Grid.Column></Grid.Column>
-        <Grid.Column>
-          <PracticeTable />
-        </Grid.Column>
-      </Grid.Row>
-    </Grid>
+    <div className="flex">
+      <div className="flex-1">
+        <EducationTable />
+      </div>
+      <div className="flex-1" />
+      <div className="flex-1">
+        <PracticeTable />
+      </div>
+    </div>
   );
 };

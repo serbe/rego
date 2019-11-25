@@ -2,24 +2,24 @@ import React, { FC } from 'react';
 
 import { Router } from './containers/Router';
 import { NavBar } from './components/navbar';
-import { Button, Container, Dropdown, Menu } from 'semantic-ui-react';
 
 import './App.css';
+import './tailwind.css';
 
 const App: FC = () => {
   return (
     <>
       <NavBar />
-      <section className="section">
-        <Container>
+      <div className="container mx-auto">
+        <div className="inset-x-0 top-0">
           <Router />
-        </Container>
-      </section>
-      <footer className="footer">
-        <Container>
+        </div>
+      </div>
+      <div className="container mx-auto">
+        <div className="inset-x-0 bottom-0">
           <p>© 2019 Сочи</p>
-        </Container>
-      </footer>
+        </div>
+      </div>
     </>
   );
 };
