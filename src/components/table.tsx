@@ -110,7 +110,7 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
     );
 
   const Td = (field: string[] | string, isArray: boolean | undefined): JSX.Element =>
-    isArray && field && Array.isArray(field) ? splitArray(field) : <>field</>;
+    isArray && field && Array.isArray(field) ? splitArray(field) : <>{field}</>;
 
   const TableRow = (row: any): JSX.Element | null => (
     <>
