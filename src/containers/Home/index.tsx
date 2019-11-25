@@ -1,9 +1,10 @@
 import React, { useState, useEffect, FC } from 'react';
+import { Link } from 'react-router-dom';
 
 import { EducationShort } from '../../models/education';
 import { PracticeShort } from '../../models/practice';
 import { fetchData } from '../../helpers/utils';
-import { Column, Table, RowClassFunc } from '../../components/table';
+import { Grid, Container, Table, Menu } from 'semantic-ui-react';
 
 import './home.css';
 
@@ -27,52 +28,6 @@ const tinyDate = (date: string): string => {
   return date;
 };
 
-const practiceColumns: Column[] = [
-  {
-    field: 'date_of_practice',
-    linkBase: '/practice/',
-    linkField: 'id',
-    fieldFunc: tinyDate,
-    className: 'w65',
-  },
-  {
-    field: 'kind_short_name',
-    linkBase: '/practice/',
-    linkField: 'id',
-    className: 'w35',
-  },
-  {
-    field: 'company_name',
-    linkBase: '/company/',
-    linkField: 'company_id',
-  },
-];
-
-const educationColumns: Column[] = [
-  {
-    field: 'start_date',
-    linkBase: '/education/',
-    linkField: 'id',
-    fieldFunc: tinyDate,
-    className: 'w65',
-  },
-  {
-    field: 'contact_name',
-    linkBase: '/contact/',
-    linkField: 'contact_id',
-  },
-];
-
-const practiceRowClass: RowClassFunc = {
-  rowFunc: trClass,
-  rowFuncField: 'date_of_practice',
-};
-
-const educationRowClass: RowClassFunc = {
-  rowFunc: trClass,
-  rowFuncField: 'start_date',
-};
-
 export const Home: FC<{}> = () => {
   const [hasError, setErrors] = useState();
   const [educations, setEducations] = useState<EducationShort[]>([]);
@@ -94,34 +49,56 @@ export const Home: FC<{}> = () => {
       .catch(error => setErrors(error));
   }, []);
 
+  const EducationTable = (): JSX.Element => (
+    <Table celled>
+      <Table.Body>
+        {educations.map((row, index) => (
+          <Table.Row key={index} className={trClass(row.start_date)}>
+            <Table.Cell>
+              <Link to={`/education/${row.id}`}>{tinyDate(row.start_date)}</Link>
+            </Table.Cell>
+            <Table.Cell>
+              <Link to={`/contact/${row.contact_id}`}>{row.contact_name}</Link>
+            </Table.Cell>
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table>
+  );
+
+  const PracticeTable = (): JSX.Element => (
+    <Table celled>
+      <Table.Body>
+        {practices.map((row, index) => (
+          <Table.Row key={index} className={trClass(row.date_of_practice)}>
+            <Table.Cell>
+              <Link to={`/practice/${row.id}`}>{tinyDate(row.date_of_practice)}</Link>
+            </Table.Cell>
+            <Table.Cell>
+              <Link to={`/kind/${row.kind_id}`}>{row.kind_short_name}</Link>
+            </Table.Cell>
+            <Table.Cell>
+              <Link to={`/company/${row.company_id}`}>{row.company_name}</Link>
+            </Table.Cell>
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table>
+  );
+
   return hasError ? (
     <div>No data</div>
   ) : (
-    <div className="container">
-      <div className="content has-text-centered">
-        <div className="columns">
-          <div className="column is-one-third">
-            <Table
-              data={educations}
-              rowClass={educationRowClass}
-              columns={educationColumns}
-              narrow
-              fullwidth
-              nohead
-            />
-          </div>
-          <div className="column is-one-third is-offset-one-third">
-            <Table
-              data={practices}
-              rowClass={practiceRowClass}
-              columns={practiceColumns}
-              narrow
-              fullwidth
-              nohead
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+    <Grid columns={3} divided>
+      <Grid.Row>
+        <Grid.Column>
+          <EducationTable />
+        </Grid.Column>
+        <Grid.Column></Grid.Column>
+        <Grid.Column>
+          <PracticeTable />
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
   );
 };

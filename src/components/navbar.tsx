@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import clsx from 'clsx';
 import { NavLink } from 'react-router-dom';
 
-import { Button } from './button';
+import { Button, Container, Dropdown, Menu } from 'semantic-ui-react';
 
 // function toggleOpen() {
 //   return (previousState, currentProps) => {
@@ -17,10 +17,6 @@ import { Button } from './button';
 //       open: boolean
 // }
 
-const navMenuStyle = (): string => {
-  return clsx(['navbar-item', 'has-dropdown', 'is-hoverable']);
-};
-
 export const NavBar: FC<{}> = () => {
   // const [auth, setAuth] = useState(true);
   const auth = true;
@@ -33,160 +29,108 @@ export const NavBar: FC<{}> = () => {
   };
 
   return (
-    <nav aria-label="main navigation" className="navbar is-dark" role="navigation">
-      <div className="container">
-        {auth ? (
-          <>
-            <div className="navbar-brand">
-              <NavLink activeClassName="is-active" className="navbar-item" exact to="/">
-                ЕДДС
-              </NavLink>
+    <Container>
+      {auth ? (
+        <Menu>
+          <Menu.Item name="ЕДДС" as={NavLink} exact to="/" />
+          <Menu.Item name="Контакты" as={NavLink} to="/contacts" onClick={handleToggle} />
+          <Menu.Item name="Организации" as={NavLink} to="/companies" onClick={handleToggle} />
+          <Menu.Item name="Сирены" as={NavLink} to="/sirens" onClick={handleToggle} />
 
-              <a
-                href="#menu"
-                aria-expanded="false"
-                aria-label="menu"
-                className="navbar-burger burger"
-                data-target="navbarData"
-                role="button"
-                onClick={handleToggle}
-              >
-                <span aria-hidden="true" />
-                <span aria-hidden="true" />
-                <span aria-hidden="true" />
-              </a>
-            </div>
-
-            <div id="navbarData" className={openClassName('navbar-menu')}>
-              <div className="navbar-start">
-                <NavLink
+          <Menu.Item>
+            <Dropdown text="Справочники">
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={handleToggle} to="/departments">
+                  Отделы
+                </Dropdown.Item>
+                <Dropdown.Item
                   activeClassName="is-active"
                   className="navbar-item"
-                  to="/contacts"
                   onClick={handleToggle}
+                  to="/educations"
                 >
-                  Контакты
-                </NavLink>
-                <NavLink
+                  Обучение
+                </Dropdown.Item>
+                <Dropdown.Item
                   activeClassName="is-active"
                   className="navbar-item"
-                  to="/companies"
                   onClick={handleToggle}
+                  to="/kinds"
                 >
-                  Организации
-                </NavLink>
-                <NavLink
+                  Типы
+                </Dropdown.Item>
+                <Dropdown.Item
                   activeClassName="is-active"
                   className="navbar-item"
-                  to="/sirens"
                   onClick={handleToggle}
+                  to="/posts"
                 >
-                  Сирены
-                </NavLink>
+                  Должности
+                </Dropdown.Item>
+                <Dropdown.Item
+                  activeClassName="is-active"
+                  className="navbar-item"
+                  onClick={handleToggle}
+                  to="/practices"
+                >
+                  Учения
+                </Dropdown.Item>
+                <Dropdown.Item
+                  activeClassName="is-active"
+                  className="navbar-item"
+                  onClick={handleToggle}
+                  to="/ranks"
+                >
+                  Чины
+                </Dropdown.Item>
+                <Dropdown.Item
+                  activeClassName="is-active"
+                  className="navbar-item"
+                  onClick={handleToggle}
+                  to="/scopes"
+                >
+                  Сферы
+                </Dropdown.Item>
+                <Dropdown.Item
+                  activeClassName="is-active"
+                  className="navbar-item"
+                  onClick={handleToggle}
+                  to="/certificates"
+                >
+                  Удостоверения
+                </Dropdown.Item>
+                <hr className="navbar-divider" />
+                <Dropdown.Item
+                  activeClassName="is-active"
+                  className="navbar-item"
+                  onClick={handleToggle}
+                  to="/sirentypes"
+                >
+                  Типы сирен
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </Menu.Item>
 
-                <div className={navMenuStyle()}>
-                  <a href="#dirs" className="navbar-link">
-                    Справочники
-                  </a>
-                  <div className="navbar-dropdown">
-                    <NavLink
-                      activeClassName="is-active"
-                      className="navbar-item"
-                      onClick={handleToggle}
-                      to="/departments"
-                    >
-                      Отделы
-                    </NavLink>
-                    <NavLink
-                      activeClassName="is-active"
-                      className="navbar-item"
-                      onClick={handleToggle}
-                      to="/educations"
-                    >
-                      Обучение
-                    </NavLink>
-                    <NavLink
-                      activeClassName="is-active"
-                      className="navbar-item"
-                      onClick={handleToggle}
-                      to="/kinds"
-                    >
-                      Типы
-                    </NavLink>
-                    <NavLink
-                      activeClassName="is-active"
-                      className="navbar-item"
-                      onClick={handleToggle}
-                      to="/posts"
-                    >
-                      Должности
-                    </NavLink>
-                    <NavLink
-                      activeClassName="is-active"
-                      className="navbar-item"
-                      onClick={handleToggle}
-                      to="/practices"
-                    >
-                      Учения
-                    </NavLink>
-                    <NavLink
-                      activeClassName="is-active"
-                      className="navbar-item"
-                      onClick={handleToggle}
-                      to="/ranks"
-                    >
-                      Чины
-                    </NavLink>
-                    <NavLink
-                      activeClassName="is-active"
-                      className="navbar-item"
-                      onClick={handleToggle}
-                      to="/scopes"
-                    >
-                      Сферы
-                    </NavLink>
-                    <NavLink
-                      activeClassName="is-active"
-                      className="navbar-item"
-                      onClick={handleToggle}
-                      to="/certificates"
-                    >
-                      Удостоверения
-                    </NavLink>
-                    <hr className="navbar-divider" />
-                    <NavLink
-                      activeClassName="is-active"
-                      className="navbar-item"
-                      onClick={handleToggle}
-                      to="/sirentypes"
-                    >
-                      Типы сирен
-                    </NavLink>
-                  </div>
-                </div>
-              </div>
-              <div className="navbar-end">
-                <div className="navbar-item has-dropdown is-hoverable">
-                  <a href="#user" className="navbar-link" onClick={handleToggle}>
-                    name
-                  </a>
-                  <div className="navbar-dropdown is-right">
-                    <div className="navbar-item">
-                      <Button color="link">Выход</Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </>
-        ) : (
-          <div className="navbar-brand">
-            <NavLink className="navbar-item" key="NavbarNotLogged" to="/login">
-              Авторизация
-            </NavLink>
-          </div>
-        )}
-      </div>
-    </nav>
+          <Menu.Menu position="right">
+            <Menu.Item>
+              <Dropdown text="name">
+                <Dropdown.Menu>
+                  <Dropdown.Item>
+                    <Button>Выход</Button>
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Menu.Item>
+          </Menu.Menu>
+        </Menu>
+      ) : (
+        <div className="navbar-brand">
+          <NavLink className="navbar-item" key="NavbarNotLogged" to="/login">
+            Авторизация
+          </NavLink>
+        </div>
+      )}
+    </Container>
   );
 };

@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 
 import { Router } from './containers/Router';
 import { NavBar } from './components/navbar';
+import { Button, Container, Dropdown, Menu } from 'semantic-ui-react';
 
 import './App.css';
 
@@ -10,14 +11,14 @@ const App: FC = () => {
     <>
       <NavBar />
       <section className="section">
-        <div className="container">
+        <Container>
           <Router />
-        </div>
+        </Container>
       </section>
       <footer className="footer">
-        <div className="container has-text-centered">
+        <Container>
           <p>© 2019 Сочи</p>
-        </div>
+        </Container>
       </footer>
     </>
   );

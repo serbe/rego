@@ -1,2 +1,2 @@
-// export { Company } from "./item.js";
+export { CertificateItem } from './item';
 export { Certificates } from './list';
