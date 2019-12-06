@@ -6,7 +6,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 import './index.scss';
-import './index.css';
+import './styles/tailwind.css';
 
 ReactDOM.render(
   <BrowserRouter>
