@@ -3,8 +3,7 @@ import React, { FC } from 'react';
 import { Router } from './containers/Router';
 import { NavBar } from './components/navbar';
 
-import './App.css';
-import './tailwind.css';
+import './app.css';
 
 const App: FC = () => {
   return (
