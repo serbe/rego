@@ -3,9 +3,9 @@ import React, { FC } from 'react';
 import { Router } from './containers/Router';
 import { NavBar } from './components/navbar';
 
-import './app.css';
+import './rugo.css';
 
-const App: FC = () => {
+const Rugo: FC = () => {
   return (
     <>
       <NavBar />
@@ -23,4 +23,4 @@ const App: FC = () => {
   );
 };
 
-export default App;
+export default Rugo;
