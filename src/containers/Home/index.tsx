@@ -32,26 +32,27 @@ export const Home: FC<{}> = () => {
   const [educations, setEducations] = useState<EducationShort[]>([]);
   const [practices, setPractices] = useState<PracticeShort[]>([]);
 
-  useEffect(() => {
-    fetchData('/api/go/education/near')
-      .then(response =>
-        response.EducationShort ? setEducations(response.EducationShort) : setErrors(true),
-      )
-      .catch(error => setErrors(error));
-  }, []);
+  // useEffect(() => {
+  //   fetchData('/api/go/education/near')
+  //     .then(response =>
+  //       response.EducationShort ? setEducations(response.EducationShort) : setErrors(true),
+  //     )
+  //     .catch(error => setErrors(error));
+  // }, []);
 
-  useEffect(() => {
-    fetchData('/api/go/practice/near')
-      .then(response =>
-        response.PracticeShort ? setPractices(response.PracticeShort) : setErrors(true),
-      )
-      .catch(error => setErrors(error));
-  }, []);
+  // useEffect(() => {
+  //   fetchData('/api/go/practice/near')
+  //     .then(response =>
+  //       response.PracticeShort ? setPractices(response.PracticeShort) : setErrors(true),
+  //     )
+  //     .catch(error => setErrors(error));
+  // }, []);
 
   const EducationTable = (): JSX.Element => (
     <table className="border-collapse border-2 border-gray-500 table-auto">
       <tbody>
         {educations.map((row, index) => (
+          // eslint-disable-next-line react/no-array-index-key
           <tr key={index} className={trClass(row.start_date)}>
             <td className="border px-2 py-2">
               <Link to={`/education/${row.id}`}>{tinyDate(row.start_date)}</Link>
@@ -69,6 +70,7 @@ export const Home: FC<{}> = () => {
     <table className="border-collapse border-2 border-gray-500 table-auto">
       <tbody>
         {practices.map((row, index) => (
+          // eslint-disable-next-line react/no-array-index-key
           <tr key={index} className={trClass(row.date_of_practice)}>
             <td className="border px-2 py-2">
               <Link to={`/practice/${row.id}`}>{tinyDate(row.date_of_practice)}</Link>

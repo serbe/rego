@@ -28,6 +28,7 @@ export type RowClassFunc = {
 const splitArray = (items: string[]): JSX.Element => (
   <>
     {items.map((arrayItem, index) => (
+      // eslint-disable-next-line react/no-array-index-key
       <div key={`div${index}`}>{arrayItem}</div>
     ))}
   </>
@@ -101,6 +102,7 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
       <thead>
         <tr>
           {columns.map<JSX.Element>((column: Column, index: number) => (
+            // eslint-disable-next-line react/no-array-index-key
             <th key={`th${index}`} className={column.className}>
               {column.label}
             </th>
@@ -112,9 +114,11 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
   const Td = (field: string[] | string, isArray: boolean | undefined): JSX.Element =>
     isArray && field && Array.isArray(field) ? splitArray(field) : <>{field}</>;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const TableRow = (row: any): JSX.Element | null => (
     <>
       {columns.map((column: Column, index: number) => (
+        // eslint-disable-next-line react/no-array-index-key
         <td key={`td${row.id}${index}`} className={column.className}>
           {column.linkField && column.linkBase ? (
             <Link to={column.linkBase + row[column.linkField]}>
@@ -138,7 +142,9 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
     <>
       {filteredData().map((item, index) => (
         <tr
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           className={rowClass ? rowClass.rowFunc((item as any)[rowClass.rowFuncField]) : undefined}
+          // eslint-disable-next-line react/no-array-index-key
           key={`tr${item.id}${index}`}
         >
           {TableRow(item)}
