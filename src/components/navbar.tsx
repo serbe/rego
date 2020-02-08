@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 // import clsx from 'clsx';
 // import { NavLink } from 'react-router-dom';
 
@@ -29,7 +29,10 @@ const Navbar = (): JSX.Element => (
       <span className="font-semibold text-xl tracking-tight">Tailwind CSS</span>
     </div>
     <div className="block lg:hidden">
-      <button className="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
+      <button
+        type="button"
+        className="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white"
+      >
         <svg
           className="fill-current h-3 w-3"
           viewBox="0 0 20 20"
@@ -63,7 +66,7 @@ const Navbar = (): JSX.Element => (
       </div>
       <div>
         <a
-          href="#"
+          href="#download"
           className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0"
         >
           Download

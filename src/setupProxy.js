@@ -1,5 +1,5 @@
-const proxy = require('http-proxy-middleware');
+import proxy from 'http-proxy-middleware';
 
-module.exports = function(app) {
+export default function(app) {
   app.use(proxy('/api', { target: 'http://localhost:9090/' }));
-};
+}
