@@ -1,5 +1,5 @@
 module.exports = {
-  // parser: '@typescript-eslint/parser',
+  parser: '@typescript-eslint/parser',
   extends: [
     'airbnb-typescript',
     'plugin:@typescript-eslint/recommended',
@@ -10,11 +10,11 @@ module.exports = {
     'prettier/react',
     'prettier/@typescript-eslint',
   ],
-  // parserOptions: {
-  //   ecmaVersion: 2018,
-  //   sourceType: 'module',
-  //   project: './tsconfig.json',
-  // },
+  parserOptions: {
+    ecmaVersion: 2018,
+    sourceType: 'module',
+    project: './tsconfig.json',
+  },
   plugins: ['@typescript-eslint', 'jest', 'promise', 'unicorn'],
   rules: {
     curly: 'error',
