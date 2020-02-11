@@ -2,7 +2,8 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   extends: [
     'airbnb-typescript',
-    'plugin:@typescript-eslint/recommended',
+    // 'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended',
     'plugin:jest/recommended',
     'plugin:promise/recommended',
     'plugin:unicorn/recommended',
@@ -14,8 +15,11 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
     project: './tsconfig.json',
+    ecmaFeatures: {
+      jsx: true,
+    },
   },
-  plugins: ['@typescript-eslint', 'jest', 'promise', 'unicorn'],
+  plugins: ['@typescript-eslint', 'jest', 'promise', 'unicorn', 'react'],
   rules: {
     curly: 'error',
     'jsx-a11y/click-events-have-key-events': 'off',

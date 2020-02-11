@@ -1,9 +1,9 @@
-import React, { useState, useEffect, FC } from 'react';
+import React, { useState, FC } from 'react';
 import { Link } from 'react-router-dom';
 
 import { EducationShort } from '../../models/education';
 import { PracticeShort } from '../../models/practice';
-import { fetchData } from '../../helpers/utils';
+// import { fetchData } from '../../helpers/utils';
 
 import './home.css';
 

@@ -116,6 +116,7 @@ export const CompanyItem: FC<{}> = () => {
       <>
         {emails.map((email, index) => (
           <Input
+            key={email.toString()}
             name={`email[${index}]`}
             value={email}
             type="email"
@@ -137,6 +138,7 @@ export const CompanyItem: FC<{}> = () => {
       <>
         {phones.map((phone, index) => (
           <Input
+            key={phone.toString()}
             name={`phone[${index}]`}
             value={phone}
             type="tel"
@@ -156,6 +158,7 @@ export const CompanyItem: FC<{}> = () => {
       <>
         {faxes.map((fax, index) => (
           <Input
+            key={fax.toString()}
             name={`fax[${index}]`}
             value={fax}
             type="tel"
@@ -175,7 +178,7 @@ export const CompanyItem: FC<{}> = () => {
       <div className="field" key="practices">
         <label className="label">Тренировки</label>
         {company.practices.map(practice => (
-          <NavLink to={`/practice/${practice.id}`}>
+          <NavLink to={`/practice/${practice.id}`} key={practice.id}>
             <Input
               value={`${practice.date_str} - ${practice.kind_name} - ${practice.topic}`}
               iconLeft="history"
@@ -191,7 +194,7 @@ export const CompanyItem: FC<{}> = () => {
       <div className="field" key="contacts">
         <label className="label">Сотрудники</label>
         {company.contacts.map(contact => (
-          <NavLink to={`/contact/${contact.id}`}>
+          <NavLink to={`/contact/${contact.id}`} key={contact.id}>
             <Input value={`${contact.name} - ${contact.post_name}`} iconLeft="user" readonly />
           </NavLink>
         ))}
