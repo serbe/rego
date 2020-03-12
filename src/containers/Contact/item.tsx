@@ -16,12 +16,14 @@ export const ContactItem: FC<{}> = () => {
         .then(response => (response.Contact ? setContacts(response.Contact) : setErrors(true)))
         .catch(error => setErrors(error));
     }
-  }, []);
+  }, [id]);
 
   const Form = (): JSX.Element => (
     <form id="contact">
       <div className="field">
-        <label className="label">Полное имя</label>
+        <label className="label" htmlFor="userid">
+          Полное имя
+        </label>
         <div className="control">
           <input className="input" placeholder="Полное имя" id="userid" key="user" />
         </div>
