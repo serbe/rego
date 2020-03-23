@@ -78,9 +78,7 @@ export const Button: FC<ButtonProps> = (properties: ButtonProps) => {
       );
     }
     if (type === 'submit' || type === 'reset') {
-      return (
-        <input type={type} disabled={disable} onClick={onClick} className={classes} />
-      );
+      return <input type={type} disabled={disable} onClick={onClick} className={classes} />;
     }
     if (type === 'a') {
       return (
