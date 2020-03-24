@@ -16,7 +16,7 @@ const Rugo: FC = () => {
       </div>
       <div className="container mx-auto">
         <div className="inset-x-0 bottom-0">
-          <p>© 2019 Сочи</p>
+          <p>© 2020 Сочи</p>
         </div>
       </div>
     </>
