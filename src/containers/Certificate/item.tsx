@@ -10,16 +10,16 @@ import { fetchData } from '../../helpers/utils';
 
 export const CertificateItem: FC<{}> = () => {
   const { id } = useParams();
-  const [hasError, setErrors] = useState();
+  const [hasError, setErrors] = useState(false);
   const [certificate, setCertificate] = useState<Certificate>();
 
   useEffect(() => {
     if (id) {
       fetchData(`/api/go/certificate/item/${id}`)
-        .then(responseJson =>
+        .then((responseJson) =>
           responseJson.Certificate ? setCertificate(responseJson.Certificate) : setErrors(true),
         )
-        .catch(error => setErrors(error));
+        .catch((error) => setErrors(error));
     }
   }, [id]);
 

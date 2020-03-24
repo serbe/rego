@@ -10,10 +10,10 @@ export const Contacts: FC<{}> = () => {
 
   useEffect(() => {
     fetchData('/api/go/contact/list')
-      .then(response =>
+      .then((response) =>
         response.ContactList ? setContacts(response.ContactList) : setErrors(true),
       )
-      .catch(error => setErrors(error));
+      .catch((error) => setErrors(error));
   }, []);
 
   const columns = [

@@ -10,7 +10,7 @@ import { addEmptyString, numberToString, fetchData } from '../../helpers/utils';
 
 export const CompanyItem: FC<{}> = () => {
   const { id } = useParams();
-  const [hasError, setErrors] = useState();
+  const [hasError, setErrors] = useState(false);
   const [company, setCompany] = useState<Company>();
   const [scope, setScope] = useState<SelectItem>();
   const [scopes, setScopes] = useState<SelectItem[]>();
@@ -54,26 +54,26 @@ export const CompanyItem: FC<{}> = () => {
   useEffect(() => {
     if (id) {
       fetchData(`/api/go/company/item/${id}`)
-        .then(responseJson =>
+        .then((responseJson) =>
           responseJson.Company ? setCompany(responseJson.Company) : setErrors(true),
         )
-        .catch(error => setErrors(error));
+        .catch((error) => setErrors(error));
     }
   }, [id]);
 
   useEffect(() => {
     if (id) {
       fetchData(`/api/go/scope/select`)
-        .then(responseJson =>
+        .then((responseJson) =>
           responseJson.SelectItem ? setScopes(responseJson.SelectItem) : setErrors(true),
         )
-        .catch(error => setErrors(error));
+        .catch((error) => setErrors(error));
     }
   }, [id]);
 
   useEffect(() => {
     if (company && scopes) {
-      setScope(scopes.find(v => v.id === company.scope_id));
+      setScope(scopes.find((v) => v.id === company.scope_id));
       setEmails(addEmptyString(company.emails));
       setPhones(addEmptyString(numberToString(company.phones)));
       setFaxes(addEmptyString(numberToString(company.faxes)));
@@ -177,7 +177,7 @@ export const CompanyItem: FC<{}> = () => {
     company && company.practices ? (
       <div className="field" key="practices">
         <label className="label">Тренировки</label>
-        {company.practices.map(practice => (
+        {company.practices.map((practice) => (
           <NavLink to={`/practice/${practice.id}`} key={practice.id}>
             <Input
               value={`${practice.date_str} - ${practice.kind_name} - ${practice.topic}`}
@@ -193,7 +193,7 @@ export const CompanyItem: FC<{}> = () => {
     company && company.contacts ? (
       <div className="field" key="contacts">
         <label className="label">Сотрудники</label>
-        {company.contacts.map(contact => (
+        {company.contacts.map((contact) => (
           <NavLink to={`/contact/${contact.id}`} key={contact.id}>
             <Input value={`${contact.name} - ${contact.post_name}`} iconLeft="user" readonly />
           </NavLink>

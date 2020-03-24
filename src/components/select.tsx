@@ -49,7 +49,7 @@ export const Select: FC<SelectProps> = (properties: SelectProps) => {
     const fList =
       item.name.length > 0
         ? list.filter(
-            listItem => listItem.name === '' || listItem.name.match(new RegExp(item.name, 'i')),
+            (listItem) => listItem.name === '' || new RegExp(item.name, 'i').exec(listItem.name),
           )
         : list;
     setFilteredList(fList);
@@ -110,7 +110,7 @@ export const Select: FC<SelectProps> = (properties: SelectProps) => {
     ) : null;
 
   const SelectList = (): JSX.Element => {
-    const items = filteredList.map(ListItem => (
+    const items = filteredList.map((ListItem) => (
       <div className="select-item input" key={ListItem.id} onClick={(): void => setItem(ListItem)}>
         {ListItem.name}
       </div>

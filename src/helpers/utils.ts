@@ -26,7 +26,7 @@ export interface Response {
 export const addEmptyString = (values: string[] | undefined): string[] => {
   let list: string[] = [];
   if (values) {
-    list = values.filter(value => value !== '');
+    list = values.filter((value) => value !== '');
   }
   list.push('');
   return list;
@@ -35,7 +35,7 @@ export const addEmptyString = (values: string[] | undefined): string[] => {
 export const numberToString = (values: number[] | undefined): string[] => {
   let list: string[] = [];
   if (values) {
-    list = values.map(value => value.toString());
+    list = values.map((value) => value.toString());
   }
   return list;
 };

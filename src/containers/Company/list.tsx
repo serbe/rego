@@ -10,10 +10,10 @@ export const Companies: FC<{}> = () => {
 
   useEffect(() => {
     fetchData('/api/go/company/list')
-      .then(response =>
+      .then((response) =>
         response.CompanyList ? setCompanies(response.CompanyList) : setErrors(true),
       )
-      .catch(error => setErrors(error));
+      .catch((error) => setErrors(error));
   }, []);
 
   const isHiddenTouch = 'is-hidden-touch';

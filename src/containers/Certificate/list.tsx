@@ -10,10 +10,10 @@ export const Certificates: FC<{}> = () => {
 
   useEffect(() => {
     fetchData('/api/go/certificate/list')
-      .then(response =>
+      .then((response) =>
         response.CertificateList ? setCertificates(response.CertificateList) : setErrors(true),
       )
-      .catch(error => setErrors(error));
+      .catch((error) => setErrors(error));
   }, []);
 
   const columns = [
