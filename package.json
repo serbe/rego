@@ -8,8 +8,7 @@
     "react-dom": "16.13.1",
     "react-router-dom": "5.1.2",
     "react-scripts": "3.4.1",
-    "tailwindcss": "1.2.0",
-    "ws": "7.2.3"
+    "tailwindcss": "1.2.0"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
