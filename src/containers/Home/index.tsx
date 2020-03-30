@@ -69,7 +69,6 @@ export const Home: FC<{}> = () => {
     <table className="border-collapse border-2 border-gray-500 table-auto">
       <tbody>
         {practices.map((row, index) => (
-          // eslint-disable-next-line react/no-array-index-key
           <tr key={index} className={trClass(row.date_of_practice)}>
             <td className="border px-2 py-2">
               <Link to={`/practice/${row.id}`}>{tinyDate(row.date_of_practice)}</Link>
