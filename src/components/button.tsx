@@ -3,7 +3,7 @@ import clsx from 'clsx';
 
 type MainColorsType = 'primary' | 'info' | 'success' | 'warning' | 'danger';
 
-const mainColors = ['primary', 'info', 'success', 'warning', 'danger'];
+const mainColors = new Set(['primary', 'info', 'success', 'warning', 'danger']);
 
 interface ButtonProps {
   type?: 'a' | 'button' | 'submit' | 'reset';
@@ -54,8 +54,8 @@ export const Button: FC<ButtonProps> = (properties: ButtonProps) => {
     'button',
     {
       [`is-${color}`]: color,
-      'is-light': color && light && mainColors.includes(color),
-      'is-dark': color && dark && mainColors.includes(color),
+      'is-light': color && light && mainColors.has(color),
+      'is-dark': color && dark && mainColors.has(color),
       [`is-${size}`]: size,
       'is-fullwidth': fullwidth,
       'is-outlined': outlined,

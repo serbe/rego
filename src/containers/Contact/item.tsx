@@ -31,9 +31,5 @@ export const ContactItem: FC<{}> = () => {
     </form>
   );
 
-  return (
-    <div className="container">
-      <Form />
-    </div>
-  );
+  return <div className="container">{hasError ? null : <Form />}</div>;
 };
