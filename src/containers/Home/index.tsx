@@ -1,9 +1,9 @@
-import React, { useState, FC } from 'react';
+import React, { useEffect, useState, FC } from 'react';
 import { Link } from 'react-router-dom';
 
 import { EducationShort } from '../../models/education';
 import { PracticeShort } from '../../models/practice';
-// import { fetchData } from '../../helpers/utils';
+import { rws } from '../../netapi';
 
 import './home.css';
 
@@ -31,6 +31,19 @@ export const Home: FC<{}> = () => {
   const [hasError, setErrors] = useState();
   const [educations, setEducations] = useState<EducationShort[]>([]);
   const [practices, setPractices] = useState<PracticeShort[]>([]);
+
+  useEffect(function () {
+    rws.addEventListener('message', (message: unknown) => {
+      console.log('addEventListener', message);
+    });
+    rws.send('home');
+
+    return function cleanup(): void {
+      rws.removeEventListener('message', (message: unknown) => {
+        console.log('removeEventListener', message);
+      });
+    };
+  }, []);
 
   // useEffect(() => {
   //   fetchData('/api/go/education/near')
