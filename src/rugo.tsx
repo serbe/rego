@@ -13,11 +13,6 @@ const Rugo: FC = () => {
           <Router />
         </div>
       </div>
-      <div className="container mx-auto">
-        <div className="inset-x-0 bottom-0">
-          <p>© 2020 Сочи</p>
-        </div>
-      </div>
     </>
   );
 };

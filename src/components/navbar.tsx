@@ -1,79 +1,136 @@
-import React, { FC } from 'react';
-// import clsx from 'clsx';
-// import { NavLink } from 'react-router-dom';
+import React, { FC, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 
-// import { Button, Container, Dropdown, Menu } from 'semantic-ui-react';
+const AccountDropdown = (): JSX.Element => {
+  const [isOpen, setOpen] = useState(false);
 
-// function toggleOpen() {
-//   return (previousState, currentProps) => {
-//     return { ...previousState, active: !previousState.active };
-//   };
-// }
-
-// interface NavBarState {
-//   active: boolean,
-//       auth: boolean,
-//       logged: boolean,
-//       open: boolean
-// }
-
-const Navbar = (): JSX.Element => (
-  <nav className="flex items-center justify-between flex-wrap bg-teal-500 px-6 py-2">
-    <div className="flex items-center flex-shrink-0 text-white mr-6">
-      <a
-        href="#responsive-header"
-        className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
-      >
-        Docs
-      </a>
-      <span className="font-semibold text-xl tracking-tight">Tailwind CSS</span>
-    </div>
-    <div className="block lg:hidden">
+  return (
+    <div className="relative ml-6">
       <button
-        type="button"
-        className="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white"
+        onClick={(): void => setOpen(!isOpen)}
+        className="relative z-10 block w-8 h-8 overflow-hidden border-2 border-gray-600 rounded-full focus:outline-none focus:border-white"
       >
-        <svg
-          className="fill-current h-3 w-3"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <title>Menu</title>
-          <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-        </svg>
+        <img
+          className="object-cover w-full h-full"
+          src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=256&q=80"
+          alt="Your avatar"
+        />
       </button>
+      {isOpen ? (
+        <button
+          onClick={(): void => setOpen(false)}
+          tabIndex={-1}
+          className="fixed inset-0 w-full h-full bg-black opacity-50 cursor-default"
+        ></button>
+      ) : null}
+      {isOpen ? (
+        <div className="absolute right-0 w-48 py-2 mt-2 bg-white rounded-lg shadow-xl">
+          <a
+            href="#settings"
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white"
+          >
+            Account settings
+          </a>
+          <a
+            href="#support"
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white"
+          >
+            Support
+          </a>
+          <a
+            href="#signout"
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white"
+          >
+            Выход
+          </a>
+        </div>
+      ) : null}
     </div>
-    <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-      <div className="text-sm lg:flex-grow">
-        <a
-          href="#responsive-header"
-          className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
-        >
-          Docs
-        </a>
-        <a
-          href="#responsive-header"
-          className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
-        >
-          Examples
-        </a>
-        <a
-          href="#responsive-header"
-          className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white"
-        >
-          Blog
-        </a>
+  );
+};
+
+const Header = (): JSX.Element => {
+  const [isOpen, setOpen] = useState(false);
+  const navClass = isOpen
+    ? 'block px-2 pt-2 pb-4 sm:flex sm:p-0'
+    : 'hidden px-2 pt-2 pb-4 sm:flex sm:p-0';
+
+  return (
+    <header className="fixed top-0 left-0 w-full bg-gray-900 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3">
+      <div className="flex items-center justify-between px-4 py-3 sm:p-0">
+        <div className="block px-2 pt-2 pb-4 sm:flex sm:p-0">
+          <NavLink
+            to="/"
+            className="block px-2 py-1 font-semibold text-white rounded hover:bg-gray-800"
+          >
+            ЕДДС
+          </NavLink>
+          <NavLink
+            to="/contacts"
+            className="block px-2 py-1 font-semibold text-white rounded hover:bg-gray-800"
+          >
+            Контакты
+          </NavLink>
+          <NavLink
+            to="/companies"
+            className="block px-2 py-1 mt-1 font-semibold text-white rounded hover:bg-gray-800 sm:mt-0 sm:ml-2"
+          >
+            Организации
+          </NavLink>
+        </div>
+        <div className="sm:hidden">
+          <button
+            onClick={(): void => setOpen(!isOpen)}
+            type="button"
+            className="block text-gray-500 hover:text-white focus:text-white focus:outline-none"
+          >
+            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
+              {isOpen ? (
+                <path
+                  fillRule="evenodd"
+                  d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"
+                />
+              ) : (
+                <path
+                  fillRule="evenodd"
+                  d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"
+                />
+              )}
+            </svg>
+          </button>
+        </div>
       </div>
-      <div>
-        <a
-          href="#download"
-          className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0"
+      <nav className={navClass}>
+        <NavLink
+          to="/certificates"
+          className="block px-2 py-1 font-semibold text-white rounded hover:bg-gray-800"
         >
-          Download
+          Сертификаты
+        </NavLink>
+        <NavLink
+          to="/companies"
+          className="block px-2 py-1 mt-1 font-semibold text-white rounded hover:bg-gray-800 sm:mt-0 sm:ml-2"
+        >
+          Организации
+        </NavLink>
+        <a
+          href="#messages"
+          className="block px-2 py-1 mt-1 font-semibold text-white rounded hover:bg-gray-800 sm:mt-0 sm:ml-2"
+        >
+          Messages
         </a>
-      </div>
+        <AccountDropdown />
+      </nav>
+    </header>
+  );
+};
+
+const BottomBar = (): JSX.Element => (
+  <div className="fixed bottom-0 left-0 w-full bg-gray-900">
+    <div className="flex flex-col items-center justify-center py-1 sm:flex-row">
+      <h1 className="text-xs font-bold text-gray-600 uppercase">© 2020 Сочи</h1>
     </div>
-  </nav>
+  </div>
 );
 
 export const NavBar: FC<{}> = () => {
@@ -88,7 +145,11 @@ export const NavBar: FC<{}> = () => {
   // };
 
   return (
-    <Navbar />
+    <div>
+      <Header />
+      {/* <Navbar /> */}
+      <BottomBar />
+    </div>
     // <Container>
     //   {auth ? (
     //     <Menu>

@@ -7,5 +7,5 @@ export const rws = new ReconnectingWebSocket(URL);
 rws.addEventListener('open', () => {
   // on receiving a message, add it to the list of messages
   console.log('open');
-  rws.send("Here's some text that the server is urgently awaiting!");
+  // rws.send("Here's some text that the server is urgently awaiting!");
 });

@@ -7,6 +7,12 @@ import { rws } from '../../netapi';
 
 import './home.css';
 
+// type HomeWS = {
+//   name: string;
+//   object: EducationShort[] | PracticeShort[] | null;
+//   error?: string;
+// };
+
 const trClass = (date: string): 'tr-is-success' | 'tr-is-danger' | 'tr-is-warning' => {
   const m = new Date();
   const d = new Date(date);
@@ -33,10 +39,20 @@ export const Home: FC<{}> = () => {
   const [practices, setPractices] = useState<PracticeShort[]>([]);
 
   useEffect(function () {
-    rws.addEventListener('message', (message: unknown) => {
-      console.log('addEventListener', message);
+    rws.addEventListener('message', (message: MessageEvent) => {
+      const data = JSON.parse(message.data);
+      if (data.name && data.name === 'PracticeNear' && data.object.PracticeShort) {
+        setPractices(data.object.PracticeShort);
+      }
+      if (data.name && data.name === 'EducationNear' && data.object.EducationShort) {
+        setEducations(data.object.EducationShort);
+      }
+      if (data.error) {
+        setErrors(data.error);
+      }
     });
-    rws.send('home');
+    rws.send('{"Get":{"List":"EducationNear"}}');
+    rws.send('{"Get":{"List":"PracticeNear"}}');
 
     return function cleanup(): void {
       rws.removeEventListener('message', (message: unknown) => {
@@ -45,31 +61,15 @@ export const Home: FC<{}> = () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   fetchData('/api/go/education/near')
-  //     .then(response =>
-  //       response.EducationShort ? setEducations(response.EducationShort) : setErrors(true),
-  //     )
-  //     .catch(error => setErrors(error));
-  // }, []);
-
-  // useEffect(() => {
-  //   fetchData('/api/go/practice/near')
-  //     .then(response =>
-  //       response.PracticeShort ? setPractices(response.PracticeShort) : setErrors(true),
-  //     )
-  //     .catch(error => setErrors(error));
-  // }, []);
-
   const EducationTable = (): JSX.Element => (
-    <table className="border-collapse border-2 border-gray-500 table-auto">
+    <table className="border-2 border-collapse border-gray-500 table-auto">
       <tbody>
         {educations.map((row, index) => (
           <tr key={index} className={trClass(row.start_date)}>
-            <td className="border px-2 py-2">
+            <td className="px-2 py-2 border">
               <Link to={`/education/${row.id}`}>{tinyDate(row.start_date)}</Link>
             </td>
-            <td className="border px-2 py-2">
+            <td className="px-2 py-2 border">
               <Link to={`/contact/${row.contact_id}`}>{row.contact_name}</Link>
             </td>
           </tr>
@@ -79,17 +79,17 @@ export const Home: FC<{}> = () => {
   );
 
   const PracticeTable = (): JSX.Element => (
-    <table className="border-collapse border-2 border-gray-500 table-auto">
+    <table className="border-2 border-collapse border-gray-500 table-auto">
       <tbody>
         {practices.map((row, index) => (
           <tr key={index} className={trClass(row.date_of_practice)}>
-            <td className="border px-2 py-2">
+            <td className="px-2 py-2 border">
               <Link to={`/practice/${row.id}`}>{tinyDate(row.date_of_practice)}</Link>
             </td>
-            <td className="border px-2 py-2">
+            <td className="px-2 py-2 border">
               <Link to={`/kind/${row.kind_id}`}>{row.kind_short_name}</Link>
             </td>
-            <td className="border px-2 py-2">
+            <td className="px-2 py-2 border">
               <Link to={`/company/${row.company_id}`}>{row.company_name}</Link>
             </td>
           </tr>
