@@ -7,11 +7,14 @@ import { rws } from '../../netapi';
 
 import './home.css';
 
-// type HomeWS = {
-//   name: string;
-//   object: EducationShort[] | PracticeShort[] | null;
-//   error?: string;
-// };
+type HomeWS = {
+  name: string;
+  object: {
+    EducationShort?: EducationShort[];
+    PracticeShort?: PracticeShort[];
+  };
+  error?: string;
+};
 
 const trClass = (date: string): 'tr-is-success' | 'tr-is-danger' | 'tr-is-warning' => {
   const m = new Date();
@@ -34,13 +37,13 @@ const tinyDate = (date: string): string => {
 };
 
 export const Home: FC<{}> = () => {
-  const [hasError, setErrors] = useState();
+  const [hasError, setErrors] = useState<string>();
   const [educations, setEducations] = useState<EducationShort[]>([]);
   const [practices, setPractices] = useState<PracticeShort[]>([]);
 
   useEffect(function () {
     rws.addEventListener('message', (message: MessageEvent) => {
-      const data = JSON.parse(message.data);
+      const data: HomeWS = JSON.parse(message.data);
       if (data.name && data.name === 'PracticeNear' && data.object.PracticeShort) {
         setPractices(data.object.PracticeShort);
       }
