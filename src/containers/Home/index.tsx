@@ -5,8 +5,6 @@ import { EducationShort } from '../../models/education';
 import { PracticeShort } from '../../models/practice';
 import { rws } from '../../netapi';
 
-import './home.css';
-
 type HomeWS = {
   name: string;
   object: {
@@ -16,17 +14,30 @@ type HomeWS = {
   error?: string;
 };
 
-const trClass = (date: string): 'tr-is-success' | 'tr-is-danger' | 'tr-is-warning' => {
+const trClass = (date: string): string => {
   const m = new Date();
   const d = new Date(date);
   if (d < m) {
-    return 'tr-is-success';
+    return 'hover:bg-green-400';
   }
   m.setMonth(m.getMonth() + 1);
   if (d < m) {
-    return 'tr-is-danger';
+    return 'hover:bg-red-600';
   }
-  return 'tr-is-warning';
+  return 'hover:bg-yellow-300';
+};
+
+const tdClass = (date: string): string => {
+  const m = new Date();
+  const d = new Date(date);
+  if (d < m) {
+    return 'px-1 py-1 border border-green-400';
+  }
+  m.setMonth(m.getMonth() + 1);
+  if (d < m) {
+    return 'px-1 py-1 border border-red-600';
+  }
+  return 'px-1 py-1 border border-yellow-300';
 };
 
 const tinyDate = (date: string): string => {
@@ -69,10 +80,10 @@ export const Home: FC<{}> = () => {
       <tbody>
         {educations.map((row, index) => (
           <tr key={index} className={trClass(row.start_date)}>
-            <td className="px-2 py-2 border">
+            <td className={tdClass(row.start_date)}>
               <Link to={`/education/${row.id}`}>{tinyDate(row.start_date)}</Link>
             </td>
-            <td className="px-2 py-2 border">
+            <td className={tdClass(row.start_date)}>
               <Link to={`/contact/${row.contact_id}`}>{row.contact_name}</Link>
             </td>
           </tr>
@@ -82,17 +93,17 @@ export const Home: FC<{}> = () => {
   );
 
   const PracticeTable = (): JSX.Element => (
-    <table className="border-2 border-collapse border-gray-500 table-auto">
+    <table className="border-2 border-collapse table-auto">
       <tbody>
         {practices.map((row, index) => (
           <tr key={index} className={trClass(row.date_of_practice)}>
-            <td className="px-2 py-2 border">
+            <td className={tdClass(row.date_of_practice)}>
               <Link to={`/practice/${row.id}`}>{tinyDate(row.date_of_practice)}</Link>
             </td>
-            <td className="px-2 py-2 border">
+            <td className={tdClass(row.date_of_practice)}>
               <Link to={`/kind/${row.kind_id}`}>{row.kind_short_name}</Link>
             </td>
-            <td className="px-2 py-2 border">
+            <td className={tdClass(row.date_of_practice)}>
               <Link to={`/company/${row.company_id}`}>{row.company_name}</Link>
             </td>
           </tr>
