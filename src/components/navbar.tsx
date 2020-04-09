@@ -56,7 +56,7 @@ const Header = (): JSX.Element => {
     : 'hidden px-2 pt-2 pb-4 sm:flex sm:p-0';
 
   return (
-    <header className="top-0 left-0 w-full bg-gray-900 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3">
+    <header className="top-0 left-0 w-full bg-gray-900 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-2">
       <div className="flex items-center justify-between px-4 py-3 sm:p-0">
         <div className="block px-2 pt-2 pb-4 sm:flex sm:p-0">
           <NavLink
