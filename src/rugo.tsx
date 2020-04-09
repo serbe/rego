@@ -8,10 +8,8 @@ const Rugo: FC = () => {
   return (
     <>
       <NavBar />
-      <div className="container mx-auto">
-        <div className="inset-x-0 top-0">
-          <Router />
-        </div>
+      <div className="p-4">
+        <Router />
       </div>
     </>
   );

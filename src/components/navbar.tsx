@@ -56,7 +56,7 @@ const Header = (): JSX.Element => {
     : 'hidden px-2 pt-2 pb-4 sm:flex sm:p-0';
 
   return (
-    <header className="fixed top-0 left-0 w-full bg-gray-900 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3">
+    <header className="top-0 left-0 w-full bg-gray-900 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3">
       <div className="flex items-center justify-between px-4 py-3 sm:p-0">
         <div className="block px-2 pt-2 pb-4 sm:flex sm:p-0">
           <NavLink
@@ -125,13 +125,13 @@ const Header = (): JSX.Element => {
   );
 };
 
-const BottomBar = (): JSX.Element => (
-  <div className="fixed bottom-0 left-0 w-full bg-gray-900">
-    <div className="flex flex-col items-center justify-center py-1 sm:flex-row">
-      <h1 className="text-xs font-bold text-gray-600 uppercase">© 2020 Сочи</h1>
-    </div>
-  </div>
-);
+// const BottomBar = (): JSX.Element => (
+//   <div className="fixed bottom-0 left-0 w-full bg-gray-900">
+//     <div className="flex flex-col items-center justify-center py-1 sm:flex-row">
+//       <h1 className="text-xs font-bold text-gray-600 uppercase">© 2020 Сочи</h1>
+//     </div>
+//   </div>
+// );
 
 export const NavBar: FC<{}> = () => {
   // const [auth, setAuth] = useState(true);
@@ -145,11 +145,11 @@ export const NavBar: FC<{}> = () => {
   // };
 
   return (
-    <div>
+    <>
       <Header />
       {/* <Navbar /> */}
-      <BottomBar />
-    </div>
+      {/* <BottomBar /> */}
+    </>
     // <Container>
     //   {auth ? (
     //     <Menu>

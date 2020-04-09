@@ -1,19 +1,39 @@
 import React, { useState, useEffect, FC } from 'react';
+import { Link } from 'react-router-dom';
 
 import { Table } from '../../components/table';
 import { ContactList } from '../../models/contact';
-import { fetchData } from '../../helpers/utils';
+import { rws } from '../../netapi';
+
+type CLWS = {
+  name: string;
+  object: {
+    ContactList?: ContactList[];
+  };
+  error?: string;
+};
 
 export const Contacts: FC<{}> = () => {
-  const [hasError, setErrors] = useState(false);
+  const [hasError, setErrors] = useState<string>();
   const [contacts, setContacts] = useState<ContactList[]>([]);
 
   useEffect(() => {
-    fetchData('/api/go/contact/list')
-      .then((response) =>
-        response.ContactList ? setContacts(response.ContactList) : setErrors(true),
-      )
-      .catch((error) => setErrors(error));
+    rws.addEventListener('message', (message: MessageEvent) => {
+      const data: CLWS = JSON.parse(message.data);
+      if (data.name && data.name === 'ContactList' && data.object.ContactList) {
+        setContacts(data.object.ContactList);
+      }
+      if (data.error) {
+        setErrors(data.error);
+      }
+    });
+    rws.send('{"Get":{"List":"ContactList"}}');
+
+    return function cleanup(): void {
+      rws.removeEventListener('message', (message: unknown) => {
+        console.log('removeEventListener', message);
+      });
+    };
   }, []);
 
   const columns = [

@@ -115,12 +115,11 @@ export const Home: FC<{}> = () => {
   return hasError ? (
     <div>No data</div>
   ) : (
-    <div className="flex">
-      <div className="flex-1">
+    <div className="flex flex-wrap">
+      <div className="w-1/3 mr-auto">
         <EducationTable />
       </div>
-      <div className="flex-1" />
-      <div className="flex-1">
+      <div className="w-1/3 ml-auto">
         <PracticeTable />
       </div>
     </div>
