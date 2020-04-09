@@ -1,12 +1,9 @@
 import React, { FC } from 'react';
-import clsx from 'clsx';
 
 interface PaginationProps {
   currentPage: number;
   lastPage: number;
   callback: (num: number) => void;
-  rounded?: boolean;
-  size?: 'small' | 'normal' | 'medium' | 'large';
 }
 
 type PaginationLinkProps = {
@@ -17,30 +14,34 @@ type PaginationLinkProps = {
 };
 
 export const Pagination: FC<PaginationProps> = (properties: PaginationProps) => {
-  const { currentPage, lastPage, callback, rounded, size } = properties;
+  const { currentPage, lastPage, callback } = properties;
 
   const Previous = (): JSX.Element | null =>
     currentPage > 1 ? (
-      <a
-        className="pagination-previous"
-        onClick={(): void => callback(currentPage - 1)}
-        key="PaginationPrev"
-        href="#prev"
-      >
-        Назад
-      </a>
+      <li className="mx-3 rounded-full bg-blue-500 hover:bg-blue-700 text-white font-bold">
+        <a
+          className="p-3"
+          onClick={(): void => callback(currentPage - 1)}
+          key="PaginationPrev"
+          href="#prev"
+        >
+          Назад
+        </a>
+      </li>
     ) : null;
 
   const Next = (): JSX.Element | null =>
     currentPage < lastPage ? (
-      <a
-        className="pagination-next"
-        onClick={(): void => callback(currentPage + 1)}
-        key="PaginationNext"
-        href="#next"
-      >
-        Далее
-      </a>
+      <li className="mx-3 rounded-full bg-blue-500 hover:bg-blue-700 text-white font-bold">
+        <a
+          className="p-3"
+          onClick={(): void => callback(currentPage + 1)}
+          key="PaginationNext"
+          href="#next"
+        >
+          Далее
+        </a>
+      </li>
     ) : null;
 
   const PaginationLink = ({
@@ -51,10 +52,10 @@ export const Pagination: FC<PaginationProps> = (properties: PaginationProps) => 
   }: PaginationLinkProps): JSX.Element | null => {
     const Tag = (): JSX.Element => {
       return ellipsis ? (
-        <span className="pagination-ellipsis">&hellip;</span>
+        <span className="p-3">&hellip;</span>
       ) : (
         <a
-          className={link === currentPage ? 'pagination-link is-current' : 'pagination-link'}
+          className={link === currentPage ? 'p-3 text-blue-900' : 'p-3'}
           onClick={(): void | null => (link ? callback(link) : null)}
           href="#link"
         >
@@ -63,32 +64,26 @@ export const Pagination: FC<PaginationProps> = (properties: PaginationProps) => 
       );
     };
     return check ? (
-      <li key={`li${index}`}>
+      <li
+        key={`li${index}`}
+        className="mx-3 rounded-full bg-blue-500 hover:bg-blue-700 text-white font-bold"
+      >
         <Tag />
       </li>
     ) : null;
   };
 
-  const navClasses = clsx([
-    'pagination',
-    'is-centered',
-    size ? `is-${size}` : null,
-    [{ 'is-rounded': { rounded } }],
-  ]);
-
   return (
-    <nav className={navClasses} key="nav">
+    <ul className="flex justify-center" key="paginate">
       <Previous />
+      <PaginationLink check={currentPage !== 1} index={1} link={1} />
+      <PaginationLink check={currentPage > 3} index={2} ellipsis />
+      <PaginationLink check={currentPage > 2} index={3} link={currentPage - 1} />
+      <PaginationLink check index={4} link={currentPage} />
+      <PaginationLink check={currentPage < lastPage - 1} index={5} link={currentPage + 1} />
+      <PaginationLink check={currentPage < lastPage - 2} index={6} ellipsis />
+      <PaginationLink check={currentPage !== lastPage} index={7} link={lastPage} />
       <Next />
-      <ul className="pagination-list" key="ul">
-        <PaginationLink check={currentPage !== 1} index={1} link={1} />
-        <PaginationLink check={currentPage > 3} index={2} ellipsis />
-        <PaginationLink check={currentPage > 2} index={3} link={currentPage - 1} />
-        <PaginationLink check index={4} link={currentPage} />
-        <PaginationLink check={currentPage < lastPage - 1} index={5} link={currentPage + 1} />
-        <PaginationLink check={currentPage < lastPage - 2} index={6} ellipsis />
-        <PaginationLink check={currentPage !== lastPage} index={7} link={lastPage} />
-      </ul>
-    </nav>
+    </ul>
   );
 };
