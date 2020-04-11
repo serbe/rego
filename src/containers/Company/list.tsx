@@ -1,23 +1,23 @@
 import React, { useState, useEffect, FC } from 'react';
 
-import { Table, Column } from '../../components/table';
+// import { Table, Column } from '../../components/table';
 import { CompanyList } from '../../models/company';
-import { fetchData } from '../../helpers/utils';
+// import { fetchData } from '../../helpers/utils';
 
 export const Companies: FC<{}> = () => {
   const [hasError, setErrors] = useState(false);
   const [companies, setCompanies] = useState<CompanyList[]>([]);
 
-  useEffect(() => {
-    fetchData('/api/go/company/list')
-      .then((response) =>
-        response.CompanyList ? setCompanies(response.CompanyList) : setErrors(true),
-      )
-      .catch((error) => setErrors(error));
-  }, []);
+  // useEffect(() => {
+  //   fetchData('/api/go/company/list')
+  //     .then((response) =>
+  //       response.CompanyList ? setCompanies(response.CompanyList) : setErrors(true),
+  //     )
+  //     .catch((error) => setErrors(error));
+  // }, []);
 
   const isHiddenTouch = 'is-hidden-touch';
-  const columns: Column[] = [
+  /* const columns: Column[] = [
     {
       field: 'name',
       label: 'Наименование',
@@ -47,13 +47,13 @@ export const Companies: FC<{}> = () => {
       array: true,
       className: isHiddenTouch,
     },
-  ];
+  ]; */
 
   return hasError ? (
     <div>No data</div>
   ) : (
     <div className="">
-      <Table data={companies} columns={columns} hoverable narrow striped paginate={20} />
+      {/* <Table data={companies} columns={columns} hoverable narrow striped paginate={20} /> */}
     </div>
   );
 };

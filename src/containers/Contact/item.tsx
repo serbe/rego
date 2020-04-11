@@ -2,7 +2,7 @@ import React, { useState, useEffect, FC } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Contact } from '../../models/contact';
-import { fetchData } from '../../helpers/utils';
+// import { fetchData } from '../../helpers/utils';
 
 export const ContactItem: FC<{}> = () => {
   const [hasError, setErrors] = useState(false);
@@ -10,13 +10,13 @@ export const ContactItem: FC<{}> = () => {
 
   const { id } = useParams();
 
-  useEffect(() => {
-    if (id) {
-      fetchData(`/api/go/contact/item/${id}`)
-        .then((response) => (response.Contact ? setContacts(response.Contact) : setErrors(true)))
-        .catch((error) => setErrors(error));
-    }
-  }, [id]);
+  // useEffect(() => {
+  //   if (id) {
+  //     fetchData(`/api/go/contact/item/${id}`)
+  //       .then((response) => (response.Contact ? setContacts(response.Contact) : setErrors(true)))
+  //       .catch((error) => setErrors(error));
+  //   }
+  // }, [id]);
 
   const Form = (): JSX.Element => (
     <form id="contact">

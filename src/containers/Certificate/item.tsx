@@ -1,27 +1,27 @@
 import React, { useState, useEffect, FC, ChangeEvent } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Input } from '../../components/input';
-import { Button } from '../../components/button';
+// import { Input } from '../../components/input';
+// import { Button } from '../../components/button';
 // import { Select } from '../../components/select';
 import { Certificate } from '../../models/certificate';
 // import { SelectItem } from '../../models/selectitem';
-import { fetchData } from '../../helpers/utils';
+// import { fetchData } from '../../helpers/utils';
 
 export const CertificateItem: FC<{}> = () => {
   const { id } = useParams();
   const [hasError, setErrors] = useState(false);
   const [certificate, setCertificate] = useState<Certificate>();
 
-  useEffect(() => {
-    if (id) {
-      fetchData(`/api/go/certificate/item/${id}`)
-        .then((responseJson) =>
-          responseJson.Certificate ? setCertificate(responseJson.Certificate) : setErrors(true),
-        )
-        .catch((error) => setErrors(error));
-    }
-  }, [id]);
+  // useEffect(() => {
+  //   if (id) {
+  //     fetchData(`/api/go/certificate/item/${id}`)
+  //       .then((responseJson) =>
+  //         responseJson.Certificate ? setCertificate(responseJson.Certificate) : setErrors(true),
+  //       )
+  //       .catch((error) => setErrors(error));
+  //   }
+  // }, [id]);
 
   // useEffect(() => {
   //   if (id) {
@@ -72,7 +72,7 @@ export const CertificateItem: FC<{}> = () => {
     <div className="container mw768">
       {!hasError && certificate ? (
         <div>
-          <Input
+          {/* <Input
             name="note"
             value={certificate.num}
             label
@@ -92,27 +92,25 @@ export const CertificateItem: FC<{}> = () => {
             onChange={(event: ChangeEvent<HTMLInputElement>): void =>
               setCertificate({ ...certificate, note: event.currentTarget.value })
             }
-          />
+          /> */}
 
           <div className="field is-grouped is-grouped-centered">
             <div className="control">
-              <Button
+              {/* <Button
                 color="primary"
                 // @click="submit"
               >
                 Сохранить
-              </Button>
+              </Button> */}
             </div>
+            <div className="control">{/* <Button>Закрыть</Button> */}</div>
             <div className="control">
-              <Button>Закрыть</Button>
-            </div>
-            <div className="control">
-              <Button
+              {/* <Button
                 color="danger"
                 // onClick={() => {return confirm('Вы действительно хотите удалить эту запись?')}}
               >
                 Удалить
-              </Button>
+              </Button> */}
             </div>
           </div>
 

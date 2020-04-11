@@ -1,20 +1,20 @@
 import React, { useState, useEffect, FC } from 'react';
 
-import { Table } from '../../components/table';
+// import { Table } from '../../components/table';
 import { CertificateList } from '../../models/certificate';
-import { fetchData } from '../../helpers/utils';
+// import { fetchData } from '../../helpers/utils';
 
 export const Certificates: FC<{}> = () => {
   const [hasError, setErrors] = useState(false);
   const [certificates, setCertificates] = useState<CertificateList[]>([]);
 
-  useEffect(() => {
-    fetchData('/api/go/certificate/list')
-      .then((response) =>
-        response.CertificateList ? setCertificates(response.CertificateList) : setErrors(true),
-      )
-      .catch((error) => setErrors(error));
-  }, []);
+  // useEffect(() => {
+  //   fetchData('/api/go/certificate/list')
+  //     .then((response) =>
+  //       response.CertificateList ? setCertificates(response.CertificateList) : setErrors(true),
+  //     )
+  //     .catch((error) => setErrors(error));
+  // }, []);
 
   const columns = [
     {
@@ -45,6 +45,7 @@ export const Certificates: FC<{}> = () => {
   return hasError ? (
     <div>No data</div>
   ) : (
-    <Table data={certificates} columns={columns} hoverable narrow striped paginate={20} />
+    // <Table data={certificates} columns={columns} hoverable narrow striped paginate={20} />
+    <div></div>
   );
 };
