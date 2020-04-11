@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { Pagination } from '../../components/pagination';
 import { ContactList } from '../../models/contact';
+import { splitNumbers } from '../../helpers/utils';
 import { rws } from '../../netapi';
 
 type CLWS = {
@@ -64,43 +65,41 @@ export const Contacts: FC<{}> = () => {
       />
     ) : null;
 
-  const Table = (): JSX.Element | null => (
-    <table className="table-fixed w-full">
+  const Table = (): JSX.Element => (
+    <table className="table-fixed mx-auto">
       <thead>
         <tr>
-          <th className="w-1/4 px-4 py-2">Фамилия Имя Отчество</th>
-          <th className="w-1/4 px-4 py-2">Организация</th>
-          <th className="xl:w-1/4 sm:hidden px-4 py-2">Должность</th>
-          <th className="w-16 px-4 py-2">Телефоны</th>
-          <th className="lg:w-16 hidden px-4 py-2">Факсы</th>
+          <th className="w-64 p-2">Фамилия Имя Отчество</th>
+          <th className="w-64 hide-less-md p-2">Организация</th>
+          <th className="w-64 hide-less-lg p-2">Должность</th>
+          <th className="w-32 p-2">Телефоны</th>
+          <th className="w-32 hide-less-lg p-2">Факсы</th>
         </tr>
       </thead>
+      <TBody />
+      <Paginate />
     </table>
   );
 
-  const columns = [
-    {
-      field: 'name',
-      label: 'Фамилия Имя Отчество',
-      linkBase: '/contacts/',
-      linkField: 'id',
-    },
-    {
-      field: 'company_name',
-      label: 'Организация',
-      linkBase: '/compaines/',
-      linkField: 'company_id',
-      className: 'is-hidden-mobile',
-    },
-    { field: 'post_name', label: 'Должность', className: 'is-hidden-touch' },
-    { field: 'phones', label: 'Телефоны', array: true },
-    {
-      field: 'faxes',
-      label: 'Факсы',
-      array: true,
-      className: 'is-hidden-touch',
-    },
-  ];
+  const TBody = (): JSX.Element | null => (
+    <tbody>
+      {filteredData().map(
+        (row: ContactList, index: number): JSX.Element => (
+          <tr key={`tr${row.id}${index}`}>
+            <td className="w-1/3 p-2">
+              <Link to={`/contacts/${row.id}`}>{row.name}</Link>
+            </td>
+            <td className="w-1/3 hide-less-md p-2">
+              <Link to={`/compaines/${row.company_id}`}>{row.company_name}</Link>
+            </td>
+            <td className="w-1/3 hide-less-lg p-2">{row.post_name}</td>
+            <td className="w-24 p-2 text-right">{splitNumbers(row.phones)}</td>
+            <td className="w-24 hide-less-lg p-2 text-right">{splitNumbers(row.faxes)}</td>
+          </tr>
+        ),
+      )}
+    </tbody>
+  );
 
   return hasError ? <div>No data</div> : <Table />;
 };

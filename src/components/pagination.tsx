@@ -74,7 +74,7 @@ export const Pagination: FC<PaginationProps> = (properties: PaginationProps) => 
   };
 
   return (
-    <ul className="flex justify-center" key="paginate">
+    <ul className="flex" key="paginate">
       <Previous />
       <PaginationLink check={currentPage !== 1} index={1} link={1} />
       <PaginationLink check={currentPage > 3} index={2} ellipsis />
