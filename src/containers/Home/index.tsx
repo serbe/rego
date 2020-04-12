@@ -76,7 +76,7 @@ export const Home: FC<{}> = () => {
   }, []);
 
   const EducationTable = (): JSX.Element => (
-    <table className="border-1 border-collapse border-gray-500 table-auto">
+    <table className="table-auto">
       <tbody>
         {educations.map((row, index) => (
           <tr key={index} className={trClass(row.start_date)}>
@@ -93,7 +93,7 @@ export const Home: FC<{}> = () => {
   );
 
   const PracticeTable = (): JSX.Element => (
-    <table className="border-1 border-collapse table-auto">
+    <table className="table-auto">
       <tbody>
         {practices.map((row, index) => (
           <tr key={index} className={trClass(row.date_of_practice)}>

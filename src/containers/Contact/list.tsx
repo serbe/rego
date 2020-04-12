@@ -1,9 +1,7 @@
 import React, { useState, useEffect, FC } from 'react';
-import { Link } from 'react-router-dom';
 
-import { Pagination } from '../../components/pagination';
+import { Table, Column } from '../../components/table';
 import { ContactList } from '../../models/contact';
-import { splitNumbers } from '../../helpers/utils';
 import { rws } from '../../netapi';
 
 type CLWS = {
@@ -15,13 +13,8 @@ type CLWS = {
 };
 
 export const Contacts: FC<{}> = () => {
-  const [hasError, setErrors] = useState<string>();
-  const [currentPage, setCurrentPage] = useState(0);
   const [contacts, setContacts] = useState<ContactList[]>([]);
-
-  const search = '';
-  let filteredLength = 0;
-  const itemsOnPage = 20;
+  const [hasError, setErrors] = useState<string>();
 
   useEffect(() => {
     rws.addEventListener('message', (message: MessageEvent) => {
@@ -42,64 +35,30 @@ export const Contacts: FC<{}> = () => {
     };
   }, []);
 
-  const filteredData = (): ContactList[] => {
-    if (search !== '') {
-      filteredLength = contacts.length;
-      return contacts;
-    }
-    const sliceData = contacts.slice(currentPage * itemsOnPage, (currentPage + 1) * itemsOnPage);
-    filteredLength = contacts.length;
-    return sliceData;
-  };
+  const columns: Column[] = [
+    {
+      field: 'name',
+      label: 'Фамилия Имя Отчество',
+      linkBase: '/contacts/',
+      linkField: 'id',
+      className: 'w-1/3 p-2',
+    },
+    {
+      field: 'company_name',
+      label: 'Организация',
+      linkBase: '/compaines/',
+      linkField: 'company_id',
+      className: 'w-1/3 hide-less-md p-2',
+    },
+    { field: 'post_name', label: 'Должность', className: 'w-1/3 hide-less-lg p-2' },
+    { field: 'phones', label: 'Телефоны', array: true, className: 'w-24 p-2 text-right' },
+    {
+      field: 'faxes',
+      label: 'Факсы',
+      array: true,
+      className: 'w-24 hide-less-lg p-2 text-right',
+    },
+  ];
 
-  const receiveChildValue = (value: number): void => {
-    setCurrentPage(value - 1);
-  };
-
-  const Paginate = (): JSX.Element | null =>
-    filteredLength / itemsOnPage > 2 ? (
-      <Pagination
-        currentPage={currentPage + 1}
-        lastPage={Math.ceil(filteredLength / itemsOnPage)}
-        callback={receiveChildValue}
-      />
-    ) : null;
-
-  const Table = (): JSX.Element => (
-    <table className="table-fixed mx-auto">
-      <thead>
-        <tr>
-          <th className="w-64 p-2">Фамилия Имя Отчество</th>
-          <th className="w-64 hide-less-md p-2">Организация</th>
-          <th className="w-64 hide-less-lg p-2">Должность</th>
-          <th className="w-32 p-2">Телефоны</th>
-          <th className="w-32 hide-less-lg p-2">Факсы</th>
-        </tr>
-      </thead>
-      <TBody />
-      <Paginate />
-    </table>
-  );
-
-  const TBody = (): JSX.Element | null => (
-    <tbody>
-      {filteredData().map(
-        (row: ContactList, index: number): JSX.Element => (
-          <tr key={`tr${row.id}${index}`}>
-            <td className="w-1/3 p-2">
-              <Link to={`/contacts/${row.id}`}>{row.name}</Link>
-            </td>
-            <td className="w-1/3 hide-less-md p-2">
-              <Link to={`/compaines/${row.company_id}`}>{row.company_name}</Link>
-            </td>
-            <td className="w-1/3 hide-less-lg p-2">{row.post_name}</td>
-            <td className="w-24 p-2 text-right">{splitNumbers(row.phones)}</td>
-            <td className="w-24 hide-less-lg p-2 text-right">{splitNumbers(row.faxes)}</td>
-          </tr>
-        ),
-      )}
-    </tbody>
-  );
-
-  return hasError ? <div>No data</div> : <Table />;
+  return hasError ? <div>No data</div> : <Table data={contacts} columns={columns} paginate={20} />;
 };
