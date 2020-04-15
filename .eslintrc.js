@@ -44,6 +44,7 @@ module.exports = {
     'jsx-a11y/click-events-have-key-events': 'warn',
     'jsx-a11y/no-static-element-interactions': 'warn',
     'jsx-a11y/label-has-associated-control': 'warn',
+    'jsx-a11y/no-autofocus': 'warn',
     // // '@typescript-eslint/indent': 'off',
     // // '@typescript-eslint/no-non-null-assertion': 'off',
     // // '@typescript-eslint/no-explicit-any': 'off',

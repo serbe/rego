@@ -1,6 +1,6 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
 
-const URL = 'ws://127.0.0.1:8080';
+const URL = 'ws://127.0.0.1:9090';
 
 export const rws = new ReconnectingWebSocket(URL);
 
