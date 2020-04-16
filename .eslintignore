@@ -9,4 +9,5 @@ node_modules
 /src/setupTests.ts
 /src/react-app-env.d.ts
 tailwind.js
+tailwind.config.js
 postcss.config.js
