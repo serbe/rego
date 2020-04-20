@@ -40,12 +40,29 @@ interface TableProps {
   loaded?: boolean;
   paginate?: number;
   nohead?: boolean;
+  hoverable?: boolean;
+  narrow?: boolean;
+  striped?: boolean;
+  fullwidth?: boolean;
+  bordered?: boolean;
 }
 
 export const Table: FC<TableProps> = (properties: TableProps) => {
   const [currentPage, setCurrentPage] = useState(0);
 
-  const { data, columns, className, paginate, nohead, rowClass } = properties;
+  const {
+    data,
+    columns,
+    className,
+    paginate,
+    nohead,
+    rowClass,
+    hoverable,
+    narrow,
+    striped,
+    fullwidth,
+    bordered,
+  } = properties;
 
   const itemsOnPage = paginate || 20;
   const search = '';
@@ -66,7 +83,11 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
     setCurrentPage(value - 1);
   };
 
-  const classes = `${className} table`;
+  const classes = `${className} table ${narrow ? 'is-narrow' : ''} ${
+    hoverable ? 'is-hoverable' : ''
+  } ${striped ? 'is-striped' : ''} ${fullwidth ? 'is-fullwidth' : ''} ${
+    bordered ? 'is-bordered' : ''
+  }`;
 
   const Heading = (): JSX.Element | null =>
     nohead ? null : (

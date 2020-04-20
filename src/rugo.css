@@ -1,4 +1,4 @@
-@media only screen and (max-width: 640px) {
+/* @media only screen and (max-width: 640px) {
   .hide-less-sm {
     display: none;
   }
@@ -24,4 +24,8 @@
 
 .max-width-lg {
   max-width: 1024px !important;
-}
+} */
+
+/* @import '~normalize.css';
+@import '~@blueprintjs/core/lib/css/blueprint.css';
+@import '~@blueprintjs/icons/lib/css/blueprint-icons.css'; */

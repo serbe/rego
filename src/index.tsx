@@ -6,7 +6,7 @@ import Rugo from './rugo';
 import * as serviceWorker from './serviceWorker';
 
 import './index.scss';
-import './index.css';
+// import './index.css';
 
 ReactDOM.render(
   <BrowserRouter>

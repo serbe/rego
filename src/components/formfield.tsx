@@ -1,16 +1,17 @@
 import React, { ChangeEvent, FC, MouseEvent } from 'react';
-import { Icon } from './icon';
 
-interface InputProps {
+import { Input } from './input';
+
+interface FormFieldProps {
   className?: string;
   color?: 'primary' | 'info' | 'success' | 'warning' | 'danger';
-  defaultValue?: string | undefined;
   disabled?: boolean;
   focused?: boolean;
   hovered?: boolean;
   iconLeft?: string;
   iconRight?: string;
   isStatic?: boolean;
+  label?: string | boolean;
   loading?: boolean;
   onClick?: (event: MouseEvent<HTMLInputElement, globalThis.MouseEvent>) => void;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -20,19 +21,20 @@ interface InputProps {
   size?: 'small' | 'normal' | 'medium' | 'large';
   type?: 'text' | 'password' | 'email' | 'tel';
   value?: string | undefined;
+  defaultValue?: string | undefined;
 }
 
-export const Input: FC<InputProps> = (properties: InputProps) => {
+export const FormField: FC<FormFieldProps> = (properties: FormFieldProps) => {
   const {
     className,
     color,
-    defaultValue,
     disabled,
     focused,
     hovered,
     iconLeft,
     iconRight,
     isStatic,
+    label,
     loading,
     onClick,
     onChange,
@@ -42,53 +44,48 @@ export const Input: FC<InputProps> = (properties: InputProps) => {
     size,
     type,
     value,
+    defaultValue,
   } = properties;
 
-  const sizeClass = size ? `is-${size}` : '';
-  const colorClass = color ? `is-${color}` : '';
-
-  const divClasses = `control ${iconLeft ? 'has-icons-left' : ''} ${
-    iconRight ? 'has-icons-right' : ''
-  } ${loading ? 'is-loading' : ''} ${sizeClass}`;
-
-  const inputClasses = `${className} input ${focused ? 'is-focused' : ''} ${
-    hovered ? 'is-hovered' : ''
-  } ${rounded ? 'is-rounded' : ''} ${isStatic ? 'is-static' : ''} ${colorClass} ${sizeClass}`;
-
-  const LeftIcon = (): JSX.Element | null => {
-    if (iconLeft) {
-      return <Icon position={'left'} icon={iconLeft} />;
-    } else {
-      return null;
-    }
-  };
-  const RightIcon = (): JSX.Element | null => {
-    if (iconRight) {
-      return <Icon position={'right'} icon={iconRight} />;
+  const Label = (): JSX.Element | null => {
+    if (label) {
+      if (label !== true) {
+        return <label className="label">{label}</label>;
+      } else {
+        return <label className="label">{placeholder}</label>;
+      }
     } else {
       return null;
     }
   };
 
   return (
-    <div className={divClasses}>
-      <input
-        className={inputClasses}
+    <div className="field">
+      <Label />
+      <Input
+        className={className}
+        color={color}
         disabled={disabled}
+        focused={focused}
+        hovered={hovered}
+        iconLeft={iconLeft}
+        iconRight={iconRight}
+        isStatic={isStatic}
+        loading={loading}
         onClick={onClick}
         onChange={onChange}
         placeholder={placeholder}
-        readOnly={readonly}
+        readonly={readonly}
+        rounded={rounded}
+        size={size}
         type={type}
         value={value}
         defaultValue={defaultValue}
       />
-      <LeftIcon />
-      <RightIcon />
     </div>
   );
 };
 
-Input.defaultProps = {
+FormField.defaultProps = {
   type: 'text',
 };

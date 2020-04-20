@@ -41,24 +41,28 @@ export const Contacts: FC<{}> = () => {
       label: 'Фамилия Имя Отчество',
       linkBase: '/contacts/',
       linkField: 'id',
-      className: 'w-1/3 p-2',
+      className: '',
     },
     {
       field: 'company_name',
       label: 'Организация',
       linkBase: '/compaines/',
       linkField: 'company_id',
-      className: 'w-1/3 hide-less-md p-2',
+      className: 'is-hidden-mobile',
     },
-    { field: 'post_name', label: 'Должность', className: 'w-1/3 hide-less-lg p-2' },
-    { field: 'phones', label: 'Телефоны', array: true, className: 'w-24 p-2 text-right' },
+    { field: 'post_name', label: 'Должность', className: 'is-hidden-touch' },
+    { field: 'phones', label: 'Телефоны', array: true, className: '' },
     {
       field: 'faxes',
       label: 'Факсы',
       array: true,
-      className: 'w-24 hide-less-lg p-2 text-right',
+      className: 'is-hidden-mobile',
     },
   ];
 
-  return hasError ? <div>No data</div> : <Table data={contacts} columns={columns} paginate={20} />;
+  return hasError ? (
+    <div>No data</div>
+  ) : (
+    <Table data={contacts} columns={columns} paginate={20} narrow />
+  );
 };

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { Contact } from '../../models/contact';
 import { rws } from '../../netapi';
-import { Input } from '../../components/input';
+import { FormField } from '../../components/formfield';
 
 type CLWS = {
   name: string;
@@ -18,8 +18,7 @@ const ContactForm = (contact: Contact): JSX.Element => {
 
   return (
     <div>
-      <Input
-        name="name"
+      <FormField
         label="Фамилия Имя Отчество"
         value={c.name}
         onChange={(event: ChangeEvent<HTMLInputElement>): void => {

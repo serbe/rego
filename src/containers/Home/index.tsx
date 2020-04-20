@@ -76,7 +76,7 @@ export const Home: FC<{}> = () => {
   }, []);
 
   const EducationTable = (): JSX.Element => (
-    <table className="table-auto">
+    <table className="table is-narrow">
       <tbody>
         {educations.map((row, index) => (
           <tr key={index} className={trClass(row.start_date)}>
@@ -93,7 +93,7 @@ export const Home: FC<{}> = () => {
   );
 
   const PracticeTable = (): JSX.Element => (
-    <table className="table-auto">
+    <table className="table is-narrow">
       <tbody>
         {practices.map((row, index) => (
           <tr key={index} className={trClass(row.date_of_practice)}>
@@ -115,11 +115,11 @@ export const Home: FC<{}> = () => {
   return hasError ? (
     <div>No data</div>
   ) : (
-    <div className="flex flex-wrap">
-      <div className="w-1/3 mr-auto">
+    <div className="columns is-mobile">
+      <div className="column is-4">
         <EducationTable />
       </div>
-      <div className="w-1/3 ml-auto">
+      <div className="column is-4 is-offset-4">
         <PracticeTable />
       </div>
     </div>
