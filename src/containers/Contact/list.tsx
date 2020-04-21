@@ -63,6 +63,6 @@ export const Contacts: FC<{}> = () => {
   return hasError ? (
     <div>No data</div>
   ) : (
-    <Table data={contacts} columns={columns} paginate={20} narrow />
+    <Table data={contacts} columns={columns} paginate={20} narrow className="mwt" />
   );
 };

@@ -155,6 +155,7 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
         currentPage={currentPage + 1}
         lastPage={Math.ceil(filteredLength / itemsOnPage)}
         callback={receiveChildValue}
+        centered
       />
     ) : null;
 
