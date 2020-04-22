@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { EducationShort } from '../../models/education';
 import { PracticeShort } from '../../models/practice';
 import { rws } from '../../netapi';
+import './index.css';
 
 type HomeWS = {
   name: string;
@@ -18,26 +19,13 @@ const trClass = (date: string): string => {
   const m = new Date();
   const d = new Date(date);
   if (d < m) {
-    return 'hover:bg-green-400';
+    return 'td-green';
   }
   m.setMonth(m.getMonth() + 1);
   if (d < m) {
-    return 'hover:bg-red-600';
+    return 'td-red';
   }
-  return 'hover:bg-yellow-300';
-};
-
-const tdClass = (date: string): string => {
-  const m = new Date();
-  const d = new Date(date);
-  if (d < m) {
-    return 'p-1 border border-green-400';
-  }
-  m.setMonth(m.getMonth() + 1);
-  if (d < m) {
-    return 'p-1 border border-red-600';
-  }
-  return 'p-1 border border-yellow-300';
+  return 'td-yellow';
 };
 
 const tinyDate = (date: string): string => {
@@ -80,11 +68,15 @@ export const Home: FC<{}> = () => {
       <tbody>
         {educations.map((row, index) => (
           <tr key={index} className={trClass(row.start_date)}>
-            <td className={tdClass(row.start_date)}>
-              <Link to={`/education/${row.id}`}>{tinyDate(row.start_date)}</Link>
+            <td>
+              <Link to={`/education/${row.id}`} className="has-text-black">
+                {tinyDate(row.start_date)}
+              </Link>
             </td>
-            <td className={tdClass(row.start_date)}>
-              <Link to={`/contact/${row.contact_id}`}>{row.contact_name}</Link>
+            <td>
+              <Link to={`/contact/${row.contact_id}`} className="has-text-black">
+                {row.contact_name}
+              </Link>
             </td>
           </tr>
         ))}
@@ -97,14 +89,20 @@ export const Home: FC<{}> = () => {
       <tbody>
         {practices.map((row, index) => (
           <tr key={index} className={trClass(row.date_of_practice)}>
-            <td className={tdClass(row.date_of_practice)}>
-              <Link to={`/practice/${row.id}`}>{tinyDate(row.date_of_practice)}</Link>
+            <td>
+              <Link to={`/practice/${row.id}`} className="has-text-black">
+                {tinyDate(row.date_of_practice)}
+              </Link>
             </td>
-            <td className={tdClass(row.date_of_practice)}>
-              <Link to={`/kind/${row.kind_id}`}>{row.kind_short_name}</Link>
+            <td>
+              <Link to={`/kind/${row.kind_id}`} className="has-text-black">
+                {row.kind_short_name}
+              </Link>
             </td>
-            <td className={tdClass(row.date_of_practice)}>
-              <Link to={`/company/${row.company_id}`}>{row.company_name}</Link>
+            <td>
+              <Link to={`/company/${row.company_id}`} className="has-text-black">
+                {row.company_name}
+              </Link>
             </td>
           </tr>
         ))}

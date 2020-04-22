@@ -1,0 +1,23 @@
+.td-green td {
+  border-color: hsl(141, 71%, 48%) !important;
+}
+
+.td-red td {
+  border-color: hsl(348, 100%, 61%) !important;
+}
+
+.td-yellow td {
+  border-color: hsl(48, 100%, 67%) !important;
+}
+
+.td-green:hover {
+  background-color: hsl(141, 71%, 48%) !important;
+}
+
+.td-red:hover {
+  background-color: hsl(348, 100%, 61%) !important;
+}
+
+.td-yellow:hover {
+  background-color: hsl(48, 100%, 67%) !important;
+}
