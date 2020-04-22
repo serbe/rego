@@ -1,23 +1,35 @@
-.td-green td {
+.tr-green td {
   border-color: hsl(141, 71%, 48%) !important;
 }
 
-.td-red td {
+.tr-red td {
   border-color: hsl(348, 100%, 61%) !important;
 }
 
-.td-yellow td {
+.tr-yellow td {
   border-color: hsl(48, 100%, 67%) !important;
 }
 
-.td-green:hover {
+.tr-green:hover {
   background-color: hsl(141, 71%, 48%) !important;
 }
 
-.td-red:hover {
+.tr-red:hover {
   background-color: hsl(348, 100%, 61%) !important;
 }
 
-.td-yellow:hover {
+.tr-yellow:hover {
+  background-color: hsl(48, 100%, 67%) !important;
+}
+
+.tr-green td:first-child {
+  background-color: hsl(141, 71%, 48%) !important;
+}
+
+.tr-red td:first-child {
+  background-color: hsl(348, 100%, 61%) !important;
+}
+
+.tr-yellow td:first-child {
   background-color: hsl(48, 100%, 67%) !important;
 }

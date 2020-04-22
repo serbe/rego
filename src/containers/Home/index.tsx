@@ -19,13 +19,13 @@ const trClass = (date: string): string => {
   const m = new Date();
   const d = new Date(date);
   if (d < m) {
-    return 'td-green';
+    return 'tr-green';
   }
   m.setMonth(m.getMonth() + 1);
   if (d < m) {
-    return 'td-red';
+    return 'tr-red';
   }
-  return 'td-yellow';
+  return 'tr-yellow';
 };
 
 const tinyDate = (date: string): string => {
