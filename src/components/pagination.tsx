@@ -24,7 +24,7 @@ export const Pagination: FC<PaginationProps> = (properties: PaginationProps) => 
     centered ? 'is-centered' : ''
   }`;
 
-  const Previous = (): JSX.Element | null =>
+  const Previous = (): JSX.Element =>
     currentPage > 1 ? (
       <a
         className="pagination-previous"
@@ -34,9 +34,13 @@ export const Pagination: FC<PaginationProps> = (properties: PaginationProps) => 
       >
         Назад
       </a>
-    ) : null;
+    ) : (
+      <button className="pagination-previous" disabled>
+        Назад
+      </button>
+    );
 
-  const Next = (): JSX.Element | null =>
+  const Next = (): JSX.Element =>
     currentPage < lastPage ? (
       <a
         className="pagination-next"
@@ -46,7 +50,11 @@ export const Pagination: FC<PaginationProps> = (properties: PaginationProps) => 
       >
         Далее
       </a>
-    ) : null;
+    ) : (
+      <button className="pagination-next" disabled>
+        Далее
+      </button>
+    );
 
   const Item = (properties: ItemProps): JSX.Element | null => {
     const { check, index, link, ellipsis } = properties;
