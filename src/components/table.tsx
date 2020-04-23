@@ -106,12 +106,12 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
     isArray && field && Array.isArray(field) ? splitArray(field) : <>{field}</>;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const TableRow = (row: any): JSX.Element | null => (
+  const TableRow = (row: any): JSX.Element => (
     <>
       {columns.map((column: Column, index: number) => (
         <td key={`td${row.id}${index}`} className={column.className}>
           {column.linkField && column.linkBase ? (
-            <Link to={column.linkBase + row[column.linkField]}>
+            <Link to={column.linkBase + row[column.linkField]} className="has-text-dark">
               {Td(
                 column.fieldFunc ? column.fieldFunc(row[column.field]) : row[column.field],
                 column.array,
