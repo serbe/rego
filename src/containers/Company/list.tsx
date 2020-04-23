@@ -28,8 +28,8 @@ export const Companies: FC<{}> = () => {
     });
     rws.send('{"Get":{"List":"CompanyList"}}');
 
-    return function cleanup(): void {
-      rws.removeEventListener('message', (message: unknown) => {
+    return (): void => {
+      rws.removeEventListener('message', (message: MessageEvent) => {
         console.log('removeEventListener', message);
       });
     };
@@ -41,30 +41,30 @@ export const Companies: FC<{}> = () => {
       label: 'Наименование',
       linkBase: '/companies/',
       linkField: 'id',
-      className: 'w-1/3 p-2',
+      className: 'w250',
     },
     {
       field: 'address',
       label: 'Адрес',
-      className: 'w-1/3 hide-less-md p-2',
+      className: 'w250 is-hidden-touch',
     },
     {
       field: 'scope_name',
       label: 'Сфера деятельности',
-      className: 'w-1/3 hide-less-lg p-2',
+      className: 'w250 is-hidden-mobile',
     },
-    { field: 'phones', label: 'Телефоны', array: true, className: 'w-24 p-2 text-right' },
+    { field: 'phones', label: 'Телефоны', array: true, className: 'w95' },
     {
       field: 'faxes',
       label: 'Факсы',
       array: true,
-      className: 'w-24 hide-less-lg p-2 text-right',
+      className: 'is-hidden-touch w95',
     },
     {
       field: 'practices',
       label: 'Тренировки',
       array: true,
-      className: 'w-24 hide-less-lg p-2',
+      className: 'is-hidden-touch is-hidden-desktop-only w95',
     },
   ];
 
@@ -72,7 +72,7 @@ export const Companies: FC<{}> = () => {
     <div>No data</div>
   ) : (
     <div className="">
-      <Table data={companies} columns={columns} paginate={20} />
+      <Table data={companies} columns={columns} paginate={20} narrow fixed />
     </div>
   );
 };

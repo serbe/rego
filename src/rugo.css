@@ -1,5 +1,6 @@
-.mw4 {
-  min-width: 25% !important;
+.w250 {
+  min-width: 250px !important;
+  max-width: 80% !important;
 }
 
 .fixed {
@@ -11,6 +12,6 @@
   padding-bottom: 1rem;
 }
 
-.w100 {
+.w95 {
   width: 95px !important;
 }

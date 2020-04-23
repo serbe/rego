@@ -122,7 +122,7 @@ export const NavBar: FC<{}> = () => {
               </div>
             </>
           ) : (
-            NavbarNotLogged
+            <NavbarNotLogged />
           )}
         </div>
       </nav>

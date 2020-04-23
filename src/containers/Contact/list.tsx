@@ -28,8 +28,8 @@ export const Contacts: FC<{}> = () => {
     });
     rws.send('{"Get":{"List":"ContactList"}}');
 
-    return function cleanup(): void {
-      rws.removeEventListener('message', (message: unknown) => {
+    return (): void => {
+      rws.removeEventListener('message', (message: MessageEvent) => {
         console.log('removeEventListener', message);
       });
     };
@@ -41,28 +41,28 @@ export const Contacts: FC<{}> = () => {
       label: 'Фамилия Имя Отчество',
       linkBase: '/contacts/',
       linkField: 'id',
-      className: 'mw4',
+      className: 'w250',
     },
     {
       field: 'company_name',
       label: 'Организация',
       linkBase: '/compaines/',
       linkField: 'company_id',
-      className: 'is-hidden-mobile mw4',
+      className: 'is-hidden-mobile w250',
     },
-    { field: 'post_name', label: 'Должность', className: 'is-hidden-touch mw4' },
-    { field: 'phones', label: 'Телефоны', array: true, className: 'w100' },
+    { field: 'post_name', label: 'Должность', className: 'is-hidden-touch w250' },
+    { field: 'phones', label: 'Телефоны', array: true, className: 'w95' },
     {
       field: 'faxes',
       label: 'Факсы',
       array: true,
-      className: 'is-hidden-mobile w100',
+      className: 'is-hidden-mobile w95',
     },
   ];
 
   return hasError ? (
     <div>No data</div>
   ) : (
-    <Table data={contacts} columns={columns} paginate={20} narrow className="mwt fixed" />
+    <Table data={contacts} columns={columns} paginate={20} narrow fixed />
   );
 };

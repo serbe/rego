@@ -40,7 +40,7 @@ export const Home: FC<{}> = () => {
   const [educations, setEducations] = useState<EducationShort[]>([]);
   const [practices, setPractices] = useState<PracticeShort[]>([]);
 
-  useEffect(function () {
+  useEffect(() => {
     rws.addEventListener('message', (message: MessageEvent) => {
       const data: HomeWS = JSON.parse(message.data);
       if (data.name && data.name === 'PracticeNear' && data.object.PracticeShort) {
@@ -56,8 +56,8 @@ export const Home: FC<{}> = () => {
     rws.send('{"Get":{"List":"EducationNear"}}');
     rws.send('{"Get":{"List":"PracticeNear"}}');
 
-    return function cleanup(): void {
-      rws.removeEventListener('message', (message: unknown) => {
+    return (): void => {
+      rws.removeEventListener('message', (message: MessageEvent) => {
         console.log('removeEventListener', message);
       });
     };
