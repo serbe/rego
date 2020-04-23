@@ -10,127 +10,65 @@ const NavbarNotLogged = (): JSX.Element => (
   </div>
 );
 
-const NavbarBrand = (): JSX.Element => (
-  <div className="navbar-brand">
-    <NavLink activeClassName="is-active" className="navbar-item" exact={true} to="/">
-      ЕДДС
+const NavbarDropdown = (): JSX.Element => (
+  <div className="navbar-dropdown">
+    <NavLink activeClassName="is-active" className="navbar-item" to="/departments">
+      Отделы
     </NavLink>
-
-    <a
-      aria-expanded="false"
-      aria-label="menu"
-      className="navbar-burger burger"
-      data-target="navbarData"
-      role="button"
-      href="#button"
-    >
-      <span aria-hidden="true" />
-      <span aria-hidden="true" />
-      <span aria-hidden="true" />
-    </a>
+    <NavLink activeClassName="is-active" className="navbar-item" to="/educations">
+      Обучение
+    </NavLink>
+    <NavLink activeClassName="is-active" className="navbar-item" to="/kinds">
+      Типы
+    </NavLink>
+    <NavLink activeClassName="is-active" className="navbar-item" to="/posts">
+      Должности
+    </NavLink>
+    <NavLink activeClassName="is-active" className="navbar-item" to="/practices">
+      Учения
+    </NavLink>
+    <NavLink activeClassName="is-active" className="navbar-item" to="/ranks">
+      Чины
+    </NavLink>
+    <NavLink activeClassName="is-active" className="navbar-item" to="/scopes">
+      Сферы
+    </NavLink>
+    <NavLink activeClassName="is-active" className="navbar-item" to="/certificates">
+      Удостоверения
+    </NavLink>
+    <hr className="navbar-divider" />
+    <NavLink activeClassName="is-active" className="navbar-item" to="/sirentypes">
+      Типы сирен
+    </NavLink>
   </div>
 );
 
-const NavbarDropdown = (
-  handleToggle: ((event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void) | undefined,
-): JSX.Element => (
+const DropdownItem = (): JSX.Element => (
   <div className="navbar-item has-dropdown is-hoverable">
     <a href="#directory" className="navbar-link">
       Справочники
     </a>
-    <div className="navbar-dropdown">
-      <NavLink
-        activeClassName="is-active"
-        className="navbar-item"
-        onClick={handleToggle}
-        to="/departments"
-      >
-        Отделы
-      </NavLink>
-      <NavLink
-        activeClassName="is-active"
-        className="navbar-item"
-        onClick={handleToggle}
-        to="/educations"
-      >
-        Обучение
-      </NavLink>
-      <NavLink
-        activeClassName="is-active"
-        className="navbar-item"
-        onClick={handleToggle}
-        to="/kinds"
-      >
-        Типы
-      </NavLink>
-      <NavLink
-        activeClassName="is-active"
-        className="navbar-item"
-        onClick={handleToggle}
-        to="/posts"
-      >
-        Должности
-      </NavLink>
-      <NavLink
-        activeClassName="is-active"
-        className="navbar-item"
-        onClick={handleToggle}
-        to="/practices"
-      >
-        Учения
-      </NavLink>
-      <NavLink
-        activeClassName="is-active"
-        className="navbar-item"
-        onClick={handleToggle}
-        to="/ranks"
-      >
-        Чины
-      </NavLink>
-      <NavLink
-        activeClassName="is-active"
-        className="navbar-item"
-        onClick={handleToggle}
-        to="/scopes"
-      >
-        Сферы
-      </NavLink>
-      <NavLink
-        activeClassName="is-active"
-        className="navbar-item"
-        onClick={handleToggle}
-        to="/certificates"
-      >
-        Удостоверения
-      </NavLink>
-      <hr className="navbar-divider" />
-      <NavLink
-        activeClassName="is-active"
-        className="navbar-item"
-        onClick={handleToggle}
-        to="/sirentypes"
-      >
-        Типы сирен
-      </NavLink>
-    </div>
+    <NavbarDropdown />
   </div>
 );
 
 const NavbarEnd = (): JSX.Element => (
-  <div className="navbar-item has-dropdown is-hoverable">
-    <a href="#user" className="navbar-link">
-      name
-    </a>
-    <div className="navbar-dropdown is-right">
-      <div className="navbar-item">
-        <Button color="link">Выход</Button>
+  <div className="navbar-end">
+    <div className="navbar-item has-dropdown is-hoverable">
+      <a href="#user" className="navbar-link">
+        name
+      </a>
+      <div className="navbar-dropdown is-right">
+        <div className="navbar-item">
+          <Button color="link">Выход</Button>
+        </div>
       </div>
     </div>
   </div>
 );
 
 const NavbarStart = (): JSX.Element => (
-  <>
+  <div className="navbar-start">
     <NavLink activeClassName="is-active" className="navbar-item" to="/contacts">
       Контакты
     </NavLink>
@@ -140,15 +78,15 @@ const NavbarStart = (): JSX.Element => (
     <NavLink activeClassName="is-active" className="navbar-item" to="/sirens">
       Сирены
     </NavLink>
-  </>
+    <DropdownItem />
+  </div>
 );
 
 export const NavBar: FC<{}> = () => {
   // const [auth, setAuth] = useState(true);
+  // const openClassName = (cn: string): string => (open ? `${cn} is-active` : cn);
   const auth = true;
   const [open, setOpen] = useState(false);
-
-  // const openClassName = (cn: string): string => (open ? `${cn} is-active` : cn);
 
   const handleToggle = (): void => {
     setOpen(!open);
@@ -160,14 +98,26 @@ export const NavBar: FC<{}> = () => {
         <div className="container">
           {auth ? (
             <>
-              <NavbarBrand />
-              <div id="navbarData" className="navbar-menu">
-                <div className="navbar-start">
-                  <NavbarStart />
-                  {NavbarDropdown(handleToggle)}
-                </div>
+              <div className="navbar-brand">
+                <NavLink activeClassName="is-active" className="navbar-item" exact={true} to="/">
+                  ЕДДС
+                </NavLink>
+                <a
+                  aria-expanded="false"
+                  aria-label="menu"
+                  className={open ? 'navbar-burger is-active' : 'navbar-burger'}
+                  data-target="navbarData"
+                  role="button"
+                  href="#button"
+                  onClick={handleToggle}
+                >
+                  <span aria-hidden="true" />
+                  <span aria-hidden="true" />
+                  <span aria-hidden="true" />
+                </a>
               </div>
-              <div className="navbar-end">
+              <div id="navbarData" className={open ? 'navbar-menu is-active' : 'navbar-menu'}>
+                <NavbarStart />
                 <NavbarEnd />
               </div>
             </>
