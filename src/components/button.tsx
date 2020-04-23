@@ -62,7 +62,7 @@ export const Button: FC<ButtonProps> = (properties: ButtonProps) => {
   const colorClass = color ? `is-${color}` : '';
   const sizeClass = size ? `is-${size}` : '';
 
-  const classes = `button ${className} ${active ? 'is-active' : ''} ${
+  const classes = `button ${className ? className : ''} ${active ? 'is-active' : ''} ${
     focused ? 'is-focused' : ''
   } ${fullwidth ? 'is-fullwidth' : ''} ${hovered ? 'is-hovered' : ''} ${
     inverted ? 'is-inverted' : ''

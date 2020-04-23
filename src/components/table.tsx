@@ -45,6 +45,7 @@ interface TableProps {
   striped?: boolean;
   fullwidth?: boolean;
   bordered?: boolean;
+  fixed?: boolean;
 }
 
 export const Table: FC<TableProps> = (properties: TableProps) => {
@@ -62,6 +63,7 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
     striped,
     fullwidth,
     bordered,
+    fixed,
   } = properties;
 
   const itemsOnPage = paginate || 20;
@@ -83,11 +85,13 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
     setCurrentPage(value - 1);
   };
 
-  const classes = `${className} table ${narrow ? 'is-narrow' : ''} ${
+  const classes = `${className ? className : ''} table ${narrow ? 'is-narrow' : ''} ${
     hoverable ? 'is-hoverable' : ''
   } ${striped ? 'is-striped' : ''} ${fullwidth ? 'is-fullwidth' : ''} ${
     bordered ? 'is-bordered' : ''
   }`;
+
+  const tableClasses = `${classes} ${fixed ? 'mwt fixed' : ''}`;
 
   const Heading = (): JSX.Element | null =>
     nohead ? null : (
@@ -163,7 +167,7 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
     <div>Loading data</div>
   ) : (
     <>
-      <table className={classes}>
+      <table className={tableClasses}>
         <Heading />
         <TBody />
       </table>

@@ -51,7 +51,7 @@ export const Input: FC<InputProps> = (properties: InputProps) => {
     iconRight ? 'has-icons-right' : ''
   } ${loading ? 'is-loading' : ''} ${sizeClass}`;
 
-  const inputClasses = `${className} input ${focused ? 'is-focused' : ''} ${
+  const inputClasses = `${className ? className : ''} input ${focused ? 'is-focused' : ''} ${
     hovered ? 'is-hovered' : ''
   } ${rounded ? 'is-rounded' : ''} ${isStatic ? 'is-static' : ''} ${colorClass} ${sizeClass}`;
 
