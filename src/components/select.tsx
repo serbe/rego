@@ -3,7 +3,7 @@ import React, { useState, SyntheticEvent, useEffect, FC } from 'react';
 import { Icon } from './icon';
 import { SelectItem } from '../models/selectitem';
 
-// import './select.css';
+import './select.css';
 
 interface SelectProps {
   id?: number;
@@ -54,11 +54,6 @@ export const Select: FC<SelectProps> = (properties: SelectProps) => {
   //   setFilteredList(fList);
   // }, [item.name, list]);
 
-  const onInput = (event: SyntheticEvent): void => {
-    const target = event.target as HTMLInputElement;
-    setItemID(0);
-  };
-
   const controlClasses = `control is-expanded select is-fullwidth ${
     iconLeft ? 'has-icons-left' : ''
   } ${iconRight ? 'has-icons-right' : ''}`;
@@ -96,50 +91,48 @@ export const Select: FC<SelectProps> = (properties: SelectProps) => {
       />
     ) : null;
 
-  const SelectList = (): JSX.Element => {
-    const items = filteredList.map((ListItem) => (
-      <div className="select-item input" key={ListItem.id}>
-        {ListItem.name}
-      </div>
-    ));
-    return <>{items}</>;
-  };
+  const DropdownContent = (): JSX.Element => (
+    <div className="dropdown-content ddm">
+      {list.map((ListItem) => (
+        <a
+          className="dropdown-item"
+          key={ListItem.id}
+          href={`#${ListItem.name}`}
+          onClick={(): void => {
+            setItemID(ListItem.id);
+          }}
+        >
+          {ListItem.name}
+        </a>
+      ))}
+    </div>
+  );
 
-  const SelectBox = (): JSX.Element | null =>
-    opened ? (
-      <div className="select-box" key="SelectOpened">
-        <SelectList />
-      </div>
-    ) : null;
+  const currentValue = (): string => {
+    const value = list.find((item) => item.id === itemID);
+    return value ? value.name : '';
+  };
 
   return (
     <div className="field">
-      <div className="dropdown is-active">
-        <div className="dropdown-trigger">
+      <div className={`dropdown full-width ${opened ? 'is-active' : ''}`}>
+        <div className="dropdown-trigger full-width">
           <input
-            // className="button"
+            className="input"
+            type="text"
             aria-haspopup="true"
             aria-controls="dropdown-menu"
-            defaultValue="test"
+            defaultValue={currentValue()}
+            onFocus={(): void => {
+              setOpened(!opened);
+            }}
+            onBlur={(): void => {
+              setOpened(!opened);
+            }}
           />
         </div>
-        <div className="dropdown-menu" id="dropdown-menu" role="menu">
-          <div className="dropdown-content">
-            <a href="#" className="dropdown-item">
-              Dropdown item
-            </a>
-            <a className="dropdown-item">Other dropdown item</a>
-            <a href="#" className="dropdown-item is-active">
-              Active dropdown item
-            </a>
-            <a href="#" className="dropdown-item">
-              Other dropdown item
-            </a>
-            <hr className="dropdown-divider" />
-            <a href="#" className="dropdown-item">
-              With a divider
-            </a>
-          </div>
+        <div className="dropdown-menu full-width" id="dropdown-menu" role="menu">
+          <DropdownContent />
         </div>
       </div>
     </div>
