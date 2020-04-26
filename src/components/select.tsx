@@ -124,10 +124,10 @@ export const Select: FC<SelectProps> = (properties: SelectProps) => {
             aria-controls="dropdown-menu"
             defaultValue={currentValue()}
             onFocus={(): void => {
-              setOpened(!opened);
+              setOpened(true);
             }}
             onBlur={(): void => {
-              setOpened(!opened);
+              setTimeout(() => setOpened(false), 300);
             }}
           />
         </div>
