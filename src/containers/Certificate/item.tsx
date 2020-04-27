@@ -10,7 +10,7 @@ import { Certificate } from '../../models/certificate';
 
 export const CertificateItem: FC<{}> = () => {
   const { id } = useParams();
-  const [hasError, setErrors] = useState(false);
+  const [error, setError] = useState(false);
   const [certificate, setCertificate] = useState<Certificate>();
 
   // useEffect(() => {
@@ -70,7 +70,7 @@ export const CertificateItem: FC<{}> = () => {
 
   return (
     <div className="container mw768">
-      {!hasError && certificate ? (
+      {!error && certificate ? (
         <div>
           {/* <Input
             name="note"
@@ -121,7 +121,7 @@ export const CertificateItem: FC<{}> = () => {
             on submit
           </Button> */}
         </div>
-      ) : null}
+      ) : undefined}
     </div>
   );
 };

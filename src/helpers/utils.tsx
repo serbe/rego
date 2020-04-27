@@ -21,7 +21,7 @@ export const splitStrings = (items: string[] | undefined): JSX.Element => (
   <>
     {items
       ? items.map((arrayItem: string, index: number) => <div key={`div${index}`}>{arrayItem}</div>)
-      : null}
+      : undefined}
   </>
 );
 
@@ -29,6 +29,6 @@ export const splitNumbers = (items: number[] | undefined): JSX.Element => (
   <>
     {items
       ? items.map((arrayItem: number, index: number) => <div key={`div${index}`}>{arrayItem}</div>)
-      : null}
+      : undefined}
   </>
 );

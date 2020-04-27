@@ -93,5 +93,5 @@ export const ContactItem = (): JSX.Element => {
     };
   }, [id]);
 
-  return <div>{contact && !error ? ContactForm(contact) : null}</div>;
+  return <div>{contact && !error ? ContactForm(contact) : undefined}</div>;
 };

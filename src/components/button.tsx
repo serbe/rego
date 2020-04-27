@@ -63,29 +63,29 @@ export const Button: FC<ButtonProps> = (properties: ButtonProps) => {
     rounded ? 'is-rounded' : ''
   } ${color ? `is-${color}` : ''}`;
 
-  const Tag = (): JSX.Element => {
-    if (type === 'submit' || type === 'reset') {
-      return (
-        <input type={type} disabled={disabled} onClick={onClick} className={classes}>
-          {children}
-        </input>
-      );
-    } else if (type === 'a') {
-      return (
-        <a href={href} onClick={onClick} className={classes}>
-          {children}
-        </a>
-      );
-    } else {
-      return (
-        <button disabled={disabled} onClick={onClick} className={classes}>
-          {children}
-        </button>
-      );
-    }
-  };
+  const AButton = (): JSX.Element => (
+    <a href={href} onClick={onClick} className={classes}>
+      {children}
+    </a>
+  );
+  const SRButton = (): JSX.Element => (
+    <input type={type} disabled={disabled} onClick={onClick} className={classes}>
+      {children}
+    </input>
+  );
+  const NButton = (): JSX.Element => (
+    <button disabled={disabled} onClick={onClick} className={classes}>
+      {children}
+    </button>
+  );
 
-  return <Tag />;
+  if (type === 'submit' || type === 'reset') {
+    return <SRButton />;
+  }
+  if (type === 'a') {
+    return <AButton />;
+  }
+  return <NButton />;
 };
 
 Button.defaultProps = {

@@ -10,7 +10,7 @@ import { addEmptyString, numberToString } from '../../helpers/utils';
 
 export const CompanyItem: FC<{}> = () => {
   const { id } = useParams();
-  const [hasError, setErrors] = useState(false);
+  const [error, setError] = useState(false);
   const [company, setCompany] = useState<Company>();
   const [scope, setScope] = useState<SelectItem>();
   const [scopes, setScopes] = useState<SelectItem[]>();
@@ -106,15 +106,17 @@ export const CompanyItem: FC<{}> = () => {
   //   }
   // }
 
-  const Scopes = (): JSX.Element | null =>
+  const Scopes = (): JSX.Element =>
     scopes && scope ? (
       <select /* selected={scope} */ /* itemName="scope" */
       /* list={scopes} */
       /* label="Сфера деятельности" */
       />
-    ) : null;
+    ) : (
+      <></>
+    );
 
-  const Emails = (): JSX.Element | null =>
+  const Emails = (): JSX.Element =>
     emails ? (
       <>
         {emails.map((email, index) => (
@@ -134,9 +136,11 @@ export const CompanyItem: FC<{}> = () => {
           />
         ))}
       </>
-    ) : null;
+    ) : (
+      <></>
+    );
 
-  const Phones = (): JSX.Element | null =>
+  const Phones = (): JSX.Element =>
     phones ? (
       <>
         {phones.map((phone, index) => (
@@ -154,9 +158,11 @@ export const CompanyItem: FC<{}> = () => {
           />
         ))}
       </>
-    ) : null;
+    ) : (
+      <></>
+    );
 
-  const Faxes = (): JSX.Element | null =>
+  const Faxes = (): JSX.Element =>
     faxes ? (
       <>
         {faxes.map((fax, index) => (
@@ -174,9 +180,11 @@ export const CompanyItem: FC<{}> = () => {
           />
         ))}
       </>
-    ) : null;
+    ) : (
+      <></>
+    );
 
-  const Practices = (): JSX.Element | null =>
+  const Practices = (): JSX.Element =>
     company && company.practices ? (
       <div className="field" key="practices">
         <label className="label">Тренировки</label>
@@ -190,9 +198,11 @@ export const CompanyItem: FC<{}> = () => {
           </NavLink>
         ))}
       </div>
-    ) : null;
+    ) : (
+      <></>
+    );
 
-  const Contacts = (): JSX.Element | null =>
+  const Contacts = (): JSX.Element =>
     company && company.contacts ? (
       <div className="field" key="contacts">
         <label className="label">Сотрудники</label>
@@ -204,11 +214,13 @@ export const CompanyItem: FC<{}> = () => {
           </NavLink>
         ))}
       </div>
-    ) : null;
+    ) : (
+      <></>
+    );
 
   return (
     <div className="container mw768">
-      {!hasError && company ? (
+      {!error && company ? (
         <div>
           <input
             name="name"
@@ -301,7 +313,9 @@ export const CompanyItem: FC<{}> = () => {
             on submit
           </button> */}
         </div>
-      ) : null}
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

@@ -9,7 +9,6 @@ import './select.css';
 interface SelectProps {
   id?: number;
   icon?: string;
-  // iconRight?: string;
   color?: 'primary' | 'info' | 'success' | 'warning' | 'danger';
   // state?: string;
   label?: string;
@@ -73,14 +72,16 @@ export const Select: FC<SelectProps> = (properties: SelectProps) => {
 
   // const inputClasses = `input ${color ? `is-${color}` : ''} ${state ? `is-${state}` : ''}`;
 
-  const Label = (): JSX.Element | null =>
+  const Label = (): JSX.Element =>
     label ? (
       <label className="label" key="SelectLabel">
         {label}
       </label>
-    ) : null;
+    ) : (
+      <></>
+    );
 
-  const LeftIcon = (): JSX.Element | null =>
+  const LeftIcon = (): JSX.Element =>
     icon ? (
       <Icon
         icon={icon}
@@ -88,17 +89,9 @@ export const Select: FC<SelectProps> = (properties: SelectProps) => {
         color={color !== 'primary' ? color : undefined}
         key="SelectIconLeft"
       />
-    ) : null;
-
-  // const IconRight = (): JSX.Element | null =>
-  //   iconRight ? (
-  //     <Icon
-  //       icon={iconRight}
-  //       position="right"
-  //       color={color !== 'primary' ? color : undefined}
-  //       key="SelectIconRight"
-  //     />
-  //   ) : null;
+    ) : (
+      <></>
+    );
 
   const currentValue = (): string => {
     if (opened) {
@@ -117,8 +110,10 @@ export const Select: FC<SelectProps> = (properties: SelectProps) => {
       : list;
   };
 
-  const DropdownContent = (): JSX.Element | null =>
-    error || !opened ? null : (
+  const DropdownContent = (): JSX.Element =>
+    error || !opened ? (
+      <></>
+    ) : (
       <div className="select-box">
         {filteredList().map((ListItem) => (
           <div

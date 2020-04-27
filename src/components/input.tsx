@@ -50,20 +50,10 @@ export const Input: FC<InputProps> = (properties: InputProps) => {
     hovered ? 'is-hovered' : ''
   } ${rounded ? 'is-rounded' : ''} ${isStatic ? 'is-static' : ''} ${color ? `is-${color}` : ''}`;
 
-  const LeftIcon = (): JSX.Element | null => {
-    if (icon) {
-      return <Icon position={'left'} icon={icon} />;
-    } else {
-      return null;
-    }
-  };
-  const RightIcon = (): JSX.Element | null => {
-    if (iconRight) {
-      return <Icon position={'right'} icon={iconRight} />;
-    } else {
-      return null;
-    }
-  };
+  const LeftIcon = (): JSX.Element => (icon ? <Icon position={'left'} icon={icon} /> : <></>);
+
+  const RightIcon = (): JSX.Element =>
+    iconRight ? <Icon position={'right'} icon={iconRight} /> : <></>;
 
   return (
     <div className={divClasses}>

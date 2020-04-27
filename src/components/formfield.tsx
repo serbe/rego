@@ -45,17 +45,8 @@ export const FormField: FC<FormFieldProps> = (properties: FormFieldProps) => {
     defaultValue,
   } = properties;
 
-  const Label = (): JSX.Element | null => {
-    if (label) {
-      if (label !== true) {
-        return <label className="label">{label}</label>;
-      } else {
-        return <label className="label">{placeholder}</label>;
-      }
-    } else {
-      return null;
-    }
-  };
+  const Label = (): JSX.Element =>
+    label ? <label className="label">{label !== true ? label : placeholder}</label> : <></>;
 
   return (
     <div className="field">

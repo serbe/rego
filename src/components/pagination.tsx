@@ -50,7 +50,7 @@ export const Pagination: FC<PaginationProps> = (properties: PaginationProps) => 
       </button>
     );
 
-  const Item = (properties: ItemProps): JSX.Element | null => {
+  const Item = (properties: ItemProps): JSX.Element => {
     const { check, index, link, ellipsis } = properties;
 
     return check ? (
@@ -67,7 +67,9 @@ export const Pagination: FC<PaginationProps> = (properties: PaginationProps) => 
           </a>
         )}
       </li>
-    ) : null;
+    ) : (
+      <></>
+    );
   };
 
   return (
