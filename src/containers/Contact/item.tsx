@@ -16,27 +16,62 @@ type CLWS = {
   error?: string;
 };
 
-const ContactForm = (contact: Contact, companies: SelectItem[]): JSX.Element => {
+const ContactForm = (contact: Contact): JSX.Element => {
   const c = contact;
 
   return (
     <div>
       <FormField
         label="Фамилия Имя Отчество"
+        icon="user"
         defaultValue={c.name}
         onChange={(event: ChangeEvent<HTMLInputElement>): void => {
           c.name = event.target.value;
         }}
       />
-      <Select list={companies} />
+      <Select
+        label="Организация"
+        listName="CompanySelect"
+        id={c.company_id}
+        icon="building"
+        callback={(value: number): void => {
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          c.company_id = value;
+        }}
+      />
+      <div className="columns">
+        <div className="column is-half">
+          <Select
+            label="Должность"
+            listName="PostSelect"
+            id={c.post_id}
+            icon="tag"
+            callback={(value: number): void => {
+              // eslint-disable-next-line @typescript-eslint/camelcase
+              c.post_id = value;
+            }}
+          />
+        </div>
+        <div className="column is-half">
+          <Select
+            label="Отдел"
+            listName="DepartmentSelect"
+            id={c.department_id}
+            icon="tag"
+            callback={(value: number): void => {
+              // eslint-disable-next-line @typescript-eslint/camelcase
+              c.department_id = value;
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 };
 
 export const ContactItem = (): JSX.Element => {
   const [contact, setContact] = useState<Contact>();
-  const [companies, setCompanies] = useState<SelectItem[]>();
-  const [hasError, setErrors] = useState<string>();
+  const [error, setError] = useState<string>();
   const { id } = useParams();
 
   useEffect(() => {
@@ -45,15 +80,11 @@ export const ContactItem = (): JSX.Element => {
       if (data?.name === 'Contact' && data.object.Contact) {
         setContact(data.object.Contact);
       }
-      if (data?.name === 'CompanySelect' && data.object.SelectItem) {
-        setCompanies(data.object.SelectItem);
-      }
       if (data.error) {
-        setErrors(data.error);
+        setError(data.error);
       }
     });
     rws.send(`{"Get":{"Item":{"id": ${id}, "name": "Contact"}}}`);
-    rws.send(`{"Get":{"List":"CompanySelect"}}`);
 
     return function cleanup(): void {
       rws.removeEventListener('message', (message: unknown) => {
@@ -62,5 +93,5 @@ export const ContactItem = (): JSX.Element => {
     };
   }, [id]);
 
-  return <div>{contact && companies && !hasError ? ContactForm(contact, companies) : null}</div>;
+  return <div>{contact && !error ? ContactForm(contact) : null}</div>;
 };
