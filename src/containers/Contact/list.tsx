@@ -14,7 +14,7 @@ type CLWS = {
 
 export const Contacts: FC<{}> = () => {
   const [contacts, setContacts] = useState<ContactList[]>([]);
-  const [hasError, setErrors] = useState<string>();
+  const [error, setError] = useState<string>();
 
   useEffect(() => {
     rws.addEventListener('message', (message: MessageEvent) => {
@@ -23,7 +23,7 @@ export const Contacts: FC<{}> = () => {
         setContacts(data.object.ContactList);
       }
       if (data.error) {
-        setErrors(data.error);
+        setError(data.error);
       }
     });
     rws.send('{"Get":{"List":"ContactList"}}');
@@ -60,9 +60,5 @@ export const Contacts: FC<{}> = () => {
     },
   ];
 
-  return hasError ? (
-    <div>No data</div>
-  ) : (
-    <Table data={contacts} columns={columns} paginate={20} narrow fixed />
-  );
+  return error ? <div>No data</div> : <Table data={contacts} columns={columns} paginate={20} />;
 };

@@ -8,7 +8,7 @@ interface InputProps {
   disabled?: boolean;
   focused?: boolean;
   hovered?: boolean;
-  iconLeft?: string;
+  icon?: string;
   iconRight?: string;
   isStatic?: boolean;
   loading?: boolean;
@@ -17,7 +17,6 @@ interface InputProps {
   placeholder?: string;
   readonly?: boolean;
   rounded?: boolean;
-  size?: 'small' | 'normal' | 'medium' | 'large';
   type?: 'text' | 'password' | 'email' | 'tel';
   value?: string | undefined;
 }
@@ -30,7 +29,7 @@ export const Input: FC<InputProps> = (properties: InputProps) => {
     disabled,
     focused,
     hovered,
-    iconLeft,
+    icon,
     iconRight,
     isStatic,
     loading,
@@ -39,25 +38,21 @@ export const Input: FC<InputProps> = (properties: InputProps) => {
     placeholder,
     readonly,
     rounded,
-    size,
     type,
     value,
   } = properties;
 
-  const sizeClass = size ? `is-${size}` : '';
-  const colorClass = color ? `is-${color}` : '';
-
-  const divClasses = `control ${iconLeft ? 'has-icons-left' : ''} ${
+  const divClasses = `control ${icon ? 'has-icons-left' : ''} ${
     iconRight ? 'has-icons-right' : ''
-  } ${loading ? 'is-loading' : ''} ${sizeClass}`;
+  } ${loading ? 'is-loading' : ''}`;
 
   const inputClasses = `${className ? className : ''} input ${focused ? 'is-focused' : ''} ${
     hovered ? 'is-hovered' : ''
-  } ${rounded ? 'is-rounded' : ''} ${isStatic ? 'is-static' : ''} ${colorClass} ${sizeClass}`;
+  } ${rounded ? 'is-rounded' : ''} ${isStatic ? 'is-static' : ''} ${color ? `is-${color}` : ''}`;
 
   const LeftIcon = (): JSX.Element | null => {
-    if (iconLeft) {
-      return <Icon position={'left'} icon={iconLeft} />;
+    if (icon) {
+      return <Icon position={'left'} icon={icon} />;
     } else {
       return null;
     }

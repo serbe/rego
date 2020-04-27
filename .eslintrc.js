@@ -69,27 +69,3 @@ module.exports = {
     es6: true,
   },
 };
-
-// "eslintConfig": {
-//   "extends": [
-//     "react-app",
-//     "plugin:jsx-a11y/recommended",
-//     "prettier",
-//     "plugin:array-func/recommended",
-//     "plugin:sonarjs/recommended",
-//     "plugin:promise/recommended"
-//   ],
-//   "plugins": [
-//     "jsx-a11y",
-//     "prettier",
-//     "@getify/proper-arrows",
-//     "sonarjs",
-//     "promise"
-//   ],
-//   "rules": {
-//     "prettier/prettier": "error",
-//     "jsx-a11y/click-events-have-key-events": "off",
-//     "jsx-a11y/no-static-element-interactions": "off",
-//     "jsx-a11y/label-has-associated-control": "off"
-//   }
-// },

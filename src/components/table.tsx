@@ -20,10 +20,6 @@ export type RowClassFunc = {
   rowFuncField: string;
 };
 
-// function getProperty<T, K extends keyof T>(object: T, key: K) {
-//   return object[key];
-// }
-
 const splitArray = (items: string[]): JSX.Element => (
   <>
     {items.map((arrayItem, index) => (
@@ -41,11 +37,8 @@ interface TableProps {
   paginate?: number;
   nohead?: boolean;
   hoverable?: boolean;
-  narrow?: boolean;
   striped?: boolean;
-  fullwidth?: boolean;
   bordered?: boolean;
-  fixed?: boolean;
 }
 
 export const Table: FC<TableProps> = (properties: TableProps) => {
@@ -59,11 +52,8 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
     nohead,
     rowClass,
     hoverable,
-    narrow,
     striped,
-    fullwidth,
     bordered,
-    fixed,
   } = properties;
 
   const itemsOnPage = paginate || 20;
@@ -85,13 +75,11 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
     setCurrentPage(value - 1);
   };
 
-  const classes = `${className ? className : ''} table ${narrow ? 'is-narrow' : ''} ${
+  const classes = `${className ? className : ''} table is-fullwidth is-narrow mwt ${
     hoverable ? 'is-hoverable' : ''
-  } ${striped ? 'is-striped' : ''} ${fullwidth ? 'is-fullwidth' : ''} ${
-    bordered ? 'is-bordered' : ''
-  }`;
+  } ${striped ? 'is-striped' : ''} ${bordered ? 'is-bordered' : ''}`;
 
-  const tableClasses = `${classes} ${fixed ? 'mwt fixed' : ''}`;
+  const tableClasses = `${classes}`;
 
   const Heading = (): JSX.Element | null =>
     nohead ? null : (
@@ -159,7 +147,6 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
         currentPage={currentPage + 1}
         lastPage={Math.ceil(filteredLength / itemsOnPage)}
         callback={receiveChildValue}
-        centered
       />
     ) : null;
 

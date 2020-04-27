@@ -8,7 +8,7 @@ interface FormFieldProps {
   disabled?: boolean;
   focused?: boolean;
   hovered?: boolean;
-  iconLeft?: string;
+  icon?: string;
   iconRight?: string;
   isStatic?: boolean;
   label?: string | boolean;
@@ -18,7 +18,6 @@ interface FormFieldProps {
   placeholder?: string;
   readonly?: boolean;
   rounded?: boolean;
-  size?: 'small' | 'normal' | 'medium' | 'large';
   type?: 'text' | 'password' | 'email' | 'tel';
   value?: string | undefined;
   defaultValue?: string | undefined;
@@ -31,7 +30,7 @@ export const FormField: FC<FormFieldProps> = (properties: FormFieldProps) => {
     disabled,
     focused,
     hovered,
-    iconLeft,
+    icon,
     iconRight,
     isStatic,
     label,
@@ -41,7 +40,6 @@ export const FormField: FC<FormFieldProps> = (properties: FormFieldProps) => {
     placeholder,
     readonly,
     rounded,
-    size,
     type,
     value,
     defaultValue,
@@ -68,7 +66,7 @@ export const FormField: FC<FormFieldProps> = (properties: FormFieldProps) => {
         disabled={disabled}
         focused={focused}
         hovered={hovered}
-        iconLeft={iconLeft}
+        icon={icon}
         iconRight={iconRight}
         isStatic={isStatic}
         loading={loading}
@@ -77,7 +75,6 @@ export const FormField: FC<FormFieldProps> = (properties: FormFieldProps) => {
         placeholder={placeholder}
         readonly={readonly}
         rounded={rounded}
-        size={size}
         type={type}
         value={value}
         defaultValue={defaultValue}

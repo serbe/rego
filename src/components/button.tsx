@@ -23,7 +23,6 @@ interface ButtonProps {
   hovered?: boolean;
   href?: string;
   inverted?: boolean;
-  isStatic?: boolean;
   light?: boolean;
   loading?: boolean;
   onClick?: (
@@ -34,7 +33,6 @@ interface ButtonProps {
   ) => void;
   outlined?: boolean;
   rounded?: boolean;
-  size?: 'small' | 'normal' | 'medium' | 'large';
 }
 
 export const Button: FC<ButtonProps> = (properties: ButtonProps) => {
@@ -49,18 +47,13 @@ export const Button: FC<ButtonProps> = (properties: ButtonProps) => {
     hovered,
     href,
     inverted,
-    isStatic,
     light,
     loading,
     outlined,
     rounded,
-    size,
     type,
     onClick,
   } = properties;
-
-  const colorClass = color ? `is-${color}` : '';
-  const sizeClass = size ? `is-${size}` : '';
 
   const classes = `button ${className ? className : ''} ${active ? 'is-active' : ''} ${
     focused ? 'is-focused' : ''
@@ -68,16 +61,10 @@ export const Button: FC<ButtonProps> = (properties: ButtonProps) => {
     inverted ? 'is-inverted' : ''
   } ${light ? 'is-light' : ''} ${loading ? 'is-loading' : ''} ${outlined ? 'is-outlined' : ''} ${
     rounded ? 'is-rounded' : ''
-  } ${isStatic ? 'is-static' : ''} ${colorClass} ${sizeClass}`;
+  } ${color ? `is-${color}` : ''}`;
 
   const Tag = (): JSX.Element => {
-    if (isStatic) {
-      return (
-        <span role="button" className={classes} tabIndex={-1} onClick={onClick}>
-          {children}
-        </span>
-      );
-    } else if (type === 'submit' || type === 'reset') {
+    if (type === 'submit' || type === 'reset') {
       return (
         <input type={type} disabled={disabled} onClick={onClick} className={classes}>
           {children}

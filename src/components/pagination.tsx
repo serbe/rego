@@ -1,12 +1,9 @@
 import React, { FC } from 'react';
 
 interface PaginationProps {
-  centered?: boolean;
   currentPage: number;
   lastPage: number;
   callback: Function;
-  rounded?: boolean;
-  size?: 'small' | 'normal' | 'medium' | 'large';
 }
 
 interface ItemProps {
@@ -17,12 +14,9 @@ interface ItemProps {
 }
 
 export const Pagination: FC<PaginationProps> = (properties: PaginationProps) => {
-  const { currentPage, lastPage, callback, centered, rounded, size } = properties;
+  const { currentPage, lastPage, callback } = properties;
 
-  const sizeClass = size ? `is-${size}` : '';
-  const navClasses = `pagination ${sizeClass} ${rounded ? 'is-rounded' : ''} ${
-    centered ? 'is-centered' : ''
-  }`;
+  const navClasses = `pagination is-rounded is-centered`;
 
   const Previous = (): JSX.Element =>
     currentPage > 1 ? (
