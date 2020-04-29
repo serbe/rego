@@ -14,3 +14,29 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+.w250 {
+  min-width: 250px !important;
+  max-width: 80% !important;
+}
+
+.fixed {
+  table-layout: fixed;
+}
+
+.pv1 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.w95 {
+  width: 95px !important;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.mb1 {
+  margin-bottom: 1rem;
+}
