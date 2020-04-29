@@ -35,10 +35,10 @@ const ContactForm = (contact: Contact): JSX.Element => {
         id={c.company_id}
         icon="building"
         callback={(value: number): void => {
-          // eslint-disable-next-line @typescript-eslint/camelcase
           c.company_id = value;
         }}
       />
+
       <div className="columns">
         <div className="column is-half">
           <Select
@@ -47,7 +47,6 @@ const ContactForm = (contact: Contact): JSX.Element => {
             id={c.post_id}
             icon="tag"
             callback={(value: number): void => {
-              // eslint-disable-next-line @typescript-eslint/camelcase
               c.post_id = value;
             }}
           />
@@ -59,8 +58,32 @@ const ContactForm = (contact: Contact): JSX.Element => {
             id={c.department_id}
             icon="tag"
             callback={(value: number): void => {
-              // eslint-disable-next-line @typescript-eslint/camelcase
               c.department_id = value;
+            }}
+          />
+        </div>
+      </div>
+
+      <div className="columns">
+        <div className="column is-half">
+          <Select
+            label="Должность ГО"
+            listName="PostGoSelect"
+            id={c.post_go_id}
+            icon="tag"
+            callback={(value: number): void => {
+              c.post_go_id = value;
+            }}
+          />
+        </div>
+        <div className="column is-half">
+          <Select
+            label="Звание"
+            listName="RankSelect"
+            id={c.rank_id}
+            icon="tag"
+            callback={(value: number): void => {
+              c.rank_id = value;
             }}
           />
         </div>
