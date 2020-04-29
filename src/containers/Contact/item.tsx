@@ -6,6 +6,7 @@ import { SelectItem } from '../../models/selectitem';
 import { rws } from '../../netapi';
 import { FormField } from '../../components/formfield';
 import { Select } from '../../components/select';
+import { DatePicker } from '../../components/datepicker';
 
 type CLWS = {
   name: string;
@@ -84,6 +85,18 @@ const ContactForm = (contact: Contact): JSX.Element => {
             icon="tag"
             callback={(value: number): void => {
               c.rank_id = value;
+            }}
+          />
+        </div>
+      </div>
+
+      <div className="columns">
+        <div className="column is-one-third">
+          <DatePicker
+            label="Дата рождения"
+            value={c.birthday}
+            callback={(value: string): void => {
+              c.birthday = value;
             }}
           />
         </div>
