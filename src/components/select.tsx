@@ -37,7 +37,7 @@ export const Select = (properties: SelectProps): JSX.Element => {
   useEffect(() => {
     rws.addEventListener('message', (message: MessageEvent) => {
       const data: CLWS = JSON.parse(message.data);
-      if (data?.name === listName && data.object.SelectItem) {
+      if (data?.name === listName && data.object.SelectItem && data.object.SelectItem.length > 0) {
         setList(data.object.SelectItem);
       }
 
@@ -99,11 +99,18 @@ export const Select = (properties: SelectProps): JSX.Element => {
 
   const filteredList = (): SelectItem[] => {
     const inputValue = currentValue();
-    return inputValue.length > 0
-      ? list.filter(
-          (listItem) => listItem.name === '' || new RegExp(inputValue, 'i').exec(listItem.name),
-        )
-      : list;
+
+    if (inputValue.trim().length === 0) {
+      return list;
+    }
+
+    const inputArray = inputValue.split(' ');
+
+    return list.filter(
+      (listItem) =>
+        listItem.name === '' ||
+        inputArray.every((value: string) => new RegExp(value, 'i').exec(listItem.name)),
+    );
   };
 
   const DropdownContent = (): JSX.Element | null =>
