@@ -1,4 +1,4 @@
-import React, { useState, FC } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Pagination } from './pagination';
@@ -13,6 +13,11 @@ export type Column = {
   linkBase?: string;
   linkField?: string;
   className?: string;
+};
+
+type SData = {
+  id: number;
+  data: string;
 };
 
 export type RowClassFunc = {
@@ -41,8 +46,12 @@ interface TableProps {
   bordered?: boolean;
 }
 
-export const Table: FC<TableProps> = (properties: TableProps) => {
+export const Table = (properties: TableProps): JSX.Element => {
   const [currentPage, setCurrentPage] = useState(0);
+  const [search, setSearch] = useState<string>('');
+  const [searchValues, setSearchValues] = useState<SData[]>([]);
+  const [fData, setFData] = useState<ModelsList[]>([]);
+  const [fLength, setFLength] = useState(0);
 
   const {
     data,
@@ -57,29 +66,66 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
   } = properties;
 
   const itemsOnPage = paginate || 20;
-  const search = '';
 
-  let filteredLength = 0;
+  useEffect(() => {
+    const sv: SData[] = [];
+    data.map((row, index): void => {
+      let rowString = '';
+      const values = Object.values(row);
+      values.map((value): void => {
+        if (value && typeof value !== 'number') {
+          if (typeof value === 'string') {
+            rowString += value;
+          } else if (Array.isArray(value)) {
+            rowString += value.join('');
+          }
+        }
+      });
+      sv.push({ id: index, data: rowString.toLowerCase() });
+    });
+    setSearchValues(sv);
+    setFData(data);
+    setFLength(data.length);
+  }, [data]);
 
-  const filteredData = (): ModelsList[] => {
-    if (search !== '') {
-      filteredLength = data.length;
-      return data;
+  useEffect(() => {
+    if (search.length < 2) {
+      const dataLength = data.length;
+      if (fLength !== dataLength) {
+        setFData(data);
+        setFLength(dataLength);
+      }
+    } else {
+      const searchArray = search.toLowerCase().split(' ');
+      const filteredData = data.filter((_, index) =>
+        searchArray.every((value: string) => searchValues[index].data.includes(value)),
+      );
+      const filteredLength = filteredData.length;
+      if (filteredLength !== fLength) {
+        if (currentPage + 1 > Math.ceil(filteredLength / itemsOnPage)) {
+          setCurrentPage(Math.ceil(filteredLength / itemsOnPage) - 1);
+        }
+        setFData(filteredData);
+        setFLength(filteredLength);
+      }
     }
-    const sliceData = data.slice(currentPage * itemsOnPage, (currentPage + 1) * itemsOnPage);
-    filteredLength = data.length;
-    return sliceData;
+  }, [search, itemsOnPage]);
+
+  const paginationData = (): ModelsList[] => {
+    return fData.slice(currentPage * itemsOnPage, (currentPage + 1) * itemsOnPage);
+  };
+
+  const changeSearch = (event: ChangeEvent<HTMLInputElement>): void => {
+    setSearch(event.target.value);
   };
 
   const receiveChildValue = (value: number): void => {
     setCurrentPage(value - 1);
   };
 
-  const classes = `${className ? className : ''} table is-fullwidth is-narrow mwt ${
+  const tableClasses = `${className ? className : ''} table is-fullwidth is-narrow mwt ${
     hoverable ? 'is-hoverable' : ''
   } ${striped ? 'is-striped' : ''} ${bordered ? 'is-bordered' : ''}`;
-
-  const tableClasses = `${classes}`;
 
   const Heading = (): JSX.Element | null =>
     nohead ? null : (
@@ -94,7 +140,7 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
       </thead>
     );
 
-  const Td = (field: string[] | string, isArray: boolean | undefined): JSX.Element =>
+  const Td = (field: string[] | string, isArray?: boolean): JSX.Element =>
     isArray && field && Array.isArray(field) ? splitArray(field) : <>{field}</>;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -122,7 +168,7 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
 
   const TableAllRows = (): JSX.Element => (
     <>
-      {filteredData().map((item, index) => (
+      {paginationData().map((item, index) => (
         <tr
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           className={rowClass ? rowClass.rowFunc((item as any)[rowClass.rowFuncField]) : undefined}
@@ -142,18 +188,32 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
     ) : null;
 
   const Paginate = (): JSX.Element | null =>
-    paginate && filteredLength / itemsOnPage > 2 ? (
+    paginate && fLength / itemsOnPage > 2 ? (
       <Pagination
         currentPage={currentPage + 1}
-        lastPage={Math.ceil(filteredLength / itemsOnPage)}
+        lastPage={Math.ceil(fLength / itemsOnPage)}
         callback={receiveChildValue}
       />
     ) : null;
+
+  const Search = (): JSX.Element => (
+    <p className="control mb1 mwt" key="TableSearch">
+      <input
+        className="input is-expanded"
+        type="search"
+        placeholder="Поиск"
+        onChange={changeSearch}
+        value={search}
+        autoFocus
+      />
+    </p>
+  );
 
   return !data ? (
     <div>Loading data</div>
   ) : (
     <>
+      <Search />
       <table className={tableClasses}>
         <Heading />
         <TBody />
