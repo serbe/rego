@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Icon } from './icon';
 import { SelectItem } from '../models/selectitem';
@@ -24,7 +24,7 @@ type CLWS = {
   error?: string;
 };
 
-export const Select: FC<SelectProps> = (properties: SelectProps) => {
+export const Select = (properties: SelectProps): JSX.Element => {
   const { id, label, icon, color, listName, callback } = properties;
   // const { id, iconLeft, iconRight, color, state, label, listName, callback } = properties;
 
@@ -72,16 +72,14 @@ export const Select: FC<SelectProps> = (properties: SelectProps) => {
 
   // const inputClasses = `input ${color ? `is-${color}` : ''} ${state ? `is-${state}` : ''}`;
 
-  const Label = (): JSX.Element =>
+  const Label = (): JSX.Element | null =>
     label ? (
       <label className="label" key="SelectLabel">
         {label}
       </label>
-    ) : (
-      <></>
-    );
+    ) : null;
 
-  const LeftIcon = (): JSX.Element =>
+  const LeftIcon = (): JSX.Element | null =>
     icon ? (
       <Icon
         icon={icon}
@@ -89,9 +87,7 @@ export const Select: FC<SelectProps> = (properties: SelectProps) => {
         color={color !== 'primary' ? color : undefined}
         key="SelectIconLeft"
       />
-    ) : (
-      <></>
-    );
+    ) : null;
 
   const currentValue = (): string => {
     if (opened) {
@@ -110,10 +106,8 @@ export const Select: FC<SelectProps> = (properties: SelectProps) => {
       : list;
   };
 
-  const DropdownContent = (): JSX.Element =>
-    error || !opened ? (
-      <></>
-    ) : (
+  const DropdownContent = (): JSX.Element | null =>
+    error || !opened ? null : (
       <div className="select-box">
         {filteredList().map((ListItem) => (
           <div

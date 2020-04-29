@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 
 interface IconProps {
   children?: Element;
@@ -8,7 +8,7 @@ interface IconProps {
   position?: 'left' | 'right';
 }
 
-export const Icon: FC<IconProps> = (properties: IconProps) => {
+export const Icon = (properties: IconProps): JSX.Element => {
   const { children, className, color, position, icon } = properties;
 
   const spanClasses = `${className} icon ${color ? `has-text-${color}` : ''} ${

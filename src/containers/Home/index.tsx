@@ -1,4 +1,4 @@
-import React, { useEffect, useState, FC } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { EducationShort } from '../../models/education';
@@ -35,7 +35,7 @@ const tinyDate = (date: string): string => {
   return date;
 };
 
-export const Home: FC<{}> = () => {
+export const Home = (): JSX.Element => {
   const [hasError, setErrors] = useState<string>();
   const [educations, setEducations] = useState<EducationShort[]>([]);
   const [practices, setPractices] = useState<PracticeShort[]>([]);

@@ -67,9 +67,7 @@ export const Pagination: FC<PaginationProps> = (properties: PaginationProps) => 
           </a>
         )}
       </li>
-    ) : (
-      <></>
-    );
+    ) : null;
   };
 
   return (

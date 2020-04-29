@@ -81,10 +81,8 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
 
   const tableClasses = `${classes}`;
 
-  const Heading = (): JSX.Element =>
-    nohead ? (
-      <></>
-    ) : (
+  const Heading = (): JSX.Element | null =>
+    nohead ? null : (
       <thead>
         <tr>
           {columns.map<JSX.Element>((column: Column, index: number) => (
@@ -136,25 +134,21 @@ export const Table: FC<TableProps> = (properties: TableProps) => {
     </>
   );
 
-  const TBody = (): JSX.Element =>
+  const TBody = (): JSX.Element | null =>
     data && data.length > 0 ? (
       <tbody>
         <TableAllRows />
       </tbody>
-    ) : (
-      <></>
-    );
+    ) : null;
 
-  const Paginate = (): JSX.Element =>
+  const Paginate = (): JSX.Element | null =>
     paginate && filteredLength / itemsOnPage > 2 ? (
       <Pagination
         currentPage={currentPage + 1}
         lastPage={Math.ceil(filteredLength / itemsOnPage)}
         callback={receiveChildValue}
       />
-    ) : (
-      <></>
-    );
+    ) : null;
 
   return !data ? (
     <div>Loading data</div>

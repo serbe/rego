@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent } from 'react';
+import React, { MouseEvent } from 'react';
 
 interface ButtonProps {
   type?: 'a' | 'button' | 'submit' | 'reset';
@@ -35,7 +35,7 @@ interface ButtonProps {
   rounded?: boolean;
 }
 
-export const Button: FC<ButtonProps> = (properties: ButtonProps) => {
+export const Button = (properties: ButtonProps): JSX.Element => {
   const {
     active,
     children,

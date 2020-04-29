@@ -1,10 +1,10 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { Router } from './containers/Router';
 
 import { NavBar } from './components/navbar';
 import './rugo.css';
 
-const Rugo: FC = () => {
+const Rugo = (): JSX.Element => {
   return (
     <>
       <NavBar />

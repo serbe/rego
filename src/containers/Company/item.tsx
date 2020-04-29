@@ -112,9 +112,7 @@ export const CompanyItem: FC<{}> = () => {
       /* list={scopes} */
       /* label="Сфера деятельности" */
       />
-    ) : (
-      <></>
-    );
+    ) : null;
 
   const Emails = (): JSX.Element =>
     emails ? (
@@ -137,7 +135,7 @@ export const CompanyItem: FC<{}> = () => {
         ))}
       </>
     ) : (
-      <></>
+      null
     );
 
   const Phones = (): JSX.Element =>
@@ -159,7 +157,7 @@ export const CompanyItem: FC<{}> = () => {
         ))}
       </>
     ) : (
-      <></>
+      null
     );
 
   const Faxes = (): JSX.Element =>
@@ -181,7 +179,7 @@ export const CompanyItem: FC<{}> = () => {
         ))}
       </>
     ) : (
-      <></>
+      null
     );
 
   const Practices = (): JSX.Element =>
@@ -199,7 +197,7 @@ export const CompanyItem: FC<{}> = () => {
         ))}
       </div>
     ) : (
-      <></>
+      null
     );
 
   const Contacts = (): JSX.Element =>
@@ -214,9 +212,7 @@ export const CompanyItem: FC<{}> = () => {
           </NavLink>
         ))}
       </div>
-    ) : (
-      <></>
-    );
+    ) : null;
 
   return (
     <div className="container mw768">
@@ -314,8 +310,8 @@ export const CompanyItem: FC<{}> = () => {
           </button> */}
         </div>
       ) : (
-        <></>
+        null
       )}
-    </div>
+    </dinull
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Table, Column } from '../../components/table';
 import { ContactList } from '../../models/contact';
@@ -12,7 +12,7 @@ type CLWS = {
   error?: string;
 };
 
-export const Contacts: FC<{}> = () => {
+export const Contacts = (): JSX.Element => {
   const [contacts, setContacts] = useState<ContactList[]>([]);
   const [error, setError] = useState<string>();
 

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, MouseEvent } from 'react';
+import React, { ChangeEvent, MouseEvent } from 'react';
 import { Icon } from './icon';
 
 interface InputProps {
@@ -21,7 +21,7 @@ interface InputProps {
   value?: string | undefined;
 }
 
-export const Input: FC<InputProps> = (properties: InputProps) => {
+export const Input = (properties: InputProps): JSX.Element => {
   const {
     className,
     color,
@@ -50,10 +50,10 @@ export const Input: FC<InputProps> = (properties: InputProps) => {
     hovered ? 'is-hovered' : ''
   } ${rounded ? 'is-rounded' : ''} ${isStatic ? 'is-static' : ''} ${color ? `is-${color}` : ''}`;
 
-  const LeftIcon = (): JSX.Element => (icon ? <Icon position={'left'} icon={icon} /> : <></>);
+  const LeftIcon = (): JSX.Element | null => (icon ? <Icon position={'left'} icon={icon} /> : null);
 
-  const RightIcon = (): JSX.Element =>
-    iconRight ? <Icon position={'right'} icon={iconRight} /> : <></>;
+  const RightIcon = (): JSX.Element | null =>
+    iconRight ? <Icon position={'right'} icon={iconRight} /> : null;
 
   return (
     <div className={divClasses}>
