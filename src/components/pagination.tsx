@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 
 interface PaginationProps {
   currentPage: number;
@@ -13,7 +13,7 @@ interface ItemProps {
   ellipsis?: boolean;
 }
 
-export const Pagination: FC<PaginationProps> = (properties: PaginationProps) => {
+export const Pagination = (properties: PaginationProps): JSX.Element => {
   const { currentPage, lastPage, callback } = properties;
 
   const navClasses = `pagination is-rounded is-centered`;
@@ -50,7 +50,7 @@ export const Pagination: FC<PaginationProps> = (properties: PaginationProps) => 
       </button>
     );
 
-  const Item = (properties: ItemProps): JSX.Element => {
+  const Item = (properties: ItemProps): JSX.Element | null => {
     const { check, index, link, ellipsis } = properties;
 
     return check ? (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC, ChangeEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 
 // import { input } from '../../components/input';
@@ -8,7 +8,7 @@ import { Company } from '../../models/company';
 import { SelectItem } from '../../models/selectitem';
 import { addEmptyString, numberToString } from '../../helpers/utils';
 
-export const CompanyItem: FC<{}> = () => {
+export const CompanyItem = (): JSX.Element => {
   const { id } = useParams();
   const [error, setError] = useState(false);
   const [company, setCompany] = useState<Company>();
@@ -106,7 +106,7 @@ export const CompanyItem: FC<{}> = () => {
   //   }
   // }
 
-  const Scopes = (): JSX.Element =>
+  const Scopes = (): JSX.Element | null =>
     scopes && scope ? (
       <select /* selected={scope} */ /* itemName="scope" */
       /* list={scopes} */
@@ -114,7 +114,7 @@ export const CompanyItem: FC<{}> = () => {
       />
     ) : null;
 
-  const Emails = (): JSX.Element =>
+  const Emails = (): JSX.Element | null =>
     emails ? (
       <>
         {emails.map((email, index) => (
@@ -134,11 +134,9 @@ export const CompanyItem: FC<{}> = () => {
           />
         ))}
       </>
-    ) : (
-      null
-    );
+    ) : null;
 
-  const Phones = (): JSX.Element =>
+  const Phones = (): JSX.Element | null =>
     phones ? (
       <>
         {phones.map((phone, index) => (
@@ -156,11 +154,9 @@ export const CompanyItem: FC<{}> = () => {
           />
         ))}
       </>
-    ) : (
-      null
-    );
+    ) : null;
 
-  const Faxes = (): JSX.Element =>
+  const Faxes = (): JSX.Element | null =>
     faxes ? (
       <>
         {faxes.map((fax, index) => (
@@ -178,11 +174,9 @@ export const CompanyItem: FC<{}> = () => {
           />
         ))}
       </>
-    ) : (
-      null
-    );
+    ) : null;
 
-  const Practices = (): JSX.Element =>
+  const Practices = (): JSX.Element | null =>
     company && company.practices ? (
       <div className="field" key="practices">
         <label className="label">Тренировки</label>
@@ -196,11 +190,9 @@ export const CompanyItem: FC<{}> = () => {
           </NavLink>
         ))}
       </div>
-    ) : (
-      null
-    );
+    ) : null;
 
-  const Contacts = (): JSX.Element =>
+  const Contacts = (): JSX.Element | null =>
     company && company.contacts ? (
       <div className="field" key="contacts">
         <label className="label">Сотрудники</label>
@@ -309,9 +301,7 @@ export const CompanyItem: FC<{}> = () => {
             on submit
           </button> */}
         </div>
-      ) : (
-        null
-      )}
-    </dinull
+      ) : null}
+    </div>
   );
 };

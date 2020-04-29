@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC, ChangeEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import { useParams } from 'react-router-dom';
 
 // import { Input } from '../../components/input';
@@ -8,7 +8,7 @@ import { Certificate } from '../../models/certificate';
 // import { SelectItem } from '../../models/selectitem';
 // import { fetchData } from '../../helpers/utils';
 
-export const CertificateItem: FC<{}> = () => {
+export const CertificateItem = (): JSX.Element => {
   const { id } = useParams();
   const [error, setError] = useState(false);
   const [certificate, setCertificate] = useState<Certificate>();

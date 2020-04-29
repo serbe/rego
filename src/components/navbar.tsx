@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button } from './button';
 
@@ -82,7 +82,7 @@ const NavbarStart = (): JSX.Element => (
   </div>
 );
 
-export const NavBar: FC<{}> = () => {
+export const NavBar = (): JSX.Element => {
   // const [auth, setAuth] = useState(true);
   // const openClassName = (cn: string): string => (open ? `${cn} is-active` : cn);
   const auth = true;
@@ -93,39 +93,37 @@ export const NavBar: FC<{}> = () => {
   };
 
   return (
-    <>
-      <nav aria-label="main navigation" className="navbar is-dark" role="navigation">
-        <div className="container">
-          {auth ? (
-            <>
-              <div className="navbar-brand">
-                <NavLink activeClassName="is-active" className="navbar-item" exact={true} to="/">
-                  ЕДДС
-                </NavLink>
-                <a
-                  aria-expanded="false"
-                  aria-label="menu"
-                  className={open ? 'navbar-burger is-active' : 'navbar-burger'}
-                  data-target="navbarData"
-                  role="button"
-                  href="#button"
-                  onClick={handleToggle}
-                >
-                  <span aria-hidden="true" />
-                  <span aria-hidden="true" />
-                  <span aria-hidden="true" />
-                </a>
-              </div>
-              <div id="navbarData" className={open ? 'navbar-menu is-active' : 'navbar-menu'}>
-                <NavbarStart />
-                <NavbarEnd />
-              </div>
-            </>
-          ) : (
-            <NavbarNotLogged />
-          )}
-        </div>
-      </nav>
-    </>
+    <nav aria-label="main navigation" className="navbar is-dark" role="navigation">
+      <div className="container">
+        {auth ? (
+          <>
+            <div className="navbar-brand">
+              <NavLink activeClassName="is-active" className="navbar-item" exact={true} to="/">
+                ЕДДС
+              </NavLink>
+              <a
+                aria-expanded="false"
+                aria-label="menu"
+                className={open ? 'navbar-burger is-active' : 'navbar-burger'}
+                data-target="navbarData"
+                role="button"
+                href="#button"
+                onClick={handleToggle}
+              >
+                <span aria-hidden="true" />
+                <span aria-hidden="true" />
+                <span aria-hidden="true" />
+              </a>
+            </div>
+            <div id="navbarData" className={open ? 'navbar-menu is-active' : 'navbar-menu'}>
+              <NavbarStart />
+              <NavbarEnd />
+            </div>
+          </>
+        ) : (
+          <NavbarNotLogged />
+        )}
+      </div>
+    </nav>
   );
 };

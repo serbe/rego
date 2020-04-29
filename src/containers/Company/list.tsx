@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Table, Column } from '../../components/table';
 import { CompanyList } from '../../models/company';
@@ -12,7 +12,7 @@ type CLWS = {
   error?: string;
 };
 
-export const Companies: FC<{}> = () => {
+export const Companies = (): JSX.Element => {
   const [companies, setCompanies] = useState<CompanyList[]>([]);
   const [error, setError] = useState<string>();
 

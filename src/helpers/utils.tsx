@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const addEmptyString = (values: string[] | undefined): string[] => {
+export const addEmptyString = (values?: string[]): string[] => {
   let list: string[] = [];
   if (values) {
     list = values.filter((value) => value !== '');
@@ -9,7 +9,7 @@ export const addEmptyString = (values: string[] | undefined): string[] => {
   return list;
 };
 
-export const numberToString = (values: number[] | undefined): string[] => {
+export const numberToString = (values?: number[]): string[] => {
   let list: string[] = [];
   if (values) {
     list = values.map((value) => value.toString());
@@ -17,7 +17,7 @@ export const numberToString = (values: number[] | undefined): string[] => {
   return list;
 };
 
-export const splitStrings = (items: string[] | undefined): JSX.Element => (
+export const splitStrings = (items?: string[]): JSX.Element => (
   <>
     {items
       ? items.map((arrayItem: string, index: number) => <div key={`div${index}`}>{arrayItem}</div>)
@@ -25,7 +25,7 @@ export const splitStrings = (items: string[] | undefined): JSX.Element => (
   </>
 );
 
-export const splitNumbers = (items: number[] | undefined): JSX.Element => (
+export const splitNumbers = (items?: number[]): JSX.Element => (
   <>
     {items
       ? items.map((arrayItem: number, index: number) => <div key={`div${index}`}>{arrayItem}</div>)

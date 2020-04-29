@@ -4,7 +4,7 @@ import { Icon } from './icon';
 interface InputProps {
   className?: string;
   color?: 'primary' | 'info' | 'success' | 'warning' | 'danger';
-  defaultValue?: string | undefined;
+  defaultValue?: string;
   disabled?: boolean;
   focused?: boolean;
   hovered?: boolean;
@@ -18,7 +18,7 @@ interface InputProps {
   readonly?: boolean;
   rounded?: boolean;
   type?: 'text' | 'password' | 'email' | 'tel';
-  value?: string | undefined;
+  value?: string;
 }
 
 export const Input = (properties: InputProps): JSX.Element => {

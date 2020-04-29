@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, MouseEvent } from 'react';
+import React, { ChangeEvent, MouseEvent } from 'react';
 
 import { Input } from './input';
 
@@ -19,11 +19,11 @@ interface FormFieldProps {
   readonly?: boolean;
   rounded?: boolean;
   type?: 'text' | 'password' | 'email' | 'tel';
-  value?: string | undefined;
-  defaultValue?: string | undefined;
+  value?: string;
+  defaultValue?: string;
 }
 
-export const FormField: FC<FormFieldProps> = (properties: FormFieldProps) => {
+export const FormField = (properties: FormFieldProps): JSX.Element => {
   const {
     className,
     color,
