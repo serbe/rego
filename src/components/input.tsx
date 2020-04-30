@@ -14,6 +14,7 @@ interface InputProps {
   loading?: boolean;
   onClick?: (event: MouseEvent<HTMLInputElement, globalThis.MouseEvent>) => void;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (event: ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   readonly?: boolean;
   rounded?: boolean;
@@ -35,6 +36,7 @@ export const Input = (properties: InputProps): JSX.Element => {
     loading,
     onClick,
     onChange,
+    onBlur,
     placeholder,
     readonly,
     rounded,
@@ -62,6 +64,7 @@ export const Input = (properties: InputProps): JSX.Element => {
         disabled={disabled}
         onClick={onClick}
         onChange={onChange}
+        onBlur={onBlur}
         placeholder={placeholder}
         readOnly={readonly}
         type={type}
