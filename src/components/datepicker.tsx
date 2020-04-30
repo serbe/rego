@@ -43,14 +43,9 @@ export const DatePicker = (properties: DatePickerProps): JSX.Element => {
       list.push(i.toString().length === 1 ? `0${i}` : i.toString());
     }
     return (
-      <select>
+      <select defaultValue={day}>
         {list.map((item) => (
-          <option
-            key={item}
-            selected={item === day}
-            value={item}
-            onSelect={(): void => setDay(item)}
-          >
+          <option key={item} value={item} onSelect={(): void => setDay(item)}>
             {item}
           </option>
         ))}
@@ -64,9 +59,9 @@ export const DatePicker = (properties: DatePickerProps): JSX.Element => {
       list.push(i.toString().length === 1 ? `0${i}` : i.toString());
     }
     return (
-      <select>
+      <select defaultValue={month}>
         {list.map((item) => (
-          <option key={item} selected={item === month} onSelect={(): void => setMonth(item)}>
+          <option key={item} onSelect={(): void => setMonth(item)}>
             {item}
           </option>
         ))}
@@ -81,9 +76,9 @@ export const DatePicker = (properties: DatePickerProps): JSX.Element => {
       list.push(i.toString());
     }
     return (
-      <select>
+      <select defaultValue={year}>
         {list.map((item) => (
-          <option key={item} selected={item === year} onSelect={(): void => setYear(item)}>
+          <option key={item} onSelect={(): void => setYear(item)}>
             {item}
           </option>
         ))}
