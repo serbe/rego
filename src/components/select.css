@@ -10,8 +10,9 @@
   width: 100%;
   overflow: auto;
   z-index: +5;
-  /*margin-top: -10px;*/
+  margin-top: 5px;
   max-height: 300px;
+  border-radius: 4px;
 }
 
 .select-item {
