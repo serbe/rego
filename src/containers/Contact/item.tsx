@@ -19,177 +19,36 @@ type CLWS = {
   error?: string;
 };
 
-const ContactForm = (contact: Contact): JSX.Element => {
-  const c = contact;
-
-  let emails = addEmptyString(c.emails);
-  let phones = addEmptyString(numberToString(c.phones));
-  let faxes = addEmptyString(numberToString(c.faxes));
-
-  const Emails = (): JSX.Element => (
-    <div className="field">
-      <label className="label">Электронный адрес</label>
-      {emails.map((email, index) => (
-        <Input
-          icon="envelope"
-          key={`email-${index}`}
-          defaultValue={email}
-          placeholder="Электронный адрес"
-          onBlur={(event): void => {
-            emails[index] = event.target.value;
-            emails = addEmptyString(emails);
-          }}
-        />
-      ))}
-    </div>
-  );
-
-  const Phones = (): JSX.Element => (
-    <div className="field">
-      <label className="label">Телефон</label>
-      {phones.map((phone, index) => (
-        <Input
-          type="tel"
-          icon="phone"
-          key={`phone-${index}`}
-          defaultValue={phone.toString()}
-          placeholder="Телефон"
-          onBlur={(event): void => {
-            phones[index] = event.target.value;
-            phones = addEmptyString(phones);
-            console.log(event.target.value, index, phones);
-          }}
-        />
-      ))}
-    </div>
-  );
-
-  const Faxes = (): JSX.Element => (
-    <div className="field">
-      <label className="label">Факс</label>
-      {faxes.map((fax, index) => (
-        <Input
-          type="tel"
-          icon="fax"
-          key={`fax-${index}`}
-          defaultValue={fax.toString()}
-          placeholder="Факс"
-          onBlur={(event): void => {
-            faxes[index] = event.target.value;
-            faxes = addEmptyString(faxes);
-          }}
-        />
-      ))}
-    </div>
-  );
-
-  return (
-    <div>
-      <FormField
-        label="Фамилия Имя Отчество"
-        icon="user"
-        defaultValue={c.name}
-        onChange={(event: ChangeEvent<HTMLInputElement>): void => {
-          c.name = event.target.value;
-        }}
-      />
-      <Select
-        label="Организация"
-        listName="CompanySelect"
-        id={c.company_id}
-        icon="building"
-        callback={(value: number): void => {
-          c.company_id = value;
-        }}
-      />
-
-      <div className="columns">
-        <div className="column is-half">
-          <Select
-            label="Должность"
-            listName="PostSelect"
-            id={c.post_id}
-            icon="tag"
-            callback={(value: number): void => {
-              c.post_id = value;
-            }}
-          />
-        </div>
-        <div className="column is-half">
-          <Select
-            label="Отдел"
-            listName="DepartmentSelect"
-            id={c.department_id}
-            icon="tag"
-            callback={(value: number): void => {
-              c.department_id = value;
-            }}
-          />
-        </div>
-      </div>
-
-      <div className="columns">
-        <div className="column is-half">
-          <Select
-            label="Должность ГО"
-            listName="PostGoSelect"
-            id={c.post_go_id}
-            icon="tag"
-            callback={(value: number): void => {
-              c.post_go_id = value;
-            }}
-          />
-        </div>
-        <div className="column is-half">
-          <Select
-            label="Звание"
-            listName="RankSelect"
-            id={c.rank_id}
-            icon="tag"
-            callback={(value: number): void => {
-              c.rank_id = value;
-            }}
-          />
-        </div>
-      </div>
-
-      <div className="columns">
-        <div className="column is-one-third">
-          <DatePicker
-            label="Дата рождения"
-            value={c.birthday}
-            callback={(value: string): void => {
-              c.birthday = value;
-            }}
-          />
-        </div>
-      </div>
-
-      <div className="columns">
-        <div className="column">
-          <Emails />
-        </div>
-        <div className="column">
-          <Phones />
-        </div>
-        <div className="column">
-          <Faxes />
-        </div>
-      </div>
-    </div>
-  );
-};
-
 export const ContactItem = (): JSX.Element => {
-  const [contact, setContact] = useState<Contact>();
   const [error, setError] = useState<string>();
+  const [name, setName] = useState<string>();
+  const [companyID, setCompanyID] = useState<number>();
+  const [postID, setPostID] = useState<number>();
+  const [departmentID, setDepartmentID] = useState<number>();
+  const [postGoID, setPostGoID] = useState<number>();
+  const [rankID, setRankID] = useState<number>();
+  const [birthday, setBirthday] = useState<string>();
+  const [emails, setEmails] = useState<string[]>();
+  const [phones, setPhones] = useState<string[]>();
+  const [faxes, setFaxes] = useState<string[]>();
   const { id } = useParams();
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     rws.addEventListener('message', (message: MessageEvent) => {
       const data: CLWS = JSON.parse(message.data);
       if (data?.name === 'Contact' && data.object.Contact) {
-        setContact(data.object.Contact);
+        setName(data.object.Contact.name);
+        setCompanyID(data.object.Contact.company_id);
+        setPostID(data.object.Contact.post_id);
+        setDepartmentID(data.object.Contact.department_id);
+        setPostGoID(data.object.Contact.post_go_id);
+        setRankID(data.object.Contact.rank_id);
+        setBirthday(data.object.Contact.birthday);
+        setEmails(addEmptyString(data.object.Contact.emails));
+        setPhones(addEmptyString(numberToString(data.object.Contact.phones)));
+        setFaxes(addEmptyString(numberToString(data.object.Contact.faxes)));
+        setLoaded(true);
       }
       if (data.error) {
         setError(data.error);
@@ -204,5 +63,198 @@ export const ContactItem = (): JSX.Element => {
     };
   }, [id]);
 
-  return <div>{contact && !error ? ContactForm(contact) : undefined}</div>;
+  const Name = (): JSX.Element => (
+    <FormField
+      label="Фамилия Имя Отчество"
+      icon="user"
+      defaultValue={name}
+      onChange={(event: ChangeEvent<HTMLInputElement>): void => {
+        setName(event.target.value);
+      }}
+    />
+  );
+
+  const Company = (): JSX.Element => (
+    <Select
+      label="Организация"
+      listName="CompanySelect"
+      id={companyID}
+      icon="building"
+      callback={(value: number): void => {
+        setCompanyID(value);
+      }}
+    />
+  );
+
+  const Post = (): JSX.Element => (
+    <Select
+      label="Должность"
+      listName="PostSelect"
+      id={postID}
+      icon="tag"
+      callback={(value: number): void => {
+        setPostID(value);
+      }}
+    />
+  );
+
+  const Department = (): JSX.Element => (
+    <Select
+      label="Отдел"
+      listName="DepartmentSelect"
+      id={departmentID}
+      icon="tag"
+      callback={(value: number): void => {
+        setDepartmentID(value);
+      }}
+    />
+  );
+
+  const PostGO = (): JSX.Element => (
+    <Select
+      label="Должность ГО"
+      listName="PostGoSelect"
+      id={postGoID}
+      icon="tag"
+      callback={(value: number): void => {
+        setPostGoID(value);
+      }}
+    />
+  );
+
+  const Rank = (): JSX.Element => (
+    <Select
+      label="Звание"
+      listName="RankSelect"
+      id={rankID}
+      icon="tag"
+      callback={(value: number): void => {
+        setRankID(value);
+      }}
+    />
+  );
+
+  const Birthday = (): JSX.Element => (
+    <DatePicker
+      label="Дата рождения"
+      value={birthday}
+      callback={(value: string): void => {
+        setBirthday(value);
+      }}
+    />
+  );
+
+  const Emails = (): JSX.Element => (
+    <div className="field">
+      <label className="label">Электронный адрес</label>
+      {emails
+        ? emails.map((email, index) => (
+            <Input
+              icon="envelope"
+              key={`email-${index}`}
+              defaultValue={email}
+              placeholder="Электронный адрес"
+              onBlur={(event): void => {
+                let values = emails;
+                values[index] = event.target.value;
+                values = addEmptyString(values);
+                setEmails(values);
+              }}
+            />
+          ))
+        : null}
+    </div>
+  );
+
+  const Phones = (): JSX.Element => (
+    <div className="field">
+      <label className="label">Телефон</label>
+      {phones
+        ? phones.map((phone, index) => (
+            <Input
+              type="tel"
+              icon="phone"
+              key={`phone-${index}`}
+              defaultValue={phone.toString()}
+              placeholder="Телефон"
+              onBlur={(event): void => {
+                let values = phones;
+                values[index] = event.target.value;
+                values = addEmptyString(values);
+                setPhones(values);
+              }}
+              classNameDiv="pb5"
+            />
+          ))
+        : null}
+    </div>
+  );
+
+  const Faxes = (): JSX.Element => (
+    <div className="field">
+      <label className="label">Факс</label>
+      {faxes
+        ? faxes.map((fax, index) => (
+            <Input
+              type="tel"
+              icon="fax"
+              key={`fax-${index}`}
+              defaultValue={fax.toString()}
+              placeholder="Факс"
+              onBlur={(event): void => {
+                let values = faxes;
+                values[index] = event.target.value;
+                values = addEmptyString(values);
+                setFaxes(values);
+              }}
+            />
+          ))
+        : null}
+    </div>
+  );
+
+  return (
+    <div>
+      {loaded && !error ? (
+        <>
+          <Name />
+          <Company />
+          <div className="columns">
+            <div className="column is-half">
+              <Post key="post" />
+            </div>
+            <div className="column is-half">
+              <Department />
+            </div>
+          </div>
+          <div className="columns">
+            <div className="column is-half">
+              <PostGO />
+            </div>
+            <div className="column is-half">
+              <Rank />
+            </div>
+          </div>
+
+          <div className="columns">
+            <div className="column is-one-third">
+              <Birthday />
+            </div>
+          </div>
+
+          <div className="columns">
+            <div className="column">
+              <Emails />
+            </div>
+            <div className="column">
+              <Phones />
+            </div>
+            <div className="column">
+              <Faxes />
+            </div>
+          </div>
+        </>
+      ) : null}
+    </div>
+  );
 };
