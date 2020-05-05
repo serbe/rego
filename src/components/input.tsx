@@ -3,6 +3,7 @@ import { Icon } from './icon';
 
 interface InputProps {
   className?: string;
+  classNameDiv?: string;
   color?: 'primary' | 'info' | 'success' | 'warning' | 'danger';
   defaultValue?: string;
   disabled?: boolean;
@@ -25,6 +26,7 @@ interface InputProps {
 export const Input = (properties: InputProps): JSX.Element => {
   const {
     className,
+    classNameDiv,
     color,
     defaultValue,
     disabled,
@@ -44,7 +46,7 @@ export const Input = (properties: InputProps): JSX.Element => {
     value,
   } = properties;
 
-  const divClasses = `control ${icon ? 'has-icons-left' : ''} ${
+  const divClasses = `${classNameDiv ? classNameDiv : ''} control ${icon ? 'has-icons-left' : ''} ${
     iconRight ? 'has-icons-right' : ''
   } ${loading ? 'is-loading' : ''}`;
 
