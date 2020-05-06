@@ -1,0 +1,46 @@
+@charset "utf-8";
+@import '../node_modules/bulma/bulma.sass';
+
+// $size-1: 2.5rem;
+// $size-2: 2.08rem;
+// $size-3: 1.66rem;
+// $size-4: 1.25rem;
+// $size-5: 1.04rem;
+// $size-6: 0.83rem;
+// $size-7: 0.62rem;
+
+.mwt {
+  max-width: 1024px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.w250 {
+  min-width: 250px !important;
+  max-width: 80% !important;
+}
+
+.fixed {
+  table-layout: fixed;
+}
+
+.pv1 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.w95 {
+  width: 95px !important;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.mb1 {
+  margin-bottom: 1rem;
+}
+
+.pb5 {
+  padding-bottom: 5px;
+}

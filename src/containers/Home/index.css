@@ -1,0 +1,35 @@
+.tr-green td {
+  border-color: hsl(141, 71%, 48%) !important;
+}
+
+.tr-red td {
+  border-color: hsl(348, 100%, 61%) !important;
+}
+
+.tr-yellow td {
+  border-color: hsl(48, 100%, 67%) !important;
+}
+
+.tr-green:hover {
+  background-color: hsl(141, 71%, 48%) !important;
+}
+
+.tr-red:hover {
+  background-color: hsl(348, 100%, 61%) !important;
+}
+
+.tr-yellow:hover {
+  background-color: hsl(48, 100%, 67%) !important;
+}
+
+.tr-green td:first-child {
+  background-color: hsl(141, 71%, 48%) !important;
+}
+
+.tr-red td:first-child {
+  background-color: hsl(348, 100%, 61%) !important;
+}
+
+.tr-yellow td:first-child {
+  background-color: hsl(48, 100%, 67%) !important;
+}

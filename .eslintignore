@@ -1,0 +1,10 @@
+/.git
+/docs/.next
+/coverage
+/docs/export
+/tmp
+build
+node_modules
+/src/serviceWorker.ts
+/src/setupTests.ts
+/src/react-app-env.d.ts
