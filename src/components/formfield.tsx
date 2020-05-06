@@ -3,6 +3,8 @@ import React, { ChangeEvent, MouseEvent } from 'react';
 import { Input } from './input';
 
 interface FormFieldProps {
+  name?: string;
+  formRef?: any;
   className?: string;
   color?: 'primary' | 'info' | 'success' | 'warning' | 'danger';
   disabled?: boolean;
@@ -25,6 +27,8 @@ interface FormFieldProps {
 
 export const FormField = (properties: FormFieldProps): JSX.Element => {
   const {
+    name,
+    formRef,
     className,
     color,
     disabled,
@@ -52,6 +56,8 @@ export const FormField = (properties: FormFieldProps): JSX.Element => {
     <div className="field">
       <Label />
       <Input
+        name={name}
+        formRef={formRef}
         className={className}
         color={color}
         disabled={disabled}

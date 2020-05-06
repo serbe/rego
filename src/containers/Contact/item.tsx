@@ -1,5 +1,6 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useCallback, useState, useEffect, ChangeEvent } from 'react';
 import { useParams } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 
 import { Contact } from '../../models/contact';
 import { SelectItem } from '../../models/selectitem';
@@ -19,7 +20,11 @@ type CLWS = {
   error?: string;
 };
 
+const onSubmit = (data: any) => console.log(data);
+
 export const ContactItem = (): JSX.Element => {
+  const { register, handleSubmit, watch, errors } = useForm();
+
   const [error, setError] = useState<string>();
   const [name, setName] = useState<string>();
   const [companyID, setCompanyID] = useState<number>();
@@ -63,26 +68,65 @@ export const ContactItem = (): JSX.Element => {
     };
   }, [id]);
 
+  // const onChangeName = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+  //   const { value } = event.target;
+  //   setName(value);
+  // }, []);
+
+  const onChangeCompany = useCallback((value: number) => {
+    setCompanyID(value);
+  }, []);
+
+  const onChangePost = useCallback((value: number) => {
+    setPostID(value);
+  }, []);
+
+  const onChangeDepartment = useCallback((value: number) => {
+    setDepartmentID(value);
+  }, []);
+
+  const onChangePostGO = useCallback((value: number) => {
+    setPostGoID(value);
+  }, []);
+
+  const onChangeRank = useCallback((value: number) => {
+    setRankID(value);
+  }, []);
+
+  const onChangeBirthday = useCallback((value: string) => {
+    setBirthday(value);
+  }, []);
+
+  // const onChangeDepartment = useCallback((value: number) => {
+  //   setDepartmentID(value);
+  // }, []);
+
+  // const onChangeDepartment = useCallback((value: number) => {
+  //   setDepartmentID(value);
+  // }, []);
+
   const Name = (): JSX.Element => (
     <FormField
+      name="name"
+      formRef={register}
       label="Фамилия Имя Отчество"
       icon="user"
       defaultValue={name}
-      onChange={(event: ChangeEvent<HTMLInputElement>): void => {
-        setName(event.target.value);
-      }}
+      // onChange={(event: ChangeEvent<HTMLInputElement>): void => {
+      //   // const { value } = event.target;
+      //   setName(event.target.value);
+      // }}
     />
   );
 
   const Company = (): JSX.Element => (
     <Select
+      name="company"
       label="Организация"
       listName="CompanySelect"
       id={companyID}
       icon="building"
-      callback={(value: number): void => {
-        setCompanyID(value);
-      }}
+      callback={onChangeCompany}
     />
   );
 
@@ -92,9 +136,7 @@ export const ContactItem = (): JSX.Element => {
       listName="PostSelect"
       id={postID}
       icon="tag"
-      callback={(value: number): void => {
-        setPostID(value);
-      }}
+      callback={onChangePost}
     />
   );
 
@@ -104,9 +146,7 @@ export const ContactItem = (): JSX.Element => {
       listName="DepartmentSelect"
       id={departmentID}
       icon="tag"
-      callback={(value: number): void => {
-        setDepartmentID(value);
-      }}
+      callback={onChangeDepartment}
     />
   );
 
@@ -116,32 +156,16 @@ export const ContactItem = (): JSX.Element => {
       listName="PostGoSelect"
       id={postGoID}
       icon="tag"
-      callback={(value: number): void => {
-        setPostGoID(value);
-      }}
+      callback={onChangePostGO}
     />
   );
 
   const Rank = (): JSX.Element => (
-    <Select
-      label="Звание"
-      listName="RankSelect"
-      id={rankID}
-      icon="tag"
-      callback={(value: number): void => {
-        setRankID(value);
-      }}
-    />
+    <Select label="Звание" listName="RankSelect" id={rankID} icon="tag" callback={onChangeRank} />
   );
 
   const Birthday = (): JSX.Element => (
-    <DatePicker
-      label="Дата рождения"
-      value={birthday}
-      callback={(value: string): void => {
-        setBirthday(value);
-      }}
-    />
+    <DatePicker label="Дата рождения" value={birthday} callback={onChangeBirthday} />
   );
 
   const Emails = (): JSX.Element => (

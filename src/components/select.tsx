@@ -7,6 +7,7 @@ import { rws } from '../netapi';
 import './select.css';
 
 interface SelectProps {
+  name?: string;
   id?: number;
   icon?: string;
   color?: 'primary' | 'info' | 'success' | 'warning' | 'danger';
@@ -25,8 +26,7 @@ type CLWS = {
 };
 
 export const Select = (properties: SelectProps): JSX.Element => {
-  const { id, label, icon, color, listName, callback } = properties;
-  // const { id, iconLeft, iconRight, color, state, label, listName, callback } = properties;
+  const { name, id, label, icon, color, listName, callback } = properties;
 
   const [opened, setOpened] = useState(false);
   const [itemID, setItemID] = useState(id ? id : 0);
@@ -65,12 +65,6 @@ export const Select = (properties: SelectProps): JSX.Element => {
       setValue(currentItem ? currentItem.name : '');
     }
   }, [list, id]);
-
-  // const controlClasses = `control is-expanded select is-fullwidth ${
-  //   iconLeft ? 'has-icons-left' : ''
-  // } ${iconRight ? 'has-icons-right' : ''}`;
-
-  // const inputClasses = `input ${color ? `is-${color}` : ''} ${state ? `is-${state}` : ''}`;
 
   const Label = (): JSX.Element | null =>
     label ? (
@@ -137,6 +131,7 @@ export const Select = (properties: SelectProps): JSX.Element => {
       <Label />
       <div className={`control is-expanded select is-fullwidth ${icon ? 'has-icons-left' : ''}`}>
         <input
+          name={name}
           className={`input ${color ? `is-${color}` : ''}`}
           type="text"
           aria-haspopup="true"

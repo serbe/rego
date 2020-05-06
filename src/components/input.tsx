@@ -2,6 +2,8 @@ import React, { ChangeEvent, MouseEvent } from 'react';
 import { Icon } from './icon';
 
 interface InputProps {
+  name?: string;
+  formRef?: any;
   className?: string;
   classNameDiv?: string;
   color?: 'primary' | 'info' | 'success' | 'warning' | 'danger';
@@ -25,6 +27,8 @@ interface InputProps {
 
 export const Input = (properties: InputProps): JSX.Element => {
   const {
+    name,
+    formRef,
     className,
     classNameDiv,
     color,
@@ -62,6 +66,8 @@ export const Input = (properties: InputProps): JSX.Element => {
   return (
     <div className={divClasses}>
       <input
+        name={name}
+        ref={formRef}
         className={inputClasses}
         disabled={disabled}
         onClick={onClick}
