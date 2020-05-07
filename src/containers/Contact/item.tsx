@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect, ChangeEvent } from 'react';
 import { useParams } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+// import { useForm } from 'react-hook-form';
 
 import { Contact } from '../../models/contact';
 import { SelectItem } from '../../models/selectitem';
@@ -9,7 +9,7 @@ import { FormField } from '../../components/formfield';
 import { Input } from '../../components/input';
 import { Select } from '../../components/select';
 import { DatePicker } from '../../components/datepicker';
-import { addEmptyString, numberToString } from '../../helpers/utils';
+import { addEmptyString, numberToString, useInput } from '../../helpers/utils';
 
 type CLWS = {
   name: string;
@@ -20,13 +20,12 @@ type CLWS = {
   error?: string;
 };
 
-const onSubmit = (data: any) => console.log(data);
+// const onSubmit = (data: any) => console.log(data);
 
 export const ContactItem = (): JSX.Element => {
-  const { register, handleSubmit, watch, errors } = useForm();
+  // const { register, handleSubmit, watch, errors } = useForm();
 
   const [error, setError] = useState<string>();
-  const [name, setName] = useState<string>();
   const [companyID, setCompanyID] = useState<number>();
   const [postID, setPostID] = useState<number>();
   const [departmentID, setDepartmentID] = useState<number>();
@@ -39,11 +38,15 @@ export const ContactItem = (): JSX.Element => {
   const { id } = useParams();
   const [loaded, setLoaded] = useState(false);
 
+  const [name, changeName, setName] = useInput('');
+
   useEffect(() => {
     rws.addEventListener('message', (message: MessageEvent) => {
       const data: CLWS = JSON.parse(message.data);
       if (data?.name === 'Contact' && data.object.Contact) {
-        setName(data.object.Contact.name);
+        const c = data.object.Contact;
+        setName(c.name ? c.name : '');
+
         setCompanyID(data.object.Contact.company_id);
         setPostID(data.object.Contact.post_id);
         setDepartmentID(data.object.Contact.department_id);
@@ -104,20 +107,6 @@ export const ContactItem = (): JSX.Element => {
   // const onChangeDepartment = useCallback((value: number) => {
   //   setDepartmentID(value);
   // }, []);
-
-  const Name = (): JSX.Element => (
-    <FormField
-      name="name"
-      formRef={register}
-      label="Фамилия Имя Отчество"
-      icon="user"
-      defaultValue={name}
-      // onChange={(event: ChangeEvent<HTMLInputElement>): void => {
-      //   // const { value } = event.target;
-      //   setName(event.target.value);
-      // }}
-    />
-  );
 
   const Company = (): JSX.Element => (
     <Select
@@ -241,7 +230,13 @@ export const ContactItem = (): JSX.Element => {
     <div>
       {loaded && !error ? (
         <>
-          <Name />
+          <FormField
+            name="name"
+            label="Фамилия Имя Отчество"
+            icon="user"
+            value={name}
+            onChange={changeName}
+          />
           <Company />
           <div className="columns">
             <div className="column is-half">

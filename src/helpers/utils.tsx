@@ -1,4 +1,32 @@
-import React from 'react';
+import React, { useState, ChangeEvent } from 'react';
+
+export function useInput(
+  initialValue: string,
+): [
+  string,
+  (event: React.ChangeEvent<HTMLInputElement>) => void,
+  React.Dispatch<React.SetStateAction<string>>,
+] {
+  const [value, setValue] = useState(initialValue);
+  function handleChange(event: ChangeEvent<HTMLInputElement>): void {
+    setValue(event.target.value);
+  }
+  return [value, handleChange, setValue];
+}
+
+export function useID(
+  initialValue: number,
+): [
+  number,
+  // (event: React.ChangeEvent<HTMLInputElement>) => void,
+  React.Dispatch<React.SetStateAction<number>>,
+] {
+  const [value, setValue] = useState(initialValue);
+  // function handleChange(event: ChangeEvent<HTMLInputElement>): void {
+  //   setValue(event.target.value);
+  // }
+  return [value, setValue];
+}
 
 export const addEmptyString = (values?: string[]): string[] => {
   let list: string[] = [];
