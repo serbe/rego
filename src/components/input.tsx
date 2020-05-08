@@ -2,61 +2,49 @@ import React, { ChangeEvent, MouseEvent } from 'react';
 import { Icon } from './icon';
 
 interface InputProps {
-  name?: string;
-  formRef?: any;
+  name: string;
+  id?: string;
+  key?: string;
   className?: string;
   classNameDiv?: string;
-  color?: 'primary' | 'info' | 'success' | 'warning' | 'danger';
+  value?: string;
   defaultValue?: string;
   disabled?: boolean;
-  focused?: boolean;
-  hovered?: boolean;
   icon?: string;
   iconRight?: string;
-  isStatic?: boolean;
-  loading?: boolean;
   onClick?: (event: MouseEvent<HTMLInputElement, globalThis.MouseEvent>) => void;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (event: ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   readonly?: boolean;
-  rounded?: boolean;
   type?: 'text' | 'password' | 'email' | 'tel';
-  value?: string;
 }
 
 export const Input = (properties: InputProps): JSX.Element => {
   const {
     name,
-    formRef,
+    id,
+    key,
     className,
     classNameDiv,
-    color,
     defaultValue,
     disabled,
-    focused,
-    hovered,
     icon,
     iconRight,
-    isStatic,
-    loading,
     onClick,
     onChange,
     onBlur,
     placeholder,
     readonly,
-    rounded,
     type,
     value,
   } = properties;
 
   const divClasses = `${classNameDiv ? classNameDiv : ''} control ${icon ? 'has-icons-left' : ''} ${
     iconRight ? 'has-icons-right' : ''
-  } ${loading ? 'is-loading' : ''}`;
+  }`;
 
-  const inputClasses = `${className ? className : ''} input ${focused ? 'is-focused' : ''} ${
-    hovered ? 'is-hovered' : ''
-  } ${rounded ? 'is-rounded' : ''} ${isStatic ? 'is-static' : ''} ${color ? `is-${color}` : ''}`;
+  const inputClasses = `${className ? className : ''} input`;
 
   const LeftIcon = (): JSX.Element | null => (icon ? <Icon position={'left'} icon={icon} /> : null);
 
@@ -67,7 +55,8 @@ export const Input = (properties: InputProps): JSX.Element => {
     <div className={divClasses}>
       <input
         name={name}
-        ref={formRef}
+        id={id ? id : name}
+        key={key ? key : name}
         className={inputClasses}
         disabled={disabled}
         onClick={onClick}

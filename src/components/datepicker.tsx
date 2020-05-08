@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { v1 as uuidv1 } from 'uuid';
 
 interface DatePickerProps {
   value?: string;
@@ -43,9 +44,9 @@ export const DatePicker = (properties: DatePickerProps): JSX.Element => {
       list.push(i.toString().length === 1 ? `0${i}` : i.toString());
     }
     return (
-      <select defaultValue={day}>
+      <select defaultValue={day} key={uuidv1()}>
         {list.map((item) => (
-          <option key={item} value={item} onSelect={(): void => setDay(item)}>
+          <option key={uuidv1()} value={item} onSelect={(): void => setDay(item)}>
             {item}
           </option>
         ))}
@@ -59,9 +60,9 @@ export const DatePicker = (properties: DatePickerProps): JSX.Element => {
       list.push(i.toString().length === 1 ? `0${i}` : i.toString());
     }
     return (
-      <select defaultValue={month}>
+      <select defaultValue={month} key={uuidv1()}>
         {list.map((item) => (
-          <option key={item} onSelect={(): void => setMonth(item)}>
+          <option key={uuidv1()} onSelect={(): void => setMonth(item)}>
             {item}
           </option>
         ))}
@@ -76,9 +77,9 @@ export const DatePicker = (properties: DatePickerProps): JSX.Element => {
       list.push(i.toString());
     }
     return (
-      <select defaultValue={year}>
+      <select defaultValue={year} key={uuidv1()}>
         {list.map((item) => (
-          <option key={item} onSelect={(): void => setYear(item)}>
+          <option key={uuidv1()} onSelect={(): void => setYear(item)}>
             {item}
           </option>
         ))}
@@ -87,7 +88,7 @@ export const DatePicker = (properties: DatePickerProps): JSX.Element => {
   };
 
   return (
-    <div className="field">
+    <div className="field" key={uuidv1()}>
       <Label />
       <div className="field has-addons">
         <p className="control">

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
 import { Icon } from './icon';
 import { SelectItem } from '../models/selectitem';
 import { rws } from '../netapi';
@@ -8,10 +7,10 @@ import './select.css';
 
 interface SelectProps {
   name?: string;
+  key?: string;
   id?: number;
   icon?: string;
   color?: 'primary' | 'info' | 'success' | 'warning' | 'danger';
-  // state?: string;
   label?: string;
   listName?: string;
   callback: (event: number) => void;
@@ -26,7 +25,7 @@ type CLWS = {
 };
 
 export const Select = (properties: SelectProps): JSX.Element => {
-  const { name, id, label, icon, color, listName, callback } = properties;
+  const { name, key, id, label, icon, color, listName, callback } = properties;
 
   const [opened, setOpened] = useState(false);
   const [itemID, setItemID] = useState(id ? id : 0);
@@ -109,11 +108,11 @@ export const Select = (properties: SelectProps): JSX.Element => {
 
   const DropdownContent = (): JSX.Element | null =>
     error || !opened ? null : (
-      <div className="select-box">
-        {filteredList().map((ListItem) => (
+      <div className="select-box" key={`${key ? key : name}-dropdown`}>
+        {filteredList().map((ListItem, index) => (
           <div
             className="select-item"
-            key={ListItem.id}
+            key={`${key ? key : name}-${index}`}
             onClick={(): void => {
               setItemID(ListItem.id);
               setValue(ListItem.name);
@@ -127,9 +126,12 @@ export const Select = (properties: SelectProps): JSX.Element => {
     );
 
   return (
-    <div className="field">
+    <div className="field" key={key ? key : name}>
       <Label />
-      <div className={`control is-expanded select is-fullwidth ${icon ? 'has-icons-left' : ''}`}>
+      <div
+        className={`control is-expanded select is-fullwidth ${icon ? 'has-icons-left' : ''}`}
+        key={`${key ? key : name}-control`}
+      >
         <input
           name={name}
           className={`input ${color ? `is-${color}` : ''}`}
@@ -146,6 +148,7 @@ export const Select = (properties: SelectProps): JSX.Element => {
           onBlur={(): void => {
             setTimeout(() => setOpened(false), 300);
           }}
+          key={`${key ? key : name}-input`}
         />
         <LeftIcon />
       </div>

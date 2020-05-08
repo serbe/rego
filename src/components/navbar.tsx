@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { v1 as uuidv1 } from 'uuid';
 import { NavLink } from 'react-router-dom';
 import { Button } from './button';
 
@@ -10,41 +11,46 @@ const NavbarNotLogged = (): JSX.Element => (
   </div>
 );
 
+const mainItems = [
+  { link: '/contacts', name: 'Контакты' },
+  { link: '/companies', name: 'Организации' },
+  { link: '/sirens', name: 'Сирены' },
+];
+
+const dropdownItems = [
+  { link: '/departments', name: 'Отделы' },
+  { link: '/educations', name: 'Обучение' },
+  { link: '/kinds', name: 'Типы' },
+  { link: '/posts', name: 'Должности' },
+  { link: '/practices', name: 'Учения' },
+  { link: '/ranks', name: 'Чины' },
+  { link: '/scopes', name: 'Сферы' },
+  { link: '/certificates', name: 'Удостоверения' },
+  { link: '/sirentypes', name: 'Типы сирен' },
+];
+
+const MainItems = (): JSX.Element => (
+  <>
+    {mainItems.map((item) => (
+      <NavLink activeClassName="is-active" className="navbar-item" to={item.link} key={uuidv1()}>
+        {item.name}
+      </NavLink>
+    ))}
+  </>
+);
+
 const NavbarDropdown = (): JSX.Element => (
-  <div className="navbar-dropdown">
-    <NavLink activeClassName="is-active" className="navbar-item" to="/departments">
-      Отделы
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/educations">
-      Обучение
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/kinds">
-      Типы
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/posts">
-      Должности
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/practices">
-      Учения
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/ranks">
-      Чины
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/scopes">
-      Сферы
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/certificates">
-      Удостоверения
-    </NavLink>
-    <hr className="navbar-divider" />
-    <NavLink activeClassName="is-active" className="navbar-item" to="/sirentypes">
-      Типы сирен
-    </NavLink>
+  <div className="navbar-dropdown" key={uuidv1()}>
+    {dropdownItems.map((item) => (
+      <NavLink activeClassName="is-active" className="navbar-item" to={item.link} key={uuidv1()}>
+        {item.name}
+      </NavLink>
+    ))}
   </div>
 );
 
-const DropdownItem = (): JSX.Element => (
-  <div className="navbar-item has-dropdown is-hoverable">
+const DropdownItems = (): JSX.Element => (
+  <div className="navbar-item has-dropdown is-hoverable" key={uuidv1()}>
     <a href="#directory" className="navbar-link">
       Справочники
     </a>
@@ -53,14 +59,14 @@ const DropdownItem = (): JSX.Element => (
 );
 
 const NavbarEnd = (): JSX.Element => (
-  <div className="navbar-end">
+  <div className="navbar-end" key={uuidv1()}>
     <div className="navbar-item has-dropdown is-hoverable">
       <a href="#user" className="navbar-link">
         name
       </a>
       <div className="navbar-dropdown is-right">
         <div className="navbar-item">
-          <Button color="link">Выход</Button>
+          <Button className="is-link">Выход</Button>
         </div>
       </div>
     </div>
@@ -68,17 +74,9 @@ const NavbarEnd = (): JSX.Element => (
 );
 
 const NavbarStart = (): JSX.Element => (
-  <div className="navbar-start">
-    <NavLink activeClassName="is-active" className="navbar-item" to="/contacts">
-      Контакты
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/companies">
-      Организации
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/sirens">
-      Сирены
-    </NavLink>
-    <DropdownItem />
+  <div className="navbar-start" key={uuidv1()}>
+    <MainItems />
+    <DropdownItems />
   </div>
 );
 

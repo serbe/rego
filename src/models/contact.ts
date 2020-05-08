@@ -14,6 +14,22 @@ export type Contact = {
   educations?: string[];
 };
 
+export interface ContactForm {
+  id: number;
+  name: string;
+  company_id: number;
+  department_id: number;
+  post_id: number;
+  post_go_id: number;
+  rank_id: number;
+  birthday: string;
+  note: string;
+  emails: string[];
+  phones: string[];
+  faxes: string[];
+  educations?: string[];
+}
+
 export type ContactList = {
   id: number;
   name?: string;

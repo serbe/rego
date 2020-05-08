@@ -5,11 +5,11 @@ import { useParams } from 'react-router-dom';
 import { Contact } from '../../models/contact';
 import { SelectItem } from '../../models/selectitem';
 import { rws } from '../../netapi';
-import { FormField } from '../../components/formfield';
 import { Input } from '../../components/input';
 import { Select } from '../../components/select';
 import { DatePicker } from '../../components/datepicker';
-import { addEmptyString, numberToString, useInput } from '../../helpers/utils';
+import { addEmptyString, numberToString, useInput, useID } from '../../helpers/utils';
+import { FormField } from '../../components/formfield';
 
 type CLWS = {
   name: string;
@@ -26,12 +26,12 @@ export const ContactItem = (): JSX.Element => {
   // const { register, handleSubmit, watch, errors } = useForm();
 
   const [error, setError] = useState<string>();
-  const [companyID, setCompanyID] = useState<number>();
+
   const [postID, setPostID] = useState<number>();
   const [departmentID, setDepartmentID] = useState<number>();
   const [postGoID, setPostGoID] = useState<number>();
   const [rankID, setRankID] = useState<number>();
-  const [birthday, setBirthday] = useState<string>();
+
   const [emails, setEmails] = useState<string[]>();
   const [phones, setPhones] = useState<string[]>();
   const [faxes, setFaxes] = useState<string[]>();
@@ -39,6 +39,9 @@ export const ContactItem = (): JSX.Element => {
   const [loaded, setLoaded] = useState(false);
 
   const [name, changeName, setName] = useInput('');
+  const [companyID, setCompanyID] = useState<number>(0);
+
+  const [birthday, , setBirthday] = useInput('');
 
   useEffect(() => {
     rws.addEventListener('message', (message: MessageEvent) => {
@@ -46,13 +49,13 @@ export const ContactItem = (): JSX.Element => {
       if (data?.name === 'Contact' && data.object.Contact) {
         const c = data.object.Contact;
         setName(c.name ? c.name : '');
+        setCompanyID(c.company_id ? c.company_id : 0);
 
-        setCompanyID(data.object.Contact.company_id);
         setPostID(data.object.Contact.post_id);
         setDepartmentID(data.object.Contact.department_id);
         setPostGoID(data.object.Contact.post_go_id);
         setRankID(data.object.Contact.rank_id);
-        setBirthday(data.object.Contact.birthday);
+        setBirthday(c.birthday ? c.birthday : '');
         setEmails(addEmptyString(data.object.Contact.emails));
         setPhones(addEmptyString(numberToString(data.object.Contact.phones)));
         setFaxes(addEmptyString(numberToString(data.object.Contact.faxes)));
@@ -70,11 +73,6 @@ export const ContactItem = (): JSX.Element => {
       });
     };
   }, [id]);
-
-  // const onChangeName = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-  //   const { value } = event.target;
-  //   setName(value);
-  // }, []);
 
   const onChangeCompany = useCallback((value: number) => {
     setCompanyID(value);
@@ -163,6 +161,7 @@ export const ContactItem = (): JSX.Element => {
       {emails
         ? emails.map((email, index) => (
             <Input
+              name={`email-${index}-input`}
               icon="envelope"
               key={`email-${index}`}
               defaultValue={email}
@@ -185,6 +184,7 @@ export const ContactItem = (): JSX.Element => {
       {phones
         ? phones.map((phone, index) => (
             <Input
+              name={`phone-${index}-input`}
               type="tel"
               icon="phone"
               key={`phone-${index}`}
@@ -209,6 +209,7 @@ export const ContactItem = (): JSX.Element => {
       {faxes
         ? faxes.map((fax, index) => (
             <Input
+              name={`fax-${index}-input`}
               type="tel"
               icon="fax"
               key={`fax-${index}`}
@@ -229,15 +230,23 @@ export const ContactItem = (): JSX.Element => {
   return (
     <div>
       {loaded && !error ? (
-        <>
+        <form>
           <FormField
             name="name"
-            label="Фамилия Имя Отчество"
-            icon="user"
             value={name}
             onChange={changeName}
+            label="Фамилия Имя Отчество"
+            icon="user"
           />
-          <Company />
+          <Select
+            name="company"
+            label="Организация"
+            listName="CompanySelect"
+            id={companyID}
+            icon="building"
+            callback={onChangeCompany}
+          />
+          {/* <Company />
           <div className="columns">
             <div className="column is-half">
               <Post key="post" />
@@ -253,15 +262,15 @@ export const ContactItem = (): JSX.Element => {
             <div className="column is-half">
               <Rank />
             </div>
-          </div>
+          </div> */}
 
-          <div className="columns">
+          {/* <div className="columns">
             <div className="column is-one-third">
               <Birthday />
             </div>
-          </div>
+          </div> */}
 
-          <div className="columns">
+          {/* <div className="columns">
             <div className="column">
               <Emails />
             </div>
@@ -271,8 +280,9 @@ export const ContactItem = (): JSX.Element => {
             <div className="column">
               <Faxes />
             </div>
-          </div>
-        </>
+          </div> */}
+          <button className="button">Сохранить</button>
+        </form>
       ) : null}
     </div>
   );
