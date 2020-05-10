@@ -4,8 +4,6 @@ import { Input } from './input';
 
 interface FormFieldProps {
   name: string;
-  id?: string;
-  key?: string;
   className?: string;
   disabled?: boolean;
   icon?: string;
@@ -18,14 +16,11 @@ interface FormFieldProps {
   rounded?: boolean;
   type?: 'text' | 'password' | 'email' | 'tel';
   value?: string;
-  defaultValue?: string;
 }
 
 export const FormField = (properties: FormFieldProps): JSX.Element => {
   const {
     name,
-    id,
-    key,
     className,
     disabled,
     icon,
@@ -37,23 +32,17 @@ export const FormField = (properties: FormFieldProps): JSX.Element => {
     readonly,
     type,
     value,
-    defaultValue,
   } = properties;
-
-  const Label = (): JSX.Element | null =>
-    label ? (
-      <label className="label" htmlFor={id ? id : name}>
-        {label !== true ? label : placeholder}
-      </label>
-    ) : null;
 
   return (
     <div className="field">
-      <Label />
+      {label && (
+        <label className="label" htmlFor={name}>
+          {label !== true ? label : placeholder}
+        </label>
+      )}
       <Input
         name={name}
-        id={id}
-        key={key}
         className={className}
         disabled={disabled}
         icon={icon}
@@ -64,7 +53,6 @@ export const FormField = (properties: FormFieldProps): JSX.Element => {
         readonly={readonly}
         type={type}
         value={value}
-        defaultValue={defaultValue}
       />
     </div>
   );

@@ -18,19 +18,13 @@ export const Button = (properties: ButtonProps): JSX.Element => {
 
   const classes = `button ${className ? className : ''}`;
 
-  const Link = (): JSX.Element => (
+  return href ? (
     <a href={href} onClick={onClick} className={classes}>
       {children}
     </a>
-  );
-  const Button = (): JSX.Element => (
+  ) : (
     <button disabled={disabled} onClick={onClick} className={classes}>
       {children}
     </button>
   );
-
-  if (href) {
-    return <Link />;
-  }
-  return <Button />;
 };

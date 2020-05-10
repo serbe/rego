@@ -6,8 +6,7 @@ import { rws } from '../netapi';
 import './select.css';
 
 interface SelectProps {
-  name?: string;
-  key?: string;
+  name: string;
   id?: number;
   icon?: string;
   color?: 'primary' | 'info' | 'success' | 'warning' | 'danger';
@@ -25,7 +24,7 @@ type CLWS = {
 };
 
 export const Select = (properties: SelectProps): JSX.Element => {
-  const { name, key, id, label, icon, color, listName, callback } = properties;
+  const { name, id, label, icon, color, listName, callback } = properties;
 
   const [opened, setOpened] = useState(false);
   const [itemID, setItemID] = useState(id ? id : 0);
@@ -65,23 +64,6 @@ export const Select = (properties: SelectProps): JSX.Element => {
     }
   }, [list, id]);
 
-  const Label = (): JSX.Element | null =>
-    label ? (
-      <label className="label" key="SelectLabel">
-        {label}
-      </label>
-    ) : null;
-
-  const LeftIcon = (): JSX.Element | null =>
-    icon ? (
-      <Icon
-        icon={icon}
-        position="left"
-        color={color !== 'primary' ? color : undefined}
-        key="SelectIconLeft"
-      />
-    ) : null;
-
   const currentValue = (): string => {
     if (opened) {
       return value ? value : '';
@@ -106,31 +88,16 @@ export const Select = (properties: SelectProps): JSX.Element => {
     );
   };
 
-  const DropdownContent = (): JSX.Element | null =>
-    error || !opened ? null : (
-      <div className="select-box" key={`${key ? key : name}-dropdown`}>
-        {filteredList().map((ListItem, index) => (
-          <div
-            className="select-item"
-            key={`${key ? key : name}-${index}`}
-            onClick={(): void => {
-              setItemID(ListItem.id);
-              setValue(ListItem.name);
-              callback(ListItem.id);
-            }}
-          >
-            {ListItem.name}
-          </div>
-        ))}
-      </div>
-    );
-
   return (
-    <div className="field" key={key ? key : name}>
-      <Label />
+    <div className="field" key={name}>
+      {label && (
+        <label className="label" key="SelectLabel">
+          {label}
+        </label>
+      )}
       <div
         className={`control is-expanded select is-fullwidth ${icon ? 'has-icons-left' : ''}`}
-        key={`${key ? key : name}-control`}
+        key={`${name}-control`}
       >
         <input
           name={name}
@@ -148,11 +115,34 @@ export const Select = (properties: SelectProps): JSX.Element => {
           onBlur={(): void => {
             setTimeout(() => setOpened(false), 300);
           }}
-          key={`${key ? key : name}-input`}
+          key={`${name}-input`}
         />
-        <LeftIcon />
+        {icon && (
+          <Icon
+            icon={icon}
+            position="left"
+            color={color !== 'primary' ? color : undefined}
+            key="SelectIconLeft"
+          />
+        )}
       </div>
-      <DropdownContent />
+      {!error && opened && (
+        <div className="select-box" key={`${name}-dropdown`}>
+          {filteredList().map((ListItem, index) => (
+            <div
+              className="select-item"
+              key={`${name}-${index}`}
+              onClick={(): void => {
+                setItemID(ListItem.id);
+                setValue(ListItem.name);
+                callback(ListItem.id);
+              }}
+            >
+              {ListItem.name}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

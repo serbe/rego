@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { v1 as uuidv1 } from 'uuid';
 import { NavLink } from 'react-router-dom';
 import { Button } from './button';
 
@@ -31,8 +30,13 @@ const dropdownItems = [
 
 const MainItems = (): JSX.Element => (
   <>
-    {mainItems.map((item) => (
-      <NavLink activeClassName="is-active" className="navbar-item" to={item.link} key={uuidv1()}>
+    {mainItems.map((item, index) => (
+      <NavLink
+        activeClassName="is-active"
+        className="navbar-item"
+        to={item.link}
+        key={`main-items-${index}`}
+      >
         {item.name}
       </NavLink>
     ))}
@@ -40,9 +44,14 @@ const MainItems = (): JSX.Element => (
 );
 
 const NavbarDropdown = (): JSX.Element => (
-  <div className="navbar-dropdown" key={uuidv1()}>
-    {dropdownItems.map((item) => (
-      <NavLink activeClassName="is-active" className="navbar-item" to={item.link} key={uuidv1()}>
+  <div className="navbar-dropdown" key="navbar-dropdown">
+    {dropdownItems.map((item, index) => (
+      <NavLink
+        activeClassName="is-active"
+        className="navbar-item"
+        to={item.link}
+        key={`navbar-dropdown-${index}`}
+      >
         {item.name}
       </NavLink>
     ))}
@@ -50,7 +59,7 @@ const NavbarDropdown = (): JSX.Element => (
 );
 
 const DropdownItems = (): JSX.Element => (
-  <div className="navbar-item has-dropdown is-hoverable" key={uuidv1()}>
+  <div className="navbar-item has-dropdown is-hoverable" key="dropdown-items">
     <a href="#directory" className="navbar-link">
       Справочники
     </a>
@@ -59,7 +68,7 @@ const DropdownItems = (): JSX.Element => (
 );
 
 const NavbarEnd = (): JSX.Element => (
-  <div className="navbar-end" key={uuidv1()}>
+  <div className="navbar-end" key="navbar-end">
     <div className="navbar-item has-dropdown is-hoverable">
       <a href="#user" className="navbar-link">
         name
@@ -74,7 +83,7 @@ const NavbarEnd = (): JSX.Element => (
 );
 
 const NavbarStart = (): JSX.Element => (
-  <div className="navbar-start" key={uuidv1()}>
+  <div className="navbar-start" key="navbar-start">
     <MainItems />
     <DropdownItems />
   </div>
