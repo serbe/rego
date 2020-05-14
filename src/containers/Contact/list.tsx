@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Table, Column } from '../../components/table';
+import { TableData, Column } from '../../components/table-data';
 import { ContactList } from '../../models/contact';
 import { rws } from '../../netapi';
 
@@ -60,5 +60,5 @@ export const Contacts = (): JSX.Element => {
     },
   ];
 
-  return error ? <div>No data</div> : <Table data={contacts} columns={columns} paginate={20} />;
+  return error ? <div>No data</div> : <TableData data={contacts} columns={columns} paginate={20} />;
 };

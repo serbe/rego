@@ -1,18 +1,19 @@
 import React from 'react';
 import { Router } from './containers/Router';
+import { Container } from '@material-ui/core';
 
 import { NavBar } from './components/navbar';
-import './rugo.css';
+// import './rugo.css';
 
-const Rugo = (): JSX.Element => {
+function Rugo(): JSX.Element {
   return (
-    <>
+    <Container maxWidth="lg">
       <NavBar />
-      <div className="container pv1">
+      <Container maxWidth="lg" style={{ padding: 20 }}>
         <Router />
-      </div>
-    </>
+      </Container>
+    </Container>
   );
-};
+}
 
 export default Rugo;

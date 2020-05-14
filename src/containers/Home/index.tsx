@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { TableContainer, Table, TableBody, TableCell, TableRow } from '@material-ui/core';
+import { Paper, Grid } from '@material-ui/core';
 
 import { EducationShort } from '../../models/education';
 import { PracticeShort } from '../../models/practice';
 import { rws } from '../../netapi';
-import './index.css';
 
 type HomeWS = {
   name: string;
@@ -35,7 +36,56 @@ const tinyDate = (date: string): string => {
   return date;
 };
 
-export const Home = (): JSX.Element => {
+function EducationTable(educations: EducationShort[]): JSX.Element {
+  const history = useHistory();
+
+  return (
+    <TableContainer component={Paper}>
+      <Table size="small" aria-label="edications table">
+        <TableBody>
+          {educations.map((row) => (
+            <TableRow key={row.id} className={trClass(row.start_date)}>
+              <TableCell onClick={(): void => history.push(`/education/${row.id}`)}>
+                {tinyDate(row.start_date)}
+              </TableCell>
+              <TableCell onClick={(): void => history.push(`/contact/${row.contact_id}`)}>
+                {row.contact_name}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}
+
+function PracticeTable(practices: PracticeShort[]): JSX.Element {
+  const history = useHistory();
+
+  return (
+    <TableContainer component={Paper}>
+      <Table size="small" aria-label="practices table">
+        <TableBody>
+          {practices.map((row) => (
+            <TableRow key={row.id} className={trClass(row.date_of_practice)}>
+              <TableCell onClick={(): void => history.push(`/practice/${row.id}`)}>
+                {tinyDate(row.date_of_practice)}
+              </TableCell>
+              <TableCell onClick={(): void => history.push(`/kind/${row.kind_id}`)}>
+                {row.kind_short_name}
+              </TableCell>
+              <TableCell onClick={(): void => history.push(`/company/${row.company_id}`)}>
+                {row.company_name}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}
+
+export function Home(): JSX.Element {
   const [hasError, setErrors] = useState<string>();
   const [educations, setEducations] = useState<EducationShort[]>([]);
   const [practices, setPractices] = useState<PracticeShort[]>([]);
@@ -63,63 +113,17 @@ export const Home = (): JSX.Element => {
     };
   }, []);
 
-  const EducationTable = (): JSX.Element => (
-    <table className="table is-narrow">
-      <tbody>
-        {educations.map((row, index) => (
-          <tr key={index} className={trClass(row.start_date)}>
-            <td>
-              <Link to={`/education/${row.id}`} className="has-text-black">
-                {tinyDate(row.start_date)}
-              </Link>
-            </td>
-            <td>
-              <Link to={`/contact/${row.contact_id}`} className="has-text-black">
-                {row.contact_name}
-              </Link>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-
-  const PracticeTable = (): JSX.Element => (
-    <table className="table is-narrow">
-      <tbody>
-        {practices.map((row, index) => (
-          <tr key={index} className={trClass(row.date_of_practice)}>
-            <td>
-              <Link to={`/practice/${row.id}`} className="has-text-black">
-                {tinyDate(row.date_of_practice)}
-              </Link>
-            </td>
-            <td>
-              <Link to={`/kind/${row.kind_id}`} className="has-text-black">
-                {row.kind_short_name}
-              </Link>
-            </td>
-            <td>
-              <Link to={`/company/${row.company_id}`} className="has-text-black">
-                {row.company_name}
-              </Link>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-
   return hasError ? (
     <div>No data</div>
   ) : (
-    <div className="columns is-mobile">
-      <div className="column is-4">
-        <EducationTable />
-      </div>
-      <div className="column is-4 is-offset-4">
-        <PracticeTable />
-      </div>
-    </div>
+    <Grid container spacing={1}>
+      <Grid item xs={4}>
+        {EducationTable(educations)}
+      </Grid>
+      <Grid item xs={4} />
+      <Grid item xs={4}>
+        {PracticeTable(practices)}
+      </Grid>
+    </Grid>
   );
-};
+}

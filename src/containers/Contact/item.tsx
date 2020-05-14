@@ -1,6 +1,5 @@
 import React, { useCallback, useState, useEffect, ChangeEvent } from 'react';
 import { useParams } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
 
 import { Contact } from '../../models/contact';
 import { SelectItem } from '../../models/selectitem';
@@ -23,8 +22,6 @@ type CLWS = {
 const onSubmit = (data: any) => console.log(data);
 
 export const ContactItem = (): JSX.Element => {
-  const { register, handleSubmit, watch, errors } = useForm();
-
   const [error, setError] = useState<string>();
   const [name, setName] = useState<string>();
   const [companyID, setCompanyID] = useState<number>();
@@ -105,19 +102,19 @@ export const ContactItem = (): JSX.Element => {
   //   setDepartmentID(value);
   // }, []);
 
-  const Name = (): JSX.Element => (
-    <FormField
-      name="name"
-      formRef={register}
-      label="Фамилия Имя Отчество"
-      icon="user"
-      defaultValue={name}
-      // onChange={(event: ChangeEvent<HTMLInputElement>): void => {
-      //   // const { value } = event.target;
-      //   setName(event.target.value);
-      // }}
-    />
-  );
+  // const Name = (): JSX.Element => (
+  //   <FormField
+  //     name="name"
+  //     formRef={register}
+  //     label="Фамилия Имя Отчество"
+  //     icon="user"
+  //     defaultValue={name}
+  //     // onChange={(event: ChangeEvent<HTMLInputElement>): void => {
+  //     //   // const { value } = event.target;
+  //     //   setName(event.target.value);
+  //     // }}
+  //   />
+  // );
 
   const Company = (): JSX.Element => (
     <Select
@@ -241,7 +238,6 @@ export const ContactItem = (): JSX.Element => {
     <div>
       {loaded && !error ? (
         <>
-          <Name />
           <Company />
           <div className="columns">
             <div className="column is-half">

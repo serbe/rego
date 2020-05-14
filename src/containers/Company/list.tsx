@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Table, Column } from '../../components/table';
+import { TableData, Column } from '../../components/table-data';
 import { CompanyList } from '../../models/company';
 import { rws } from '../../netapi';
 
@@ -72,7 +72,7 @@ export const Companies = (): JSX.Element => {
     <div>No data</div>
   ) : (
     <div className="">
-      <Table data={companies} columns={columns} paginate={20} />
+      <TableData data={companies} columns={columns} paginate={20} />
     </div>
   );
 };

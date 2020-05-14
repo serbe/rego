@@ -1,129 +1,161 @@
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { Button } from './button';
+import React, { useState, KeyboardEvent, MouseEvent } from 'react';
+import clsx from 'clsx';
+import { makeStyles, Theme } from '@material-ui/core/styles';
+import { NavLink, useHistory } from 'react-router-dom';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import Button from '@material-ui/core/Button';
+import { Archive } from '@material-ui/icons';
+import {
+  Drawer,
+  SwipeableDrawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from '@material-ui/core';
 
-const NavbarNotLogged = (): JSX.Element => (
-  <div className="navbar-brand">
-    <NavLink className="navbar-item" key="NavbarNotLogged" to="/login">
-      Авторизация
-    </NavLink>
-  </div>
-);
+// const drawerWidth = 240;
 
-const NavbarDropdown = (): JSX.Element => (
-  <div className="navbar-dropdown">
-    <NavLink activeClassName="is-active" className="navbar-item" to="/departments">
-      Отделы
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/educations">
-      Обучение
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/kinds">
-      Типы
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/posts">
-      Должности
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/practices">
-      Учения
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/ranks">
-      Чины
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/scopes">
-      Сферы
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/certificates">
-      Удостоверения
-    </NavLink>
-    <hr className="navbar-divider" />
-    <NavLink activeClassName="is-active" className="navbar-item" to="/sirentypes">
-      Типы сирен
-    </NavLink>
-  </div>
-);
+interface NavListProps {
+  name: string;
+  href: string;
+  icon?: JSX.Element;
+}
 
-const DropdownItem = (): JSX.Element => (
-  <div className="navbar-item has-dropdown is-hoverable">
-    <a href="#directory" className="navbar-link">
-      Справочники
-    </a>
-    <NavbarDropdown />
-  </div>
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    display: 'flex',
+  },
+  list: {
+    width: 250,
+  },
+  fullList: {
+    width: 'auto',
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+}));
 
-const NavbarEnd = (): JSX.Element => (
-  <div className="navbar-end">
-    <div className="navbar-item has-dropdown is-hoverable">
-      <a href="#user" className="navbar-link">
-        name
-      </a>
-      <div className="navbar-dropdown is-right">
-        <div className="navbar-item">
-          <Button color="link">Выход</Button>
+const navList: NavListProps[] = [
+  { name: 'Отделы', href: '/departments' },
+  { name: 'Обучение', href: '/educations' },
+  { name: 'Типы', href: '/kinds' },
+  { name: 'Должности', href: '/posts' },
+  { name: 'Учения', href: '/practices' },
+  { name: 'Чины', href: '/ranks' },
+  { name: 'Сферы', href: '/scopes' },
+  { name: 'Удостоверения', href: '/certificates' },
+  { name: 'Типы сирен', href: '/sirentypes' },
+];
+
+function NavbarNotLogged(): JSX.Element {
+  return (
+    <div className="navbar-brand">
+      <NavLink className="navbar-item" key="NavbarNotLogged" to="/login">
+        Авторизация
+      </NavLink>
+    </div>
+  );
+}
+
+function NavbarEnd(): JSX.Element {
+  return (
+    <div className="navbar-end">
+      <div className="navbar-item has-dropdown is-hoverable">
+        <a href="#user" className="navbar-link">
+          name
+        </a>
+        <div className="navbar-dropdown is-right">
+          <div className="navbar-item">
+            <Button color="inherit">Выход</Button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+}
 
-const NavbarStart = (): JSX.Element => (
-  <div className="navbar-start">
-    <NavLink activeClassName="is-active" className="navbar-item" to="/contacts">
-      Контакты
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/companies">
-      Организации
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/sirens">
-      Сирены
-    </NavLink>
-    <DropdownItem />
-  </div>
-);
+function NavbarStart(): JSX.Element {
+  const history = useHistory();
+  return (
+    <>
+      <Typography
+        variant="h6"
+        style={{ flexGrow: 1 }}
+        onClick={(): void => {
+          history.push('/contacts');
+        }}
+      >
+        Контакты
+      </Typography>
+      <NavLink activeClassName="is-active" className="navbar-item" to="/companies">
+        Организации
+      </NavLink>
+      <NavLink activeClassName="is-active" className="navbar-item" to="/sirens">
+        Сирены
+      </NavLink>
+    </>
+  );
+}
 
-export const NavBar = (): JSX.Element => {
+export function NavBar(): JSX.Element {
+  const history = useHistory();
+  const classes = useStyles();
   // const [auth, setAuth] = useState(true);
-  // const openClassName = (cn: string): string => (open ? `${cn} is-active` : cn);
-  const auth = true;
+  // const auth = true;
   const [open, setOpen] = useState(false);
 
-  const handleToggle = (): void => {
+  // const handleDrawerOpen = (): void => {
+  //   setOpen(true);
+  // };
+  const toggleDrawer = (event: KeyboardEvent | MouseEvent): void => {
+    if (
+      event.type === 'keydown' &&
+      ((event as KeyboardEvent).key === 'Tab' || (event as KeyboardEvent).key === 'Shift')
+    ) {
+      return;
+    }
     setOpen(!open);
   };
 
-  return (
-    <nav aria-label="main navigation" className="navbar is-dark" role="navigation">
-      <div className="container">
-        {auth ? (
-          <>
-            <div className="navbar-brand">
-              <NavLink activeClassName="is-active" className="navbar-item" exact={true} to="/">
-                ЕДДС
-              </NavLink>
-              <a
-                aria-expanded="false"
-                aria-label="menu"
-                className={open ? 'navbar-burger is-active' : 'navbar-burger'}
-                data-target="navbarData"
-                role="button"
-                href="#button"
-                onClick={handleToggle}
-              >
-                <span aria-hidden="true" />
-                <span aria-hidden="true" />
-                <span aria-hidden="true" />
-              </a>
-            </div>
-            <div id="navbarData" className={open ? 'navbar-menu is-active' : 'navbar-menu'}>
-              <NavbarStart />
-              <NavbarEnd />
-            </div>
-          </>
-        ) : (
-          <NavbarNotLogged />
-        )}
-      </div>
-    </nav>
+  const list = () => (
+    <div role="presentation" onClick={toggleDrawer} onKeyDown={toggleDrawer}>
+      <List>
+        {navList.map((item) => (
+          <ListItem button key={item.name}>
+            <ListItemIcon>{item.icon ? item.icon : <Archive />}</ListItemIcon>
+            <ListItemText primary={item.name} />
+          </ListItem>
+        ))}
+      </List>
+    </div>
   );
-};
+
+  return (
+    <AppBar position="static">
+      <Toolbar>
+        <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+          <MenuIcon />
+        </IconButton>
+        <Typography
+          variant="h6"
+          className={classes.title}
+          onClick={(): void => {
+            history.push('/');
+          }}
+        >
+          ЕДДС
+        </Typography>
+        <NavbarStart />
+      </Toolbar>
+    </AppBar>
+  );
+}

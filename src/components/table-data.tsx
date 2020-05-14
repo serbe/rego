@@ -1,7 +1,14 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
-import { Pagination } from './pagination';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+// import { Pagination } from '@material-ui/lab';
 import { ModelsList } from '../models/lists';
 
 export type Column = {
@@ -33,7 +40,11 @@ const splitArray = (items: string[]): JSX.Element => (
   </>
 );
 
-interface TableProps {
+function Td(field: string[] | string, isArray?: boolean): JSX.Element {
+  return isArray && field && Array.isArray(field) ? splitArray(field) : <>{field}</>;
+}
+
+interface TableDataProps {
   data: ModelsList[];
   columns: Column[];
   rowClass?: RowClassFunc;
@@ -46,12 +57,14 @@ interface TableProps {
   bordered?: boolean;
 }
 
-export const Table = (properties: TableProps): JSX.Element => {
+export function TableData(properties: TableDataProps): JSX.Element {
   const [currentPage, setCurrentPage] = useState(0);
   const [search, setSearch] = useState<string>('');
   const [searchValues, setSearchValues] = useState<SData[]>([]);
   const [fData, setFData] = useState<ModelsList[]>([]);
   const [fLength, setFLength] = useState(0);
+
+  const history = useHistory();
 
   const {
     data,
@@ -123,45 +136,28 @@ export const Table = (properties: TableProps): JSX.Element => {
     setCurrentPage(value - 1);
   };
 
-  const tableClasses = `${className ? className : ''} table is-fullwidth is-narrow mwt ${
-    hoverable ? 'is-hoverable' : ''
-  } ${striped ? 'is-striped' : ''} ${bordered ? 'is-bordered' : ''}`;
-
-  const Heading = (): JSX.Element | null =>
-    nohead ? null : (
-      <thead>
-        <tr>
-          {columns.map<JSX.Element>((column: Column, index: number) => (
-            <th key={`th${index}`} className={column.className}>
-              {column.label}
-            </th>
-          ))}
-        </tr>
-      </thead>
-    );
-
-  const Td = (field: string[] | string, isArray?: boolean): JSX.Element =>
-    isArray && field && Array.isArray(field) ? splitArray(field) : <>{field}</>;
+  // const tableClasses = `${className ? className : ''} table is-fullwidth is-narrow mwt ${
+  //   hoverable ? 'is-hoverable' : ''
+  // } ${striped ? 'is-striped' : ''} ${bordered ? 'is-bordered' : ''}`;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const TableRow = (row: any): JSX.Element => (
+  const TR = (row: any): JSX.Element => (
     <>
       {columns.map((column: Column, index: number) => (
-        <td key={`td${row.id}${index}`} className={column.className}>
-          {column.linkField && column.linkBase ? (
-            <Link to={column.linkBase + row[column.linkField]} className="has-text-dark">
-              {Td(
-                column.fieldFunc ? column.fieldFunc(row[column.field]) : row[column.field],
-                column.array,
-              )}
-            </Link>
-          ) : (
-            Td(
-              column.fieldFunc ? column.fieldFunc(row[column.field]) : row[column.field],
-              column.array,
-            )
+        <TableCell
+          key={`td${row.id}${index}`}
+          className={column.className}
+          onClick={(): void => {
+            column.linkField &&
+              column.linkBase &&
+              history.push(column.linkBase + row[column.linkField]);
+          }}
+        >
+          {Td(
+            column.fieldFunc ? column.fieldFunc(row[column.field]) : row[column.field],
+            column.array,
           )}
-        </td>
+        </TableCell>
       ))}
     </>
   );
@@ -169,32 +165,25 @@ export const Table = (properties: TableProps): JSX.Element => {
   const TableAllRows = (): JSX.Element => (
     <>
       {paginationData().map((item, index) => (
-        <tr
+        <TableRow
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           className={rowClass ? rowClass.rowFunc((item as any)[rowClass.rowFuncField]) : undefined}
           key={`tr${item.id}${index}`}
         >
-          {TableRow(item)}
-        </tr>
+          {TR(item)}
+        </TableRow>
       ))}
     </>
   );
 
-  const TBody = (): JSX.Element | null =>
-    data && data.length > 0 ? (
-      <tbody>
-        <TableAllRows />
-      </tbody>
-    ) : null;
-
-  const Paginate = (): JSX.Element | null =>
-    paginate && fLength / itemsOnPage > 2 ? (
-      <Pagination
-        currentPage={currentPage + 1}
-        lastPage={Math.ceil(fLength / itemsOnPage)}
-        callback={receiveChildValue}
-      />
-    ) : null;
+  // const Paginate = (): JSX.Element | null =>
+  //   paginate && fLength / itemsOnPage > 2 ? (
+  //     <Pagination
+  //       currentPage={currentPage + 1}
+  //       lastPage={Math.ceil(fLength / itemsOnPage)}
+  //       callback={receiveChildValue}
+  //     />
+  //   ) : null;
 
   const Search = (): JSX.Element => (
     <p className="control mb1 mwt" key="TableSearch">
@@ -214,11 +203,26 @@ export const Table = (properties: TableProps): JSX.Element => {
   ) : (
     <>
       <Search />
-      <table className={tableClasses}>
-        <Heading />
-        <TBody />
-      </table>
-      <Paginate />
+      <TableContainer component={Paper}>
+        <Table>
+          {!nohead && (
+            <TableHead>
+              <TableRow>
+                {columns.map<JSX.Element>((column: Column, index: number) => (
+                  <TableRow key={`th${index}`} className={column.className}>
+                    {column.label}
+                  </TableRow>
+                ))}
+              </TableRow>
+            </TableHead>
+          )}
+          {data && data.length > 0 && (
+            <TableBody>
+              <TableAllRows />
+            </TableBody>
+          )}
+        </Table>
+      </TableContainer>
     </>
   );
-};
+}

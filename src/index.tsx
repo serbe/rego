@@ -1,17 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@material-ui/core/styles';
 import { BrowserRouter } from 'react-router-dom';
 
 import Rugo from './rugo';
+import theme from './theme';
+
 import * as serviceWorker from './serviceWorker';
 
-import './index.scss';
+// import './index.scss';
 // import './index.css';
 
 ReactDOM.render(
-  <BrowserRouter>
-    <Rugo />
-  </BrowserRouter>,
+  <ThemeProvider theme={theme}>
+    <CssBaseline />
+    <BrowserRouter>
+      <Rugo />
+    </BrowserRouter>
+  </ThemeProvider>,
   document.querySelector('#root'),
 );
 
