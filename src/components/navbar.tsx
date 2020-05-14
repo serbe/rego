@@ -126,8 +126,13 @@ export function NavBar(): JSX.Element {
     setOpen(!open);
   };
 
-  const list = () => (
-    <div role="presentation" onClick={toggleDrawer} onKeyDown={toggleDrawer}>
+  const list = (): JSX.Element => (
+    <div
+      className={classes.list}
+      role="presentation"
+      onClick={toggleDrawer}
+      onKeyDown={toggleDrawer}
+    >
       <List>
         {navList.map((item) => (
           <ListItem button key={item.name}>
@@ -142,7 +147,13 @@ export function NavBar(): JSX.Element {
   return (
     <AppBar position="static">
       <Toolbar>
-        <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+        <IconButton
+          onClick={toggleDrawer}
+          edge="start"
+          className={classes.menuButton}
+          color="inherit"
+          aria-label="menu"
+        >
           <MenuIcon />
         </IconButton>
         <Typography
@@ -154,7 +165,9 @@ export function NavBar(): JSX.Element {
         >
           ЕДДС
         </Typography>
-        <NavbarStart />
+        <Drawer anchor="left" open={open} onClose={toggleDrawer}>
+          {list()}
+        </Drawer>
       </Toolbar>
     </AppBar>
   );
