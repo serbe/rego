@@ -137,7 +137,8 @@ export const NoMemoSelect = (properties: SelectProps): JSX.Element => {
                 setValue(ListItem.name);
                 callback(ListItem.id);
               }}
-              role="gridcell"
+              role="row"
+              tabIndex={index}
             >
               {ListItem.name}
             </div>
