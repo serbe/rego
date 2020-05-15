@@ -49,15 +49,13 @@ export const Input = (properties: InputProps): JSX.Element => {
     iconRight ? 'has-icons-right' : ''
   }`;
 
-  const inputClasses = `${className ? className : ''} input`;
-
   return (
     <div className={divClasses}>
       <input
         name={name}
         id={name}
         key={name}
-        className={inputClasses}
+        className={`${className ? className : ''} input`}
         disabled={disabled}
         onClick={onClick}
         onChange={handleChange}

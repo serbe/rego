@@ -15,7 +15,6 @@ interface ButtonProps {
 
 export const Button = (properties: ButtonProps): JSX.Element => {
   const { children, className, disabled, href, onClick } = properties;
-
   const classes = `button ${className ? className : ''}`;
 
   return href ? (

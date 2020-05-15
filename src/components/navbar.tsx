@@ -2,14 +2,6 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button } from './button';
 
-const NavbarNotLogged = (): JSX.Element => (
-  <div className="navbar-brand">
-    <NavLink className="navbar-item" key="NavbarNotLogged" to="/login">
-      Авторизация
-    </NavLink>
-  </div>
-);
-
 const mainItems = [
   { link: '/contacts', name: 'Контакты' },
   { link: '/companies', name: 'Организации' },
@@ -28,7 +20,15 @@ const dropdownItems = [
   { link: '/sirentypes', name: 'Типы сирен' },
 ];
 
-const MainItems = (): JSX.Element => (
+const NavbarNotLogged: JSX.Element = (
+  <div className="navbar-brand">
+    <NavLink className="navbar-item" key="NavbarNotLogged" to="/login">
+      Авторизация
+    </NavLink>
+  </div>
+);
+
+const MainItems: JSX.Element = (
   <>
     {mainItems.map((item, index) => (
       <NavLink
@@ -43,7 +43,7 @@ const MainItems = (): JSX.Element => (
   </>
 );
 
-const NavbarDropdown = (): JSX.Element => (
+const NavbarDropdown: JSX.Element = (
   <div className="navbar-dropdown" key="navbar-dropdown">
     {dropdownItems.map((item, index) => (
       <NavLink
@@ -58,16 +58,16 @@ const NavbarDropdown = (): JSX.Element => (
   </div>
 );
 
-const DropdownItems = (): JSX.Element => (
+const DropdownItems: JSX.Element = (
   <div className="navbar-item has-dropdown is-hoverable" key="dropdown-items">
     <a href="#directory" className="navbar-link">
       Справочники
     </a>
-    <NavbarDropdown />
+    {NavbarDropdown}
   </div>
 );
 
-const NavbarEnd = (): JSX.Element => (
+const NavbarEnd: JSX.Element = (
   <div className="navbar-end" key="navbar-end">
     <div className="navbar-item has-dropdown is-hoverable">
       <a href="#user" className="navbar-link">
@@ -82,10 +82,10 @@ const NavbarEnd = (): JSX.Element => (
   </div>
 );
 
-const NavbarStart = (): JSX.Element => (
+const NavbarStart: JSX.Element = (
   <div className="navbar-start" key="navbar-start">
-    <MainItems />
-    <DropdownItems />
+    {MainItems}
+    {DropdownItems}
   </div>
 );
 
@@ -123,12 +123,12 @@ export const NavBar = (): JSX.Element => {
               </a>
             </div>
             <div id="navbarData" className={open ? 'navbar-menu is-active' : 'navbar-menu'}>
-              <NavbarStart />
-              <NavbarEnd />
+              {NavbarStart}
+              {NavbarEnd}
             </div>
           </>
         ) : (
-          <NavbarNotLogged />
+          NavbarNotLogged
         )}
       </div>
     </nav>
