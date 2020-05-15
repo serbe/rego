@@ -1,17 +1,32 @@
 import React from 'react';
+import { makeStyles, Theme, useTheme } from '@material-ui/core/styles';
 import { Router } from './containers/Router';
 import { Container } from '@material-ui/core';
 
 import { NavBar } from './components/navbar';
-// import './rugo.css';
+
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    display: 'flex',
+  },
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
+}));
 
 function Rugo(): JSX.Element {
+  const classes = useStyles();
+
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" className={classes.root}>
       <NavBar />
-      <Container maxWidth="lg" style={{ padding: 20 }}>
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
         <Router />
-      </Container>
+      </main>
     </Container>
   );
 }

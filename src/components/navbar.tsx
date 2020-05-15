@@ -1,5 +1,4 @@
-import React, { useState, KeyboardEvent, MouseEvent } from 'react';
-import clsx from 'clsx';
+import React, { useState } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { NavLink, useHistory } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
@@ -11,14 +10,15 @@ import Button from '@material-ui/core/Button';
 import { Archive } from '@material-ui/icons';
 import {
   Drawer,
-  SwipeableDrawer,
+  Divider,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
+  Hidden,
 } from '@material-ui/core';
 
-// const drawerWidth = 240;
+const drawerWidth = 240;
 
 interface NavListProps {
   name: string;
@@ -30,21 +30,39 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {
     display: 'flex',
   },
-  list: {
-    width: 250,
+  drawer: {
+    [theme.breakpoints.up('md')]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
   },
-  fullList: {
-    width: 'auto',
+  appBar: {
+    [theme.breakpoints.up('md')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+    },
   },
   menuButton: {
     marginRight: theme.spacing(2),
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
   },
-  title: {
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  content: {
     flexGrow: 1,
+    padding: theme.spacing(3),
   },
 }));
 
 const navList: NavListProps[] = [
+  { name: 'Контакты', href: '/contacts' },
+  { name: 'Организации', href: '/companies' },
+  { name: 'Сирены', href: '/sirens' },
   { name: 'Отделы', href: '/departments' },
   { name: 'Обучение', href: '/educations' },
   { name: 'Типы', href: '/kinds' },
@@ -83,56 +101,19 @@ function NavbarEnd(): JSX.Element {
   );
 }
 
-function NavbarStart(): JSX.Element {
-  const history = useHistory();
-  return (
-    <>
-      <Typography
-        variant="h6"
-        style={{ flexGrow: 1 }}
-        onClick={(): void => {
-          history.push('/contacts');
-        }}
-      >
-        Контакты
-      </Typography>
-      <NavLink activeClassName="is-active" className="navbar-item" to="/companies">
-        Организации
-      </NavLink>
-      <NavLink activeClassName="is-active" className="navbar-item" to="/sirens">
-        Сирены
-      </NavLink>
-    </>
-  );
-}
-
 export function NavBar(): JSX.Element {
   const history = useHistory();
   const classes = useStyles();
-  // const [auth, setAuth] = useState(true);
-  // const auth = true;
-  const [open, setOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  // const handleDrawerOpen = (): void => {
-  //   setOpen(true);
-  // };
-  const toggleDrawer = (event: KeyboardEvent | MouseEvent): void => {
-    if (
-      event.type === 'keydown' &&
-      ((event as KeyboardEvent).key === 'Tab' || (event as KeyboardEvent).key === 'Shift')
-    ) {
-      return;
-    }
-    setOpen(!open);
+  const handleDrawerToggle = (): void => {
+    setMobileOpen(!mobileOpen);
   };
 
-  const list = (): JSX.Element => (
-    <div
-      className={classes.list}
-      role="presentation"
-      onClick={toggleDrawer}
-      onKeyDown={toggleDrawer}
-    >
+  const drawer = (
+    <div>
+      {/* <div className={classes.toolbar} /> */}
+      <Divider />
       <List>
         {navList.map((item) => (
           <ListItem button key={item.name}>
@@ -145,30 +126,60 @@ export function NavBar(): JSX.Element {
   );
 
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <IconButton
-          onClick={toggleDrawer}
-          edge="start"
-          className={classes.menuButton}
-          color="inherit"
-          aria-label="menu"
-        >
-          <MenuIcon />
-        </IconButton>
-        <Typography
-          variant="h6"
-          className={classes.title}
-          onClick={(): void => {
-            history.push('/');
-          }}
-        >
-          ЕДДС
-        </Typography>
-        <Drawer anchor="left" open={open} onClose={toggleDrawer}>
-          {list()}
-        </Drawer>
-      </Toolbar>
-    </AppBar>
+    <>
+      <AppBar position="fixed" className={classes.appBar}>
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            className={classes.menuButton}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography
+            variant="h6"
+            noWrap
+            onClick={(): void => {
+              history.push('/');
+            }}
+          >
+            ЕДДС
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <nav className={classes.drawer} aria-label="mailbox folders">
+        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+        <Hidden mdUp implementation="css">
+          <Drawer
+            // container={container}
+            variant="temporary"
+            anchor="left"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+          >
+            {drawer}
+          </Drawer>
+        </Hidden>
+        <Hidden smDown implementation="css">
+          <Drawer
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            variant="permanent"
+            open
+          >
+            {drawer}
+          </Drawer>
+        </Hidden>
+      </nav>
+    </>
   );
 }

@@ -44,7 +44,7 @@ function EducationTable(educations: EducationShort[]): JSX.Element {
       <Table size="small" aria-label="edications table">
         <TableBody>
           {educations.map((row) => (
-            <TableRow key={row.id} className={trClass(row.start_date)}>
+            <TableRow key={row.id} className={trClass(row.start_date)} hover>
               <TableCell onClick={(): void => history.push(`/education/${row.id}`)}>
                 {tinyDate(row.start_date)}
               </TableCell>
@@ -67,8 +67,12 @@ function PracticeTable(practices: PracticeShort[]): JSX.Element {
       <Table size="small" aria-label="practices table">
         <TableBody>
           {practices.map((row) => (
-            <TableRow key={row.id} className={trClass(row.date_of_practice)}>
-              <TableCell onClick={(): void => history.push(`/practice/${row.id}`)}>
+            <TableRow key={row.id} className={trClass(row.date_of_practice)} hover>
+              <TableCell
+                component="th"
+                scope="row"
+                onClick={(): void => history.push(`/practice/${row.id}`)}
+              >
                 {tinyDate(row.date_of_practice)}
               </TableCell>
               <TableCell onClick={(): void => history.push(`/kind/${row.kind_id}`)}>
@@ -118,9 +122,12 @@ export function Home(): JSX.Element {
   ) : (
     <Grid container spacing={1}>
       <Grid item xs={4}>
+        {PracticeTable(practices)}
+      </Grid>
+      <Grid item xs={4}>
         {EducationTable(educations)}
       </Grid>
-      <Grid item xs={4} />
+      {/* <Grid item xs={4} /> */}
       <Grid item xs={4}>
         {PracticeTable(practices)}
       </Grid>
