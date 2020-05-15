@@ -13,7 +13,7 @@ interface ButtonProps {
   ) => void;
 }
 
-export const Button = (properties: ButtonProps): JSX.Element => {
+const NoMemoButton = (properties: ButtonProps): JSX.Element => {
   const { children, className, disabled, href, onClick } = properties;
   const classes = `button ${className ? className : ''}`;
 
@@ -27,3 +27,5 @@ export const Button = (properties: ButtonProps): JSX.Element => {
     </button>
   );
 };
+
+export const Button = React.memo(NoMemoButton);

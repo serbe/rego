@@ -8,7 +8,7 @@ interface IconProps {
   position?: 'left' | 'right';
 }
 
-export const Icon = (properties: IconProps): JSX.Element => {
+export const NoMemoIcon = (properties: IconProps): JSX.Element => {
   const { children, className, color, position, icon } = properties;
   const spanClasses = `${className} icon ${color ? `has-text-${color}` : ''} ${
     position ? `is-${position}` : ''
@@ -20,3 +20,5 @@ export const Icon = (properties: IconProps): JSX.Element => {
     </span>
   );
 };
+
+export const Icon = React.memo(NoMemoIcon);

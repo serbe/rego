@@ -13,7 +13,7 @@ interface ItemProps {
   ellipsis?: boolean;
 }
 
-export const Pagination = (properties: PaginationProps): JSX.Element => {
+export const NoMemoPagination = (properties: PaginationProps): JSX.Element => {
   const { currentPage, lastPage, callback } = properties;
   const navClasses = `pagination is-rounded is-centered`;
 
@@ -49,7 +49,7 @@ export const Pagination = (properties: PaginationProps): JSX.Element => {
       </button>
     );
 
-  const Item = (properties: ItemProps): JSX.Element | null => {
+  const Item = (properties: ItemProps): JSX.Element => {
     const { check, index, link, ellipsis } = properties;
 
     return check ? (
@@ -66,7 +66,9 @@ export const Pagination = (properties: PaginationProps): JSX.Element => {
           </a>
         )}
       </li>
-    ) : null;
+    ) : (
+      <></>
+    );
   };
 
   return (
@@ -85,3 +87,5 @@ export const Pagination = (properties: PaginationProps): JSX.Element => {
     </nav>
   );
 };
+
+export const Pagination = React.memo(NoMemoPagination);

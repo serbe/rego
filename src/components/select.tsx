@@ -23,7 +23,7 @@ type CLWS = {
   error?: string;
 };
 
-export const Select = (properties: SelectProps): JSX.Element => {
+export const NoMemoSelect = (properties: SelectProps): JSX.Element => {
   const { name, id, label, icon, color, listName, callback } = properties;
 
   const [opened, setOpened] = useState(false);
@@ -132,11 +132,12 @@ export const Select = (properties: SelectProps): JSX.Element => {
             <div
               className="select-item"
               key={`${name}-${index}`}
-              onClick={(): void => {
+              onMouseDown={(): void => {
                 setItemID(ListItem.id);
                 setValue(ListItem.name);
                 callback(ListItem.id);
               }}
+              role="gridcell"
             >
               {ListItem.name}
             </div>
@@ -146,3 +147,5 @@ export const Select = (properties: SelectProps): JSX.Element => {
     </div>
   );
 };
+
+export const Select = React.memo(NoMemoSelect);

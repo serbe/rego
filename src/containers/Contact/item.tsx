@@ -82,7 +82,7 @@ export const ContactItem = (): JSX.Element => {
   return (
     <div>
       {loaded && !error && (
-        <form>
+        <>
           <FormField
             name="name"
             value={name}
@@ -225,7 +225,7 @@ export const ContactItem = (): JSX.Element => {
             </div>
           </div>
           <button className="button">Сохранить</button>
-        </form>
+        </>
       )}
     </div>
   );

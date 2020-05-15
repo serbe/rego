@@ -17,7 +17,7 @@ interface InputProps {
   type?: 'text' | 'password' | 'email' | 'tel';
 }
 
-export const Input = (properties: InputProps): JSX.Element => {
+export const NoMemoInput = (properties: InputProps): JSX.Element => {
   const {
     name,
     className,
@@ -71,6 +71,8 @@ export const Input = (properties: InputProps): JSX.Element => {
   );
 };
 
-Input.defaultProps = {
+NoMemoInput.defaultProps = {
   type: 'text',
 };
+
+export const Input = React.memo(NoMemoInput);

@@ -18,7 +18,7 @@ interface FormFieldProps {
   value?: string;
 }
 
-export const FormField = (properties: FormFieldProps): JSX.Element => {
+export const NoMemoFormField = (properties: FormFieldProps): JSX.Element => {
   const {
     name,
     className,
@@ -58,6 +58,8 @@ export const FormField = (properties: FormFieldProps): JSX.Element => {
   );
 };
 
-FormField.defaultProps = {
+NoMemoFormField.defaultProps = {
   type: 'text',
 };
+
+export const FormField = React.memo(NoMemoFormField);

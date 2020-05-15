@@ -46,7 +46,7 @@ interface TableProps {
   bordered?: boolean;
 }
 
-export const Table = (properties: TableProps): JSX.Element => {
+export const NoMemoTable = (properties: TableProps): JSX.Element => {
   const [currentPage, setCurrentPage] = useState(0);
   const [search, setSearch] = useState<string>('');
   const [searchValues, setSearchValues] = useState<SData[]>([]);
@@ -127,8 +127,10 @@ export const Table = (properties: TableProps): JSX.Element => {
     hoverable ? 'is-hoverable' : ''
   } ${striped ? 'is-striped' : ''} ${bordered ? 'is-bordered' : ''}`;
 
-  const Heading = (): JSX.Element | null =>
-    nohead ? null : (
+  const Heading = (): JSX.Element =>
+    nohead ? (
+      <></>
+    ) : (
       <thead>
         <tr>
           {columns.map<JSX.Element>((column: Column, index: number) => (
@@ -180,21 +182,25 @@ export const Table = (properties: TableProps): JSX.Element => {
     </>
   );
 
-  const TBody = (): JSX.Element | null =>
+  const TBody = (): JSX.Element =>
     data && data.length > 0 ? (
       <tbody>
         <TableAllRows />
       </tbody>
-    ) : null;
+    ) : (
+      <></>
+    );
 
-  const Paginate = (): JSX.Element | null =>
+  const Paginate = (): JSX.Element =>
     paginate && fLength / itemsOnPage > 2 ? (
       <Pagination
         currentPage={currentPage + 1}
         lastPage={Math.ceil(fLength / itemsOnPage)}
         callback={receiveChildValue}
       />
-    ) : null;
+    ) : (
+      <></>
+    );
 
   const Search = (): JSX.Element => (
     <p className="control mb1 mwt" key="TableSearch">
@@ -222,3 +228,5 @@ export const Table = (properties: TableProps): JSX.Element => {
     </>
   );
 };
+
+export const Table = React.memo(NoMemoTable);

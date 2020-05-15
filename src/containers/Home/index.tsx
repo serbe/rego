@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import { EducationShort } from '../../models/education';
 import { PracticeShort } from '../../models/practice';
@@ -39,6 +39,7 @@ export const Home = (): JSX.Element => {
   const [hasError, setErrors] = useState<string>();
   const [educations, setEducations] = useState<EducationShort[]>([]);
   const [practices, setPractices] = useState<PracticeShort[]>([]);
+  const history = useHistory();
 
   useEffect(() => {
     rws.addEventListener('message', (message: MessageEvent) => {
@@ -68,15 +69,19 @@ export const Home = (): JSX.Element => {
       <tbody>
         {educations.map((row, index) => (
           <tr key={index} className={trClass(row.start_date)}>
-            <td>
-              <Link to={`/education/${row.id}`} className="has-text-black">
-                {tinyDate(row.start_date)}
-              </Link>
+            <td
+              className="has-text-black"
+              onMouseDown={(): void => history.push(`/education/${row.id}`)}
+              role="gridcell"
+            >
+              {tinyDate(row.start_date)}
             </td>
-            <td>
-              <Link to={`/contact/${row.contact_id}`} className="has-text-black">
-                {row.contact_name}
-              </Link>
+            <td
+              className="has-text-black"
+              onMouseDown={(): void => history.push(`/contact/${row.contact_id}`)}
+              role="gridcell"
+            >
+              {row.contact_name}
             </td>
           </tr>
         ))}
@@ -89,20 +94,26 @@ export const Home = (): JSX.Element => {
       <tbody>
         {practices.map((row, index) => (
           <tr key={index} className={trClass(row.date_of_practice)}>
-            <td>
-              <Link to={`/practice/${row.id}`} className="has-text-black">
-                {tinyDate(row.date_of_practice)}
-              </Link>
+            <td
+              className="has-text-black"
+              onMouseDown={(): void => history.push(`/practice/${row.id}`)}
+              role="gridcell"
+            >
+              {tinyDate(row.date_of_practice)}
             </td>
-            <td>
-              <Link to={`/kind/${row.kind_id}`} className="has-text-black">
-                {row.kind_short_name}
-              </Link>
+            <td
+              className="has-text-black"
+              onMouseDown={(): void => history.push(`/kind/${row.kind_id}`)}
+              role="gridcell"
+            >
+              {row.kind_short_name}
             </td>
-            <td>
-              <Link to={`/company/${row.company_id}`} className="has-text-black">
-                {row.company_name}
-              </Link>
+            <td
+              className="has-text-black"
+              onMouseDown={(): void => history.push(`/company/${row.company_id}`)}
+              role="gridcell"
+            >
+              {row.company_name}
             </td>
           </tr>
         ))}

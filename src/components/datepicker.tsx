@@ -33,7 +33,7 @@ const listYears = (): string[] => {
   return list;
 };
 
-export const DatePicker = (properties: DatePickerProps): JSX.Element => {
+export const NoMemoDatePicker = (properties: DatePickerProps): JSX.Element => {
   const { name, value, callback, label } = properties;
 
   const [year, setYear] = useState(() => ' ');
@@ -117,3 +117,5 @@ export const DatePicker = (properties: DatePickerProps): JSX.Element => {
     </div>
   );
 };
+
+export const DatePicker = React.memo(NoMemoDatePicker);
