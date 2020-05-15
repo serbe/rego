@@ -102,7 +102,7 @@ export const Table = (properties: TableProps): JSX.Element => {
       );
       const filteredLength = filteredData.length;
       if (filteredLength !== fLength) {
-        if (currentPage + 1 > Math.ceil(filteredLength / itemsOnPage)) {
+        if (currentPage > 1 && currentPage + 1 > Math.ceil(filteredLength / itemsOnPage)) {
           setCurrentPage(Math.ceil(filteredLength / itemsOnPage) - 1);
         }
         setFData(filteredData);

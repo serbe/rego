@@ -15,7 +15,6 @@ interface ItemProps {
 
 export const Pagination = (properties: PaginationProps): JSX.Element => {
   const { currentPage, lastPage, callback } = properties;
-
   const navClasses = `pagination is-rounded is-centered`;
 
   const Previous = (): JSX.Element =>
@@ -75,13 +74,13 @@ export const Pagination = (properties: PaginationProps): JSX.Element => {
       <Previous />
       <Next />
       <ul className="pagination-list" key="ul">
-        <Item check={currentPage !== 1} index={1} link={1} />
+        <Item check={currentPage > 1} index={1} link={1} />
         <Item check={currentPage > 3} index={2} ellipsis />
         <Item check={currentPage > 2} index={3} link={currentPage - 1} />
         <Item check index={4} link={currentPage} />
         <Item check={currentPage < lastPage - 1} index={5} link={currentPage + 1} />
         <Item check={currentPage < lastPage - 2} index={6} ellipsis />
-        <Item check={currentPage !== lastPage} index={7} link={lastPage} />
+        <Item check={currentPage < lastPage} index={7} link={lastPage} />
       </ul>
     </nav>
   );
