@@ -1,4 +1,4 @@
-import React, { MouseEvent } from 'react';
+import React, { memo, MouseEvent } from 'react';
 
 interface ButtonProps {
   children?: string;
@@ -6,7 +6,7 @@ interface ButtonProps {
   disabled?: boolean;
   href?: string;
   onClick?: (
-    event: React.MouseEvent<
+    event: MouseEvent<
       HTMLAnchorElement | HTMLButtonElement | HTMLInputElement,
       globalThis.MouseEvent
     >,
@@ -28,4 +28,4 @@ const NoMemoButton = (properties: ButtonProps): JSX.Element => {
   );
 };
 
-export const Button = React.memo(NoMemoButton);
+export const Button = memo(NoMemoButton);

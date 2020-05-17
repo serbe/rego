@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 
 interface DatePickerProps {
   name: string;
@@ -118,4 +118,4 @@ export const NoMemoDatePicker = (properties: DatePickerProps): JSX.Element => {
   );
 };
 
-export const DatePicker = React.memo(NoMemoDatePicker);
+export const DatePicker = memo(NoMemoDatePicker);

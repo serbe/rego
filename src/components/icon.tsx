@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 interface IconProps {
   children?: Element;
@@ -21,4 +21,4 @@ export const NoMemoIcon = (properties: IconProps): JSX.Element => {
   );
 };
 
-export const Icon = React.memo(NoMemoIcon);
+export const Icon = memo(NoMemoIcon);

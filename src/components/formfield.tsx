@@ -1,5 +1,4 @@
-import React, { ChangeEvent, MouseEvent } from 'react';
-
+import React, { ChangeEvent, memo, MouseEvent } from 'react';
 import { Input } from './input';
 
 interface FormFieldProps {
@@ -62,4 +61,4 @@ NoMemoFormField.defaultProps = {
   type: 'text',
 };
 
-export const FormField = React.memo(NoMemoFormField);
+export const FormField = memo(NoMemoFormField);

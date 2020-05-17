@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MouseEvent, useState, useEffect } from 'react';
+import React, { ChangeEvent, memo, MouseEvent, useEffect, useState } from 'react';
 import { Icon } from './icon';
 
 interface InputProps {
@@ -75,4 +75,4 @@ NoMemoInput.defaultProps = {
   type: 'text',
 };
 
-export const Input = React.memo(NoMemoInput);
+export const Input = memo(NoMemoInput);

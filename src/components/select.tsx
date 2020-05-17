@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { ChangeEvent, memo, useEffect, useState } from 'react';
 import { Icon } from './icon';
-import { SelectItem } from '../models/selectitem';
 import { rws } from '../netapi';
-
+import { SelectItem } from '../models/selectitem';
 import './select.css';
 
 interface SelectProps {
@@ -106,7 +105,7 @@ export const NoMemoSelect = (properties: SelectProps): JSX.Element => {
           aria-haspopup="true"
           aria-controls="dropdown-menu"
           value={currentValue()}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
+          onChange={(event: ChangeEvent<HTMLInputElement>): void => {
             setValue(event.target.value);
           }}
           onFocus={(): void => {
@@ -149,4 +148,4 @@ export const NoMemoSelect = (properties: SelectProps): JSX.Element => {
   );
 };
 
-export const Select = React.memo(NoMemoSelect);
+export const Select = memo(NoMemoSelect);

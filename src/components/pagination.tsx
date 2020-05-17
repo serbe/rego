@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 interface PaginationProps {
   currentPage: number;
@@ -88,4 +88,4 @@ export const NoMemoPagination = (properties: PaginationProps): JSX.Element => {
   );
 };
 
-export const Pagination = React.memo(NoMemoPagination);
+export const Pagination = memo(NoMemoPagination);

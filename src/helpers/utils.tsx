@@ -1,12 +1,8 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 
 export function useInput(
   initialValue: string,
-): [
-  string,
-  (event: React.ChangeEvent<HTMLInputElement>) => void,
-  React.Dispatch<React.SetStateAction<string>>,
-] {
+): [string, (event: ChangeEvent<HTMLInputElement>) => void, Dispatch<SetStateAction<string>>] {
   const [value, setValue] = useState(initialValue);
   function handleChange(event: ChangeEvent<HTMLInputElement>): void {
     setValue(event.target.value);
@@ -14,17 +10,8 @@ export function useInput(
   return [value, handleChange, setValue];
 }
 
-export function useID(
-  initialValue: number,
-): [
-  number,
-  // (event: React.ChangeEvent<HTMLInputElement>) => void,
-  React.Dispatch<React.SetStateAction<number>>,
-] {
+export function useID(initialValue: number): [number, Dispatch<SetStateAction<number>>] {
   const [value, setValue] = useState(initialValue);
-  // function handleChange(event: ChangeEvent<HTMLInputElement>): void {
-  //   setValue(event.target.value);
-  // }
   return [value, setValue];
 }
 

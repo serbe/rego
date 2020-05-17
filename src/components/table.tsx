@@ -1,8 +1,7 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { ChangeEvent, memo, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-import { Pagination } from './pagination';
 import { ModelsList } from '../models/lists';
+import { Pagination } from './pagination';
 
 export type Column = {
   field: string;
@@ -229,4 +228,4 @@ export const NoMemoTable = (properties: TableProps): JSX.Element => {
   );
 };
 
-export const Table = React.memo(NoMemoTable);
+export const Table = memo(NoMemoTable);
