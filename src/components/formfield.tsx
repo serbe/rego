@@ -7,7 +7,7 @@ interface FormFieldProps {
   disabled?: boolean;
   icon?: string;
   iconRight?: string;
-  label?: string | boolean;
+  label?: string;
   onClick?: (event: MouseEvent<HTMLInputElement, globalThis.MouseEvent>) => void;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
@@ -37,7 +37,7 @@ export const NoMemoFormField = (properties: FormFieldProps): JSX.Element => {
     <div className="field">
       {label && (
         <label className="label" htmlFor={name}>
-          {label !== true ? label : placeholder}
+          {label}
         </label>
       )}
       <Input
