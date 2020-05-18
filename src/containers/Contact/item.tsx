@@ -1,14 +1,13 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
-import { useParams } from 'react-router-dom';
-
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { addEmptyString, numberToString, useInput } from '../../helpers/utils';
 import { Contact } from '../../models/contact';
-import { SelectItem } from '../../models/selectitem';
-import { rws } from '../../netapi';
+import { DatePicker } from '../../components/datepicker';
+import { FormField } from '../../components/formfield';
 import { Input } from '../../components/input';
 import { Select } from '../../components/select';
-import { DatePicker } from '../../components/datepicker';
-import { addEmptyString, numberToString, useInput } from '../../helpers/utils';
-import { FormField } from '../../components/formfield';
+import { SelectItem } from '../../models/selectitem';
+import { rws } from '../../netapi';
+import { useParams } from 'react-router-dom';
 
 type CLWS = {
   name: string;
@@ -19,33 +18,26 @@ type CLWS = {
   error?: string;
 };
 
-// const onSubmit = (data: any) => console.log(data);
-
 type InputProps = {
   value: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 };
 
 export const ContactItem = (): JSX.Element => {
-  // const { register, handleSubmit, watch, errors } = useForm();
-
+  const { id } = useParams();
   const [error, setError] = useState<string>(() => '');
-
+  const [name, changeName, setName] = useInput('');
   const [postID, setPostID] = useState<number>(() => 0);
-  const [departmentID, setDepartmentID] = useState<number>();
+  const [departmentID, setDepartmentID] = useState<number>(() => 0);
   const [postGoID, setPostGoID] = useState<number>(() => 0);
   const [rankID, setRankID] = useState<number>(() => 0);
-
   const [emails, setEmails] = useState<string[]>(() => ['']);
   const [phones, setPhones] = useState<string[]>(() => ['']);
   const [faxes, setFaxes] = useState<string[]>(() => ['']);
-  const { id } = useParams();
   const [loaded, setLoaded] = useState(false);
-
-  const [name, changeName, setName] = useInput('');
   const [companyID, setCompanyID] = useState<number>(0);
-
   const [birthday, , setBirthday] = useInput('');
+  const [note, changeNote, setNote] = useInput('');
 
   useEffect(() => {
     if (id && id !== 0) {
@@ -63,6 +55,7 @@ export const ContactItem = (): JSX.Element => {
           setEmails(addEmptyString(c.emails));
           setPhones(addEmptyString(numberToString(c.phones)));
           setFaxes(addEmptyString(numberToString(c.faxes)));
+          setNote(c.note ? c.note : '');
           setLoaded(true);
         }
         if (data.error) {
@@ -77,7 +70,7 @@ export const ContactItem = (): JSX.Element => {
         });
       };
     }
-  }, [id, setBirthday, setName]);
+  }, [id, setBirthday, setName, setNote]);
 
   return (
     <div>
@@ -157,7 +150,9 @@ export const ContactItem = (): JSX.Element => {
           <div className="columns">
             <div className="column">
               <div className="field">
-                <label className="label">Электронный адрес</label>
+                <label className="label" htmlFor="email-1-input">
+                  Электронный адрес
+                </label>
                 {emails &&
                   emails.map((email, index) => (
                     <Input
@@ -179,7 +174,9 @@ export const ContactItem = (): JSX.Element => {
             </div>
             <div className="column">
               <div className="field">
-                <label className="label">Телефон</label>
+                <label className="label" htmlFor="phone-1-input">
+                  Телефон
+                </label>
                 {phones &&
                   phones.map((phone, index) => (
                     <Input
@@ -202,7 +199,9 @@ export const ContactItem = (): JSX.Element => {
             </div>
             <div className="column">
               <div className="field">
-                <label className="label">Факс</label>
+                <label className="label" htmlFor="fax-1-input">
+                  Факс
+                </label>
                 {faxes &&
                   faxes.map((fax, index) => (
                     <Input
@@ -224,6 +223,13 @@ export const ContactItem = (): JSX.Element => {
               </div>
             </div>
           </div>
+          <FormField
+            name="note"
+            value={note}
+            onChange={changeNote}
+            label="Заметки"
+            icon="comment"
+          />
           <button className="button">Сохранить</button>
         </>
       )}

@@ -122,7 +122,7 @@ export const NoMemoTable = (properties: TableProps): JSX.Element => {
     setCurrentPage(value - 1);
   };
 
-  const tableClasses = `${className ? className : ''} table is-fullwidth is-narrow mwt ${
+  const tableClasses = `${className ? className : ''} table is-fullwidth is-narrow ${
     hoverable ? 'is-hoverable' : ''
   } ${striped ? 'is-striped' : ''} ${bordered ? 'is-bordered' : ''}`;
 

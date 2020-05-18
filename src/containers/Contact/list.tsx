@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-
-import { Table, Column } from '../../components/table';
+import React, { useEffect, useState } from 'react';
+import { Column, Table } from '../../components/table';
 import { ContactList } from '../../models/contact';
 import { rws } from '../../netapi';
 

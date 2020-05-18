@@ -15,6 +15,14 @@ export function useID(initialValue: number): [number, Dispatch<SetStateAction<nu
   return [value, setValue];
 }
 
+export function stringNoNull(value?: string): string {
+  return value ? value : '';
+}
+
+export function numberNoNull(value?: number): number {
+  return value ? value : 0;
+}
+
 export const addEmptyString = (values?: string[]): string[] => {
   let list: string[] = [];
   if (values) {

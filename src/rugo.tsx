@@ -8,7 +8,7 @@ const Rugo = (): JSX.Element => {
   return (
     <>
       <NavBar />
-      <div className="container pv1">
+      <div className="container pv1 mwt">
         <Router />
       </div>
     </>
