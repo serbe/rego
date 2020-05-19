@@ -25,7 +25,21 @@ type InputProps = {
 
 export const ContactItem = (): JSX.Element => {
   const { id } = useParams();
+  const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState<string>(() => '');
+  // const { formField, changeHandler } = useFormFields({
+  //   name: '',
+  //   companyID: 0,
+  //   departmentID: 0,
+  //   postID: 0,
+  //   postGoID: 0,
+  //   rankID: 0,
+  //   birthday: '',
+  //   emails: [''],
+  //   phones: [''],
+  //   faxes: [''],
+  //   educations: [''],
+  // });
   const [name, changeName, setName] = useInput('');
   const [postID, setPostID] = useState<number>(() => 0);
   const [departmentID, setDepartmentID] = useState<number>(() => 0);
@@ -34,7 +48,6 @@ export const ContactItem = (): JSX.Element => {
   const [emails, setEmails] = useState<string[]>(() => ['']);
   const [phones, setPhones] = useState<string[]>(() => ['']);
   const [faxes, setFaxes] = useState<string[]>(() => ['']);
-  const [loaded, setLoaded] = useState(false);
   const [companyID, setCompanyID] = useState<number>(0);
   const [birthday, , setBirthday] = useInput('');
   const [note, changeNote, setNote] = useInput('');
