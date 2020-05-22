@@ -144,28 +144,35 @@ export const NoMemoTable = (properties: TableProps): JSX.Element => {
   const Td = (field: string[] | string, isArray?: boolean): JSX.Element =>
     isArray && field && Array.isArray(field) ? splitArray(field) : <>{field}</>;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const TableRow = (row: any): JSX.Element => (
-    <>
-      {columns.map((column: Column, index: number) => (
-        <td key={`td${row.id}${index}`} className={column.className}>
-          {column.linkField && column.linkBase ? (
-            <Link to={column.linkBase + row[column.linkField]} className="has-text-dark">
-              {Td(
-                column.fieldFunc ? column.fieldFunc(row[column.field]) : row[column.field],
-                column.array,
+  function TableRow(row: ModelsList): JSX.Element {
+    return (
+      <>
+        {columns.map((column: Column, index: number) => {
+          const field = column.linkField;
+          if (field && field in row) {
+            console.log(field, 'in');
+          }
+          return (
+            <td key={`td${row.id}${index}`} className={column.className}>
+              {column.linkBase && field && field in row ? (
+                <Link to={`${column.linkBase}${row[field]}`} className="has-text-dark">
+                  {Td(
+                    column.fieldFunc ? column.fieldFunc(row[column.field]) : row[column.field],
+                    column.array,
+                  )}
+                </Link>
+              ) : (
+                Td(
+                  column.fieldFunc ? column.fieldFunc(row[column.field]) : row[column.field],
+                  column.array,
+                )
               )}
-            </Link>
-          ) : (
-            Td(
-              column.fieldFunc ? column.fieldFunc(row[column.field]) : row[column.field],
-              column.array,
-            )
-          )}
-        </td>
-      ))}
-    </>
-  );
+            </td>
+          );
+        })}
+      </>
+    );
+  }
 
   const TableAllRows = (): JSX.Element => (
     <>

@@ -10,7 +10,7 @@ interface IconProps {
 
 export const NoMemoIcon = (properties: IconProps): JSX.Element => {
   const { children, className, color, position, icon } = properties;
-  const spanClasses = `${className} icon ${color ? `has-text-${color}` : ''} ${
+  const spanClasses = `icon ${className ? className : ''} ${color ? `has-text-${color}` : ''} ${
     position ? `is-${position}` : ''
   }`;
 

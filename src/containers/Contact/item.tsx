@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { addEmptyString, numberToString, useInput } from '../../helpers/utils';
 import { Contact } from '../../models/contact';
 import { DatePicker } from '../../components/datepicker';
@@ -18,13 +18,17 @@ type CLWS = {
   error?: string;
 };
 
-type InputProps = {
-  value: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-};
+// type InputProps = {
+//   value: string;
+//   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+// };
+
+interface ParamTypes {
+  id: string;
+}
 
 export const ContactItem = (): JSX.Element => {
-  const { id } = useParams();
+  const { id } = useParams<ParamTypes>();
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState<string>(() => '');
   // const { formField, changeHandler } = useFormFields({
@@ -53,9 +57,9 @@ export const ContactItem = (): JSX.Element => {
   const [note, changeNote, setNote] = useInput('');
 
   useEffect(() => {
-    if (id && id !== 0) {
+    if (id !== '0') {
       rws.addEventListener('message', (message: MessageEvent) => {
-        const data: CLWS = JSON.parse(message.data);
+        const data = JSON.parse(message.data) as CLWS;
         if (data?.name === 'Contact' && data.object.Contact) {
           const c = data.object.Contact;
           setName(c.name ? c.name : '');

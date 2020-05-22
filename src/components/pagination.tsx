@@ -3,7 +3,7 @@ import React, { memo } from 'react';
 interface PaginationProps {
   currentPage: number;
   lastPage: number;
-  callback: Function;
+  callback: (value: number) => void;
 }
 
 interface ItemProps {
@@ -59,7 +59,7 @@ export const NoMemoPagination = (properties: PaginationProps): JSX.Element => {
         ) : (
           <a
             className={link === currentPage ? 'pagination-link is-current' : 'pagination-link'}
-            onClick={link === currentPage ? undefined : (): void => callback(link)}
+            onClick={link === currentPage || !link ? undefined : (): void => callback(link)}
             href="#item"
           >
             {link}

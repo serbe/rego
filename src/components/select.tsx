@@ -33,7 +33,7 @@ export const NoMemoSelect = (properties: SelectProps): JSX.Element => {
 
   useEffect(() => {
     rws.addEventListener('message', (message: MessageEvent) => {
-      const data: CLWS = JSON.parse(message.data);
+      const data = JSON.parse(message.data) as CLWS;
       if (data?.name === listName && data.object.SelectItem && data.object.SelectItem.length > 0) {
         setList(data.object.SelectItem);
       }
@@ -42,7 +42,7 @@ export const NoMemoSelect = (properties: SelectProps): JSX.Element => {
         setError(data.error);
       }
     });
-    rws.send(`{"Get":{"List":"${listName}"}}`);
+    if (listName) rws.send(`{"Get":{"List":"${listName}"}}`);
 
     return function cleanup(): void {
       rws.removeEventListener('message', (message: unknown) => {

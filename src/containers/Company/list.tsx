@@ -18,7 +18,7 @@ export const Companies = (): JSX.Element => {
 
   useEffect(() => {
     rws.addEventListener('message', (message: MessageEvent) => {
-      const data: CLWS = JSON.parse(message.data);
+      const data = JSON.parse(message.data) as CLWS;
       if (data.name && data.name === 'CompanyList' && data.object.CompanyList) {
         setCompanies(data.object.CompanyList);
       }

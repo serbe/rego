@@ -17,7 +17,7 @@ export const Contacts = (): JSX.Element => {
 
   useEffect(() => {
     rws.addEventListener('message', (message: MessageEvent) => {
-      const data: CLWS = JSON.parse(message.data);
+      const data = JSON.parse(message.data) as CLWS;
       if (data.name && data.name === 'ContactList' && data.object.ContactList) {
         setContacts(data.object.ContactList);
       }

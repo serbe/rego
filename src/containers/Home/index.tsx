@@ -43,7 +43,7 @@ export const Home = (): JSX.Element => {
 
   useEffect(() => {
     rws.addEventListener('message', (message: MessageEvent) => {
-      const data: HomeWS = JSON.parse(message.data);
+      const data = JSON.parse(message.data) as HomeWS;
       if (data.name && data.name === 'PracticeNear' && data.object.PracticeShort) {
         setPractices(data.object.PracticeShort);
       }
