@@ -1,4 +1,4 @@
-import React, { ChangeEvent, memo, MouseEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import { Icon } from './icon';
 
 interface InputProps {
@@ -17,7 +17,7 @@ interface InputProps {
   type?: 'text' | 'password' | 'email' | 'tel';
 }
 
-export const NoMemoInput = (properties: InputProps): JSX.Element => {
+export const Input = (properties: InputProps): JSX.Element => {
   const {
     name,
     className,
@@ -37,15 +37,10 @@ export const NoMemoInput = (properties: InputProps): JSX.Element => {
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
-    setInputValue(value ? value : '');
+    setInputValue(value || '');
   }, [value]);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setInputValue(event.target.value);
-    if (onChange) onChange(event);
-  };
-
-  const divClasses = `${classNameDiv ? classNameDiv : ''} control ${icon ? 'has-icons-left' : ''} ${
+  const divClasses = `control ${classNameDiv || ''} ${icon ? 'has-icons-left' : ''} ${
     iconRight ? 'has-icons-right' : ''
   }`;
 
@@ -55,15 +50,15 @@ export const NoMemoInput = (properties: InputProps): JSX.Element => {
         name={name}
         id={name}
         key={name}
-        className={`${className ? className : ''} input`}
+        className={`${className || ''} input`}
         disabled={disabled}
         onClick={onClick}
-        onChange={handleChange}
+        onChange={onChange}
         onBlur={onBlur}
         placeholder={placeholder}
         readOnly={readonly}
         type={type}
-        value={inputValue}
+        defaultValue={inputValue}
       />
       {icon && <Icon position={'left'} icon={icon} />}
       {iconRight && <Icon position={'right'} icon={iconRight} />}
@@ -71,8 +66,6 @@ export const NoMemoInput = (properties: InputProps): JSX.Element => {
   );
 };
 
-NoMemoInput.defaultProps = {
+Input.defaultProps = {
   type: 'text',
 };
-
-export const Input = memo(NoMemoInput);

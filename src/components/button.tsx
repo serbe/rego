@@ -1,4 +1,4 @@
-import React, { memo, MouseEvent } from 'react';
+import React, { MouseEvent } from 'react';
 
 interface ButtonProps {
   children?: string;
@@ -13,9 +13,9 @@ interface ButtonProps {
   ) => void;
 }
 
-const NoMemoButton = (properties: ButtonProps): JSX.Element => {
+export const Button = (properties: ButtonProps): JSX.Element => {
   const { children, className, disabled, href, onClick } = properties;
-  const classes = `button ${className ? className : ''}`;
+  const classes = `button ${className || ''}`;
 
   return href ? (
     <a href={href} onClick={onClick} className={classes}>
@@ -27,5 +27,3 @@ const NoMemoButton = (properties: ButtonProps): JSX.Element => {
     </button>
   );
 };
-
-export const Button = memo(NoMemoButton);

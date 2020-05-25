@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 
 interface PaginationProps {
   currentPage: number;
@@ -13,7 +13,7 @@ interface ItemProps {
   ellipsis?: boolean;
 }
 
-export const NoMemoPagination = (properties: PaginationProps): JSX.Element => {
+export const Pagination = (properties: PaginationProps): JSX.Element => {
   const { currentPage, lastPage, callback } = properties;
   const navClasses = `pagination is-rounded is-centered`;
 
@@ -87,5 +87,3 @@ export const NoMemoPagination = (properties: PaginationProps): JSX.Element => {
     </nav>
   );
 };
-
-export const Pagination = memo(NoMemoPagination);

@@ -159,7 +159,7 @@ export const ContactItem = (): JSX.Element => {
                 name="birthday"
                 label="Дата рождения"
                 value={birthday}
-                callback={setBirthday}
+                onChange={setBirthday}
               />
             </div>
           </div>

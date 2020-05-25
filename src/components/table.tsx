@@ -1,7 +1,8 @@
-import React, { ChangeEvent, memo, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ModelsList } from '../models/lists';
 import { Pagination } from './pagination';
+import { Input } from './input';
 
 export type Column = {
   field: string;
@@ -18,6 +19,21 @@ type SData = {
   id: number;
   data: string;
 };
+
+function getValue<T, K extends keyof T>(object: T, key: K): T[K] {
+  return object[key];
+}
+
+function getString<T, K extends keyof T>(object: T, key: K): string {
+  const value: T[K] = getValue(object, key);
+  if (!value) {
+    return '';
+  }
+  if (typeof value === 'string') {
+    return value;
+  }
+  return '';
+}
 
 export type RowClassFunc = {
   rowFunc: (value: string) => string;
@@ -45,7 +61,7 @@ interface TableProps {
   bordered?: boolean;
 }
 
-export const NoMemoTable = (properties: TableProps): JSX.Element => {
+export const Table = (properties: TableProps): JSX.Element => {
   const [currentPage, setCurrentPage] = useState(0);
   const [search, setSearch] = useState<string>('');
   const [searchValues, setSearchValues] = useState<SData[]>([]);
@@ -122,7 +138,7 @@ export const NoMemoTable = (properties: TableProps): JSX.Element => {
     setCurrentPage(value - 1);
   };
 
-  const tableClasses = `${className ? className : ''} table is-fullwidth is-narrow ${
+  const tableClasses = `${className || ''} table is-fullwidth is-narrow ${
     hoverable ? 'is-hoverable' : ''
   } ${striped ? 'is-striped' : ''} ${bordered ? 'is-bordered' : ''}`;
 
@@ -148,22 +164,26 @@ export const NoMemoTable = (properties: TableProps): JSX.Element => {
     return (
       <>
         {columns.map((column: Column, index: number) => {
-          const field = column.linkField;
-          if (field && field in row) {
-            console.log(field, 'in');
+          const link = column.linkField;
+          if (link && link in row) {
+            console.log(link, 'in');
           }
           return (
             <td key={`td${row.id}${index}`} className={column.className}>
-              {column.linkBase && field && field in row ? (
-                <Link to={`${column.linkBase}${row[field]}`} className="has-text-dark">
+              {column.linkBase && link ? (
+                <Link to={`${column.linkBase}${getString(row, link)}`} className="has-text-dark">
                   {Td(
-                    column.fieldFunc ? column.fieldFunc(row[column.field]) : row[column.field],
+                    column.fieldFunc
+                      ? column.fieldFunc(getString(row, column.field))
+                      : getString(row, column.field),
                     column.array,
                   )}
                 </Link>
               ) : (
                 Td(
-                  column.fieldFunc ? column.fieldFunc(row[column.field]) : row[column.field],
+                  column.fieldFunc
+                    ? column.fieldFunc(getString(row, column.field))
+                    : getString(row, column.field),
                   column.array,
                 )
               )}
@@ -178,7 +198,6 @@ export const NoMemoTable = (properties: TableProps): JSX.Element => {
     <>
       {paginationData().map((item, index) => (
         <tr
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           className={rowClass ? rowClass.rowFunc((item as any)[rowClass.rowFuncField]) : undefined}
           key={`tr${item.id}${index}`}
         >
@@ -210,13 +229,12 @@ export const NoMemoTable = (properties: TableProps): JSX.Element => {
 
   const Search = (): JSX.Element => (
     <p className="control mb1 mwt" key="TableSearch">
-      <input
-        className="input is-expanded"
-        type="search"
+      <Input
+        name="search"
+        className="is-expanded"
         placeholder="Поиск"
         onChange={changeSearch}
         value={search}
-        autoFocus
       />
     </p>
   );
@@ -234,5 +252,3 @@ export const NoMemoTable = (properties: TableProps): JSX.Element => {
     </>
   );
 };
-
-export const Table = memo(NoMemoTable);

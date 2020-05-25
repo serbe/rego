@@ -1,4 +1,4 @@
-import React, { ChangeEvent, memo, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Icon } from './icon';
 import { rws } from '../netapi';
 import { SelectItem } from '../models/selectitem';
@@ -22,7 +22,7 @@ type CLWS = {
   error?: string;
 };
 
-export const NoMemoSelect = (properties: SelectProps): JSX.Element => {
+export const Select = (properties: SelectProps): JSX.Element => {
   const { name, id, label, icon, color, listName, callback } = properties;
 
   const [opened, setOpened] = useState(false);
@@ -147,5 +147,3 @@ export const NoMemoSelect = (properties: SelectProps): JSX.Element => {
     </div>
   );
 };
-
-export const Select = memo(NoMemoSelect);

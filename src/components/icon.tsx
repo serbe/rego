@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 
 interface IconProps {
   children?: Element;
@@ -8,9 +8,9 @@ interface IconProps {
   position?: 'left' | 'right';
 }
 
-export const NoMemoIcon = (properties: IconProps): JSX.Element => {
+export const Icon = (properties: IconProps): JSX.Element => {
   const { children, className, color, position, icon } = properties;
-  const spanClasses = `icon ${className ? className : ''} ${color ? `has-text-${color}` : ''} ${
+  const spanClasses = `icon ${className || ''} ${color ? `has-text-${color}` : ''} ${
     position ? `is-${position}` : ''
   }`;
 
@@ -20,5 +20,3 @@ export const NoMemoIcon = (properties: IconProps): JSX.Element => {
     </span>
   );
 };
-
-export const Icon = memo(NoMemoIcon);

@@ -1,9 +1,9 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface DatePickerProps {
   name: string;
   value?: string;
-  callback: (value: string) => void;
+  onChange: (value: string) => void;
   label?: string;
 }
 
@@ -33,37 +33,35 @@ const listYears = (): string[] => {
   return list;
 };
 
-export const NoMemoDatePicker = (properties: DatePickerProps): JSX.Element => {
-  const { name, value, callback, label } = properties;
+export const DatePicker = (properties: DatePickerProps): JSX.Element => {
+  const { name, value, onChange, label } = properties;
 
   const [year, setYear] = useState(() => ' ');
   const [month, setMonth] = useState(() => ' ');
   const [day, setDay] = useState(() => ' ');
+  const [rawDate, setRawDate] = useState(() => '');
   const [date, setDate] = useState(() => new Date());
 
   useEffect(() => {
-    if (value) {
+    if (value && value !== rawDate) {
       const values = value.split('-');
       if (values.length === 3) {
+        setRawDate(value);
         setYear(values[0]);
         setMonth(values[1]);
         setDay(values[2]);
         setDate(new Date(Number(values[0]), Number(values[1]), 0));
       }
     }
-  }, [value]);
+  }, [rawDate, value]);
 
-  const handleChangeDay = (newday: string): void => {
-    setDay(newday);
-    const strdate = `${year}-${month}-${newday}`;
-    if (strdate.length === 10) callback(strdate);
-  };
-
-  const handleChangeMonth = (newmonth: string): void => {
-    setMonth(newmonth);
-    const strdate = `${year}-${newmonth}-${day}`;
-    if (strdate.length === 10) callback(strdate);
-  };
+  useEffect(() => {
+    const strdate = `${year}-${month}-${day}`;
+    if (strdate !== rawDate) {
+      setRawDate(strdate);
+      onChange(strdate);
+    }
+  }, [day, month, onChange, rawDate, year]);
 
   return (
     <div className="field" key={name}>
@@ -73,49 +71,58 @@ export const NoMemoDatePicker = (properties: DatePickerProps): JSX.Element => {
         </label>
       )}
       <div className="field has-addons">
-        <p className="control">
-          <span className="select">
-            <select className="select" value={day} key={`${name}day`}>
+        <div className="control">
+          <div className="select">
+            <select
+              className="select"
+              value={day}
+              key={`${name}day`}
+              onChange={(event) => setDay(event.target.value)}
+              onBlur={(event) => setDay(event.target.value)}
+            >
               {listDate(date).map((item, index) => (
-                <option
-                  key={`${name}day-${index}`}
-                  value={item}
-                  onSelect={(): void => handleChangeDay(item)}
-                >
+                <option key={`${name}day-${index}`} value={item}>
                   {item}
                 </option>
               ))}
             </select>
-          </span>
-        </p>
-        <p className="control">
-          <span className="select">
-            <select className="select" value={month} key={`${name}month`}>
+          </div>
+        </div>
+        <div className="control">
+          <div className="select">
+            <select
+              className="select"
+              value={month}
+              key={`${name}month`}
+              onChange={(event) => setMonth(event.target.value)}
+              onBlur={(event) => setMonth(event.target.value)}
+            >
               {listMonth().map((item, index) => (
-                <option
-                  key={`${name}month-${index}`}
-                  onSelect={(): void => handleChangeMonth(item)}
-                >
+                <option key={`${name}month-${index}`} value={item}>
                   {item}
                 </option>
               ))}
             </select>
-          </span>
-        </p>
-        <p className="control">
-          <span className="select">
-            <select className="select" value={year} key={`${name}year`}>
+          </div>
+        </div>
+        <div className="control">
+          <div className="select">
+            <select
+              className="select"
+              value={year}
+              key={`${name}year`}
+              onChange={(event) => setYear(event.target.value)}
+              onBlur={(event) => setYear(event.target.value)}
+            >
               {listYears().map((item, index) => (
-                <option key={`${name}year-${index}`} onSelect={(): void => setYear(item)}>
+                <option key={`${name}year-${index}`} value={item}>
                   {item}
                 </option>
               ))}
             </select>
-          </span>
-        </p>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
-
-export const DatePicker = memo(NoMemoDatePicker);
