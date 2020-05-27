@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Table, Column } from '../../components/table';
+// import { Table, Column } from '../../components/table';
 import { CompanyList } from '../../models/company';
 import { rws } from '../../netapi';
 
@@ -35,44 +35,42 @@ export const Companies = (): JSX.Element => {
     };
   }, []);
 
-  const columns: Column[] = [
-    {
-      field: 'name',
-      label: 'Наименование',
-      linkBase: '/companies/',
-      linkField: 'id',
-      className: 'w250',
-    },
-    {
-      field: 'address',
-      label: 'Адрес',
-      className: 'w250 is-hidden-touch',
-    },
-    {
-      field: 'scope_name',
-      label: 'Сфера деятельности',
-      className: 'w250 is-hidden-mobile',
-    },
-    { field: 'phones', label: 'Телефоны', array: true, className: 'w95' },
-    {
-      field: 'faxes',
-      label: 'Факсы',
-      array: true,
-      className: 'is-hidden-touch w95',
-    },
-    {
-      field: 'practices',
-      label: 'Тренировки',
-      array: true,
-      className: 'is-hidden-touch is-hidden-desktop-only w95',
-    },
-  ];
+  // const columns: Column[] = [
+  //   {
+  //     field: 'name',
+  //     label: 'Наименование',
+  //     linkBase: '/companies/',
+  //     linkField: 'id',
+  //     className: 'w250',
+  //   },
+  //   {
+  //     field: 'address',
+  //     label: 'Адрес',
+  //     className: 'w250 is-hidden-touch',
+  //   },
+  //   {
+  //     field: 'scope_name',
+  //     label: 'Сфера деятельности',
+  //     className: 'w250 is-hidden-mobile',
+  //   },
+  //   { field: 'phones', label: 'Телефоны', array: true, className: 'w95' },
+  //   {
+  //     field: 'faxes',
+  //     label: 'Факсы',
+  //     array: true,
+  //     className: 'is-hidden-touch w95',
+  //   },
+  //   {
+  //     field: 'practices',
+  //     label: 'Тренировки',
+  //     array: true,
+  //     className: 'is-hidden-touch is-hidden-desktop-only w95',
+  //   },
+  // ];
 
   return error ? (
     <div>No data</div>
   ) : (
-    <div className="">
-      <Table data={companies} columns={columns} paginate={20} />
-    </div>
+    <div className="">{/* <Table data={companies} columns={columns} paginate={20} /> */}</div>
   );
 };

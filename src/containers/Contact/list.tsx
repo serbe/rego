@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Column, Table } from '../../components/table';
+import { useHistory } from 'react-router-dom';
+import { SData, Search, Paginate } from '../../components/table';
 import { ContactList } from '../../models/contact';
+import { splitNumbers, useInput } from '../../helpers/utils';
 import { rws } from '../../netapi';
 
 type CLWS = {
@@ -13,7 +15,15 @@ type CLWS = {
 
 export const Contacts = (): JSX.Element => {
   const [contacts, setContacts] = useState<ContactList[]>([]);
+  const [fData, setFData] = useState<ContactList[]>([]);
+  const [search, changeSearch] = useInput('');
+  const [currentPage, setCurrentPage] = useState(0);
+  const [searchValues, setSearchValues] = useState<SData[]>([]);
+  const [fLength, setFLength] = useState(0);
   const [error, setError] = useState<string>();
+  const history = useHistory();
+
+  const itemsOnPage = 20;
 
   useEffect(() => {
     rws.addEventListener('message', (message: MessageEvent) => {
@@ -34,30 +44,99 @@ export const Contacts = (): JSX.Element => {
     };
   }, []);
 
-  const columns: Column[] = [
-    {
-      field: 'name',
-      label: 'Фамилия Имя Отчество',
-      linkBase: '/contacts/',
-      linkField: 'id',
-      className: 'w250',
-    },
-    {
-      field: 'company_name',
-      label: 'Организация',
-      linkBase: '/compaines/',
-      linkField: 'company_id',
-      className: 'is-hidden-mobile w250',
-    },
-    { field: 'post_name', label: 'Должность', className: 'is-hidden-touch w250' },
-    { field: 'phones', label: 'Телефоны', array: true, className: 'w95' },
-    {
-      field: 'faxes',
-      label: 'Факсы',
-      array: true,
-      className: 'is-hidden-mobile w95',
-    },
-  ];
+  useEffect(() => {
+    const sv: SData[] = [];
+    contacts.map((row, index): void => {
+      let rowString = '';
+      const values = Object.values(row);
+      values.map((value): void => {
+        if (value && typeof value !== 'number') {
+          if (typeof value === 'string') {
+            rowString += value;
+          } else if (Array.isArray(value)) {
+            rowString += value.join('');
+          }
+        }
+      });
+      sv.push({ id: index, data: rowString.toLowerCase() });
+    });
+    setSearchValues(sv);
+    setFData(contacts);
+    setFLength(contacts.length);
+  }, [contacts]);
 
-  return error ? <div>No data</div> : <Table data={contacts} columns={columns} paginate={20} />;
+  useEffect(() => {
+    if (search.length < 2) {
+      const dataLength = contacts.length;
+      if (fLength !== dataLength) {
+        setFData(contacts);
+        setFLength(dataLength);
+      }
+    } else {
+      const searchArray = search.toLowerCase().split(' ');
+      const filteredData = contacts.filter((_, index) =>
+        searchArray.every((value: string) => searchValues[index].data.includes(value)),
+      );
+      const filteredLength = filteredData.length;
+      if (filteredLength !== fLength) {
+        if (currentPage > 1 && currentPage + 1 > Math.ceil(filteredLength / itemsOnPage)) {
+          setCurrentPage(Math.ceil(filteredLength / itemsOnPage) - 1);
+        }
+        setFData(filteredData);
+        setFLength(filteredLength);
+      }
+    }
+  }, [search, itemsOnPage]);
+
+  const paginationData = (): ContactList[] => {
+    return fData.slice(currentPage * itemsOnPage, (currentPage + 1) * itemsOnPage);
+  };
+
+  const Body = (): JSX.Element => (
+    <>
+      {paginationData().map((contact, index) => (
+        <tr key={`tr${contact.id}${index}`}>
+          <td
+            onClick={() => history.push(`/contacts/${contact.id}`)}
+            role="gridcell"
+            className="w250"
+          >
+            {contact.name}
+          </td>
+          <td
+            onClick={() => history.push(`/compaines/${contact.company_id || 0}`)}
+            role="gridcell"
+            className="is-hidden-mobile w250"
+          >
+            {contact.company_name}
+          </td>
+          <td className="is-hidden-touch w250">{contact.post_name}</td>
+          <td className="w95">{splitNumbers(contact.phones)}</td>
+          <td className="is-hidden-mobile w95">{splitNumbers(contact.faxes)}</td>
+        </tr>
+      ))}
+    </>
+  );
+
+  // <Table data={contacts} columns={columns} paginate={20} />
+  return error ? (
+    <></>
+  ) : (
+    <>
+      {Search(search, changeSearch)}
+      <table className="table is-narrow">
+        <tbody>
+          <tr>
+            <th className="w250">Фамилия Имя Отчество</th>
+            <th className="is-hidden-mobile w250">Организация</th>
+            <th className="is-hidden-touch w250">Должность</th>
+            <th className="w95">Телефоны</th>
+            <th className="is-hidden-mobile w95">Факсы</th>
+          </tr>
+          <Body />
+        </tbody>
+      </table>
+      {Paginate(fLength, itemsOnPage, currentPage, setCurrentPage)}
+    </>
+  );
 };
