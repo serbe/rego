@@ -118,7 +118,6 @@ export const Contacts = (): JSX.Element => {
     </>
   );
 
-  // <Table data={contacts} columns={columns} paginate={20} />
   return error ? (
     <></>
   ) : (

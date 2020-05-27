@@ -1,6 +1,11 @@
 import React, { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import { Icon } from './icon';
 
+export type InputValues = {
+  value: string;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+};
+
 interface InputProps {
   name: string;
   className?: string;

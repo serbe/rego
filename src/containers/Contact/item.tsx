@@ -3,7 +3,7 @@ import { addEmptyString, numberToString, useInput } from '../../helpers/utils';
 import { Contact } from '../../models/contact';
 import { DatePicker } from '../../components/datepicker';
 import { FormField } from '../../components/formfield';
-import { Input } from '../../components/input';
+import { Input, InputValues } from '../../components/input';
 import { Select } from '../../components/select';
 import { SelectItem } from '../../models/selectitem';
 import { rws } from '../../netapi';
@@ -18,32 +18,27 @@ type CLWS = {
   error?: string;
 };
 
-// type InputProps = {
-//   value: string;
-//   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-// };
-
 interface ParamTypes {
   id: string;
 }
+
+const Name = (values: InputValues): JSX.Element => {
+  const { value, onChange } = values;
+  return (
+    <FormField
+      name="name"
+      value={value}
+      onChange={onChange}
+      label="Фамилия Имя Отчество"
+      icon="user"
+    />
+  );
+};
 
 export const ContactItem = (): JSX.Element => {
   const { id } = useParams<ParamTypes>();
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState<string>(() => '');
-  // const { formField, changeHandler } = useFormFields({
-  //   name: '',
-  //   companyID: 0,
-  //   departmentID: 0,
-  //   postID: 0,
-  //   postGoID: 0,
-  //   rankID: 0,
-  //   birthday: '',
-  //   emails: [''],
-  //   phones: [''],
-  //   faxes: [''],
-  //   educations: [''],
-  // });
   const [name, changeName, setName] = useInput('');
   const [postID, setPostID] = useState<number>(() => 0);
   const [departmentID, setDepartmentID] = useState<number>(() => 0);
@@ -93,13 +88,7 @@ export const ContactItem = (): JSX.Element => {
     <div>
       {loaded && !error && (
         <>
-          <FormField
-            name="name"
-            value={name}
-            onChange={changeName}
-            label="Фамилия Имя Отчество"
-            icon="user"
-          />
+          <Name value={name} onChange={changeName} />
           <Select
             name="company"
             label="Организация"
