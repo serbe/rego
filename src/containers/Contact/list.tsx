@@ -15,11 +15,11 @@ type CLWS = {
 
 export const Contacts = (): JSX.Element => {
   const [contacts, setContacts] = useState<ContactList[]>([]);
-  const [fData, setFData] = useState<ContactList[]>([]);
+  const [filteredData, setFilteredData] = useState<ContactList[]>([]);
   const [search, changeSearch] = useInput('');
   const [currentPage, setCurrentPage] = useState(0);
   const [searchValues, setSearchValues] = useState<SData[]>([]);
-  const [fLength, setFLength] = useState(0);
+  const [filteredLength, setFilteredLength] = useState(0);
   const [error, setError] = useState<string>();
   const history = useHistory();
 
@@ -61,35 +61,35 @@ export const Contacts = (): JSX.Element => {
       sv.push({ id: index, data: rowString.toLowerCase() });
     });
     setSearchValues(sv);
-    setFData(contacts);
-    setFLength(contacts.length);
+    setFilteredData(contacts);
+    setFilteredLength(contacts.length);
   }, [contacts]);
 
   useEffect(() => {
     if (search.length < 2) {
       const dataLength = contacts.length;
-      if (fLength !== dataLength) {
-        setFData(contacts);
-        setFLength(dataLength);
+      if (filteredLength !== dataLength) {
+        setFilteredData(contacts);
+        setFilteredLength(dataLength);
       }
     } else {
       const searchArray = search.toLowerCase().split(' ');
-      const filteredData = contacts.filter((_, index) =>
+      const temporaryFilteredData = contacts.filter((_, index) =>
         searchArray.every((value: string) => searchValues[index].data.includes(value)),
       );
-      const filteredLength = filteredData.length;
-      if (filteredLength !== fLength) {
-        if (currentPage > 1 && currentPage + 1 > Math.ceil(filteredLength / itemsOnPage)) {
-          setCurrentPage(Math.ceil(filteredLength / itemsOnPage) - 1);
+      const temporaryFilteredLength = temporaryFilteredData.length;
+      if (temporaryFilteredLength !== filteredLength) {
+        if (currentPage > 1 && currentPage + 1 > Math.ceil(temporaryFilteredLength / itemsOnPage)) {
+          setCurrentPage(Math.ceil(temporaryFilteredLength / itemsOnPage) - 1);
         }
-        setFData(filteredData);
-        setFLength(filteredLength);
+        setFilteredData(temporaryFilteredData);
+        setFilteredLength(temporaryFilteredLength);
       }
     }
-  }, [search, itemsOnPage]);
+  }, [search]);
 
   const paginationData = (): ContactList[] => {
-    return fData.slice(currentPage * itemsOnPage, (currentPage + 1) * itemsOnPage);
+    return filteredData.slice(currentPage * itemsOnPage, (currentPage + 1) * itemsOnPage);
   };
 
   const Body = (): JSX.Element => (
@@ -97,14 +97,14 @@ export const Contacts = (): JSX.Element => {
       {paginationData().map((contact, index) => (
         <tr key={`tr${contact.id}${index}`}>
           <td
-            onClick={() => history.push(`/contacts/${contact.id}`)}
+            onClick={(): void => history.push(`/contacts/${contact.id}`)}
             role="gridcell"
             className="w250"
           >
             {contact.name}
           </td>
           <td
-            onClick={() => history.push(`/compaines/${contact.company_id || 0}`)}
+            onClick={(): void => history.push(`/compaines/${contact.company_id || 0}`)}
             role="gridcell"
             className="is-hidden-mobile w250"
           >
@@ -136,7 +136,7 @@ export const Contacts = (): JSX.Element => {
           <Body />
         </tbody>
       </table>
-      {Paginate(fLength, itemsOnPage, currentPage, setCurrentPage)}
+      {Paginate(filteredLength, itemsOnPage, currentPage, setCurrentPage)}
     </>
   );
 };
