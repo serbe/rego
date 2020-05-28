@@ -1,42 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { addEmptyString, numberToString, useInput } from '../../helpers/utils';
-import { Contact } from '../../models/contact';
-import { DatePicker } from '../../components/datepicker';
-import { FormField } from '../../components/formfield';
-import { Input, InputValues } from '../../components/input';
-import { Select } from '../../components/select';
-import { SelectItem } from '../../models/selectitem';
+import { ContactNameInput, ContactBirthdayInput, ContactJsonScheme } from '../../models/contact';
+import { CompanyIdSelect } from '../../models/company';
+import { PostIdSelect, PostGoIdSelect } from '../../models/post';
+import { DepartmentIdSelect } from '../../models/department';
+import { RankIdSelect } from '../../models/rank';
+import {
+  ParameterTypes,
+  EmailInputs,
+  NoteInput,
+  PhoneInputs,
+  FaxInputs,
+} from '../../models/impersonal';
 import { rws } from '../../netapi';
 import { useParams } from 'react-router-dom';
 
-type CLWS = {
-  name: string;
-  object: {
-    Contact?: Contact;
-    SelectItem?: SelectItem[];
-  };
-  error?: string;
-};
-
-interface ParamTypes {
-  id: string;
-}
-
-const Name = (values: InputValues): JSX.Element => {
-  const { value, onChange } = values;
-  return (
-    <FormField
-      name="name"
-      value={value}
-      onChange={onChange}
-      label="Фамилия Имя Отчество"
-      icon="user"
-    />
-  );
-};
-
 export const ContactItem = (): JSX.Element => {
-  const { id } = useParams<ParamTypes>();
+  const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState<string>(() => '');
   const [name, changeName, setName] = useInput('');
@@ -54,16 +34,16 @@ export const ContactItem = (): JSX.Element => {
   useEffect(() => {
     if (id !== '0') {
       rws.addEventListener('message', (message: MessageEvent) => {
-        const data = JSON.parse(message.data) as CLWS;
+        const data = JSON.parse(message.data) as ContactJsonScheme;
         if (data?.name === 'Contact' && data.object.Contact) {
           const c = data.object.Contact;
-          setName(c.name ? c.name : '');
-          setCompanyID(c.company_id ? c.company_id : 0);
-          setPostID(c.post_id ? c.post_id : 0);
-          setDepartmentID(c.department_id ? c.department_id : 0);
-          setPostGoID(c.post_go_id ? c.post_go_id : 0);
-          setRankID(c.rank_id ? c.rank_id : 0);
-          setBirthday(c.birthday ? c.birthday : '');
+          setName(c.name || '');
+          setCompanyID(c.company_id || 0);
+          setPostID(c.post_id || 0);
+          setDepartmentID(c.department_id || 0);
+          setPostGoID(c.post_go_id || 0);
+          setRankID(c.rank_id || 0);
+          setBirthday(c.birthday || '');
           setEmails(addEmptyString(c.emails));
           setPhones(addEmptyString(numberToString(c.phones)));
           setFaxes(addEmptyString(numberToString(c.faxes)));
@@ -88,154 +68,46 @@ export const ContactItem = (): JSX.Element => {
     <div>
       {loaded && !error && (
         <>
-          <Name value={name} onChange={changeName} />
-          <Select
-            name="company"
-            label="Организация"
-            listName="CompanySelect"
-            id={companyID}
-            icon="building"
-            callback={setCompanyID}
-          />
+          <ContactNameInput value={name} onChange={changeName} />
+          <CompanyIdSelect id={companyID} callback={setCompanyID} />
+
           <div className="columns">
             <div className="column is-half">
-              <Select
-                name="post"
-                label="Должность"
-                listName="PostSelect"
-                id={postID}
-                icon="tag"
-                callback={setPostID}
-              />
+              <PostIdSelect id={postID} callback={setPostID} />
             </div>
             <div className="column is-half">
-              <Select
-                name="departmen"
-                label="Отдел"
-                listName="DepartmentSelect"
-                id={departmentID}
-                icon="tag"
-                callback={setDepartmentID}
-              />
+              <DepartmentIdSelect id={departmentID} callback={setDepartmentID} />
             </div>
           </div>
           <div className="columns">
             <div className="column is-half">
-              <Select
-                name="postgo"
-                label="Должность ГО"
-                listName="PostGoSelect"
-                id={postGoID}
-                icon="tag"
-                callback={setPostGoID}
-              />
+              <PostGoIdSelect id={postGoID} callback={setPostGoID} />
             </div>
             <div className="column is-half">
-              <Select
-                name="rank"
-                label="Звание"
-                listName="RankSelect"
-                id={rankID}
-                icon="tag"
-                callback={setRankID}
-              />
+              <RankIdSelect id={rankID} callback={setRankID} />
             </div>
           </div>
 
           <div className="columns">
             <div className="column is-one-third">
-              <DatePicker
-                name="birthday"
-                label="Дата рождения"
-                value={birthday}
-                onChange={setBirthday}
-              />
+              <ContactBirthdayInput value={birthday} onChange={setBirthday} />
             </div>
           </div>
 
           <div className="columns">
             <div className="column">
-              <div className="field">
-                <label className="label" htmlFor="email-1-input">
-                  Электронный адрес
-                </label>
-                {emails &&
-                  emails.map((email, index) => (
-                    <Input
-                      name={`email-${index}-input`}
-                      icon="envelope"
-                      key={`email-${index}`}
-                      value={email}
-                      placeholder="Электронный адрес"
-                      onBlur={(event): void => {
-                        let values = emails;
-                        values[index] = event.target.value;
-                        values = addEmptyString(values);
-                        setEmails(values);
-                      }}
-                      classNameDiv="pb5"
-                    />
-                  ))}
-              </div>
+              <EmailInputs emails={emails} setter={setEmails} />
             </div>
             <div className="column">
-              <div className="field">
-                <label className="label" htmlFor="phone-1-input">
-                  Телефон
-                </label>
-                {phones &&
-                  phones.map((phone, index) => (
-                    <Input
-                      name={`phone-${index}-input`}
-                      type="tel"
-                      icon="phone"
-                      key={`phone-${index}`}
-                      value={phone.toString()}
-                      placeholder="Телефон"
-                      onBlur={(event): void => {
-                        let values = phones;
-                        values[index] = event.target.value;
-                        values = addEmptyString(values);
-                        setPhones(values);
-                      }}
-                      classNameDiv="pb5"
-                    />
-                  ))}
-              </div>
+              <PhoneInputs phones={phones} setter={setPhones} />
             </div>
             <div className="column">
-              <div className="field">
-                <label className="label" htmlFor="fax-1-input">
-                  Факс
-                </label>
-                {faxes &&
-                  faxes.map((fax, index) => (
-                    <Input
-                      name={`fax-${index}-input`}
-                      type="tel"
-                      icon="fax"
-                      key={`fax-${index}`}
-                      value={fax.toString()}
-                      placeholder="Факс"
-                      onBlur={(event): void => {
-                        let values = faxes;
-                        values[index] = event.target.value;
-                        values = addEmptyString(values);
-                        setFaxes(values);
-                      }}
-                      classNameDiv="pb5"
-                    />
-                  ))}
-              </div>
+              <FaxInputs phones={faxes} setter={setFaxes} />
             </div>
           </div>
-          <FormField
-            name="note"
-            value={note}
-            onChange={changeNote}
-            label="Заметки"
-            icon="comment"
-          />
+
+          <NoteInput value={note} onChange={changeNote} />
+
           <button className="button">Сохранить</button>
         </>
       )}

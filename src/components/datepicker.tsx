@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
+export type DatePickerValues = {
+  value: string;
+  onChange: (value: string) => void;
+};
+
 interface DatePickerProps {
   name: string;
   value?: string;

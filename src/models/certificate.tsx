@@ -1,3 +1,11 @@
+export type CertificateListJsonScheme = {
+  name: string;
+  object: {
+    CertificateList?: CertificateList[];
+  };
+  error?: string;
+};
+
 export type Certificate = {
   id: number;
   num?: string;

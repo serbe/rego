@@ -4,6 +4,11 @@ import { rws } from '../netapi';
 import { SelectItem } from '../models/selectitem';
 import './select.css';
 
+export interface SelectValues {
+  id: number;
+  callback: (event: number) => void;
+}
+
 interface SelectProps {
   name: string;
   id?: number;

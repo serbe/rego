@@ -1,17 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { SData, Search, Paginate } from '../../components/table';
-import { ContactList } from '../../models/contact';
+import { ContactList, ContactListJsonScheme } from '../../models/contact';
 import { splitNumbers, useInput } from '../../helpers/utils';
 import { rws } from '../../netapi';
-
-type CLWS = {
-  name: string;
-  object: {
-    ContactList?: ContactList[];
-  };
-  error?: string;
-};
 
 export const Contacts = (): JSX.Element => {
   const [contacts, setContacts] = useState<ContactList[]>([]);
@@ -27,7 +19,7 @@ export const Contacts = (): JSX.Element => {
 
   useEffect(() => {
     rws.addEventListener('message', (message: MessageEvent) => {
-      const data = JSON.parse(message.data) as CLWS;
+      const data = JSON.parse(message.data) as ContactListJsonScheme;
       if (data.name && data.name === 'ContactList' && data.object.ContactList) {
         setContacts(data.object.ContactList);
       }
@@ -99,14 +91,14 @@ export const Contacts = (): JSX.Element => {
           <td
             onClick={(): void => history.push(`/contacts/${contact.id}`)}
             role="gridcell"
-            className="w250"
+            className="w250 link"
           >
             {contact.name}
           </td>
           <td
             onClick={(): void => history.push(`/compaines/${contact.company_id || 0}`)}
             role="gridcell"
-            className="is-hidden-mobile w250"
+            className="is-hidden-mobile w250 link"
           >
             {contact.company_name}
           </td>
