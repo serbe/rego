@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-
 import { EducationShort } from '../../models/education';
 import { PracticeShort } from '../../models/practice';
 import { rws } from '../../netapi';
