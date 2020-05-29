@@ -1,98 +1,62 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
-// import { Input } from '../../components/input';
-// import { Button } from '../../components/button';
-// import { Select } from '../../components/select';
-import { Certificate } from '../../models/certificate';
-// import { SelectItem } from '../../models/selectitem';
-// import { fetchData } from '../../helpers/utils';
+import { useInput } from '../../helpers/utils';
+import {
+  CertificateDateInput,
+  CertificateJsonScheme,
+  CertificateNumberInput,
+} from '../../models/certificate';
+import { CompanyIdSelect } from '../../models/company';
+import { ContactIdSelect } from '../../models/contact';
+import { NoteInput, ParameterTypes } from '../../models/impersonal';
+import { rws } from '../../netapi';
 
 export const CertificateItem = (): JSX.Element => {
-  const { id } = useParams();
-  const [error, setError] = useState(false);
-  const [certificate, setCertificate] = useState<Certificate>();
+  const { id } = useParams<ParameterTypes>();
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState<string>(() => '');
+  const [sNumber, changeSNumber, setSNumber] = useInput('');
+  const [contactID, setContactID] = useState<number>(() => 0);
+  const [companyID, setCompanyID] = useState<number>(() => 0);
+  const [certDate, setCertDate] = useState<string>(() => '');
+  const [note, changeNote, setNote] = useInput('');
 
-  // useEffect(() => {
-  //   if (id) {
-  //     fetchData(`/api/go/certificate/item/${id}`)
-  //       .then((responseJson) =>
-  //         responseJson.Certificate ? setCertificate(responseJson.Certificate) : setErrors(true),
-  //       )
-  //       .catch((error) => setErrors(error));
-  //   }
-  // }, [id]);
+  useEffect(() => {
+    if (id !== '0') {
+      rws.addEventListener('message', (message: MessageEvent) => {
+        const data = JSON.parse(message.data) as CertificateJsonScheme;
+        if (data?.name === 'Certificate' && data.object.Certificate) {
+          const c = data.object.Certificate;
+          setSNumber(c.num || '');
+          setContactID(c.contact_id || 0);
+          setCompanyID(c.company_id || 0);
+          setCertDate(c.cert_date || '');
+          setNote(c.note || '');
+          setLoaded(true);
+        }
+        if (data.error) {
+          setError(data.error);
+        }
+      });
+      rws.send(`{"Get":{"Item":{"id": ${id}, "name": "Certificate"}}}`);
 
-  // useEffect(() => {
-  //   if (id) {
-  //     fetchData(`/api/go/scope/select`)
-  //       .then(responseJson =>
-  //         responseJson.SelectItem ? setScopes(responseJson.SelectItem) : setErrors(true),
-  //       )
-  //       .catch(error => setErrors(error));
-  //   }
-  // }, [id]);
-
-  // useEffect(() => {
-  //   if (certificate) {
-  //     setScope(scopes.find(v => v.id === company.scope_id));
-  //     setEmails(addEmptyString(company.emails));
-  //     setPhones(addEmptyString(numberToString(company.phones)));
-  //     setFaxes(addEmptyString(numberToString(company.faxes)));
-  //   }
-  // }, [company, scopes]);
-
-  // const Submit = () => {
-  //   if (company && scopes && scope) {
-  //     let values = {
-  //       id: company.id,
-  //       name: company.name,
-  //       address: company.address,
-  //       scope_id: scopes.filter((item) => item.name === scope.name).map((item) => item.id)[0],
-  //       note: company.note,
-  //       emails: emails.filter((value) => value !== ""),
-  //       phones: phones.filter((value) => value !== "").map((value) => parseInt(value, 10)),
-  //       faxes: faxes.filter((value) => value !== "").map((value) => parseInt(value, 10)),
-  //     };
-
-  //     // Object.keys(values).forEach((key) => {
-  //     //   if (
-  //     //     !Array.isArray(values[key]) &&
-  //     //     (values[key] === undefined || values[key] === "")
-  //     //   ) {
-  //     //     delete values[key];
-  //     //   }
-  //     // });
-
-  //     // this.close();
-  //   }
-  // }
+      return function cleanup(): void {
+        rws.removeEventListener('message', (message: unknown) => {
+          console.log('removeEventListener', message);
+        });
+      };
+    }
+  }, [id, setCertDate, setNote, setSNumber]);
 
   return (
-    <div className="container mw768">
-      {!error && certificate ? (
-        <div>
-          {/* <Input
-            name="note"
-            value={certificate.num}
-            label
-            placeholder="Серийный номер удостоверения"
-            iconLeft="tag"
-            onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-              setCertificate({ ...certificate, num: event.currentTarget.value })
-            }
-          />
-
-          <Input
-            name="note"
-            value={certificate.note}
-            label
-            placeholder="Заметка"
-            iconLeft="sticky-note"
-            onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-              setCertificate({ ...certificate, note: event.currentTarget.value })
-            }
-          /> */}
+    <div>
+      {loaded && !error && (
+        <>
+          <CertificateNumberInput value={sNumber} onChange={changeSNumber} />
+          <ContactIdSelect id={contactID} callback={setContactID} />
+          <CompanyIdSelect id={companyID} callback={setCompanyID} />
+          <CertificateDateInput value={certDate} onChange={setCertDate} />
+          <NoteInput value={note} onChange={changeNote} />
 
           <div className="field is-grouped is-grouped-centered">
             <div className="control">
@@ -120,8 +84,8 @@ export const CertificateItem = (): JSX.Element => {
           <Button className="button" onClick={handleSubmit(onSubmit)}>
             on submit
           </Button> */}
-        </div>
-      ) : undefined}
+        </>
+      )}
     </div>
   );
 };
