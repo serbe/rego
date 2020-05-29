@@ -4,6 +4,7 @@ import { DatePicker, DatePickerValues } from '../components/datepicker';
 import { FormField } from '../components/formfield';
 import { Input, InputValues } from '../components/input';
 import { SelectItem } from '../models/selectitem';
+import { Select, SelectValues } from '../components/select';
 
 export interface ContactShortValues {
   contacts: ContactShort[];
@@ -91,7 +92,7 @@ export const ContactNameInput = (values: InputValues): JSX.Element => {
 
 export const ContactBirthdayInput = (values: DatePickerValues): JSX.Element => {
   const { value, onChange } = values;
-  return <DatePicker name="birthday" label="Дата рождения" value={value} onChange={onChange} />;
+  return <DatePicker name="birthday" label="Дата рождения" value={value} setter={onChange} />;
 };
 
 export const ContactShortForm = (values: ContactShortValues): JSX.Element => {
@@ -114,5 +115,19 @@ export const ContactShortForm = (values: ContactShortValues): JSX.Element => {
         />
       ))}
     </div>
+  );
+};
+
+export const ContactIdSelect = (values: SelectValues): JSX.Element => {
+  const { id, callback } = values;
+  return (
+    <Select
+      name="contact"
+      label="Фамилия Имя Отчество"
+      listName="ContactSelect"
+      id={id}
+      icon="user"
+      callback={callback}
+    />
   );
 };
