@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { addEmptyString, numberToString, useInput } from '../../helpers/utils';
-import { CompanyIdSelect } from '../../models/company';
+import { CompanyIDSelect } from '../../models/company';
 import { ContactBirthdayInput, ContactJsonScheme, ContactNameInput } from '../../models/contact';
-import { DepartmentIdSelect } from '../../models/department';
+import { DepartmentIDSelect } from '../../models/department';
 import {
   EmailInputs,
   FaxInputs,
@@ -11,8 +11,8 @@ import {
   ParameterTypes,
   PhoneInputs,
 } from '../../models/impersonal';
-import { PostGoIdSelect, PostIdSelect } from '../../models/post';
-import { RankIdSelect } from '../../models/rank';
+import { PostGoIDSelect, PostIDSelect } from '../../models/post';
+import { RankIDSelect } from '../../models/rank';
 import { rws } from '../../netapi';
 
 export const ContactItem = (): JSX.Element => {
@@ -69,22 +69,22 @@ export const ContactItem = (): JSX.Element => {
       {loaded && !error && (
         <>
           <ContactNameInput value={name} onChange={changeName} />
-          <CompanyIdSelect id={companyID} callback={setCompanyID} />
+          <CompanyIDSelect id={companyID} callback={setCompanyID} />
 
           <div className="columns">
             <div className="column is-half">
-              <PostIdSelect id={postID} callback={setPostID} />
+              <PostIDSelect id={postID} callback={setPostID} />
             </div>
             <div className="column is-half">
-              <DepartmentIdSelect id={departmentID} callback={setDepartmentID} />
+              <DepartmentIDSelect id={departmentID} callback={setDepartmentID} />
             </div>
           </div>
           <div className="columns">
             <div className="column is-half">
-              <PostGoIdSelect id={postGoID} callback={setPostGoID} />
+              <PostGoIDSelect id={postGoID} callback={setPostGoID} />
             </div>
             <div className="column is-half">
-              <RankIdSelect id={rankID} callback={setRankID} />
+              <RankIDSelect id={rankID} callback={setRankID} />
             </div>
           </div>
 

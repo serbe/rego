@@ -6,8 +6,8 @@ import {
   CertificateJsonScheme,
   CertificateNumberInput,
 } from '../../models/certificate';
-import { CompanyIdSelect } from '../../models/company';
-import { ContactIdSelect } from '../../models/contact';
+import { CompanyIDSelect } from '../../models/company';
+import { ContactIDSelect } from '../../models/contact';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { rws } from '../../netapi';
 
@@ -53,8 +53,8 @@ export const CertificateItem = (): JSX.Element => {
       {loaded && !error && (
         <>
           <CertificateNumberInput value={sNumber} onChange={changeSNumber} />
-          <ContactIdSelect id={contactID} callback={setContactID} />
-          <CompanyIdSelect id={companyID} callback={setCompanyID} />
+          <ContactIDSelect id={contactID} callback={setContactID} />
+          <CompanyIDSelect id={companyID} callback={setCompanyID} />
           <CertificateDateInput value={certDate} onChange={setCertDate} />
           <NoteInput value={note} onChange={changeNote} />
 

@@ -13,7 +13,7 @@ export type DepartmentList = {
   note?: string;
 };
 
-export const DepartmentIdSelect = (values: SelectValues): JSX.Element => {
+export const DepartmentIDSelect = (values: SelectValues): JSX.Element => {
   const { id, callback } = values;
   return (
     <Select

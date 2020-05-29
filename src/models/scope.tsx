@@ -13,7 +13,7 @@ export type ScopeList = {
   note?: string;
 };
 
-export const ScopeIdSelect = (values: SelectValues): JSX.Element => {
+export const ScopeIDSelect = (values: SelectValues): JSX.Element => {
   const { id, callback } = values;
   return (
     <Select

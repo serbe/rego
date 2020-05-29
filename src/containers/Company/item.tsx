@@ -12,7 +12,7 @@ import {
   PhoneInputs,
 } from '../../models/impersonal';
 import { PracticeList, PracticeListForm } from '../../models/practice';
-import { ScopeIdSelect } from '../../models/scope';
+import { ScopeIDSelect } from '../../models/scope';
 import { rws } from '../../netapi';
 
 export const CompanyItem = (): JSX.Element => {
@@ -65,7 +65,7 @@ export const CompanyItem = (): JSX.Element => {
       {loaded && !error && (
         <>
           <CompanyNameInput value={name} onChange={changeName} />
-          <ScopeIdSelect id={scopeID} callback={setScopeID} />
+          <ScopeIDSelect id={scopeID} callback={setScopeID} />
           <AddressInput value={address} onChange={changeAddress} />
 
           <div className="columns">

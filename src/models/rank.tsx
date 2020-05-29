@@ -13,7 +13,7 @@ export type RankList = {
   note?: string;
 };
 
-export const RankIdSelect = (values: SelectValues): JSX.Element => {
+export const RankIDSelect = (values: SelectValues): JSX.Element => {
   const { id, callback } = values;
   return (
     <Select

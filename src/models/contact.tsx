@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import { DatePicker, DatePickerValues } from '../components/datepicker';
 import { FormField } from '../components/formfield';
 import { Input, InputValues } from '../components/input';
-import { SelectItem } from '../models/selectitem';
 import { Select, SelectValues } from '../components/select';
 
 export interface ContactShortValues {
@@ -14,7 +13,6 @@ export type ContactJsonScheme = {
   name: string;
   object: {
     Contact?: Contact;
-    SelectItem?: SelectItem[];
   };
   error?: string;
 };
@@ -118,7 +116,7 @@ export const ContactShortForm = (values: ContactShortValues): JSX.Element => {
   );
 };
 
-export const ContactIdSelect = (values: SelectValues): JSX.Element => {
+export const ContactIDSelect = (values: SelectValues): JSX.Element => {
   const { id, callback } = values;
   return (
     <Select

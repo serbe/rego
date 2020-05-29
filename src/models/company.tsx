@@ -2,7 +2,6 @@ import React from 'react';
 import { FormField } from '../components/formfield';
 import { InputValues } from '../components/input';
 import { Select, SelectValues } from '../components/select';
-import { SelectItem } from '../models/selectitem';
 import { ContactShort } from './contact';
 import { PracticeList } from './practice';
 
@@ -10,7 +9,6 @@ export type CompanyJsonScheme = {
   name: string;
   object: {
     Company?: Company;
-    SelectItem?: SelectItem[];
   };
   error?: string;
 };
@@ -19,7 +17,6 @@ export type CompanyListJsonScheme = {
   name: string;
   object: {
     CompanyList?: CompanyList[];
-    SelectItem?: SelectItem[];
   };
   error?: string;
 };
@@ -48,7 +45,7 @@ export type CompanyList = {
   practices?: string[];
 };
 
-export const CompanyIdSelect = (values: SelectValues): JSX.Element => {
+export const CompanyIDSelect = (values: SelectValues): JSX.Element => {
   const { id, callback } = values;
   return (
     <Select
