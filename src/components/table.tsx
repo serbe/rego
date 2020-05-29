@@ -1,65 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import { Pagination } from './pagination';
-import { Input } from './input';
-import { CertificateList, CertificateListJsonScheme } from '../models/certificate';
+import React, { useEffect, useState } from 'react';
+import { CertificateList } from '../models/certificate';
 import { CompanyList } from '../models/company';
 import { ContactList } from '../models/contact';
-import { EducationList, EducationShort } from '../models/education';
-import { PracticeList, PracticeShort } from '../models/practice';
-import { splitNumbers, useInput, splitStrings } from '../helpers/utils';
-import { rws } from '../netapi';
+import { Input } from './input';
+import { Pagination } from './pagination';
 
 export type SData = {
   id: number;
   data: string;
 };
 
+export type PaginateProperties = {
+  filteredLength: number;
+  itemsOnPage: number;
+  currentPage: number;
+  setCurrentPage: (value: number) => void;
+};
+
 export type dataType = CertificateList | CompanyList | ContactList;
 
 export type ListProperties = {
-  dataName: string;
-  dataType: dataType;
-  jsonType: CertificateListJsonScheme;
-  jsonObject: any;
+  data: dataType[];
+  search: string;
 };
 
-export const List = (properties: ListProperties): any => {
-  type td = typeof properties.dataType;
-  type jsonScheme = typeof properties.jsonType;
+export const List = (properties: ListProperties): [() => dataType[], JSX.Element] => {
+  const { data, search } = properties;
+  type td = typeof properties.data;
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const { dataName, jsonObject } = properties;
-
-  const [data, setData] = useState<td[]>([]);
-  const [filteredData, setFilteredData] = useState<td[]>([]);
-  const [search, changeSearch] = useInput('');
+  const [filteredData, setFilteredData] = useState<td>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [searchValues, setSearchValues] = useState<SData[]>([]);
   const [filteredLength, setFilteredLength] = useState(0);
-  const [error, setError] = useState<string>();
-  const history = useHistory();
 
   const itemsOnPage = 20;
-
-  useEffect(() => {
-    rws.addEventListener('message', (message: MessageEvent) => {
-      const data = JSON.parse(message.data) as jsonScheme;
-      if (data.name && data.name === dataName && jsonObject) {
-        setData(jsonObject);
-      }
-      if (data.error) {
-        setError(data.error);
-      }
-    });
-    rws.send(`{"Get":{"List":"${dataName}"}}`);
-
-    return (): void => {
-      rws.removeEventListener('message', (message: MessageEvent) => {
-        console.log('removeEventListener', message);
-      });
-    };
-  }, [jsonObject]);
 
   useEffect(() => {
     const sv: SData[] = [];
@@ -105,11 +79,19 @@ export const List = (properties: ListProperties): any => {
     }
   }, [search]);
 
-  const paginationData = (): td[] => {
+  const paginationData = (): td => {
     return filteredData.slice(currentPage * itemsOnPage, (currentPage + 1) * itemsOnPage);
   };
 
-  return paginationData;
+  return [
+    paginationData,
+    Paginate({
+      filteredLength: filteredLength,
+      itemsOnPage: itemsOnPage,
+      currentPage: currentPage,
+      setCurrentPage: setCurrentPage,
+    }),
+  ];
 };
 
 export const Search = (
@@ -127,19 +109,15 @@ export const Search = (
   </div>
 );
 
-export const Paginate = (
-  fLength: number,
-  itemsOnPage: number,
-  currentPage: number,
-  setCurrentPage: (value: number) => void,
-): JSX.Element => {
+export const Paginate = (properties: PaginateProperties): JSX.Element => {
+  const { filteredLength, itemsOnPage, currentPage, setCurrentPage } = properties;
   const receiveChildValue = (value: number): void => {
     setCurrentPage(value - 1);
   };
-  return fLength / itemsOnPage > 2 ? (
+  return filteredLength / itemsOnPage > 2 ? (
     <Pagination
       currentPage={currentPage + 1}
-      lastPage={Math.ceil(fLength / itemsOnPage)}
+      lastPage={Math.ceil(filteredLength / itemsOnPage)}
       callback={receiveChildValue}
     />
   ) : (
