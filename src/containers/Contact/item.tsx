@@ -28,7 +28,7 @@ export const ContactItem = (): JSX.Element => {
   const [phones, setPhones] = useState<string[]>(() => ['']);
   const [faxes, setFaxes] = useState<string[]>(() => ['']);
   const [companyID, setCompanyID] = useState<number>(0);
-  const [birthday, , setBirthday] = useInput('');
+  const [birthday, setBirthday] = useState(() => '');
   const [note, changeNote, setNote] = useInput('');
 
   useEffect(() => {

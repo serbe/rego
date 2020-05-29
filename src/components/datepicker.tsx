@@ -8,7 +8,7 @@ export type DatePickerValues = {
 interface DatePickerProps {
   name: string;
   value?: string;
-  onChange: (value: string) => void;
+  setter: (value: string) => void;
   label?: string;
 }
 
@@ -39,7 +39,7 @@ const listYears = (): string[] => {
 };
 
 export const DatePicker = (properties: DatePickerProps): JSX.Element => {
-  const { name, value, onChange, label } = properties;
+  const { name, value, setter, label } = properties;
 
   const [year, setYear] = useState(() => ' ');
   const [month, setMonth] = useState(() => ' ');
@@ -64,9 +64,9 @@ export const DatePicker = (properties: DatePickerProps): JSX.Element => {
     const strdate = `${year}-${month}-${day}`;
     if (strdate !== rawDate) {
       setRawDate(strdate);
-      onChange(strdate);
+      setter(strdate);
     }
-  }, [day, month, onChange, rawDate, year]);
+  }, [day, month, setter, rawDate, year]);
 
   return (
     <div className="field" key={name}>

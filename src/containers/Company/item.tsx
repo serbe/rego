@@ -8,18 +8,15 @@ import {
   EmailInputs,
   FaxInputs,
   NoteInput,
+  ParameterTypes,
   PhoneInputs,
 } from '../../models/impersonal';
 import { PracticeList, PracticeListForm } from '../../models/practice';
 import { ScopeIdSelect } from '../../models/scope';
 import { rws } from '../../netapi';
 
-interface ParamTypes {
-  id: string;
-}
-
 export const CompanyItem = (): JSX.Element => {
-  const { id } = useParams<ParamTypes>();
+  const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState<string>(() => '');
   const [name, changeName, setName] = useInput('');
