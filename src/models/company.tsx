@@ -1,15 +1,24 @@
 import React from 'react';
-import { PracticeList } from './practice';
-import { ContactShort } from './contact';
 import { FormField } from '../components/formfield';
 import { InputValues } from '../components/input';
 import { Select, SelectValues } from '../components/select';
 import { SelectItem } from '../models/selectitem';
+import { ContactShort } from './contact';
+import { PracticeList } from './practice';
 
 export type CompanyJsonScheme = {
   name: string;
   object: {
     Company?: Company;
+    SelectItem?: SelectItem[];
+  };
+  error?: string;
+};
+
+export type CompanyListJsonScheme = {
+  name: string;
+  object: {
+    CompanyList?: CompanyList[];
     SelectItem?: SelectItem[];
   };
   error?: string;
