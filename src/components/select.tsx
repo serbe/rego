@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { Icon } from './icon';
-import { rws } from '../netapi';
 import { SelectItem } from '../models/selectitem';
+import { rws } from '../netapi';
+import { Icon } from './icon';
 import './select.css';
 
 export interface SelectValues {

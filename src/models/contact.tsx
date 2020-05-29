@@ -1,9 +1,9 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { DatePicker, DatePickerValues } from '../components/datepicker';
 import { FormField } from '../components/formfield';
 import { Input, InputValues } from '../components/input';
 import { SelectItem } from '../models/selectitem';
-import { DatePicker, DatePickerValues } from '../components/datepicker';
 
 export interface ContactShortValues {
   contacts: ContactShort[];

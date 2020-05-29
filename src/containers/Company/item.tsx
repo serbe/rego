@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { addEmptyString, numberToString, useInput } from '../../helpers/utils';
-import { CompanyNameInput, CompanyJsonScheme } from '../../models/company';
+import { CompanyJsonScheme, CompanyNameInput } from '../../models/company';
+import { ContactShort, ContactShortForm } from '../../models/contact';
+import {
+  AddressInput,
+  EmailInputs,
+  FaxInputs,
+  NoteInput,
+  PhoneInputs,
+} from '../../models/impersonal';
+import { PracticeList, PracticeListForm } from '../../models/practice';
 import { ScopeIdSelect } from '../../models/scope';
-import { AddressInput } from '../../models/impersonal';
-import { EmailInputs, NoteInput, PhoneInputs, FaxInputs } from '../../models/impersonal';
-import { PracticeListForm, PracticeList } from '../../models/practice';
-import { ContactShortForm, ContactShort } from '../../models/contact';
 import { rws } from '../../netapi';
 
 interface ParamTypes {

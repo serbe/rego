@@ -1,7 +1,7 @@
 import React, { SetStateAction } from 'react';
-import { addEmptyString } from '../helpers/utils';
 import { FormField } from '../components/formfield';
 import { Input, InputValues } from '../components/input';
+import { addEmptyString } from '../helpers/utils';
 
 export interface ParameterTypes {
   id: string;

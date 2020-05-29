@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { addEmptyString, numberToString, useInput } from '../../helpers/utils';
-import { ContactNameInput, ContactBirthdayInput, ContactJsonScheme } from '../../models/contact';
-import { CompanyIdSelect } from '../../models/company';
-import { PostIdSelect, PostGoIdSelect } from '../../models/post';
-import { DepartmentIdSelect } from '../../models/department';
-import { RankIdSelect } from '../../models/rank';
-import {
-  ParameterTypes,
-  EmailInputs,
-  NoteInput,
-  PhoneInputs,
-  FaxInputs,
-} from '../../models/impersonal';
-import { rws } from '../../netapi';
 import { useParams } from 'react-router-dom';
+import { addEmptyString, numberToString, useInput } from '../../helpers/utils';
+import { CompanyIdSelect } from '../../models/company';
+import { ContactBirthdayInput, ContactJsonScheme, ContactNameInput } from '../../models/contact';
+import { DepartmentIdSelect } from '../../models/department';
+import {
+  EmailInputs,
+  FaxInputs,
+  NoteInput,
+  ParameterTypes,
+  PhoneInputs,
+} from '../../models/impersonal';
+import { PostGoIdSelect, PostIdSelect } from '../../models/post';
+import { RankIdSelect } from '../../models/rank';
+import { rws } from '../../netapi';
 
 export const ContactItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();

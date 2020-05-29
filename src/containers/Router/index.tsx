@@ -1,10 +1,9 @@
 import React, { Suspense } from 'react';
-import { Switch, Route } from 'react-router-dom';
-
-import { Home } from '../Home';
+import { Route, Switch } from 'react-router-dom';
 import { CertificateItem, Certificates } from '../Certificate';
+import { Companies, CompanyItem } from '../Company';
 import { ContactItem, Contacts } from '../Contact';
-import { CompanyItem, Companies } from '../Company';
+import { Home } from '../Home';
 
 export const Router = (): JSX.Element => (
   <Suspense fallback={<div>Loading...</div>}>
