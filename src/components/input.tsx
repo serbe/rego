@@ -3,7 +3,7 @@ import { Icon } from './icon';
 
 export type InputValues = {
   value: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  setter: (value: string) => void;
 };
 
 interface InputProps {

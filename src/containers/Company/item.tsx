@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { addEmptyString, numberToString, useInput } from '../../helpers/utils';
+import { addEmptyString, numberToString } from '../../helpers/utils';
 import { CompanyJsonScheme, CompanyNameInput } from '../../models/company';
 import { ContactShort, ContactShortForm } from '../../models/contact';
 import {
@@ -19,15 +19,15 @@ export const CompanyItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState<string>(() => '');
-  const [name, changeName, setName] = useInput('');
+  const [name, setName] = useState('');
   const [scopeID, setScopeID] = useState<number>(() => 0);
-  const [address, changeAddress, setAddress] = useInput('');
+  const [address, setAddress] = useState('');
   const [emails, setEmails] = useState<string[]>(() => ['']);
   const [phones, setPhones] = useState<string[]>(() => ['']);
   const [faxes, setFaxes] = useState<string[]>(() => ['']);
   const [practices, setPractices] = useState<PracticeList[]>(() => []);
   const [contacts, setContacts] = useState<ContactShort[]>(() => []);
-  const [note, changeNote, setNote] = useInput('');
+  const [note, setNote] = useState('');
 
   useEffect(() => {
     if (id !== '0') {
@@ -64,9 +64,9 @@ export const CompanyItem = (): JSX.Element => {
     <div>
       {loaded && !error && (
         <>
-          <CompanyNameInput value={name} onChange={changeName} />
+          <CompanyNameInput value={name} setter={setName} />
           <ScopeIDSelect id={scopeID} callback={setScopeID} />
-          <AddressInput value={address} onChange={changeAddress} />
+          <AddressInput value={address} setter={setAddress} />
 
           <div className="columns">
             <div className="column">
@@ -84,7 +84,7 @@ export const CompanyItem = (): JSX.Element => {
 
           <ContactShortForm contacts={contacts} />
 
-          <NoteInput value={note} onChange={changeNote} />
+          <NoteInput value={note} setter={setNote} />
 
           <div className="field is-grouped is-grouped-centered">
             <div className="control">

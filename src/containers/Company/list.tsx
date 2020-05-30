@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { List, Search } from '../../components/table';
-import { splitNumbers, splitStrings, useInput } from '../../helpers/utils';
+import { splitNumbers, splitStrings } from '../../helpers/utils';
 import { CompanyList, CompanyListJsonScheme } from '../../models/company';
 import { rws } from '../../netapi';
 
 export const Companies = (): JSX.Element => {
   const [data, setData] = useState<CompanyList[]>([]);
-  const [search, changeSearch] = useInput('');
+  const [search, setSearch] = useState(() => '');
   const [error, setError] = useState<string>();
   const history = useHistory();
 
@@ -66,7 +66,7 @@ export const Companies = (): JSX.Element => {
     <></>
   ) : (
     <>
-      {Search(search, changeSearch)}
+      {Search(search, setSearch)}
       <table className="table is-narrow">
         <tbody>
           <tr>

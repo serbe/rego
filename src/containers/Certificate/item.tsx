@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useInput } from '../../helpers/utils';
 import {
   CertificateDateInput,
   CertificateJsonScheme,
@@ -15,11 +14,11 @@ export const CertificateItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState<string>(() => '');
-  const [sNumber, changeSNumber, setSNumber] = useInput('');
+  const [sNumber, setSNumber] = useState('');
   const [contactID, setContactID] = useState<number>(() => 0);
   const [companyID, setCompanyID] = useState<number>(() => 0);
   const [certDate, setCertDate] = useState<string>(() => '');
-  const [note, changeNote, setNote] = useInput('');
+  const [note, setNote] = useState('');
 
   useEffect(() => {
     if (id !== '0') {
@@ -52,11 +51,11 @@ export const CertificateItem = (): JSX.Element => {
     <div>
       {loaded && !error && (
         <>
-          <CertificateNumberInput value={sNumber} onChange={changeSNumber} />
+          <CertificateNumberInput value={sNumber} setter={setSNumber} />
           <ContactIDSelect id={contactID} callback={setContactID} />
           <CompanyIDSelect id={companyID} callback={setCompanyID} />
           <CertificateDateInput value={certDate} onChange={setCertDate} />
-          <NoteInput value={note} onChange={changeNote} />
+          <NoteInput value={note} setter={setNote} />
 
           <div className="field is-grouped is-grouped-centered">
             <div className="control">

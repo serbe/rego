@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { List, Search } from '../../components/table';
-import { useInput } from '../../helpers/utils';
 import { CertificateList, CertificateListJsonScheme } from '../../models/certificate';
 import { rws } from '../../netapi';
 
 export const Certificates = (): JSX.Element => {
   const [data, setData] = useState<CertificateList[]>([]);
-  const [search, changeSearch] = useInput('');
+  const [search, setSearch] = useState('');
   const [error, setError] = useState<string>();
   const history = useHistory();
 
@@ -75,7 +74,7 @@ export const Certificates = (): JSX.Element => {
     <></>
   ) : (
     <>
-      {Search(search, changeSearch)}
+      {Search(search, setSearch)}
       <table className="table is-narrow">
         <tbody>
           <tr>

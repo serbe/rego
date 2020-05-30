@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { CertificateList } from '../models/certificate';
 import { CompanyList } from '../models/company';
 import { ContactList } from '../models/contact';
+import { SirenList } from '../models/siren';
 import { Input } from './input';
 import { Pagination } from './pagination';
 
@@ -17,7 +18,7 @@ export type PaginateProperties = {
   setCurrentPage: (value: number) => void;
 };
 
-export type dataType = CertificateList | CompanyList | ContactList;
+export type dataType = CertificateList | CompanyList | ContactList | SirenList;
 
 export type ListProperties = {
   data: dataType[];
@@ -94,16 +95,13 @@ export const List = (properties: ListProperties): [() => dataType[], JSX.Element
   ];
 };
 
-export const Search = (
-  value: string,
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
-): JSX.Element => (
+export const Search = (value: string, setter: (value: string) => void): JSX.Element => (
   <div className="control mb1 mwt" key="TableSearch">
     <Input
       name="search"
       className="input is-expanded"
       placeholder="Поиск"
-      onChange={onChange}
+      onChange={(event: React.ChangeEvent<HTMLInputElement>): void => setter(event.target.value)}
       value={value}
     />
   </div>

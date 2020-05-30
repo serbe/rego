@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { addEmptyString, numberToString, useInput } from '../../helpers/utils';
+import { addEmptyString, numberToString } from '../../helpers/utils';
 import { CompanyIDSelect } from '../../models/company';
 import { ContactBirthdayInput, ContactJsonScheme, ContactNameInput } from '../../models/contact';
 import { DepartmentIDSelect } from '../../models/department';
@@ -19,7 +19,7 @@ export const ContactItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState<string>(() => '');
-  const [name, changeName, setName] = useInput('');
+  const [name, setName] = useState('');
   const [postID, setPostID] = useState<number>(() => 0);
   const [departmentID, setDepartmentID] = useState<number>(() => 0);
   const [postGoID, setPostGoID] = useState<number>(() => 0);
@@ -29,7 +29,7 @@ export const ContactItem = (): JSX.Element => {
   const [faxes, setFaxes] = useState<string[]>(() => ['']);
   const [companyID, setCompanyID] = useState<number>(0);
   const [birthday, setBirthday] = useState(() => '');
-  const [note, changeNote, setNote] = useInput('');
+  const [note, setNote] = useState('');
 
   useEffect(() => {
     if (id !== '0') {
@@ -68,7 +68,7 @@ export const ContactItem = (): JSX.Element => {
     <div>
       {loaded && !error && (
         <>
-          <ContactNameInput value={name} onChange={changeName} />
+          <ContactNameInput value={name} setter={setName} />
           <CompanyIDSelect id={companyID} callback={setCompanyID} />
 
           <div className="columns">
@@ -106,7 +106,7 @@ export const ContactItem = (): JSX.Element => {
             </div>
           </div>
 
-          <NoteInput value={note} onChange={changeNote} />
+          <NoteInput value={note} setter={setNote} />
 
           <button className="button">Сохранить</button>
         </>
