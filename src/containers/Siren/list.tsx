@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { List, Search } from '../../components/table';
-import { splitNumbers, useInput } from '../../helpers/utils';
+import { splitNumbers } from '../../helpers/utils';
 import { SirenList, SirenListJsonScheme } from '../../models/siren';
 import { rws } from '../../netapi';
 
 export const Sirens = (): JSX.Element => {
   const [data, setData] = useState<SirenList[]>([]);
-  const [search, changeSearch] = useInput('');
+  const [search, changeSearch] = useState('');
   const [error, setError] = useState<string>();
 
   const [paginationData, Paginate] = List({

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { FormField } from '../components/formfield';
 import { InputValues } from '../components/input';
 import { Select, SelectValues } from '../components/select';
@@ -60,12 +60,12 @@ export const CompanyIDSelect = (values: SelectValues): JSX.Element => {
 };
 
 export const CompanyNameInput = (values: InputValues): JSX.Element => {
-  const { value, onChange } = values;
+  const { value, setter } = values;
   return (
     <FormField
       name="name"
       value={value}
-      onChange={onChange}
+      onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(event.target.value)}
       label="Наименование организации"
       icon="building"
     />

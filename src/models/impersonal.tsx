@@ -1,4 +1,4 @@
-import React, { SetStateAction } from 'react';
+import React, { SetStateAction, ChangeEvent } from 'react';
 import { FormField } from '../components/formfield';
 import { Input, InputValues } from '../components/input';
 import { addEmptyString } from '../helpers/utils';
@@ -104,13 +104,27 @@ export const FaxInputs = (values: PhoneValues): JSX.Element => {
 };
 
 export const NoteInput = (values: InputValues): JSX.Element => {
-  const { value, onChange } = values;
-  return <FormField name="note" value={value} onChange={onChange} label="Заметки" icon="comment" />;
+  const { value, setter } = values;
+  return (
+    <FormField
+      name="note"
+      value={value}
+      onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(event.target.value)}
+      label="Заметки"
+      icon="comment"
+    />
+  );
 };
 
 export const AddressInput = (values: InputValues): JSX.Element => {
-  const { value, onChange } = values;
+  const { value, setter } = values;
   return (
-    <FormField name="address" value={value} onChange={onChange} label="Адрес" icon="address-card" />
+    <FormField
+      name="address"
+      value={value}
+      onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(event.target.value)}
+      label="Адрес"
+      icon="address-card"
+    />
   );
 };

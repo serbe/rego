@@ -7,7 +7,7 @@ import { rws } from '../../netapi';
 
 export const Companies = (): JSX.Element => {
   const [data, setData] = useState<CompanyList[]>([]);
-  const [search, setSearch] = useState(() => '');
+  const [search, setSearch] = useState('');
   const [error, setError] = useState<string>();
   const history = useHistory();
 

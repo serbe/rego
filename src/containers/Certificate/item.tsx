@@ -13,11 +13,11 @@ import { rws } from '../../netapi';
 export const CertificateItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState<string>(() => '');
+  const [error, setError] = useState<string>('');
   const [sNumber, setSNumber] = useState('');
-  const [contactID, setContactID] = useState<number>(() => 0);
-  const [companyID, setCompanyID] = useState<number>(() => 0);
-  const [certDate, setCertDate] = useState<string>(() => '');
+  const [contactID, setContactID] = useState<number>(0);
+  const [companyID, setCompanyID] = useState<number>(0);
+  const [certDate, setCertDate] = useState<string>('');
   const [note, setNote] = useState('');
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export const CertificateItem = (): JSX.Element => {
           <CertificateNumberInput value={sNumber} setter={setSNumber} />
           <ContactIDSelect id={contactID} callback={setContactID} />
           <CompanyIDSelect id={companyID} callback={setCompanyID} />
-          <CertificateDateInput value={certDate} onChange={setCertDate} />
+          <CertificateDateInput value={certDate} setter={setCertDate} />
           <NoteInput value={note} setter={setNote} />
 
           <div className="field is-grouped is-grouped-centered">

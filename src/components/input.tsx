@@ -6,6 +6,11 @@ export type InputValues = {
   setter: (value: string) => void;
 };
 
+export type InputNumberValues = {
+  value: number;
+  setter: (value: number) => void;
+};
+
 interface InputProps {
   name: string;
   className?: string;

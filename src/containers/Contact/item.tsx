@@ -18,17 +18,17 @@ import { rws } from '../../netapi';
 export const ContactItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState<string>(() => '');
+  const [error, setError] = useState<string>('');
   const [name, setName] = useState('');
-  const [postID, setPostID] = useState<number>(() => 0);
-  const [departmentID, setDepartmentID] = useState<number>(() => 0);
-  const [postGoID, setPostGoID] = useState<number>(() => 0);
-  const [rankID, setRankID] = useState<number>(() => 0);
+  const [postID, setPostID] = useState<number>(0);
+  const [departmentID, setDepartmentID] = useState<number>(0);
+  const [postGoID, setPostGoID] = useState<number>(0);
+  const [rankID, setRankID] = useState<number>(0);
   const [emails, setEmails] = useState<string[]>(() => ['']);
   const [phones, setPhones] = useState<string[]>(() => ['']);
   const [faxes, setFaxes] = useState<string[]>(() => ['']);
   const [companyID, setCompanyID] = useState<number>(0);
-  const [birthday, setBirthday] = useState(() => '');
+  const [birthday, setBirthday] = useState('');
   const [note, setNote] = useState('');
 
   useEffect(() => {
@@ -90,7 +90,7 @@ export const ContactItem = (): JSX.Element => {
 
           <div className="columns">
             <div className="column is-one-third">
-              <ContactBirthdayInput value={birthday} onChange={setBirthday} />
+              <ContactBirthdayInput value={birthday} setter={setBirthday} />
             </div>
           </div>
 

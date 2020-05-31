@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { FormField } from '../components/formfield';
 import { InputValues } from '../components/input';
 import { DatePicker, DatePickerValues } from '../components/datepicker';
@@ -40,12 +40,12 @@ export type CertificateList = {
 };
 
 export const CertificateNumberInput = (values: InputValues): JSX.Element => {
-  const { value, onChange } = values;
+  const { value, setter } = values;
   return (
     <FormField
       name="num"
       value={value}
-      onChange={onChange}
+      onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(event.target.value)}
       label="Серийный номер удостоверения"
       icon="tag"
     />
@@ -53,6 +53,6 @@ export const CertificateNumberInput = (values: InputValues): JSX.Element => {
 };
 
 export const CertificateDateInput = (values: DatePickerValues): JSX.Element => {
-  const { value, onChange } = values;
-  return <DatePicker name="cert-date" label="Дата выдачи" value={value} setter={onChange} />;
+  const { value, setter } = values;
+  return <DatePicker name="cert-date" label="Дата выдачи" value={value} setter={setter} />;
 };

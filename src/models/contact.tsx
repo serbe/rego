@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 import { DatePicker, DatePickerValues } from '../components/datepicker';
 import { FormField } from '../components/formfield';
@@ -76,12 +76,12 @@ export type ContactShort = {
 };
 
 export const ContactNameInput = (values: InputValues): JSX.Element => {
-  const { value, onChange } = values;
+  const { value, setter } = values;
   return (
     <FormField
       name="name"
       value={value}
-      onChange={onChange}
+      onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(event.target.value)}
       label="Фамилия Имя Отчество"
       icon="user"
     />
@@ -89,8 +89,8 @@ export const ContactNameInput = (values: InputValues): JSX.Element => {
 };
 
 export const ContactBirthdayInput = (values: DatePickerValues): JSX.Element => {
-  const { value, onChange } = values;
-  return <DatePicker name="birthday" label="Дата рождения" value={value} setter={onChange} />;
+  const { value, setter } = values;
+  return <DatePicker name="birthday" label="Дата рождения" value={value} setter={setter} />;
 };
 
 export const ContactShortForm = (values: ContactShortValues): JSX.Element => {

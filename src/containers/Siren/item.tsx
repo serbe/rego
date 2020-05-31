@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { addEmptyString, numberToString, useInput } from '../../helpers/utils';
+import { addEmptyString, numberToString } from '../../helpers/utils';
 import { CompanyIDSelect } from '../../models/company';
-import { ContactBirthdayInput, ContactJsonScheme, ContactNameInput } from '../../models/contact';
-import { SirenJsonScheme, SirenNumberIDInput } from '../../models/siren';
+import { ContactBirthdayInput } from '../../models/contact';
+import { SirenJsonScheme, SirenNumberIDInput, SirenNumberPassportInput } from '../../models/siren';
+import { SirenTypeIDSelect } from '../../models/sirentype';
 import { DepartmentIDSelect } from '../../models/department';
 import {
+  AddressInput,
   EmailInputs,
   FaxInputs,
   NoteInput,
@@ -19,20 +21,20 @@ import { rws } from '../../netapi';
 export const SirenItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState<string>(() => '');
-  const [numberID, setNumberID] = useState<number>(() => 0);
-  const [numberPassword, changeNumberPassword, setNumberPassword] = useInput('');
-  const [sirenTypeID, setSirenTypeID] = useState<number>(() => 0);
-  const [address, changeAddress, setAddress] = useInput('');
-  const [radio, changeRadio, setRadio] = useInput('');
-  const [desc, changeDesc, setDesc] = useInput('');
-  const [contactID, setContactID] = useState<number>(() => 0);
+  const [error, setError] = useState<string>('');
+  const [numberID, setNumberID] = useState<number>(0);
+  const [numberPassport, setNumberPassport] = useState('');
+  const [sirenTypeID, setSirenTypeID] = useState<number>(0);
+  const [address, setAddress] = useState('');
+  const [radio, setRadio] = useState('');
+  const [desc, setDesc] = useState('');
+  const [contactID, setContactID] = useState<number>(0);
   const [companyID, setCompanyID] = useState<number>(0);
-  const [latitude, changeLatitude, setLatitude] = useInput('');
-  const [longitude, changeLongitude, setLongitude] = useInput('');
-  const [stage, setStage] = useState<number>(() => 0);
-  const [own, changeOwn, setOwn] = useInput('');
-  const [note, changeNote, setNote] = useInput('');
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState('');
+  const [stage, setStage] = useState<number>(0);
+  const [own, setOwn] = useState('');
+  const [note, setNote] = useState('');
 
   useEffect(() => {
     if (id !== '0') {
@@ -41,7 +43,7 @@ export const SirenItem = (): JSX.Element => {
         if (data?.name === 'Contact' && data.object.Siren) {
           const c = data.object.Siren;
           setNumberID(c.num_id || 0);
-          setNumberPassword(c.num_pass || '');
+          setNumberPassport(c.num_pass || '');
           setSirenTypeID(c.siren_type_id || 0);
           setAddress(c.address || '');
           setRadio(c.radio || '');
@@ -74,7 +76,7 @@ export const SirenItem = (): JSX.Element => {
     setLatitude,
     setLongitude,
     setNote,
-    setNumberPassword,
+    setNumberPassport,
     setOwn,
     setRadio,
   ]);
@@ -83,7 +85,11 @@ export const SirenItem = (): JSX.Element => {
     <div>
       {loaded && !error && (
         <>
-          {/* <SirenNumberIDInput value={numberID} onChange={changeNumnmerID} /> */}
+          <SirenNumberIDInput value={numberID} setter={setNumberID} />
+          <SirenNumberPassportInput value={numberPassport} setter={setNumberPassport} />
+          <SirenTypeIDSelect id={sirenTypeID} callback={setSirenTypeID} />
+          <AddressInput value={address} setter={setAddress} />
+
           <CompanyIDSelect id={companyID} callback={setCompanyID} />
 
           <div className="columns">

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { FormField } from '../components/formfield';
-import { InputValues } from '../components/input';
-import { Select, SelectValues } from '../components/select';
+import { InputValues, InputNumberValues } from '../components/input';
+// import { Select, SelectValues } from '../components/select';
 
 export type SirenJsonScheme = {
   name: string;
@@ -44,9 +44,28 @@ export type SirenList = {
   phones?: number[];
 };
 
-export const SirenNumberIDInput = (values: InputValues): JSX.Element => {
-  const { value, onChange } = values;
+export const SirenNumberIDInput = (values: InputNumberValues): JSX.Element => {
+  const { value, setter } = values;
   return (
-    <FormField name="name" value={value} onChange={onChange} label="Инвентарный номер" icon="tag" />
+    <FormField
+      name="name"
+      value={value.toString()}
+      onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(Number(event.target.value))}
+      label="Инвентарный номер"
+      icon="tag"
+    />
+  );
+};
+
+export const SirenNumberPassportInput = (values: InputValues): JSX.Element => {
+  const { value, setter } = values;
+  return (
+    <FormField
+      name="name"
+      value={value.toString()}
+      onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(event.target.value)}
+      label="Номер по паспорту"
+      icon="tag"
+    />
   );
 };

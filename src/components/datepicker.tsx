@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 export type DatePickerValues = {
   value: string;
-  onChange: (value: string) => void;
+  setter: (value: string) => void;
 };
 
 interface DatePickerProps {
@@ -41,10 +41,10 @@ const listYears = (): string[] => {
 export const DatePicker = (properties: DatePickerProps): JSX.Element => {
   const { name, value, setter, label } = properties;
 
-  const [year, setYear] = useState(() => ' ');
-  const [month, setMonth] = useState(() => ' ');
-  const [day, setDay] = useState(() => ' ');
-  const [rawDate, setRawDate] = useState(() => '');
+  const [year, setYear] = useState(' ');
+  const [month, setMonth] = useState(' ');
+  const [day, setDay] = useState(' ');
+  const [rawDate, setRawDate] = useState('');
   const [date, setDate] = useState(() => new Date());
 
   useEffect(() => {
