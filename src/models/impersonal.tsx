@@ -1,8 +1,8 @@
-import React, { SetStateAction, ChangeEvent } from 'react';
+import React, { ChangeEvent, SetStateAction } from 'react';
 import { FormField } from '../components/formfield';
-import { Input, FieldStringProperties } from '../components/input';
-import { addEmptyString } from '../helpers/utils';
+import { FieldStringProperties, Input } from '../components/input';
 import { Select, SelectValues } from '../components/select';
+import { addEmptyString } from '../helpers/utils';
 
 export interface ParameterTypes {
   id: string;

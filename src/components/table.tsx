@@ -3,6 +3,7 @@ import { CertificateList } from '../models/certificate';
 import { CompanyList } from '../models/company';
 import { ContactList } from '../models/contact';
 import { SirenList } from '../models/siren';
+import { SirenTypeList } from '../models/sirentype';
 import { Input } from './input';
 import { Pagination } from './pagination';
 
@@ -18,7 +19,7 @@ export type PaginateProperties = {
   setCurrentPage: (value: number) => void;
 };
 
-export type dataType = CertificateList | CompanyList | ContactList | SirenList;
+export type dataType = CertificateList | CompanyList | ContactList | SirenList | SirenTypeList;
 
 export type ListProperties = {
   data: dataType[];

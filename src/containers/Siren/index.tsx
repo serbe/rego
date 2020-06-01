@@ -1,2 +1,2 @@
-// export { SirenItem } from './item';
+export { SirenItem } from './item';
 export { Sirens } from './list';

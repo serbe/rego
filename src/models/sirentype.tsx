@@ -1,9 +1,23 @@
 import React, { ChangeEvent } from 'react';
-import { useHistory } from 'react-router-dom';
-import { DatePicker, DatePickerValues } from '../components/datepicker';
 import { FormField } from '../components/formfield';
-import { Input, FieldStringProperties } from '../components/input';
+import { FieldNumberProperties, FieldStringProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
+
+export type SirenTypeJsonScheme = {
+  name: string;
+  object: {
+    SirenType?: SirenType;
+  };
+  error?: string;
+};
+
+export type SirenTypeListJsonScheme = {
+  name: string;
+  object: {
+    SirenTypeList?: SirenTypeList[];
+  };
+  error?: string;
+};
 
 export type SirenType = {
   id: number;
@@ -29,6 +43,32 @@ export const SirenTypeIDSelect = (values: SelectValues): JSX.Element => {
       id={id}
       icon="tag"
       setter={setter}
+    />
+  );
+};
+
+export const SirenTypeNameInput = (values: FieldStringProperties): JSX.Element => {
+  const { value, setter } = values;
+  return (
+    <FormField
+      name="name"
+      value={value}
+      onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(event.target.value)}
+      label="Наименование организации"
+      icon="building"
+    />
+  );
+};
+
+export const SirenTypeRadiusInput = (values: FieldNumberProperties): JSX.Element => {
+  const { value, setter } = values;
+  return (
+    <FormField
+      name="stage"
+      value={value.toString()}
+      onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(Number(event.target.value))}
+      label="Радиус действия"
+      icon="tag"
     />
   );
 };

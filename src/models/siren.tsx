@@ -1,7 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import { FormField } from '../components/formfield';
-import { FieldStringProperties, FieldNumberProperties } from '../components/input';
-// import { Select, SelectValues } from '../components/select';
+import { FieldNumberProperties, FieldStringProperties } from '../components/input';
 
 export type SirenJsonScheme = {
   name: string;
