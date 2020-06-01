@@ -1,7 +1,8 @@
 import React, { SetStateAction, ChangeEvent } from 'react';
 import { FormField } from '../components/formfield';
-import { Input, InputValues } from '../components/input';
+import { Input, FieldStringProperties } from '../components/input';
 import { addEmptyString } from '../helpers/utils';
+import { Select, SelectValues } from '../components/select';
 
 export interface ParameterTypes {
   id: string;
@@ -103,7 +104,7 @@ export const FaxInputs = (values: PhoneValues): JSX.Element => {
   );
 };
 
-export const NoteInput = (values: InputValues): JSX.Element => {
+export const NoteInput = (values: FieldStringProperties): JSX.Element => {
   const { value, setter } = values;
   return (
     <FormField
@@ -116,7 +117,7 @@ export const NoteInput = (values: InputValues): JSX.Element => {
   );
 };
 
-export const AddressInput = (values: InputValues): JSX.Element => {
+export const AddressInput = (values: FieldStringProperties): JSX.Element => {
   const { value, setter } = values;
   return (
     <FormField
@@ -125,6 +126,20 @@ export const AddressInput = (values: InputValues): JSX.Element => {
       onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(event.target.value)}
       label="Адрес"
       icon="address-card"
+    />
+  );
+};
+
+export const ContactIDSelect = (values: SelectValues): JSX.Element => {
+  const { id, setter } = values;
+  return (
+    <Select
+      name="contact"
+      label="Контактное лицо"
+      listName="ContactSelect"
+      id={id}
+      icon="user"
+      setter={setter}
     />
   );
 };
