@@ -14,7 +14,7 @@ export type DepartmentList = {
 };
 
 export const DepartmentIDSelect = (values: SelectValues): JSX.Element => {
-  const { id, callback } = values;
+  const { id, setter } = values;
   return (
     <Select
       name="department"
@@ -22,7 +22,7 @@ export const DepartmentIDSelect = (values: SelectValues): JSX.Element => {
       listName="DepartmentSelect"
       id={id}
       icon="tag"
-      callback={callback}
+      setter={setter}
     />
   );
 };

@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 import { DatePicker, DatePickerValues } from '../components/datepicker';
 import { FormField } from '../components/formfield';
-import { Input, InputValues } from '../components/input';
+import { Input, FieldStringProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
 
 export type SirenType = {
@@ -20,7 +20,7 @@ export type SirenTypeList = {
 };
 
 export const SirenTypeIDSelect = (values: SelectValues): JSX.Element => {
-  const { id, callback } = values;
+  const { id, setter } = values;
   return (
     <Select
       name="siren_type_id"
@@ -28,7 +28,7 @@ export const SirenTypeIDSelect = (values: SelectValues): JSX.Element => {
       listName="SyrenTypeSelect"
       id={id}
       icon="tag"
-      callback={callback}
+      setter={setter}
     />
   );
 };

@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 import { DatePicker, DatePickerValues } from '../components/datepicker';
 import { FormField } from '../components/formfield';
-import { Input, InputValues } from '../components/input';
+import { Input, FieldStringProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
 
 export interface ContactShortValues {
@@ -75,7 +75,7 @@ export type ContactShort = {
   post_go_name?: string;
 };
 
-export const ContactNameInput = (values: InputValues): JSX.Element => {
+export const ContactNameInput = (values: FieldStringProperties): JSX.Element => {
   const { value, setter } = values;
   return (
     <FormField
@@ -117,7 +117,7 @@ export const ContactShortForm = (values: ContactShortValues): JSX.Element => {
 };
 
 export const ContactIDSelect = (values: SelectValues): JSX.Element => {
-  const { id, callback } = values;
+  const { id, setter } = values;
   return (
     <Select
       name="contact"
@@ -125,7 +125,7 @@ export const ContactIDSelect = (values: SelectValues): JSX.Element => {
       listName="ContactSelect"
       id={id}
       icon="user"
-      callback={callback}
+      setter={setter}
     />
   );
 };

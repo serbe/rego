@@ -1,12 +1,12 @@
 import React, { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import { Icon } from './icon';
 
-export type InputValues = {
+export type FieldStringProperties = {
   value: string;
   setter: (value: string) => void;
 };
 
-export type InputNumberValues = {
+export type FieldNumberProperties = {
   value: number;
   setter: (value: number) => void;
 };

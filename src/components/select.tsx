@@ -6,7 +6,7 @@ import './select.css';
 
 export interface SelectValues {
   id: number;
-  callback: (event: number) => void;
+  setter: (event: number) => void;
 }
 
 interface SelectProps {
@@ -16,7 +16,7 @@ interface SelectProps {
   color?: 'primary' | 'info' | 'success' | 'warning' | 'danger';
   label?: string;
   listName?: string;
-  callback: (event: number) => void;
+  setter: (event: number) => void;
 }
 
 type CLWS = {
@@ -28,7 +28,7 @@ type CLWS = {
 };
 
 export const Select = (properties: SelectProps): JSX.Element => {
-  const { name, id, label, icon, color, listName, callback } = properties;
+  const { name, id, label, icon, color, listName, setter } = properties;
 
   const [opened, setOpened] = useState(false);
   const [itemID, setItemID] = useState(id ? id : 0);
@@ -139,7 +139,7 @@ export const Select = (properties: SelectProps): JSX.Element => {
               onMouseDown={(): void => {
                 setItemID(ListItem.id);
                 setValue(ListItem.name);
-                callback(ListItem.id);
+                setter(ListItem.id);
               }}
               role="row"
               tabIndex={index}

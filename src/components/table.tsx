@@ -116,7 +116,7 @@ export const Paginate = (properties: PaginateProperties): JSX.Element => {
     <Pagination
       currentPage={currentPage + 1}
       lastPage={Math.ceil(filteredLength / itemsOnPage)}
-      callback={receiveChildValue}
+      setter={receiveChildValue}
     />
   ) : (
     <></>

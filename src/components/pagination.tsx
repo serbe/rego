@@ -3,7 +3,7 @@ import React from 'react';
 interface PaginationProps {
   currentPage: number;
   lastPage: number;
-  callback: (value: number) => void;
+  setter: (value: number) => void;
 }
 
 interface ItemProps {
@@ -14,14 +14,14 @@ interface ItemProps {
 }
 
 export const Pagination = (properties: PaginationProps): JSX.Element => {
-  const { currentPage, lastPage, callback } = properties;
+  const { currentPage, lastPage, setter } = properties;
   const navClasses = `pagination is-rounded is-centered`;
 
   const Previous = (): JSX.Element =>
     currentPage > 1 ? (
       <a
         className="pagination-previous"
-        onClick={(): void => callback(currentPage - 1)}
+        onClick={(): void => setter(currentPage - 1)}
         key="PaginationPrev"
         href="#prev"
       >
@@ -37,7 +37,7 @@ export const Pagination = (properties: PaginationProps): JSX.Element => {
     currentPage < lastPage ? (
       <a
         className="pagination-next"
-        onClick={(): void => callback(currentPage + 1)}
+        onClick={(): void => setter(currentPage + 1)}
         key="PaginationNext"
         href="#next"
       >
@@ -59,7 +59,7 @@ export const Pagination = (properties: PaginationProps): JSX.Element => {
         ) : (
           <a
             className={link === currentPage ? 'pagination-link is-current' : 'pagination-link'}
-            onClick={link === currentPage || !link ? undefined : (): void => callback(link)}
+            onClick={link === currentPage || !link ? undefined : (): void => setter(link)}
             href="#item"
           >
             {link}

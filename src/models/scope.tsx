@@ -14,7 +14,7 @@ export type ScopeList = {
 };
 
 export const ScopeIDSelect = (values: SelectValues): JSX.Element => {
-  const { id, callback } = values;
+  const { id, setter } = values;
   return (
     <Select
       name="scope"
@@ -22,7 +22,7 @@ export const ScopeIDSelect = (values: SelectValues): JSX.Element => {
       listName="ScopeSelect"
       id={id}
       icon="tag"
-      callback={callback}
+      setter={setter}
     />
   );
 };

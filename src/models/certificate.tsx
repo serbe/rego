@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import { FormField } from '../components/formfield';
-import { InputValues } from '../components/input';
+import { FieldStringProperties } from '../components/input';
 import { DatePicker, DatePickerValues } from '../components/datepicker';
 
 export type CertificateJsonScheme = {
@@ -39,7 +39,7 @@ export type CertificateList = {
   note?: string;
 };
 
-export const CertificateNumberInput = (values: InputValues): JSX.Element => {
+export const CertificateNumberInput = (values: FieldStringProperties): JSX.Element => {
   const { value, setter } = values;
   return (
     <FormField

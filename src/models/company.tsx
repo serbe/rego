@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import { FormField } from '../components/formfield';
-import { InputValues } from '../components/input';
+import { FieldStringProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
 import { ContactShort } from './contact';
 import { PracticeList } from './practice';
@@ -46,7 +46,7 @@ export type CompanyList = {
 };
 
 export const CompanyIDSelect = (values: SelectValues): JSX.Element => {
-  const { id, callback } = values;
+  const { id, setter } = values;
   return (
     <Select
       name="company"
@@ -54,12 +54,12 @@ export const CompanyIDSelect = (values: SelectValues): JSX.Element => {
       listName="CompanySelect"
       id={id}
       icon="building"
-      callback={callback}
+      setter={setter}
     />
   );
 };
 
-export const CompanyNameInput = (values: InputValues): JSX.Element => {
+export const CompanyNameInput = (values: FieldStringProperties): JSX.Element => {
   const { value, setter } = values;
   return (
     <FormField

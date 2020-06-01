@@ -16,7 +16,7 @@ export type PostList = {
 };
 
 export const PostIDSelect = (values: SelectValues): JSX.Element => {
-  const { id, callback } = values;
+  const { id, setter } = values;
   return (
     <Select
       name="post"
@@ -24,13 +24,13 @@ export const PostIDSelect = (values: SelectValues): JSX.Element => {
       listName="PostSelect"
       id={id}
       icon="tag"
-      callback={callback}
+      setter={setter}
     />
   );
 };
 
 export const PostGoIDSelect = (values: SelectValues): JSX.Element => {
-  const { id, callback } = values;
+  const { id, setter } = values;
   return (
     <Select
       name="postgo"
@@ -38,7 +38,7 @@ export const PostGoIDSelect = (values: SelectValues): JSX.Element => {
       listName="PostGoSelect"
       id={id}
       icon="tag"
-      callback={callback}
+      setter={setter}
     />
   );
 };

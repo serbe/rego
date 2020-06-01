@@ -69,22 +69,22 @@ export const ContactItem = (): JSX.Element => {
       {loaded && !error && (
         <>
           <ContactNameInput value={name} setter={setName} />
-          <CompanyIDSelect id={companyID} callback={setCompanyID} />
+          <CompanyIDSelect id={companyID} setter={setCompanyID} />
 
           <div className="columns">
             <div className="column is-half">
-              <PostIDSelect id={postID} callback={setPostID} />
+              <PostIDSelect id={postID} setter={setPostID} />
             </div>
             <div className="column is-half">
-              <DepartmentIDSelect id={departmentID} callback={setDepartmentID} />
+              <DepartmentIDSelect id={departmentID} setter={setDepartmentID} />
             </div>
           </div>
           <div className="columns">
             <div className="column is-half">
-              <PostGoIDSelect id={postGoID} callback={setPostGoID} />
+              <PostGoIDSelect id={postGoID} setter={setPostGoID} />
             </div>
             <div className="column is-half">
-              <RankIDSelect id={rankID} callback={setRankID} />
+              <RankIDSelect id={rankID} setter={setRankID} />
             </div>
           </div>
 

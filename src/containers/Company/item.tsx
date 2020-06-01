@@ -65,7 +65,7 @@ export const CompanyItem = (): JSX.Element => {
       {loaded && !error && (
         <>
           <CompanyNameInput value={name} setter={setName} />
-          <ScopeIDSelect id={scopeID} callback={setScopeID} />
+          <ScopeIDSelect id={scopeID} setter={setScopeID} />
           <AddressInput value={address} setter={setAddress} />
 
           <div className="columns">

@@ -52,8 +52,8 @@ export const CertificateItem = (): JSX.Element => {
       {loaded && !error && (
         <>
           <CertificateNumberInput value={sNumber} setter={setSNumber} />
-          <ContactIDSelect id={contactID} callback={setContactID} />
-          <CompanyIDSelect id={companyID} callback={setCompanyID} />
+          <ContactIDSelect id={contactID} setter={setContactID} />
+          <CompanyIDSelect id={companyID} setter={setCompanyID} />
           <CertificateDateInput value={certDate} setter={setCertDate} />
           <NoteInput value={note} setter={setNote} />
 

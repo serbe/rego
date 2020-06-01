@@ -14,15 +14,8 @@ export type RankList = {
 };
 
 export const RankIDSelect = (values: SelectValues): JSX.Element => {
-  const { id, callback } = values;
+  const { id, setter } = values;
   return (
-    <Select
-      name="rank"
-      label="Звание"
-      listName="RankSelect"
-      id={id}
-      icon="tag"
-      callback={callback}
-    />
+    <Select name="rank" label="Звание" listName="RankSelect" id={id} icon="tag" setter={setter} />
   );
 };
