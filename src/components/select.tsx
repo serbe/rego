@@ -31,7 +31,7 @@ export const Select = (properties: SelectProps): JSX.Element => {
   const { name, id, label, icon, color, listName, setter } = properties;
 
   const [opened, setOpened] = useState(false);
-  const [itemID, setItemID] = useState(id ? id : 0);
+  const [itemID, setItemID] = useState(id || 0);
   const [list, setList] = useState<SelectItem[]>([{ id: 0, name: '' }]);
   const [error, setError] = useState<string>();
   const [value, setValue] = useState<string>();
@@ -64,16 +64,16 @@ export const Select = (properties: SelectProps): JSX.Element => {
       setValue('');
     } else {
       const currentItem = list.find((item) => item.id === id);
-      setValue(currentItem ? currentItem.name : '');
+      setValue(currentItem?.name || '');
     }
   }, [list, id]);
 
   const currentValue = (): string => {
     if (opened) {
-      return value ? value : '';
+      return value || '';
     }
     const currentItem = list.find((item) => item.id === itemID);
-    return currentItem ? currentItem.name : '';
+    return currentItem?.name || '';
   };
 
   const filteredList = (): SelectItem[] => {

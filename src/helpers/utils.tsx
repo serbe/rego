@@ -30,11 +30,11 @@ import React from 'react';
 // }
 
 export function stringNoNull(value?: string): string {
-  return value ? value : '';
+  return value || '';
 }
 
 export function numberNoNull(value?: number): number {
-  return value ? value : 0;
+  return value || 0;
 }
 
 export const addEmptyString = (values?: string[]): string[] => {
@@ -56,16 +56,14 @@ export const numberToString = (values?: number[]): string[] => {
 
 export const splitStrings = (items?: string[]): JSX.Element => (
   <>
-    {items
-      ? items.map((arrayItem: string, index: number) => <div key={`div${index}`}>{arrayItem}</div>)
-      : undefined}
+    {items &&
+      items.map((arrayItem: string, index: number) => <div key={`div${index}`}>{arrayItem}</div>)}
   </>
 );
 
 export const splitNumbers = (items?: number[]): JSX.Element => (
   <>
-    {items
-      ? items.map((arrayItem: number, index: number) => <div key={`div${index}`}>{arrayItem}</div>)
-      : undefined}
+    {items &&
+      items.map((arrayItem: number, index: number) => <div key={`div${index}`}>{arrayItem}</div>)}
   </>
 );

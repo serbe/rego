@@ -13,11 +13,11 @@ import { rws } from '../../netapi';
 export const CertificateItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState('');
   const [sNumber, setSNumber] = useState('');
-  const [contactID, setContactID] = useState<number>(0);
-  const [companyID, setCompanyID] = useState<number>(0);
-  const [certDate, setCertDate] = useState<string>('');
+  const [contactID, setContactID] = useState(0);
+  const [companyID, setCompanyID] = useState(0);
+  const [certDate, setCertDate] = useState('');
   const [note, setNote] = useState('');
 
   useEffect(() => {

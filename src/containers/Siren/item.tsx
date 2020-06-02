@@ -19,18 +19,18 @@ import { rws } from '../../netapi';
 export const SirenItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState<string>('');
-  const [numberID, setNumberID] = useState<number>(0);
+  const [error, setError] = useState('');
+  const [numberID, setNumberID] = useState(0);
   const [numberPassport, setNumberPassport] = useState('');
-  const [sirenTypeID, setSirenTypeID] = useState<number>(0);
+  const [sirenTypeID, setSirenTypeID] = useState(0);
   const [address, setAddress] = useState('');
   const [radio, setRadio] = useState('');
   const [desk, setDesk] = useState('');
-  const [contactID, setContactID] = useState<number>(0);
-  const [companyID, setCompanyID] = useState<number>(0);
+  const [contactID, setContactID] = useState(0);
+  const [companyID, setCompanyID] = useState(0);
   const [latitude, setLatitude] = useState('');
   const [longitude, setLongitude] = useState('');
-  const [stage, setStage] = useState<number>(0);
+  const [stage, setStage] = useState(0);
   const [own, setOwn] = useState('');
   const [note, setNote] = useState('');
 
@@ -38,7 +38,7 @@ export const SirenItem = (): JSX.Element => {
     if (id !== '0') {
       rws.addEventListener('message', (message: MessageEvent) => {
         const data = JSON.parse(message.data) as SirenJsonScheme;
-        if (data?.name === 'Contact' && data.object.Siren) {
+        if (data?.name === 'Siren' && data.object.Siren) {
           const c = data.object.Siren;
           setNumberID(c.num_id || 0);
           setNumberPassport(c.num_pass || '');
@@ -52,7 +52,7 @@ export const SirenItem = (): JSX.Element => {
           setLongitude(c.longitude || '');
           setStage(c.stage || 0);
           setOwn(c.own || '');
-          setNote(c.note ? c.note : '');
+          setNote(c.note || '');
           setLoaded(true);
         }
         if (data.error) {

@@ -18,15 +18,15 @@ import { rws } from '../../netapi';
 export const CompanyItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState('');
   const [name, setName] = useState('');
-  const [scopeID, setScopeID] = useState<number>(0);
+  const [scopeID, setScopeID] = useState(0);
   const [address, setAddress] = useState('');
-  const [emails, setEmails] = useState<string[]>(() => ['']);
-  const [phones, setPhones] = useState<string[]>(() => ['']);
-  const [faxes, setFaxes] = useState<string[]>(() => ['']);
-  const [practices, setPractices] = useState<PracticeList[]>(() => []);
-  const [contacts, setContacts] = useState<ContactShort[]>(() => []);
+  const [emails, setEmails] = useState(['']);
+  const [phones, setPhones] = useState(['']);
+  const [faxes, setFaxes] = useState(['']);
+  const [practices, setPractices] = useState<PracticeList[]>([]);
+  const [contacts, setContacts] = useState<ContactShort[]>([]);
   const [note, setNote] = useState('');
 
   useEffect(() => {

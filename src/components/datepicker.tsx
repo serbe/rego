@@ -45,7 +45,7 @@ export const DatePicker = (properties: DatePickerProps): JSX.Element => {
   const [month, setMonth] = useState(' ');
   const [day, setDay] = useState(' ');
   const [rawDate, setRawDate] = useState('');
-  const [date, setDate] = useState(() => new Date());
+  const [date, setDate] = useState(new Date());
 
   useEffect(() => {
     if (value && value !== rawDate) {

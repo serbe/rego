@@ -18,16 +18,16 @@ import { rws } from '../../netapi';
 export const ContactItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState('');
   const [name, setName] = useState('');
-  const [postID, setPostID] = useState<number>(0);
-  const [departmentID, setDepartmentID] = useState<number>(0);
-  const [postGoID, setPostGoID] = useState<number>(0);
-  const [rankID, setRankID] = useState<number>(0);
-  const [emails, setEmails] = useState<string[]>(() => ['']);
-  const [phones, setPhones] = useState<string[]>(() => ['']);
-  const [faxes, setFaxes] = useState<string[]>(() => ['']);
-  const [companyID, setCompanyID] = useState<number>(0);
+  const [postID, setPostID] = useState(0);
+  const [departmentID, setDepartmentID] = useState(0);
+  const [postGoID, setPostGoID] = useState(0);
+  const [rankID, setRankID] = useState(0);
+  const [emails, setEmails] = useState(['']);
+  const [phones, setPhones] = useState(['']);
+  const [faxes, setFaxes] = useState(['']);
+  const [companyID, setCompanyID] = useState(0);
   const [birthday, setBirthday] = useState('');
   const [note, setNote] = useState('');
 
@@ -47,7 +47,7 @@ export const ContactItem = (): JSX.Element => {
           setEmails(addEmptyString(c.emails));
           setPhones(addEmptyString(numberToString(c.phones)));
           setFaxes(addEmptyString(numberToString(c.faxes)));
-          setNote(c.note ? c.note : '');
+          setNote(c.note || '');
           setLoaded(true);
         }
         if (data.error) {
