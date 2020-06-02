@@ -5,10 +5,10 @@ import { CertificateList, CertificateListJsonScheme } from '../../models/certifi
 import { rws } from '../../netapi';
 
 export const Certificates = (): JSX.Element => {
+  const history = useHistory();
   const [data, setData] = useState<CertificateList[]>([]);
   const [search, setSearch] = useState('');
   const [error, setError] = useState<string>();
-  const history = useHistory();
 
   const [paginationData, Paginate] = List({
     data: data,
@@ -74,7 +74,7 @@ export const Certificates = (): JSX.Element => {
     <></>
   ) : (
     <>
-      {Search(search, setSearch)}
+      <Search value={search} setter={setSearch} />
       <table className="table is-narrow">
         <tbody>
           <tr>

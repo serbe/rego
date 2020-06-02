@@ -6,10 +6,10 @@ import { CompanyList, CompanyListJsonScheme } from '../../models/company';
 import { rws } from '../../netapi';
 
 export const Companies = (): JSX.Element => {
+  const history = useHistory();
   const [data, setData] = useState<CompanyList[]>([]);
   const [search, setSearch] = useState('');
   const [error, setError] = useState<string>();
-  const history = useHistory();
 
   const [paginationData, Paginate] = List({
     data: data,
@@ -66,7 +66,7 @@ export const Companies = (): JSX.Element => {
     <></>
   ) : (
     <>
-      {Search(search, setSearch)}
+      <Search value={search} setter={setSearch} />
       <table className="table is-narrow">
         <tbody>
           <tr>

@@ -4,7 +4,7 @@ import { CompanyList } from '../models/company';
 import { ContactList } from '../models/contact';
 import { SirenList } from '../models/siren';
 import { SirenTypeList } from '../models/sirentype';
-import { Input } from './input';
+import { Input, StringInputProperties } from './input';
 import { Pagination } from './pagination';
 
 export type SData = {
@@ -96,14 +96,16 @@ export const List = (properties: ListProperties): [() => dataType[], JSX.Element
   ];
 };
 
-export const Search = (value: string, setter: (value: string) => void): JSX.Element => (
+export const Search = (properties: StringInputProperties): JSX.Element => (
   <div className="control mb1 mwt" key="TableSearch">
     <Input
       name="search"
       className="input is-expanded"
       placeholder="Поиск"
-      onChange={(event: React.ChangeEvent<HTMLInputElement>): void => setter(event.target.value)}
-      value={value}
+      onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
+        properties.setter(event.target.value)
+      }
+      value={properties.value}
     />
   </div>
 );
