@@ -32,7 +32,7 @@ const NavbarNotLogged: JSX.Element = (
   </div>
 );
 
-const MainItems: JSX.Element = (
+const MainItems = (value: Setter): JSX.Element => (
   <>
     {mainItems.map((item, index) => (
       <NavLink
@@ -40,6 +40,7 @@ const MainItems: JSX.Element = (
         className="navbar-item"
         to={item.link}
         key={`main-items-${index}`}
+        onClick={() => value.setter(false)}
       >
         {item.name}
       </NavLink>
@@ -60,6 +61,18 @@ const NavbarDropdown = (value: Setter): JSX.Element => (
         {item.name}
       </NavLink>
     ))}
+  </div>
+);
+
+const NavBarStart = (value: Setter): JSX.Element => (
+  <div className="navbar-start" key="navbar-start">
+    <MainItems setter={value.setter} />
+    <div className="navbar-item has-dropdown is-hoverable" key="dropdown-items">
+      <a href="#directory" className="navbar-link">
+        Справочники
+      </a>
+      <NavbarDropdown setter={value.setter} />
+    </div>
   </div>
 );
 
@@ -112,15 +125,7 @@ export const NavBar = (): JSX.Element => {
               </a>
             </div>
             <div id="navbarData" className={open ? 'navbar-menu is-active' : 'navbar-menu'}>
-              <div className="navbar-start" key="navbar-start">
-                {MainItems}
-                <div className="navbar-item has-dropdown is-hoverable" key="dropdown-items">
-                  <a href="#directory" className="navbar-link">
-                    Справочники
-                  </a>
-                  <NavbarDropdown setter={setOpen} />
-                </div>
-              </div>
+              <NavBarStart setter={setOpen} />
               {NavbarEnd}
             </div>
           </>

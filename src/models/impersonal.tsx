@@ -29,6 +29,7 @@ export const EmailInputs = (values: EmailValues): JSX.Element => {
         emails.map((email, index) => (
           <Input
             name={`email-${index}-input`}
+            type="email"
             icon="envelope"
             key={`email-${index}`}
             value={email}

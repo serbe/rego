@@ -54,8 +54,8 @@ export const SirenTypeNameInput = (values: FieldStringProperties): JSX.Element =
       name="name"
       value={value}
       onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(event.target.value)}
-      label="Наименование организации"
-      icon="building"
+      label="Тип сирены"
+      icon="tag"
     />
   );
 };
