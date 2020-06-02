@@ -7,7 +7,7 @@ import { rws } from '../../netapi';
 export const DepartmentItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState('');
   const [name, setName] = useState('');
   const [note, setNote] = useState('');
 
@@ -15,7 +15,7 @@ export const DepartmentItem = (): JSX.Element => {
     if (id !== '0') {
       rws.addEventListener('message', (message: MessageEvent) => {
         const data = JSON.parse(message.data) as DepartmentJsonScheme;
-        if (data?.name === 'Contact' && data.object.Department) {
+        if (data?.name === 'Department' && data.object.Department) {
           const c = data.object.Department;
           setName(c.name || '');
           setNote(c.note || '');
