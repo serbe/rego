@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { List, Search } from '../../components/table';
 import { SirenTypeList, SirenTypeListJsonScheme } from '../../models/sirentype';
 import { rws } from '../../netapi';
 
 export const SirenTypes = (): JSX.Element => {
+  const history = useHistory();
   const [data, setData] = useState<SirenTypeList[]>([]);
-  const [search, changeSearch] = useState('');
+  const [search, setSearch] = useState('');
   const [error, setError] = useState<string>();
 
   const [paginationData, Paginate] = List({
@@ -20,7 +22,7 @@ export const SirenTypes = (): JSX.Element => {
   useEffect(() => {
     rws.addEventListener('message', (message: MessageEvent) => {
       const data = JSON.parse(message.data) as SirenTypeListJsonScheme;
-      if (data.name && data.name === 'SirenList' && data.object.SirenTypeList) {
+      if (data.name && data.name === 'SirenTypeList' && data.object.SirenTypeList) {
         setData(data.object.SirenTypeList);
       }
       if (data.error) {
@@ -38,11 +40,16 @@ export const SirenTypes = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((siren, index) => (
-        <tr key={`tr${siren.id}${index}`}>
-          <td className="w250">{siren.name}</td>
-          <td className="w95">{siren.radius}</td>
-          <td className="w250">{siren.note}</td>
+      {tableData().map((siren_type, index) => (
+        <tr
+          key={`tr${siren_type.id}${index}`}
+          onClick={(): void => history.push(`/sirentypes/${siren_type.id}`)}
+          role="gridcell"
+          className="link"
+        >
+          <td className="w250">{siren_type.name}</td>
+          <td className="w95">{siren_type.radius}</td>
+          <td className="w250">{siren_type.note}</td>
         </tr>
       ))}
     </>
@@ -52,11 +59,11 @@ export const SirenTypes = (): JSX.Element => {
     <></>
   ) : (
     <>
-      {Search(search, changeSearch)}
+      <Search value={search} setter={setSearch} />
       <table className="table is-narrow">
         <tbody>
           <tr>
-            <th className="w250">Наименование</th>
+            <th className="w250">Тип сирены</th>
             <th className="w95">Радиус действия</th>
             <th className="w250">Заметка</th>
           </tr>

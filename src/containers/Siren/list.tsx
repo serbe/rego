@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { List, Search } from '../../components/table';
 import { splitNumbers } from '../../helpers/utils';
 import { SirenList, SirenListJsonScheme } from '../../models/siren';
 import { rws } from '../../netapi';
 
 export const Sirens = (): JSX.Element => {
+  const history = useHistory();
   const [data, setData] = useState<SirenList[]>([]);
-  const [search, changeSearch] = useState('');
+  const [search, setSearch] = useState('');
   const [error, setError] = useState<string>();
 
   const [paginationData, Paginate] = List({
@@ -40,7 +42,12 @@ export const Sirens = (): JSX.Element => {
   const Body = (): JSX.Element => (
     <>
       {tableData().map((siren, index) => (
-        <tr key={`tr${siren.id}${index}`}>
+        <tr
+          key={`tr${siren.id}${index}`}
+          onClick={(): void => history.push(`/sirens/${siren.id}`)}
+          role="gridcell"
+          className="link"
+        >
           <td className="w250">{siren.siren_type_name}</td>
           <td className="is-hidden-mobile">{siren.address}</td>
           <td className="is-hidden-touch w250">{siren.contact_name}</td>
@@ -54,7 +61,7 @@ export const Sirens = (): JSX.Element => {
     <></>
   ) : (
     <>
-      {Search(search, changeSearch)}
+      <Search value={search} setter={setSearch} />
       <table className="table is-narrow">
         <tbody>
           <tr>
