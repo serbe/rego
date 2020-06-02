@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 import { DatePicker, DatePickerValues } from '../components/datepicker';
 import { FormField } from '../components/formfield';
-import { FieldStringProperties, Input } from '../components/input';
+import { Input, StringInputProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
 
 export interface ContactShortValues {
@@ -75,33 +75,33 @@ export type ContactShort = {
   post_go_name?: string;
 };
 
-export const ContactNameInput = (values: FieldStringProperties): JSX.Element => {
-  const { value, setter } = values;
-  return (
-    <FormField
-      name="name"
-      value={value}
-      onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(event.target.value)}
-      label="Фамилия Имя Отчество"
-      icon="user"
-    />
-  );
-};
+export const ContactNameInput = (properties: StringInputProperties): JSX.Element => (
+  <FormField
+    name="name"
+    value={properties.value}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    label="Фамилия Имя Отчество"
+    icon="user"
+  />
+);
 
-export const ContactBirthdayInput = (values: DatePickerValues): JSX.Element => {
-  const { value, setter } = values;
-  return <DatePicker name="birthday" label="Дата рождения" value={value} setter={setter} />;
-};
+export const ContactBirthdayInput = (properties: DatePickerValues): JSX.Element => (
+  <DatePicker
+    name="birthday"
+    label="Дата рождения"
+    value={properties.value}
+    setter={properties.setter}
+  />
+);
 
-export const ContactShortForm = (values: ContactShortValues): JSX.Element => {
-  const { contacts } = values;
+export const ContactShortForm = (properties: ContactShortValues): JSX.Element => {
   const history = useHistory();
   return (
     <div className="field" key="contacts">
       <label className="label" htmlFor="contact-1">
         Сотрудники
       </label>
-      {contacts.map((contact, index) => (
+      {properties.contacts.map((contact, index) => (
         <Input
           key={`contact-${index}`}
           name={`contact-${index}`}
@@ -116,16 +116,13 @@ export const ContactShortForm = (values: ContactShortValues): JSX.Element => {
   );
 };
 
-export const ContactIDSelect = (values: SelectValues): JSX.Element => {
-  const { id, setter } = values;
-  return (
-    <Select
-      name="contact"
-      label="Фамилия Имя Отчество"
-      listName="ContactSelect"
-      id={id}
-      icon="user"
-      setter={setter}
-    />
-  );
-};
+export const ContactIDSelect = (properties: SelectValues): JSX.Element => (
+  <Select
+    name="contact"
+    label="Фамилия Имя Отчество"
+    listName="ContactSelect"
+    id={properties.id}
+    icon="user"
+    setter={properties.setter}
+  />
+);

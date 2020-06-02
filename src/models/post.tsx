@@ -15,30 +15,24 @@ export type PostList = {
   note?: string;
 };
 
-export const PostIDSelect = (values: SelectValues): JSX.Element => {
-  const { id, setter } = values;
-  return (
-    <Select
-      name="post"
-      label="Должность"
-      listName="PostSelect"
-      id={id}
-      icon="tag"
-      setter={setter}
-    />
-  );
-};
+export const PostIDSelect = (properties: SelectValues): JSX.Element => (
+  <Select
+    name="post"
+    label="Должность"
+    listName="PostSelect"
+    id={properties.id}
+    icon="tag"
+    setter={properties.setter}
+  />
+);
 
-export const PostGoIDSelect = (values: SelectValues): JSX.Element => {
-  const { id, setter } = values;
-  return (
-    <Select
-      name="postgo"
-      label="Должность ГО"
-      listName="PostGoSelect"
-      id={id}
-      icon="tag"
-      setter={setter}
-    />
-  );
-};
+export const PostGoIDSelect = (properties: SelectValues): JSX.Element => (
+  <Select
+    name="postgo"
+    label="Должность ГО"
+    listName="PostGoSelect"
+    id={properties.id}
+    icon="tag"
+    setter={properties.setter}
+  />
+);

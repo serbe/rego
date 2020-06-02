@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import { FormField } from '../components/formfield';
-import { FieldStringProperties } from '../components/input';
+import { StringInputProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
 import { ContactShort } from './contact';
 import { PracticeList } from './practice';
@@ -45,29 +45,23 @@ export type CompanyList = {
   practices?: string[];
 };
 
-export const CompanyIDSelect = (values: SelectValues): JSX.Element => {
-  const { id, setter } = values;
-  return (
-    <Select
-      name="company"
-      label="Организация"
-      listName="CompanySelect"
-      id={id}
-      icon="building"
-      setter={setter}
-    />
-  );
-};
+export const CompanyIDSelect = (properties: SelectValues): JSX.Element => (
+  <Select
+    name="company"
+    label="Организация"
+    listName="CompanySelect"
+    id={properties.id}
+    icon="building"
+    setter={properties.setter}
+  />
+);
 
-export const CompanyNameInput = (values: FieldStringProperties): JSX.Element => {
-  const { value, setter } = values;
-  return (
-    <FormField
-      name="name"
-      value={value}
-      onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(event.target.value)}
-      label="Наименование организации"
-      icon="building"
-    />
-  );
-};
+export const CompanyNameInput = (properties: StringInputProperties): JSX.Element => (
+  <FormField
+    name="name"
+    value={properties.value}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    label="Наименование организации"
+    icon="building"
+  />
+);

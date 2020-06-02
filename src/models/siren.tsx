@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import { FormField } from '../components/formfield';
-import { FieldNumberProperties, FieldStringProperties } from '../components/input';
+import { NumberInputProperties, StringInputProperties } from '../components/input';
 
 export type SirenJsonScheme = {
   name: string;
@@ -43,106 +43,86 @@ export type SirenList = {
   phones?: number[];
 };
 
-export const SirenNumberIDInput = (values: FieldNumberProperties): JSX.Element => {
-  const { value, setter } = values;
-  return (
-    <FormField
-      name="name"
-      value={value.toString()}
-      onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(Number(event.target.value))}
-      label="Инвентарный номер"
-      icon="tag"
-    />
-  );
-};
+export const SirenNumberIDInput = (properties: NumberInputProperties): JSX.Element => (
+  <FormField
+    name="siren_number_id"
+    value={properties.value.toString()}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void =>
+      properties.setter(Number(event.target.value))
+    }
+    label="Инвентарный номер"
+    icon="tag"
+  />
+);
 
-export const SirenNumberPassportInput = (values: FieldStringProperties): JSX.Element => {
-  const { value, setter } = values;
-  return (
-    <FormField
-      name="name"
-      value={value.toString()}
-      onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(event.target.value)}
-      label="Номер по паспорту"
-      icon="tag"
-    />
-  );
-};
+export const SirenNumberPassportInput = (properties: StringInputProperties): JSX.Element => (
+  <FormField
+    name="siren_number_passport"
+    value={properties.value.toString()}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    label="Номер по паспорту"
+    icon="tag"
+  />
+);
 
-export const SirenRadioInput = (values: FieldStringProperties): JSX.Element => {
-  const { value, setter } = values;
-  return (
-    <FormField
-      name="name"
-      value={value}
-      onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(event.target.value)}
-      label="Радио"
-      icon="tag"
-    />
-  );
-};
+export const SirenRadioInput = (properties: StringInputProperties): JSX.Element => (
+  <FormField
+    name="siren_radio"
+    value={properties.value}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    label="Радио"
+    icon="tag"
+  />
+);
 
-export const SirenDeskInput = (values: FieldStringProperties): JSX.Element => {
-  const { value, setter } = values;
-  return (
-    <FormField
-      name="name"
-      value={value}
-      onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(event.target.value)}
-      label="Пульт управления"
-      icon="tag"
-    />
-  );
-};
+export const SirenDeskInput = (properties: StringInputProperties): JSX.Element => (
+  <FormField
+    name="siren_desk"
+    value={properties.value}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    label="Пульт управления"
+    icon="tag"
+  />
+);
 
-export const SirenLatitudeInput = (values: FieldStringProperties): JSX.Element => {
-  const { value, setter } = values;
-  return (
-    <FormField
-      name="latitude"
-      value={value}
-      onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(event.target.value)}
-      label="Широта"
-      icon="tag"
-    />
-  );
-};
+export const SirenLatitudeInput = (properties: StringInputProperties): JSX.Element => (
+  <FormField
+    name="siren_latitude"
+    value={properties.value}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    label="Широта"
+    icon="tag"
+  />
+);
 
-export const SirenLongtitudeInput = (values: FieldStringProperties): JSX.Element => {
-  const { value, setter } = values;
-  return (
-    <FormField
-      name="longtitude"
-      value={value}
-      onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(event.target.value)}
-      label="Долгота"
-      icon="tag"
-    />
-  );
-};
+export const SirenLongtitudeInput = (properties: StringInputProperties): JSX.Element => (
+  <FormField
+    name="siren_longtitude"
+    value={properties.value}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    label="Долгота"
+    icon="tag"
+  />
+);
 
-export const SirenStageInput = (values: FieldNumberProperties): JSX.Element => {
-  const { value, setter } = values;
-  return (
-    <FormField
-      name="stage"
-      value={value.toString()}
-      onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(Number(event.target.value))}
-      label="Этап"
-      icon="tag"
-    />
-  );
-};
+export const SirenStageInput = (properties: NumberInputProperties): JSX.Element => (
+  <FormField
+    name="siren_stage"
+    value={properties.value.toString()}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void =>
+      properties.setter(Number(event.target.value))
+    }
+    label="Этап"
+    icon="tag"
+  />
+);
 
-export const SirenOwnInput = (values: FieldStringProperties): JSX.Element => {
-  const { value, setter } = values;
-  return (
-    <FormField
-      name="own"
-      value={value}
-      onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(event.target.value)}
-      label="Собственность"
-      icon="tag"
-    />
-  );
-};
+export const SirenOwnInput = (properties: StringInputProperties): JSX.Element => (
+  <FormField
+    name="siren_own"
+    value={properties.value}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    label="Собственность"
+    icon="tag"
+  />
+);

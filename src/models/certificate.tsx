@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import { DatePicker, DatePickerValues } from '../components/datepicker';
 import { FormField } from '../components/formfield';
-import { FieldStringProperties } from '../components/input';
+import { StringInputProperties } from '../components/input';
 
 export type CertificateJsonScheme = {
   name: string;
@@ -39,20 +39,21 @@ export type CertificateList = {
   note?: string;
 };
 
-export const CertificateNumberInput = (values: FieldStringProperties): JSX.Element => {
-  const { value, setter } = values;
-  return (
-    <FormField
-      name="num"
-      value={value}
-      onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(event.target.value)}
-      label="Серийный номер удостоверения"
-      icon="tag"
-    />
-  );
-};
+export const CertificateNumberInput = (properties: StringInputProperties): JSX.Element => (
+  <FormField
+    name="num"
+    value={properties.value}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    label="Серийный номер удостоверения"
+    icon="tag"
+  />
+);
 
-export const CertificateDateInput = (values: DatePickerValues): JSX.Element => {
-  const { value, setter } = values;
-  return <DatePicker name="cert-date" label="Дата выдачи" value={value} setter={setter} />;
-};
+export const CertificateDateInput = (properties: DatePickerValues): JSX.Element => (
+  <DatePicker
+    name="cert-date"
+    label="Дата выдачи"
+    value={properties.value}
+    setter={properties.setter}
+  />
+);

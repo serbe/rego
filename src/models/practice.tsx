@@ -36,15 +36,14 @@ export type PracticeShort = {
   date_of_practice: string;
 };
 
-export const PracticeListForm = (values: PracticeValues): JSX.Element => {
-  const { practices } = values;
+export const PracticeListForm = (properties: PracticeValues): JSX.Element => {
   const history = useHistory();
-  return (
+  return properties.practices.length > 0 ? (
     <div className="field" key="practices">
       <label className="label" htmlFor="practice-1">
         Тренировки
       </label>
-      {practices.map((practice, index) => (
+      {properties.practices.map((practice, index) => (
         <Input
           name={`practice-${index}`}
           key={`practice-${index}`}
@@ -58,5 +57,7 @@ export const PracticeListForm = (values: PracticeValues): JSX.Element => {
         />
       ))}
     </div>
+  ) : (
+    <></>
   );
 };
