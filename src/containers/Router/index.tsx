@@ -4,7 +4,11 @@ import { CertificateItem, Certificates } from '../Certificate';
 import { Companies, CompanyItem } from '../Company';
 import { ContactItem, Contacts } from '../Contact';
 import { DepartmentItem, Departments } from '../Department';
+import { EducationItem, Educations } from '../Education';
+import { KindItem, Kinds } from '../Kind';
 import { Home } from '../Home';
+import { PostItem, Posts } from '../Post';
+import { PracticeItem, Practices } from '../Practice';
 import { RankItem, Ranks } from '../Rank';
 import { ScopeItem, Scopes } from '../Scope';
 import { SirenItem, Sirens } from '../Siren';
@@ -22,6 +26,14 @@ export const Router = (): JSX.Element => (
       <Route exact path="/contacts/:id" component={ContactItem} />
       <Route exact path="/departments" component={Departments} />
       <Route exact path="/departments/:id" component={DepartmentItem} />
+      <Route exact path="/educations" component={Educations} />
+      <Route exact path="/educations/:id" component={EducationItem} />
+      <Route exact path="/kinds" component={Kinds} />
+      <Route exact path="/kinds/:id" component={KindItem} />
+      <Route exact path="/posts" component={Posts} />
+      <Route exact path="/posts/:id" component={PostItem} />
+      <Route exact path="/practices" component={Practices} />
+      <Route exact path="/practices/:id" component={PracticeItem} />
       <Route exact path="/ranks" component={Ranks} />
       <Route exact path="/ranks/:id" component={RankItem} />
       <Route exact path="/scopes" component={Scopes} />
