@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button } from './button';
 
+interface Setter {
+  setter: (value: boolean) => void;
+}
+
 const mainItems = [
   { link: '/contacts', name: 'Контакты' },
   { link: '/companies', name: 'Организации' },
@@ -43,7 +47,7 @@ const MainItems: JSX.Element = (
   </>
 );
 
-const NavbarDropdown: JSX.Element = (
+const NavbarDropdown = (value: Setter): JSX.Element => (
   <div className="navbar-dropdown" key="navbar-dropdown">
     {dropdownItems.map((item, index) => (
       <NavLink
@@ -51,19 +55,11 @@ const NavbarDropdown: JSX.Element = (
         className="navbar-item"
         to={item.link}
         key={`navbar-dropdown-${index}`}
+        onClick={() => value.setter(false)}
       >
         {item.name}
       </NavLink>
     ))}
-  </div>
-);
-
-const DropdownItems: JSX.Element = (
-  <div className="navbar-item has-dropdown is-hoverable" key="dropdown-items">
-    <a href="#directory" className="navbar-link">
-      Справочники
-    </a>
-    {NavbarDropdown}
   </div>
 );
 
@@ -79,13 +75,6 @@ const NavbarEnd: JSX.Element = (
         </div>
       </div>
     </div>
-  </div>
-);
-
-const NavbarStart: JSX.Element = (
-  <div className="navbar-start" key="navbar-start">
-    {MainItems}
-    {DropdownItems}
   </div>
 );
 
@@ -123,7 +112,15 @@ export const NavBar = (): JSX.Element => {
               </a>
             </div>
             <div id="navbarData" className={open ? 'navbar-menu is-active' : 'navbar-menu'}>
-              {NavbarStart}
+              <div className="navbar-start" key="navbar-start">
+                {MainItems}
+                <div className="navbar-item has-dropdown is-hoverable" key="dropdown-items">
+                  <a href="#directory" className="navbar-link">
+                    Справочники
+                  </a>
+                  <NavbarDropdown setter={setOpen} />
+                </div>
+              </div>
               {NavbarEnd}
             </div>
           </>
