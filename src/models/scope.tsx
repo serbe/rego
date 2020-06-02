@@ -1,5 +1,23 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
+import { FormField } from '../components/formfield';
+import { StringInputProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
+
+export type ScopeJsonScheme = {
+  name: string;
+  object: {
+    Scope?: Scope;
+  };
+  error?: string;
+};
+
+export type ScopeListJsonScheme = {
+  name: string;
+  object: {
+    ScopeList?: ScopeList[];
+  };
+  error?: string;
+};
 
 export type Scope = {
   id: number;
@@ -13,16 +31,23 @@ export type ScopeList = {
   note?: string;
 };
 
-export const ScopeIDSelect = (values: SelectValues): JSX.Element => {
-  const { id, setter } = values;
-  return (
-    <Select
-      name="scope"
-      label="Сфера деятельности"
-      listName="ScopeSelect"
-      id={id}
-      icon="tag"
-      setter={setter}
-    />
-  );
-};
+export const ScopeIDSelect = (properties: SelectValues): JSX.Element => (
+  <Select
+    name="scope"
+    label="Сфера деятельности"
+    listName="ScopeSelect"
+    id={properties.id}
+    icon="tag"
+    setter={properties.setter}
+  />
+);
+
+export const ScopeNameInput = (properties: StringInputProperties): JSX.Element => (
+  <FormField
+    name="name"
+    value={properties.value}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    label="Сфера деятельности"
+    icon="tag"
+  />
+);
