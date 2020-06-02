@@ -67,17 +67,7 @@ export const SirenItem = (): JSX.Element => {
         });
       };
     }
-  }, [
-    id,
-    setAddress,
-    setDesk,
-    setLatitude,
-    setLongitude,
-    setNote,
-    setNumberPassport,
-    setOwn,
-    setRadio,
-  ]);
+  }, [id]);
 
   return (
     <div>

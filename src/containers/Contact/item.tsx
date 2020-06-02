@@ -62,7 +62,7 @@ export const ContactItem = (): JSX.Element => {
         });
       };
     }
-  }, [id, setBirthday, setName, setNote]);
+  }, [id]);
 
   return (
     <div>

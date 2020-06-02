@@ -45,7 +45,7 @@ export const CertificateItem = (): JSX.Element => {
         });
       };
     }
-  }, [id, setCertDate, setNote, setSNumber]);
+  }, [id]);
 
   return (
     <div>

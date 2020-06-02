@@ -58,7 +58,7 @@ export const CompanyItem = (): JSX.Element => {
         });
       };
     }
-  }, [id, setAddress, setName, setNote]);
+  }, [id]);
 
   return (
     <div>
