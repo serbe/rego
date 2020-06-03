@@ -11,6 +11,11 @@ export type NumberInputProperties = {
   setter: (value: number) => void;
 };
 
+export type BooleanInputProperties = {
+  value: boolean;
+  setter: (value: boolean) => void;
+};
+
 interface InputProps {
   name: string;
   className?: string;

@@ -1,6 +1,24 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Input } from '../components/input';
+import { DatePicker, DatePickerValues } from '../components/datepicker';
+import { FormField } from '../components/formfield';
+import { Input, StringInputProperties } from '../components/input';
+
+export type PracticeJsonScheme = {
+  name: string;
+  object: {
+    Practice?: Practice;
+  };
+  error?: string;
+};
+
+export type PracticeListJsonScheme = {
+  name: string;
+  object: {
+    PracticeList?: PracticeList[];
+  };
+  error?: string;
+};
 
 export interface PracticeValues {
   practices: PracticeList[];
@@ -61,3 +79,22 @@ export const PracticeListForm = (properties: PracticeValues): JSX.Element => {
     <></>
   );
 };
+
+export const PracticeTopicInput = (properties: StringInputProperties): JSX.Element => (
+  <FormField
+    name="practice-topic"
+    value={properties.value}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    label="Тема тренировки"
+    icon="tag"
+  />
+);
+
+export const PracticeDateInput = (properties: DatePickerValues): JSX.Element => (
+  <DatePicker
+    name="practice-date"
+    label="Дата проведения тренировки"
+    value={properties.value}
+    setter={properties.setter}
+  />
+);

@@ -1,6 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import { FormField } from '../components/formfield';
 import { StringInputProperties } from '../components/input';
+import { Select, SelectValues } from '../components/select';
 
 export type KindJsonScheme = {
   name: string;
@@ -49,5 +50,16 @@ export const KindShortNameInput = (properties: StringInputProperties): JSX.Eleme
     onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
     label="Сокращенное наименование"
     icon="tag"
+  />
+);
+
+export const KindIDSelect = (properties: SelectValues): JSX.Element => (
+  <Select
+    name="kink-select"
+    label="Тип тренировки"
+    listName="KindSelect"
+    id={properties.id}
+    icon="tag"
+    setter={properties.setter}
   />
 );

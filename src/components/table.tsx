@@ -2,10 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { CertificateList } from '../models/certificate';
 import { CompanyList } from '../models/company';
 import { ContactList } from '../models/contact';
-import { SirenList } from '../models/siren';
-import { SirenTypeList } from '../models/sirentype';
-import { Input, StringInputProperties } from './input';
-import { Pagination } from './pagination';
 import { DepartmentList } from '../models/department';
 import { EducationList } from '../models/education';
 import { KindList } from '../models/kind';
@@ -13,6 +9,10 @@ import { PostList } from '../models/post';
 import { PracticeList } from '../models/practice';
 import { RankList } from '../models/rank';
 import { ScopeList } from '../models/scope';
+import { SirenList } from '../models/siren';
+import { SirenTypeList } from '../models/sirentype';
+import { Input, StringInputProperties } from './input';
+import { Pagination } from './pagination';
 
 export type SData = {
   id: number;
