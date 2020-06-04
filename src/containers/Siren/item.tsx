@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 import { CompanyIDSelect } from '../../models/company';
 import { AddressInput, ContactIDSelect, NoteInput, ParameterTypes } from '../../models/impersonal';
 import {
@@ -14,9 +15,9 @@ import {
   SirenStageInput,
 } from '../../models/siren';
 import { SirenTypeIDSelect } from '../../models/sirentype';
-import { rws } from '../../netapi';
 
 export const SirenItem = (): JSX.Element => {
+  const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState('');
@@ -36,6 +37,8 @@ export const SirenItem = (): JSX.Element => {
 
   useEffect(() => {
     if (id !== '0') {
+      const rws = new ReconnectingWebSocket('ws://127.0.0.1:9090');
+
       rws.addEventListener('message', (message: MessageEvent) => {
         const data = JSON.parse(message.data) as SirenJsonScheme;
         if (data?.name === 'Siren' && data.object.Siren) {
@@ -59,12 +62,17 @@ export const SirenItem = (): JSX.Element => {
           setError(data.error);
         }
       });
-      rws.send(`{"Get":{"Item":{"id": ${id}, "name": "Siren"}}}`);
 
-      return function cleanup(): void {
-        rws.removeEventListener('message', (message: unknown) => {
-          console.log('removeEventListener', message);
-        });
+      rws.addEventListener('open', () => {
+        rws.send(`{"Get":{"Item":{"id": ${id}, "name": "Siren"}}}`);
+      });
+
+      rws.onclose = () => {
+        rws.close();
+      };
+
+      return (): void => {
+        rws.close();
       };
     }
   }, [id]);
@@ -87,7 +95,16 @@ export const SirenItem = (): JSX.Element => {
           <SirenOwnInput value={own} setter={setOwn} />
           <NoteInput value={note} setter={setNote} />
 
-          <button className="button">Сохранить</button>
+          <div className="field is-grouped">
+            <div className="control">
+              <button className="button">Сохранить</button>
+            </div>
+            <div className="control">
+              <button className="button" onClick={() => history.go(-1)}>
+                Закрыть
+              </button>
+            </div>
+          </div>
         </>
       )}
     </div>

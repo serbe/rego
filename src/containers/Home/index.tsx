@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 import { EducationShort } from '../../models/education';
 import { PracticeShort } from '../../models/practice';
-import { rws } from '../../netapi';
 import './index.css';
 
 type HomeWS = {
@@ -41,8 +41,10 @@ export const Home = (): JSX.Element => {
   const history = useHistory();
 
   useEffect(() => {
-    rws.addEventListener('message', (message: MessageEvent) => {
-      const data = JSON.parse(message.data) as HomeWS;
+    const rws = new ReconnectingWebSocket('ws://127.0.0.1:9090');
+
+    rws.addEventListener('message', (event: MessageEvent) => {
+      const data = JSON.parse(event.data) as HomeWS;
       if (data.name && data.name === 'PracticeNear' && data.object.PracticeShort) {
         setPractices(data.object.PracticeShort);
       }
@@ -53,13 +55,18 @@ export const Home = (): JSX.Element => {
         setErrors(data.error);
       }
     });
-    rws.send('{"Get":{"List":"EducationNear"}}');
-    rws.send('{"Get":{"List":"PracticeNear"}}');
+
+    rws.addEventListener('open', () => {
+      rws.send('{"Get":{"List":"EducationNear"}}');
+      rws.send('{"Get":{"List":"PracticeNear"}}');
+    });
+
+    rws.onclose = () => {
+      rws.close();
+    };
 
     return (): void => {
-      rws.removeEventListener('message', (message: MessageEvent) => {
-        console.log('removeEventListener', message);
-      });
+      rws.close();
     };
   }, []);
 

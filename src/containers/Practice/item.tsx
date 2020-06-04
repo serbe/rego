@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { NoteInput, ParameterTypes } from '../../models/impersonal';
+import { useHistory, useParams } from 'react-router-dom';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 import { CompanyIDSelect } from '../../models/company';
+import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { KindIDSelect } from '../../models/kind';
-import { PracticeJsonScheme, PracticeTopicInput, PracticeDateInput } from '../../models/practice';
-import { rws } from '../../netapi';
+import { PracticeDateInput, PracticeJsonScheme, PracticeTopicInput } from '../../models/practice';
 
 export const PracticeItem = (): JSX.Element => {
+  const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState('');
@@ -18,6 +19,8 @@ export const PracticeItem = (): JSX.Element => {
 
   useEffect(() => {
     if (id !== '0') {
+      const rws = new ReconnectingWebSocket('ws://127.0.0.1:9090');
+
       rws.addEventListener('message', (message: MessageEvent) => {
         const data = JSON.parse(message.data) as PracticeJsonScheme;
         if (data?.name === 'Practice' && data.object.Practice) {
@@ -33,12 +36,17 @@ export const PracticeItem = (): JSX.Element => {
           setError(data.error);
         }
       });
-      rws.send(`{"Get":{"Item":{"id": ${id}, "name": "Practice"}}}`);
 
-      return function cleanup(): void {
-        rws.removeEventListener('message', (message: unknown) => {
-          console.log('removeEventListener', message);
-        });
+      rws.addEventListener('open', () => {
+        rws.send(`{"Get":{"Item":{"id": ${id}, "name": "Practice"}}}`);
+      });
+
+      rws.onclose = () => {
+        rws.close();
+      };
+
+      return (): void => {
+        rws.close();
       };
     }
   }, [id]);
@@ -53,7 +61,16 @@ export const PracticeItem = (): JSX.Element => {
           <PracticeDateInput value={date} setter={setDate} />
           <NoteInput value={note} setter={setNote} />
 
-          <button className="button">Сохранить</button>
+          <div className="field is-grouped">
+            <div className="control">
+              <button className="button">Сохранить</button>
+            </div>
+            <div className="control">
+              <button className="button" onClick={() => history.go(-1)}>
+                Закрыть
+              </button>
+            </div>
+          </div>
         </>
       )}
     </div>

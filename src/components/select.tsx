@@ -49,7 +49,7 @@ export const Select = (properties: SelectProps): JSX.Element => {
     });
     if (listName) rws.send(`{"Get":{"List":"${listName}"}}`);
 
-    return function cleanup(): void {
+    return (): void => {
       rws.removeEventListener('message', (message: unknown) => {
         console.log('removeEventListener', message);
       });

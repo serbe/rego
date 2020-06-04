@@ -68,10 +68,12 @@ export const PostNameInput = (properties: StringInputProperties): JSX.Element =>
 export const PostGOSwitch = (properties: BooleanInputProperties): JSX.Element => (
   <div className="field">
     <div className="control">
-      <label className="checkbox">
+      <label className="checkbox" htmlFor="post-go">
         <input
+          className="checkbox"
           type="checkbox"
-          name="question"
+          name="post-go"
+          id="post-go"
           checked={properties.value}
           onClick={() => properties.setter(!properties.value)}
         />

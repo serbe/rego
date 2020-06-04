@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 import { List, Search } from '../../components/table';
 import { DepartmentList, DepartmentListJsonScheme } from '../../models/department';
-import { rws } from '../../netapi';
 
 export const Departments = (): JSX.Element => {
   const history = useHistory();
@@ -20,6 +20,8 @@ export const Departments = (): JSX.Element => {
   };
 
   useEffect(() => {
+    const rws = new ReconnectingWebSocket('ws://127.0.0.1:9090');
+
     rws.addEventListener('message', (message: MessageEvent) => {
       const data = JSON.parse(message.data) as DepartmentListJsonScheme;
       if (data.name && data.name === 'DepartmentList' && data.object.DepartmentList) {
@@ -29,12 +31,17 @@ export const Departments = (): JSX.Element => {
         setError(data.error);
       }
     });
-    rws.send('{"Get":{"List":"DepartmentList"}}');
+
+    rws.addEventListener('open', () => {
+      rws.send('{"Get":{"List":"DepartmentList"}}');
+    });
+
+    rws.onclose = () => {
+      rws.close();
+    };
 
     return (): void => {
-      rws.removeEventListener('message', (message: MessageEvent) => {
-        console.log('removeEventListener', message);
-      });
+      rws.close();
     };
   }, []);
 

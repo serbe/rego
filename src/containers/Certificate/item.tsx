@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 import {
   CertificateDateInput,
   CertificateJsonScheme,
@@ -8,9 +9,9 @@ import {
 import { CompanyIDSelect } from '../../models/company';
 import { ContactIDSelect } from '../../models/contact';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
-import { rws } from '../../netapi';
 
 export const CertificateItem = (): JSX.Element => {
+  const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState('');
@@ -22,6 +23,8 @@ export const CertificateItem = (): JSX.Element => {
 
   useEffect(() => {
     if (id !== '0') {
+      const rws = new ReconnectingWebSocket('ws://127.0.0.1:9090');
+
       rws.addEventListener('message', (message: MessageEvent) => {
         const data = JSON.parse(message.data) as CertificateJsonScheme;
         if (data?.name === 'Certificate' && data.object.Certificate) {
@@ -37,12 +40,17 @@ export const CertificateItem = (): JSX.Element => {
           setError(data.error);
         }
       });
-      rws.send(`{"Get":{"Item":{"id": ${id}, "name": "Certificate"}}}`);
 
-      return function cleanup(): void {
-        rws.removeEventListener('message', (message: unknown) => {
-          console.log('removeEventListener', message);
-        });
+      rws.addEventListener('open', () => {
+        rws.send(`{"Get":{"Item":{"id": ${id}, "name": "Certificate"}}}`);
+      });
+
+      rws.onclose = () => {
+        rws.close();
+      };
+
+      return (): void => {
+        rws.close();
       };
     }
   }, [id]);
@@ -57,32 +65,16 @@ export const CertificateItem = (): JSX.Element => {
           <CertificateDateInput value={certDate} setter={setCertDate} />
           <NoteInput value={note} setter={setNote} />
 
-          <div className="field is-grouped is-grouped-centered">
+          <div className="field is-grouped">
             <div className="control">
-              {/* <Button
-                color="primary"
-                // @click="submit"
-              >
-                Сохранить
-              </Button> */}
+              <button className="button">Сохранить</button>
             </div>
-            <div className="control">{/* <Button>Закрыть</Button> */}</div>
             <div className="control">
-              {/* <Button
-                color="danger"
-                // onClick={() => {return confirm('Вы действительно хотите удалить эту запись?')}}
-              >
-                Удалить
-              </Button> */}
+              <button className="button" onClick={() => history.go(-1)}>
+                Закрыть
+              </button>
             </div>
           </div>
-
-          {/* <button className="button" onClick={handleSubmit(onSubmit)}>
-            on submit
-          </button>
-          <Button className="button" onClick={handleSubmit(onSubmit)}>
-            on submit
-          </Button> */}
         </>
       )}
     </div>

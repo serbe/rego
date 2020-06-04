@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { KindJsonScheme, KindNameInput, KindShortNameInput } from '../../models/kind';
-import { rws } from '../../netapi';
 
 export const KindItem = (): JSX.Element => {
+  const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState('');
@@ -14,6 +15,8 @@ export const KindItem = (): JSX.Element => {
 
   useEffect(() => {
     if (id !== '0') {
+      const rws = new ReconnectingWebSocket('ws://127.0.0.1:9090');
+
       rws.addEventListener('message', (message: MessageEvent) => {
         const data = JSON.parse(message.data) as KindJsonScheme;
         if (data?.name === 'Kind' && data.object.Kind) {
@@ -27,12 +30,17 @@ export const KindItem = (): JSX.Element => {
           setError(data.error);
         }
       });
-      rws.send(`{"Get":{"Item":{"id": ${id}, "name": "Kind"}}}`);
 
-      return function cleanup(): void {
-        rws.removeEventListener('message', (message: unknown) => {
-          console.log('removeEventListener', message);
-        });
+      rws.addEventListener('open', () => {
+        rws.send(`{"Get":{"Item":{"id": ${id}, "name": "Kind"}}}`);
+      });
+
+      rws.onclose = () => {
+        rws.close();
+      };
+
+      return (): void => {
+        rws.close();
       };
     }
   }, [id]);
@@ -45,7 +53,16 @@ export const KindItem = (): JSX.Element => {
           <KindShortNameInput value={shortName} setter={setShortName} />
           <NoteInput value={note} setter={setNote} />
 
-          <button className="button">Сохранить</button>
+          <div className="field is-grouped">
+            <div className="control">
+              <button className="button">Сохранить</button>
+            </div>
+            <div className="control">
+              <button className="button" onClick={() => history.go(-1)}>
+                Закрыть
+              </button>
+            </div>
+          </div>
         </>
       )}
     </div>

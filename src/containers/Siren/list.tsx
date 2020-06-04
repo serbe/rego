@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 import { List, Search } from '../../components/table';
 import { splitNumbers } from '../../helpers/utils';
 import { SirenList, SirenListJsonScheme } from '../../models/siren';
-import { rws } from '../../netapi';
 
 export const Sirens = (): JSX.Element => {
   const history = useHistory();
@@ -21,6 +21,8 @@ export const Sirens = (): JSX.Element => {
   };
 
   useEffect(() => {
+    const rws = new ReconnectingWebSocket('ws://127.0.0.1:9090');
+
     rws.addEventListener('message', (message: MessageEvent) => {
       const data = JSON.parse(message.data) as SirenListJsonScheme;
       if (data.name && data.name === 'SirenList' && data.object.SirenList) {
@@ -30,12 +32,17 @@ export const Sirens = (): JSX.Element => {
         setError(data.error);
       }
     });
-    rws.send('{"Get":{"List":"SirenList"}}');
+
+    rws.addEventListener('open', () => {
+      rws.send('{"Get":{"List":"SirenList"}}');
+    });
+
+    rws.onclose = () => {
+      rws.close();
+    };
 
     return (): void => {
-      rws.removeEventListener('message', (message: MessageEvent) => {
-        console.log('removeEventListener', message);
-      });
+      rws.close();
     };
   }, []);
 
