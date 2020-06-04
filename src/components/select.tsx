@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 import { SelectItem } from '../models/selectitem';
-import { rws } from '../netapi';
 import { Icon } from './icon';
 import './select.css';
 
@@ -15,7 +15,7 @@ interface SelectProps {
   icon?: string;
   color?: 'primary' | 'info' | 'success' | 'warning' | 'danger';
   label?: string;
-  listName?: string;
+  listName: string;
   setter: (event: number) => void;
 }
 
@@ -37,6 +37,8 @@ export const Select = (properties: SelectProps): JSX.Element => {
   const [value, setValue] = useState<string>();
 
   useEffect(() => {
+    const rws = new ReconnectingWebSocket('ws://127.0.0.1:9090');
+
     rws.addEventListener('message', (message: MessageEvent) => {
       const data = JSON.parse(message.data) as CLWS;
       if (data?.name === listName && data.object.SelectItem && data.object.SelectItem.length > 0) {
@@ -47,12 +49,17 @@ export const Select = (properties: SelectProps): JSX.Element => {
         setError(data.error);
       }
     });
-    if (listName) rws.send(`{"Get":{"List":"${listName}"}}`);
+
+    rws.addEventListener('open', () => {
+      rws.send(`{"Get":{"List":"${listName}"}}`);
+    });
+
+    rws.onclose = () => {
+      rws.close();
+    };
 
     return (): void => {
-      rws.removeEventListener('message', (message: unknown) => {
-        console.log('removeEventListener', message);
-      });
+      rws.close();
     };
   }, [listName]);
 
