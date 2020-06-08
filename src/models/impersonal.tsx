@@ -37,7 +37,7 @@ export const EmailInputs = (properties: EmailValues): JSX.Element => (
           values = addEmptyString(values);
           properties.setter(values);
         }}
-        classNameDiv="pb5"
+        classNameDiv="pb-1"
       />
     ))}
   </div>
@@ -62,7 +62,7 @@ export const PhoneInputs = (properties: PhoneValues): JSX.Element => (
           values = addEmptyString(values);
           properties.setter(values);
         }}
-        classNameDiv="pb5"
+        classNameDiv="pb-1"
       />
     ))}
   </div>
@@ -87,7 +87,7 @@ export const FaxInputs = (properties: PhoneValues): JSX.Element => (
           values = addEmptyString(values);
           properties.setter(values);
         }}
-        classNameDiv="pb5"
+        classNameDiv="pb-1"
       />
     ))}
   </div>

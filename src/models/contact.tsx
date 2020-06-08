@@ -108,7 +108,7 @@ export const ContactShortForm = (properties: ContactShortValues): JSX.Element =>
           onClick={(): void => history.push(`/contact/${contact.id}`)}
           value={`${contact.name || ''} - ${contact.post_name || ''}`}
           readonly
-          classNameDiv="pb5"
+          classNameDiv="pb-1"
           className="link"
         />
       ))}

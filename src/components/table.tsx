@@ -57,21 +57,22 @@ export const List = (properties: ListProperties): [() => dataType[], JSX.Element
   const itemsOnPage = 20;
 
   useEffect(() => {
-    const sv: SData[] = [];
-    data.map((row, index): void => {
-      let rowString = '';
-      const values = Object.values(row);
-      values.map((value): void => {
-        if (value && typeof value !== 'number') {
-          if (typeof value === 'string') {
-            rowString += value;
-          } else if (Array.isArray(value)) {
-            rowString += value.join('');
+    const sv: SData[] = data.map(
+      (row, index): SData => {
+        const values = Object.values(row);
+        const rowString: string[] = values.map((value) => {
+          if (value && typeof value !== 'number') {
+            if (typeof value === 'string') {
+              return value;
+            } else if (Array.isArray(value)) {
+              return value.join('');
+            }
           }
-        }
-      });
-      sv.push({ id: index, data: rowString.toLowerCase() });
-    });
+          return '';
+        });
+        return { id: index, data: rowString.join('').toLowerCase() };
+      },
+    );
     setSearchValues(sv);
     setFilteredData(data);
     setFilteredLength(data.length);
@@ -116,7 +117,7 @@ export const List = (properties: ListProperties): [() => dataType[], JSX.Element
 };
 
 export const Search = (properties: StringInputProperties): JSX.Element => (
-  <div className="control mb1 mwt" key="TableSearch">
+  <div className="control mb-4" key="TableSearch">
     <Input
       name="search"
       className="input is-expanded"

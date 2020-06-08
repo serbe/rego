@@ -102,37 +102,35 @@ export const NavBar = (): JSX.Element => {
   };
 
   return (
-    <nav aria-label="main navigation" className="navbar is-dark" role="navigation">
-      <div className="container">
-        {auth ? (
-          <>
-            <div className="navbar-brand">
-              <NavLink activeClassName="is-active" className="navbar-item" exact={true} to="/">
-                ЕДДС
-              </NavLink>
-              <a
-                aria-expanded="false"
-                aria-label="menu"
-                className={open ? 'navbar-burger is-active' : 'navbar-burger'}
-                data-target="navbarData"
-                role="button"
-                href="#button"
-                onClick={handleToggle}
-              >
-                <span aria-hidden="true" />
-                <span aria-hidden="true" />
-                <span aria-hidden="true" />
-              </a>
-            </div>
-            <div id="navbarData" className={open ? 'navbar-menu is-active' : 'navbar-menu'}>
-              <NavBarStart setter={setOpen} />
-              {NavbarEnd}
-            </div>
-          </>
-        ) : (
-          NavbarNotLogged
-        )}
-      </div>
+    <nav className="navbar is-dark" role="navigation" aria-label="dropdown navigation">
+      {auth ? (
+        <>
+          <div className="navbar-brand">
+            <NavLink activeClassName="is-active" className="navbar-item" exact={true} to="/">
+              ЕДДС
+            </NavLink>
+            <a
+              aria-expanded="false"
+              aria-label="menu"
+              className={open ? 'navbar-burger is-active' : 'navbar-burger'}
+              data-target="navbarData"
+              role="button"
+              href="#button"
+              onClick={handleToggle}
+            >
+              <span aria-hidden="true" />
+              <span aria-hidden="true" />
+              <span aria-hidden="true" />
+            </a>
+          </div>
+          <div id="navbarData" className={open ? 'navbar-menu is-active' : 'navbar-menu'}>
+            <NavBarStart setter={setOpen} />
+            {NavbarEnd}
+          </div>
+        </>
+      ) : (
+        NavbarNotLogged
+      )}
     </nav>
   );
 };

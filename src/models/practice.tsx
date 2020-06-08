@@ -70,7 +70,7 @@ export const PracticeListForm = (properties: PracticeValues): JSX.Element => {
             practice.topic || ''
           }`}
           readonly
-          classNameDiv="pb5"
+          classNameDiv="pb-1"
           className="link"
         />
       ))}
