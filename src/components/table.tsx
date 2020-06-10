@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useReducer } from 'react';
 import { CertificateList } from '../models/certificate';
 import { CompanyList } from '../models/company';
 import { ContactList } from '../models/contact';
@@ -45,16 +45,75 @@ export type ListProperties = {
   search: string;
 };
 
+type State = {
+  filteredData: dataType[];
+  currentPage: number;
+  searchValues: SData[];
+  filteredLength: number;
+};
+
+type Action =
+  | { type: 'littleSearch' }
+  | { type: 'bigSearch' }
+  | { type: 'data'; value: dataType[] }
+  | { type: 'page'; value: number }
+  | { type: 'values'; value: SData[] }
+  | { type: 'length'; value: number };
+
+const initialArguments = {
+  filteredData: [],
+  currentPage: 0,
+  searchValues: [],
+  filteredLength: 0,
+};
+
+const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    // case 'littleSearch':
+    //   const dataLength = state.data.length;
+    //   if (filteredLength !== dataLength) {
+    //     dispatch({ type: 'data', value: data });
+    //     // setFilteredData(data);
+    //     dispatch({ type: 'length', value: dataLength });
+    //     // setFilteredLength(dataLength);
+    //   }
+    // case 'bigSearch':
+
+    case 'data':
+      return { ...state, filteredData: action.value };
+    case 'page':
+      return { ...state, currentPage: action.value };
+    case 'values':
+      return { ...state, searchValues: action.value };
+    case 'length':
+      return { ...state, filteredLength: action.value };
+    default:
+      return { ...state };
+  }
+};
+
 export const List = (properties: ListProperties): [() => dataType[], JSX.Element] => {
   const { data, search } = properties;
   type td = typeof properties.data;
 
-  const [filteredData, setFilteredData] = useState<td>([]);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [searchValues, setSearchValues] = useState<SData[]>([]);
-  const [filteredLength, setFilteredLength] = useState(0);
+  // const [filteredData, setFilteredData] = useState<td>([]);
+  // const [currentPage, setCurrentPage] = useState(0);
+  // const [searchValues, setSearchValues] = useState<SData[]>([]);
+  // const [filteredLength, setFilteredLength] = useState(0);
+
+  const [{ filteredData, currentPage, searchValues, filteredLength }, dispatch] = useReducer(
+    reducer,
+    initialArguments,
+  );
 
   const itemsOnPage = 20;
+
+  const setCurrentPage = (page: number): void => {
+    dispatch({
+      type: 'page',
+      value: page,
+    });
+  };
 
   useEffect(() => {
     const sv: SData[] = data.map(
@@ -73,18 +132,24 @@ export const List = (properties: ListProperties): [() => dataType[], JSX.Element
         return { id: index, data: rowString.join('').toLowerCase() };
       },
     );
-    setSearchValues(sv);
-    setFilteredData(data);
-    setFilteredLength(data.length);
+    dispatch({ type: 'values', value: sv });
+    // setSearchValues(sv);
+    dispatch({ type: 'data', value: data });
+    // setFilteredData(data);
+    dispatch({ type: 'length', value: data.length });
+    // setFilteredLength(data.length);
   }, [data]);
 
   useEffect(() => {
     if (search.length < 2) {
-      const dataLength = data.length;
-      if (filteredLength !== dataLength) {
-        setFilteredData(data);
-        setFilteredLength(dataLength);
-      }
+      // const dataLength = data.length;
+      // if (filteredLength !== dataLength) {
+      //   dispatch({ type: 'data', value: data });
+      //   // setFilteredData(data);
+      //   dispatch({ type: 'length', value: dataLength });
+      //   // setFilteredLength(dataLength);
+      // }
+      dispatch({ type: 'littleSearch' });
     } else {
       const searchArray = search.toLowerCase().split(' ');
       const temporaryFilteredData = data.filter((_, index) =>
@@ -93,10 +158,13 @@ export const List = (properties: ListProperties): [() => dataType[], JSX.Element
       const temporaryFilteredLength = temporaryFilteredData.length;
       if (temporaryFilteredLength !== filteredLength) {
         if (currentPage > 1 && currentPage + 1 > Math.ceil(temporaryFilteredLength / itemsOnPage)) {
-          setCurrentPage(Math.ceil(temporaryFilteredLength / itemsOnPage) - 1);
+          dispatch({ type: 'page', value: Math.ceil(temporaryFilteredLength / itemsOnPage) - 1 });
+          // setCurrentPage(Math.ceil(temporaryFilteredLength / itemsOnPage) - 1);
         }
-        setFilteredData(temporaryFilteredData);
-        setFilteredLength(temporaryFilteredLength);
+        dispatch({ type: 'data', value: temporaryFilteredData });
+        // setFilteredData(temporaryFilteredData);
+        dispatch({ type: 'length', value: temporaryFilteredLength });
+        // setFilteredLength(temporaryFilteredLength);
       }
     }
   }, [search]);
