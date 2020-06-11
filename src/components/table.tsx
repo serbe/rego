@@ -20,10 +20,10 @@ export type SData = {
 };
 
 export type PaginateProperties = {
-  filteredLength: number;
-  itemsOnPage: number;
+  filteredDataLength: number;
+  itemsPerPage: number;
   currentPage: number;
-  setCurrentPage: (value: number) => void;
+  setter: (value: number) => void;
 };
 
 export type dataType =
@@ -49,67 +49,67 @@ type State = {
   filteredData: dataType[];
   currentPage: number;
   searchValues: SData[];
-  filteredLength: number;
-  itemsOnPage: number;
+  filteredDataLength: number;
+  itemsPerPage: number;
 };
 
 type Action =
-  | { type: 'littleSearch'; value: dataType[]; dataLength: number }
-  | { type: 'bigSearch'; value: dataType[]; search: string }
-  | { type: 'data'; value: dataType[] }
-  | { type: 'page'; value: number }
-  | { type: 'values'; value: SData[] }
-  | { type: 'length'; value: number };
+  | { type: 'searchLessThanTwo'; value: dataType[]; valueLength: number }
+  | { type: 'changeSearch'; value: dataType[]; search: string }
+  | { type: 'setFilteredData'; value: dataType[] }
+  | { type: 'setCurrentPage'; value: number }
+  | { type: 'setSearchValues'; value: SData[] }
+  | { type: 'setFilteredDataLength'; value: number };
 
 const initialArguments = {
   filteredData: [],
   currentPage: 0,
   searchValues: [],
-  filteredLength: 0,
-  itemsOnPage: 20,
+  filteredDataLength: 0,
+  itemsPerPage: 20,
 };
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case 'littleSearch':
-      if (state.filteredLength !== action.dataLength) {
-        return { ...state, filteredLength: action.dataLength, filteredData: action.value };
+    case 'searchLessThanTwo':
+      if (state.filteredDataLength !== action.valueLength) {
+        return { ...state, filteredDataLength: action.valueLength, filteredData: action.value };
       }
       return state;
-    case 'bigSearch': {
+    case 'changeSearch': {
       const searchArray = action.search.toLowerCase().split(' ');
       const temporaryFilteredData = action.value.filter((_, index) =>
         searchArray.every((value: string) => state.searchValues[index].data.includes(value)),
       );
       const temporaryFilteredLength = temporaryFilteredData.length;
-      if (temporaryFilteredLength !== state.filteredLength) {
+      if (temporaryFilteredLength !== state.filteredDataLength) {
         if (
           state.currentPage > 1 &&
-          state.currentPage + 1 > Math.ceil(temporaryFilteredLength / state.itemsOnPage)
+          state.currentPage + 1 > Math.ceil(temporaryFilteredLength / state.itemsPerPage)
         ) {
           return {
             ...state,
-            currentPage: Math.ceil(temporaryFilteredLength / state.itemsOnPage) - 1,
+            currentPage: Math.ceil(temporaryFilteredLength / state.itemsPerPage) - 1,
             filteredData: temporaryFilteredData,
-            filteredLength: temporaryFilteredLength,
+            filteredDataLength: temporaryFilteredLength,
           };
         }
         return {
           ...state,
           filteredData: temporaryFilteredData,
-          filteredLength: temporaryFilteredLength,
+          filteredDataLength: temporaryFilteredLength,
         };
       }
       return state;
     }
-    case 'data':
+    case 'setFilteredData':
       return { ...state, filteredData: action.value };
-    case 'page':
+    case 'setCurrentPage':
       return { ...state, currentPage: action.value };
-    case 'values':
+    case 'setSearchValues':
       return { ...state, searchValues: action.value };
-    case 'length':
-      return { ...state, filteredLength: action.value };
+    case 'setFilteredDataLength':
+      return { ...state, filteredDataLength: action.value };
     default:
       return state;
   }
@@ -119,14 +119,14 @@ export const List = (properties: ListProperties): [() => dataType[], JSX.Element
   const { data, search } = properties;
   type td = typeof properties.data;
 
-  const [{ filteredData, currentPage, filteredLength, itemsOnPage }, dispatch] = useReducer(
+  const [{ filteredData, currentPage, filteredDataLength, itemsPerPage }, dispatch] = useReducer(
     reducer,
     initialArguments,
   );
 
   const setCurrentPage = (page: number): void => {
     dispatch({
-      type: 'page',
+      type: 'setCurrentPage',
       value: page,
     });
   };
@@ -148,30 +148,30 @@ export const List = (properties: ListProperties): [() => dataType[], JSX.Element
         return { id: index, data: rowString.join('').toLowerCase() };
       },
     );
-    dispatch({ type: 'values', value: sv });
-    dispatch({ type: 'data', value: data });
-    dispatch({ type: 'length', value: data.length });
+    dispatch({ type: 'setSearchValues', value: sv });
+    dispatch({ type: 'setFilteredData', value: data });
+    dispatch({ type: 'setFilteredDataLength', value: data.length });
   }, [data]);
 
   useEffect(() => {
     if (search.length < 2) {
-      dispatch({ type: 'littleSearch', value: data, dataLength: data.length });
+      dispatch({ type: 'searchLessThanTwo', value: data, valueLength: data.length });
     } else {
-      dispatch({ type: 'bigSearch', value: data, search: search });
+      dispatch({ type: 'changeSearch', value: data, search: search });
     }
   }, [search, data]);
 
   const paginationData = (): td => {
-    return filteredData.slice(currentPage * itemsOnPage, (currentPage + 1) * itemsOnPage);
+    return filteredData.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
   };
 
   return [
     paginationData,
     Paginate({
-      filteredLength: filteredLength,
-      itemsOnPage: itemsOnPage,
+      filteredDataLength: filteredDataLength,
+      itemsPerPage: itemsPerPage,
       currentPage: currentPage,
-      setCurrentPage: setCurrentPage,
+      setter: setCurrentPage,
     }),
   ];
 };
@@ -191,14 +191,14 @@ export const Search = (properties: StringInputProperties): JSX.Element => (
 );
 
 export const Paginate = (properties: PaginateProperties): JSX.Element => {
-  const { filteredLength, itemsOnPage, currentPage, setCurrentPage } = properties;
+  const { filteredDataLength, itemsPerPage, currentPage, setter } = properties;
   const receiveChildValue = (value: number): void => {
-    setCurrentPage(value - 1);
+    setter(value - 1);
   };
-  return filteredLength / itemsOnPage > 2 ? (
+  return filteredDataLength / itemsPerPage > 2 ? (
     <Pagination
       currentPage={currentPage + 1}
-      lastPage={Math.ceil(filteredLength / itemsOnPage)}
+      lastPage={Math.ceil(filteredDataLength / itemsPerPage)}
       setter={receiveChildValue}
     />
   ) : (

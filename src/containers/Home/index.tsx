@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import ReconnectingWebSocket from 'reconnecting-websocket';
 import { EducationShort } from '../../models/education';
 import { PracticeShort } from '../../models/practice';
+import { rwsContext } from '../../helpers/utils';
 import './index.css';
+
+// import ReconnectingWebSocket from 'reconnecting-websocket';
 
 type HomeWS = {
   name: string;
@@ -39,10 +41,9 @@ export const Home = (): JSX.Element => {
   const [educations, setEducations] = useState<EducationShort[]>([]);
   const [practices, setPractices] = useState<PracticeShort[]>([]);
   const history = useHistory();
+  const rws = useContext(rwsContext);
 
   useEffect(() => {
-    const rws = new ReconnectingWebSocket('ws://127.0.0.1:9090');
-
     rws.addEventListener('message', (event: MessageEvent) => {
       const data = JSON.parse(event.data) as HomeWS;
       if (data.name && data.name === 'PracticeNear' && data.object.PracticeShort) {
@@ -60,15 +61,7 @@ export const Home = (): JSX.Element => {
       rws.send('{"Get":{"List":"EducationNear"}}');
       rws.send('{"Get":{"List":"PracticeNear"}}');
     });
-
-    rws.onclose = () => {
-      rws.close();
-    };
-
-    return (): void => {
-      rws.close();
-    };
-  }, []);
+  }, [rws]);
 
   const EducationTable = (): JSX.Element => (
     <table className="table is-narrow">

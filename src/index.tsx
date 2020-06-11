@@ -1,11 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-
+import './index.scss';
 import Rugo from './rugo';
 import * as serviceWorker from './serviceWorker';
 
-import './index.scss';
 // import './index.css';
 
 ReactDOM.render(
