@@ -4,10 +4,10 @@ import { Certificate, CertificateList } from '../models/certificate';
 import { Company, CompanyList } from '../models/company';
 import { Contact, ContactList } from '../models/contact';
 import { Department, DepartmentList } from '../models/department';
-import { Education, EducationList } from '../models/education';
+import { Education, EducationList, EducationShort } from '../models/education';
 import { Kind, KindList } from '../models/kind';
 import { Post, PostList } from '../models/post';
-import { Practice, PracticeList, PracticeNear } from '../models/practice';
+import { Practice, PracticeList, PracticeShort } from '../models/practice';
 import { Rank, RankList } from '../models/rank';
 import { Scope, ScopeList } from '../models/scope';
 import { Siren, SirenList } from '../models/siren';
@@ -24,13 +24,14 @@ type State = {
   DepartmentList?: DepartmentList[];
   Education?: Education;
   EducationList?: EducationList[];
+  EducationShort?: EducationShort[];
   Kind?: Kind;
   KindList?: KindList[];
   Post?: Post;
   PostList?: PostList[];
   Practice?: Practice;
   PracticeList?: PracticeList[];
-  PracticeNear?: PracticeNear[];
+  PracticeShort?: PracticeShort[];
   Rank?: Rank;
   RankList?: RankList[];
   Scope?: Scope;
@@ -53,13 +54,14 @@ type SocketValues = {
   DepartmentList?: DepartmentList[];
   Education?: Education;
   EducationList?: EducationList[];
+  EducationShort?: EducationShort[];
   Kind?: Kind;
   KindList?: KindList[];
   Post?: Post;
   PostList?: PostList[];
   Practice?: Practice;
   PracticeList?: PracticeList[];
-  PracticeNear?: PracticeNear[];
+  PracticeShort?: PracticeShort[];
   Rank?: Rank;
   RankList?: RankList[];
   Scope?: Scope;
@@ -69,7 +71,8 @@ type SocketValues = {
   SirenType?: SirenType[];
   SirenTypeList?: SirenTypeList;
   Error?: string;
-  Dispatch: Dispatch<JsonScheme>;
+  dispatch: Dispatch<JsonScheme>;
+  rws: ReconnectingWebSocket;
 };
 
 type JsonScheme =
@@ -83,13 +86,14 @@ type JsonScheme =
   | { name: 'DepartmentList'; object: { DepartmentList?: DepartmentList[] }; error?: string }
   | { name: 'Education'; object: { Education?: Education }; error?: string }
   | { name: 'EducationList'; object: { EducationList?: EducationList[] }; error?: string }
+  | { name: 'EducationNear'; object: { EducationShort?: EducationShort[] }; error?: string }
   | { name: 'Kind'; object: { Kind?: Kind }; error?: string }
   | { name: 'KindList'; object: { KindList?: KindList[] }; error?: string }
   | { name: 'Post'; object: { Post?: Post }; error?: string }
   | { name: 'PostList'; object: { PostList?: PostList[] }; error?: string }
   | { name: 'Practice'; object: { Practice?: Practice }; error?: string }
   | { name: 'PracticeList'; object: { PracticeList?: PracticeList[] }; error?: string }
-  | { name: 'PracticeNear'; object: { PracticeNear?: PracticeNear[] }; error?: string }
+  | { name: 'PracticeNear'; object: { PracticeShort?: PracticeShort[] }; error?: string }
   | { name: 'Rank'; object: { Rank?: Rank }; error?: string }
   | { name: 'RankList'; object: { RankList?: RankList[] }; error?: string }
   | { name: 'Scope'; object: { Scope?: Scope }; error?: string }
@@ -127,6 +131,8 @@ const reducer = (state: State, action: JsonScheme): State => {
       return { ...state, Education: action.object.Education, Error: action.error };
     case 'EducationList':
       return { ...state, EducationList: action.object.EducationList, Error: action.error };
+    case 'EducationNear':
+      return { ...state, EducationShort: action.object.EducationShort, Error: action.error };
     case 'Kind':
       return { ...state, Kind: action.object.Kind, Error: action.error };
     case 'KindList':
@@ -135,28 +141,30 @@ const reducer = (state: State, action: JsonScheme): State => {
       return { ...state, Post: action.object.Post, Error: action.error };
     case 'PostList':
       return { ...state, PostList: action.object.PostList, Error: action.error };
-    case 'Post':
-      return { ...state, Post: action.object.Post, Error: action.error };
-    case 'PostList':
-      return { ...state, PostList: action.object.PostList, Error: action.error };
-    case 'PostList':
-      return { ...state, PostList: action.object.PostList, Error: action.error };
+    case 'Practice':
+      return { ...state, Practice: action.object.Practice, Error: action.error };
+    case 'PracticeList':
+      return { ...state, PracticeList: action.object.PracticeList, Error: action.error };
+    case 'PracticeNear': {
+      console.log('reducer PracticeNear', action.object.PracticeShort?.length);
+      return { ...state, PracticeShort: action.object.PracticeShort, Error: action.error };
+    }
     case 'Rank':
       return { ...state, Rank: action.object.Rank, Error: action.error };
     case 'RankList':
       return { ...state, RankList: action.object.RankList, Error: action.error };
-    case 'SirenType':
-      return { ...state, SirenType: action.object.SirenType, Error: action.error };
-    case 'SirenTypeList':
-      return { ...state, SirenTypeList: action.object.SirenTypeList, Error: action.error };
-    case 'Siren':
-      return { ...state, Siren: action.object.Siren, Error: action.error };
-    case 'SirenList':
-      return { ...state, SirenList: action.object.SirenList, Error: action.error };
     case 'Scope':
       return { ...state, Scope: action.object.Scope, Error: action.error };
     case 'ScopeList':
       return { ...state, ScopeList: action.object.ScopeList, Error: action.error };
+    case 'Siren':
+      return { ...state, Siren: action.object.Siren, Error: action.error };
+    case 'SirenList':
+      return { ...state, SirenList: action.object.SirenList, Error: action.error };
+    case 'SirenType':
+      return { ...state, SirenType: action.object.SirenType, Error: action.error };
+    case 'SirenTypeList':
+      return { ...state, SirenTypeList: action.object.SirenTypeList, Error: action.error };
     default:
       return state;
   }
@@ -175,6 +183,7 @@ export const Socket = (): SocketValues => {
       DepartmentList,
       Education,
       EducationList,
+      EducationShort,
       Kind,
       KindList,
       Post,
@@ -217,6 +226,7 @@ export const Socket = (): SocketValues => {
     DepartmentList,
     Education,
     EducationList,
+    EducationShort,
     Kind,
     KindList,
     Post,
@@ -232,6 +242,7 @@ export const Socket = (): SocketValues => {
     SirenType,
     SirenTypeList,
     Error,
-    Dispatch: dispatch,
+    dispatch,
+    rws,
   };
 };
