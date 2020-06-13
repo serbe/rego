@@ -1,4 +1,4 @@
-import { Dispatch, useReducer } from 'react';
+import React, { createContext, Dispatch, ReactNode, useReducer, useMemo } from 'react';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { Certificate, CertificateList } from '../models/certificate';
 import { Company, CompanyList } from '../models/company';
@@ -13,7 +13,17 @@ import { Scope, ScopeList } from '../models/scope';
 import { Siren, SirenList } from '../models/siren';
 import { SirenType, SirenTypeList } from '../models/sirentype';
 
-type State = {
+const URL = 'ws://127.0.0.1:9090';
+
+const initContext: SocketValues = {
+  state: {},
+  dispatch: () => null,
+  rws: new ReconnectingWebSocket(URL),
+};
+
+export const SocketContext = createContext<SocketValues>(initContext);
+
+export type State = {
   Certificate?: Certificate;
   CertificateList?: CertificateList[];
   Company?: Company;
@@ -43,36 +53,14 @@ type State = {
   Error?: string;
 };
 
-type SocketValues = {
-  Certificate?: Certificate;
-  CertificateList?: CertificateList[];
-  Company?: Company;
-  CompanyList?: CompanyList[];
-  Contact?: Contact;
-  ContactList?: ContactList[];
-  Department?: Department;
-  DepartmentList?: DepartmentList[];
-  Education?: Education;
-  EducationList?: EducationList[];
-  EducationShort?: EducationShort[];
-  Kind?: Kind;
-  KindList?: KindList[];
-  Post?: Post;
-  PostList?: PostList[];
-  Practice?: Practice;
-  PracticeList?: PracticeList[];
-  PracticeShort?: PracticeShort[];
-  Rank?: Rank;
-  RankList?: RankList[];
-  Scope?: Scope;
-  ScopeList?: ScopeList[];
-  Siren?: Siren;
-  SirenList?: SirenList[];
-  SirenType?: SirenType[];
-  SirenTypeList?: SirenTypeList;
-  Error?: string;
+export type SocketValues = {
+  state: State;
   dispatch: Dispatch<JsonScheme>;
   rws: ReconnectingWebSocket;
+};
+
+type SocketProperties = {
+  children: ReactNode;
 };
 
 type JsonScheme =
@@ -103,11 +91,7 @@ type JsonScheme =
   | { name: 'SirenType'; object: { SirenType?: SirenType[] }; error?: string }
   | { name: 'SirenTypeList'; object: { SirenTypeList?: SirenTypeList }; error?: string };
 
-const URL = 'ws://127.0.0.1:9090';
-
 const initialArguments: State = {};
-
-// export const rwsContext = createContext(rws);
 
 const reducer = (state: State, action: JsonScheme): State => {
   switch (action.name) {
@@ -170,38 +154,38 @@ const reducer = (state: State, action: JsonScheme): State => {
   }
 };
 
-export const Socket = (): SocketValues => {
-  const [
-    {
-      Certificate,
-      CertificateList,
-      Company,
-      CompanyList,
-      Contact,
-      ContactList,
-      Department,
-      DepartmentList,
-      Education,
-      EducationList,
-      EducationShort,
-      Kind,
-      KindList,
-      Post,
-      PostList,
-      Practice,
-      PracticeList,
-      Rank,
-      RankList,
-      Scope,
-      ScopeList,
-      Siren,
-      SirenList,
-      SirenType,
-      SirenTypeList,
-      Error,
-    },
-    dispatch,
-  ] = useReducer(reducer, initialArguments);
+// {
+//   Certificate,
+//   CertificateList,
+//   Company,
+//   CompanyList,
+//   Contact,
+//   ContactList,
+//   Department,
+//   DepartmentList,
+//   Education,
+//   EducationList,
+//   EducationShort,
+//   Kind,
+//   KindList,
+//   Post,
+//   PostList,
+//   Practice,
+//   PracticeList,
+//   Rank,
+//   RankList,
+//   Scope,
+//   ScopeList,
+//   Siren,
+//   SirenList,
+//   SirenType,
+//   SirenTypeList,
+//   Error,
+// },
+
+export const Socket = (properties: SocketProperties): JSX.Element => {
+  const { children } = properties;
+  const [state, dispatch] = useReducer(reducer, initialArguments);
 
   const rws = new ReconnectingWebSocket(URL);
 
@@ -215,34 +199,14 @@ export const Socket = (): SocketValues => {
     rws.close();
   });
 
-  return {
-    Certificate,
-    CertificateList,
-    Company,
-    CompanyList,
-    Contact,
-    ContactList,
-    Department,
-    DepartmentList,
-    Education,
-    EducationList,
-    EducationShort,
-    Kind,
-    KindList,
-    Post,
-    PostList,
-    Practice,
-    PracticeList,
-    Rank,
-    RankList,
-    Scope,
-    ScopeList,
-    Siren,
-    SirenList,
-    SirenType,
-    SirenTypeList,
-    Error,
-    dispatch,
-    rws,
-  };
+  const contentValues = useMemo(
+    () => ({
+      state,
+      dispatch,
+      rws,
+    }),
+    [state, dispatch, rws],
+  );
+
+  return <SocketContext.Provider value={contentValues}>{children}</SocketContext.Provider>;
 };

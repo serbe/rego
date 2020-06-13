@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Socket } from '../../helpers/socket';
-import './index.css';
+import { SocketContext, SocketValues } from '../../helpers/socket';
 import { EducationShort } from '../../models/education';
 import { PracticeShort } from '../../models/practice';
+import './index.css';
 
 type EducationProperties = {
   values?: EducationShort[];
@@ -99,20 +99,17 @@ const tinyDate = (date: string): string => {
 };
 
 export const Home = (): JSX.Element => {
-  const { PracticeShort, EducationShort, Error, rws } = Socket();
+  const { state, dispatch, rws } = useContext<SocketValues>(SocketContext);
+  const { PracticeShort, EducationShort, Error } = state;
 
   useEffect(() => {
     rws.send('{"Get":{"List":"EducationNear"}}');
     rws.send('{"Get":{"List":"PracticeNear"}}');
+    return (): void => {
+      // dispatch('clearEducationNear');
+      // dispatch('clearPracticeNear');
+    };
   }, []);
-
-  useEffect(() => {
-    console.log('EducationShort', EducationShort?.length);
-  }, [EducationShort]);
-
-  useEffect(() => {
-    console.log('PracticeShort', PracticeShort?.length);
-  }, [PracticeShort]);
 
   return Error ? (
     <div>No data</div>
