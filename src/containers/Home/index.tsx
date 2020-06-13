@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { SocketContext, SocketValues } from '../../helpers/socket';
 import { EducationShort } from '../../models/education';
@@ -6,11 +6,11 @@ import { PracticeShort } from '../../models/practice';
 import './index.css';
 
 type EducationProperties = {
-  values?: EducationShort[];
+  values: EducationShort[];
 };
 
 type PracticeProperties = {
-  values?: PracticeShort[];
+  values: PracticeShort[];
 };
 
 const EducationTable = (properties: EducationProperties): JSX.Element => {
@@ -19,7 +19,7 @@ const EducationTable = (properties: EducationProperties): JSX.Element => {
   return (
     <table className="table is-narrow">
       <tbody>
-        {values?.map((row, index) => (
+        {values.map((row, index) => (
           <tr key={index} className={trClass(row.start_date)}>
             <td
               className="has-text-black"
@@ -48,7 +48,7 @@ const PracticeTable = (properties: PracticeProperties): JSX.Element => {
   return (
     <table className="table is-narrow">
       <tbody>
-        {values?.map((row, index) => (
+        {values.map((row, index) => (
           <tr key={index} className={trClass(row.date_of_practice)}>
             <td
               className="has-text-black"
@@ -99,27 +99,27 @@ const tinyDate = (date: string): string => {
 };
 
 export const Home = (): JSX.Element => {
-  const { state, dispatch, rws } = useContext<SocketValues>(SocketContext);
-  const { PracticeShort, EducationShort, Error } = state;
+  const { state, dispatch } = useContext<SocketValues>(SocketContext);
+  const { practiceShort, educationShort, error } = state;
 
   useEffect(() => {
-    rws.send('{"Get":{"List":"EducationNear"}}');
-    rws.send('{"Get":{"List":"PracticeNear"}}');
+    dispatch({ name: 'GetEducationNear' });
+    dispatch({ name: 'GetPracticeNear' });
     return (): void => {
-      // dispatch('clearEducationNear');
-      // dispatch('clearPracticeNear');
+      dispatch({ name: 'ClearEducationNear' });
+      dispatch({ name: 'ClearPracticeNear' });
     };
-  }, []);
+  }, [dispatch]);
 
-  return Error ? (
+  return error ? (
     <div>No data</div>
   ) : (
     <div className="columns is-mobile">
       <div className="column is-4">
-        <EducationTable values={EducationShort} />
+        <EducationTable values={educationShort} />
       </div>
       <div className="column is-4 is-offset-4">
-        <PracticeTable values={PracticeShort} />
+        <PracticeTable values={practiceShort} />
       </div>
     </div>
   );

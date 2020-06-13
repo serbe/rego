@@ -15,48 +15,64 @@ import { SirenType, SirenTypeList } from '../models/sirentype';
 
 const URL = 'ws://127.0.0.1:9090';
 
-const initContext: SocketValues = {
-  state: {},
-  dispatch: () => null,
+const initialArguments: State = {
+  certificateList: [],
+  companyList: [],
+  contactList: [],
+  departmentList: [],
+  educationList: [],
+  educationShort: [],
+  kindList: [],
+  postList: [],
+  practiceList: [],
+  practiceShort: [],
+  rankList: [],
+  sirenList: [],
+  sirenTypeList: [],
   rws: new ReconnectingWebSocket(URL),
+};
+
+const initContext: SocketValues = {
+  state: initialArguments,
+  dispatch: () => null,
 };
 
 export const SocketContext = createContext<SocketValues>(initContext);
 
 export type State = {
-  Certificate?: Certificate;
-  CertificateList?: CertificateList[];
-  Company?: Company;
-  CompanyList?: CompanyList[];
-  Contact?: Contact;
-  ContactList?: ContactList[];
-  Department?: Department;
-  DepartmentList?: DepartmentList[];
-  Education?: Education;
-  EducationList?: EducationList[];
-  EducationShort?: EducationShort[];
-  Kind?: Kind;
-  KindList?: KindList[];
-  Post?: Post;
-  PostList?: PostList[];
-  Practice?: Practice;
-  PracticeList?: PracticeList[];
-  PracticeShort?: PracticeShort[];
-  Rank?: Rank;
-  RankList?: RankList[];
-  Scope?: Scope;
-  ScopeList?: ScopeList[];
-  Siren?: Siren;
-  SirenList?: SirenList[];
-  SirenType?: SirenType[];
-  SirenTypeList?: SirenTypeList;
-  Error?: string;
+  certificate?: Certificate;
+  certificateList: CertificateList[];
+  company?: Company;
+  companyList: CompanyList[];
+  contact?: Contact;
+  contactList: ContactList[];
+  department?: Department;
+  departmentList: DepartmentList[];
+  education?: Education;
+  educationList: EducationList[];
+  educationShort: EducationShort[];
+  kind?: Kind;
+  kindList: KindList[];
+  post?: Post;
+  postList: PostList[];
+  practice?: Practice;
+  practiceList: PracticeList[];
+  practiceShort: PracticeShort[];
+  rank?: Rank;
+  rankList: RankList[];
+  scope?: Scope;
+  scopeList?: ScopeList[];
+  siren?: Siren;
+  sirenList: SirenList[];
+  sirenType?: SirenType;
+  sirenTypeList: SirenTypeList[];
+  error?: string;
+  rws: ReconnectingWebSocket;
 };
 
 export type SocketValues = {
   state: State;
-  dispatch: Dispatch<JsonScheme>;
-  rws: ReconnectingWebSocket;
+  dispatch: Dispatch<ReducerActions>;
 };
 
 type SocketProperties = {
@@ -88,67 +104,105 @@ type JsonScheme =
   | { name: 'ScopeList'; object: { ScopeList?: ScopeList[] }; error?: string }
   | { name: 'Siren'; object: { Siren?: Siren }; error?: string }
   | { name: 'SirenList'; object: { SirenList?: SirenList[] }; error?: string }
-  | { name: 'SirenType'; object: { SirenType?: SirenType[] }; error?: string }
-  | { name: 'SirenTypeList'; object: { SirenTypeList?: SirenTypeList }; error?: string };
+  | { name: 'SirenType'; object: { SirenType?: SirenType }; error?: string }
+  | { name: 'SirenTypeList'; object: { SirenTypeList?: SirenTypeList[] }; error?: string };
 
-const initialArguments: State = {};
+type ReducerActions =
+  | { name: 'ClearEducationNear' }
+  | { name: 'ClearCertificate' }
+  | { name: 'ClearCertificateList' }
+  | { name: 'ClearCompany' }
+  | { name: 'ClearCompanyList' }
+  | { name: 'ClearContact' }
+  | { name: 'ClearContactList' }
+  | { name: 'ClearPracticeNear' }
+  | { name: 'GetEducationNear' }
+  | { name: 'GetCertificate' }
+  | { name: 'GetCertificateList' }
+  | { name: 'GetCompany' }
+  | { name: 'GetCompanyList' }
+  | { name: 'GetContact' }
+  | { name: 'GetContactList' }
+  | { name: 'GetPracticeNear' }
+  | JsonScheme;
 
-const reducer = (state: State, action: JsonScheme): State => {
+const reducer = (state: State, action: ReducerActions): State => {
   switch (action.name) {
     case 'Certificate':
-      return { ...state, Certificate: action.object.Certificate, Error: action.error };
+      return { ...state, certificate: action.object.Certificate, error: action.error };
     case 'CertificateList':
-      return { ...state, CertificateList: action.object.CertificateList, Error: action.error };
+      return {
+        ...state,
+        certificateList: action.object.CertificateList || [],
+        error: action.error,
+      };
     case 'Company':
-      return { ...state, Company: action.object.Company, Error: action.error };
+      return { ...state, company: action.object.Company, error: action.error };
     case 'CompanyList':
-      return { ...state, CompanyList: action.object.CompanyList, Error: action.error };
+      return { ...state, companyList: action.object.CompanyList || [], error: action.error };
     case 'Contact':
-      return { ...state, Contact: action.object.Contact, Error: action.error };
+      return { ...state, contact: action.object.Contact, error: action.error };
+    case 'ClearContactList':
+      return { ...state, contactList: [], error: undefined };
+    case 'GetContactList': {
+      state.rws.send('{"Get":{"List":"ContactList"}}');
+      return state;
+    }
     case 'ContactList':
-      return { ...state, ContactList: action.object.ContactList, Error: action.error };
+      return { ...state, contactList: action.object.ContactList || [], error: action.error };
     case 'Department':
-      return { ...state, Department: action.object.Department, Error: action.error };
+      return { ...state, department: action.object.Department, error: action.error };
     case 'DepartmentList':
-      return { ...state, DepartmentList: action.object.DepartmentList, Error: action.error };
+      return { ...state, departmentList: action.object.DepartmentList || [], error: action.error };
     case 'Education':
-      return { ...state, Education: action.object.Education, Error: action.error };
+      return { ...state, education: action.object.Education, error: action.error };
     case 'EducationList':
-      return { ...state, EducationList: action.object.EducationList, Error: action.error };
+      return { ...state, educationList: action.object.EducationList || [], error: action.error };
+    case 'ClearEducationNear':
+      return { ...state, educationShort: [], error: undefined };
+    case 'GetEducationNear': {
+      state.rws.send('{"Get":{"List":"EducationNear"}}');
+      return state;
+    }
     case 'EducationNear':
-      return { ...state, EducationShort: action.object.EducationShort, Error: action.error };
+      return { ...state, educationShort: action.object.EducationShort || [], error: action.error };
     case 'Kind':
-      return { ...state, Kind: action.object.Kind, Error: action.error };
+      return { ...state, kind: action.object.Kind, error: action.error };
     case 'KindList':
-      return { ...state, KindList: action.object.KindList, Error: action.error };
+      return { ...state, kindList: action.object.KindList || [], error: action.error };
     case 'Post':
-      return { ...state, Post: action.object.Post, Error: action.error };
+      return { ...state, post: action.object.Post, error: action.error };
     case 'PostList':
-      return { ...state, PostList: action.object.PostList, Error: action.error };
+      return { ...state, postList: action.object.PostList || [], error: action.error };
     case 'Practice':
-      return { ...state, Practice: action.object.Practice, Error: action.error };
+      return { ...state, practice: action.object.Practice, error: action.error };
     case 'PracticeList':
-      return { ...state, PracticeList: action.object.PracticeList, Error: action.error };
+      return { ...state, practiceList: action.object.PracticeList || [], error: action.error };
+    case 'ClearPracticeNear':
+      return { ...state, practiceShort: [], error: undefined };
+    case 'GetPracticeNear': {
+      state.rws.send('{"Get":{"List":"PracticeNear"}}');
+      return state;
+    }
     case 'PracticeNear': {
-      console.log('reducer PracticeNear', action.object.PracticeShort?.length);
-      return { ...state, PracticeShort: action.object.PracticeShort, Error: action.error };
+      return { ...state, practiceShort: action.object.PracticeShort || [], error: action.error };
     }
     case 'Rank':
-      return { ...state, Rank: action.object.Rank, Error: action.error };
+      return { ...state, rank: action.object.Rank, error: action.error };
     case 'RankList':
-      return { ...state, RankList: action.object.RankList, Error: action.error };
+      return { ...state, rankList: action.object.RankList || [], error: action.error };
     case 'Scope':
-      return { ...state, Scope: action.object.Scope, Error: action.error };
+      return { ...state, scope: action.object.Scope, error: action.error };
     case 'ScopeList':
-      return { ...state, ScopeList: action.object.ScopeList, Error: action.error };
+      return { ...state, scopeList: action.object.ScopeList || [], error: action.error };
     case 'Siren':
-      return { ...state, Siren: action.object.Siren, Error: action.error };
+      return { ...state, siren: action.object.Siren, error: action.error };
     case 'SirenList':
-      return { ...state, SirenList: action.object.SirenList, Error: action.error };
+      return { ...state, sirenList: action.object.SirenList || [], error: action.error };
     case 'SirenType':
-      return { ...state, SirenType: action.object.SirenType, Error: action.error };
+      return { ...state, sirenType: action.object.SirenType, error: action.error };
     case 'SirenTypeList':
-      return { ...state, SirenTypeList: action.object.SirenTypeList, Error: action.error };
+      return { ...state, sirenTypeList: action.object.SirenTypeList || [], error: action.error };
     default:
       return state;
   }
@@ -187,25 +241,22 @@ export const Socket = (properties: SocketProperties): JSX.Element => {
   const { children } = properties;
   const [state, dispatch] = useReducer(reducer, initialArguments);
 
-  const rws = new ReconnectingWebSocket(URL);
-
-  rws.addEventListener('message', (message: MessageEvent) => {
+  state.rws.addEventListener('message', (message: MessageEvent) => {
     const data = JSON.parse(message.data) as JsonScheme;
     dispatch(data);
   });
 
-  rws.addEventListener('close', () => {
+  state.rws.addEventListener('close', () => {
     console.log('close rws');
-    rws.close();
+    state.rws.close();
   });
 
   const contentValues = useMemo(
     () => ({
       state,
       dispatch,
-      rws,
     }),
-    [state, dispatch, rws],
+    [state, dispatch],
   );
 
   return <SocketContext.Provider value={contentValues}>{children}</SocketContext.Provider>;
