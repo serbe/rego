@@ -1,31 +1,45 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { SocketContext, SocketValues } from '../../helpers/socket';
 import { List, Search } from '../../components/table';
-import { splitNumbers } from '../../helpers/utils';
-import { ContactList } from '../../models/contact';
+import { splitNumbers, URL } from '../../helpers/utils';
+import { ContactList, ContactListJsonScheme } from '../../models/contact';
 
 export const Contacts = (): JSX.Element => {
   const history = useHistory();
+  const [data, setData] = useState<ContactList[]>([]);
   const [search, setSearch] = useState('');
-  const { state, dispatch } = useContext<SocketValues>(SocketContext);
-  const { contactList, error } = state;
+  const [error, setError] = useState<string>();
 
   const [paginationData, Paginate] = List({
-    data: contactList,
+    data: data,
     search: search,
   });
-
-  useEffect(() => {
-    dispatch({ name: 'GetContactList' });
-    return (): void => {
-      dispatch({ name: 'ClearContactList' });
-    };
-  }, [dispatch]);
 
   const tableData = (): ContactList[] => {
     return paginationData();
   };
+
+  useEffect(() => {
+    const ws = new WebSocket(URL);
+
+    ws.addEventListener('message', (message: MessageEvent) => {
+      const data = JSON.parse(message.data) as ContactListJsonScheme;
+      if (data.name && data.name === 'ContactList' && data.object.ContactList) {
+        setData(data.object.ContactList);
+      }
+      if (data.error) {
+        setError(data.error);
+      }
+    });
+
+    ws.addEventListener('open', () => {
+      ws.send('{"Get":{"List":"ContactList"}}');
+    });
+
+    return (): void => {
+      ws.close();
+    };
+  }, []);
 
   const Body = (): JSX.Element => (
     <>

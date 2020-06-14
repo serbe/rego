@@ -13,7 +13,9 @@ import { Scope, ScopeList } from '../models/scope';
 import { Siren, SirenList } from '../models/siren';
 import { SirenType, SirenTypeList } from '../models/sirentype';
 
-const URL = 'ws://127.0.0.1:9090';
+export const URL = 'ws://127.0.0.1:9090';
+
+export const ws = new WebSocket(URL);
 
 const initialArguments: State = {
   certificateList: [],

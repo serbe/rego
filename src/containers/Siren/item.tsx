@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import ReconnectingWebSocket from 'reconnecting-websocket';
+import { URL } from '../../helpers/utils';
 import { CompanyIDSelect } from '../../models/company';
 import { AddressInput, ContactIDSelect, NoteInput, ParameterTypes } from '../../models/impersonal';
 import {
@@ -37,9 +37,9 @@ export const SirenItem = (): JSX.Element => {
 
   useEffect(() => {
     if (id !== '0') {
-      const rws = new ReconnectingWebSocket('ws://127.0.0.1:9090');
+      const ws = new WebSocket(URL);
 
-      rws.addEventListener('message', (message: MessageEvent) => {
+      ws.addEventListener('message', (message: MessageEvent) => {
         const data = JSON.parse(message.data) as SirenJsonScheme;
         if (data?.name === 'Siren' && data.object.Siren) {
           const c = data.object.Siren;
@@ -63,16 +63,12 @@ export const SirenItem = (): JSX.Element => {
         }
       });
 
-      rws.addEventListener('open', () => {
-        rws.send(`{"Get":{"Item":{"id": ${id}, "name": "Siren"}}}`);
+      ws.addEventListener('open', () => {
+        ws.send(`{"Get":{"Item":{"id": ${id}, "name": "Siren"}}}`);
       });
 
-      rws.onclose = () => {
-        rws.close();
-      };
-
       return (): void => {
-        rws.close();
+        ws.close();
       };
     }
   }, [id]);

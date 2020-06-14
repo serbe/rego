@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import ReconnectingWebSocket from 'reconnecting-websocket';
 import { List, Search } from '../../components/table';
+import { URL } from '../../helpers/utils';
 import { PostList, PostListJsonScheme } from '../../models/post';
 
 export const Posts = (): JSX.Element => {
@@ -20,9 +20,9 @@ export const Posts = (): JSX.Element => {
   };
 
   useEffect(() => {
-    const rws = new ReconnectingWebSocket('ws://127.0.0.1:9090');
+    const ws = new WebSocket(URL);
 
-    rws.addEventListener('message', (message: MessageEvent) => {
+    ws.addEventListener('message', (message: MessageEvent) => {
       const data = JSON.parse(message.data) as PostListJsonScheme;
       if (data.name && data.name === 'PostList' && data.object.PostList) {
         setData(data.object.PostList);
@@ -32,16 +32,12 @@ export const Posts = (): JSX.Element => {
       }
     });
 
-    rws.addEventListener('open', () => {
-      rws.send('{"Get":{"List":"PostList"}}');
+    ws.addEventListener('open', () => {
+      ws.send('{"Get":{"List":"PostList"}}');
     });
 
-    rws.onclose = () => {
-      rws.close();
-    };
-
     return (): void => {
-      rws.close();
+      ws.close();
     };
   }, []);
 

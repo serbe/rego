@@ -1,16 +1,6 @@
-import React, { createContext } from 'react';
-import ReconnectingWebSocket from 'reconnecting-websocket';
+import React from 'react';
 
-const URL = 'ws://127.0.0.1:9090';
-
-const rws = new ReconnectingWebSocket(URL);
-
-rws.addEventListener('close', () => {
-  console.log('close rws');
-  rws.close();
-});
-
-export const rwsContext = createContext(rws);
+export const URL = 'ws://127.0.0.1:9090';
 
 // , { ChangeEvent, Dispatch, SetStateAction, useState }
 

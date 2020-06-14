@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import ReconnectingWebSocket from 'reconnecting-websocket';
+import { URL } from '../../helpers/utils';
 import { CompanyIDSelect } from '../../models/company';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { KindIDSelect } from '../../models/kind';
@@ -19,9 +19,9 @@ export const PracticeItem = (): JSX.Element => {
 
   useEffect(() => {
     if (id !== '0') {
-      const rws = new ReconnectingWebSocket('ws://127.0.0.1:9090');
+      const ws = new WebSocket(URL);
 
-      rws.addEventListener('message', (message: MessageEvent) => {
+      ws.addEventListener('message', (message: MessageEvent) => {
         const data = JSON.parse(message.data) as PracticeJsonScheme;
         if (data?.name === 'Practice' && data.object.Practice) {
           const c = data.object.Practice;
@@ -37,16 +37,12 @@ export const PracticeItem = (): JSX.Element => {
         }
       });
 
-      rws.addEventListener('open', () => {
-        rws.send(`{"Get":{"Item":{"id": ${id}, "name": "Practice"}}}`);
+      ws.addEventListener('open', () => {
+        ws.send(`{"Get":{"Item":{"id": ${id}, "name": "Practice"}}}`);
       });
 
-      rws.onclose = () => {
-        rws.close();
-      };
-
       return (): void => {
-        rws.close();
+        ws.close();
       };
     }
   }, [id]);

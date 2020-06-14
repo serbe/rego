@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import ReconnectingWebSocket from 'reconnecting-websocket';
+import { URL } from '../../helpers/utils';
 import {
   CertificateDateInput,
   CertificateJsonScheme,
@@ -23,9 +23,9 @@ export const CertificateItem = (): JSX.Element => {
 
   useEffect(() => {
     if (id !== '0') {
-      const rws = new ReconnectingWebSocket('ws://127.0.0.1:9090');
+      const ws = new WebSocket(URL);
 
-      rws.addEventListener('message', (message: MessageEvent) => {
+      ws.addEventListener('message', (message: MessageEvent) => {
         const data = JSON.parse(message.data) as CertificateJsonScheme;
         if (data?.name === 'Certificate' && data.object.Certificate) {
           const c = data.object.Certificate;
@@ -41,16 +41,12 @@ export const CertificateItem = (): JSX.Element => {
         }
       });
 
-      rws.addEventListener('open', () => {
-        rws.send(`{"Get":{"Item":{"id": ${id}, "name": "Certificate"}}}`);
+      ws.addEventListener('open', () => {
+        ws.send(`{"Get":{"Item":{"id": ${id}, "name": "Certificate"}}}`);
       });
 
-      rws.onclose = () => {
-        rws.close();
-      };
-
       return (): void => {
-        rws.close();
+        ws.close();
       };
     }
   }, [id]);

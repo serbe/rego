@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import ReconnectingWebSocket from 'reconnecting-websocket';
 import { List, Search } from '../../components/table';
-import { splitNumbers, splitStrings } from '../../helpers/utils';
+import { splitNumbers, splitStrings, URL } from '../../helpers/utils';
 import { CompanyList, CompanyListJsonScheme } from '../../models/company';
-
 export const Companies = (): JSX.Element => {
   const history = useHistory();
   const [data, setData] = useState<CompanyList[]>([]);
@@ -21,9 +19,9 @@ export const Companies = (): JSX.Element => {
   };
 
   useEffect(() => {
-    const rws = new ReconnectingWebSocket('ws://127.0.0.1:9090');
+    const ws = new WebSocket(URL);
 
-    rws.addEventListener('message', (message: MessageEvent) => {
+    ws.addEventListener('message', (message: MessageEvent) => {
       const data = JSON.parse(message.data) as CompanyListJsonScheme;
       if (data.name && data.name === 'CompanyList' && data.object.CompanyList) {
         setData(data.object.CompanyList);
@@ -33,16 +31,12 @@ export const Companies = (): JSX.Element => {
       }
     });
 
-    rws.addEventListener('open', () => {
-      rws.send('{"Get":{"List":"CompanyList"}}');
+    ws.addEventListener('open', () => {
+      ws.send('{"Get":{"List":"CompanyList"}}');
     });
 
-    rws.onclose = () => {
-      rws.close();
-    };
-
     return (): void => {
-      rws.close();
+      ws.close();
     };
   }, []);
 

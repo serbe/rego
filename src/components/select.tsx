@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import ReconnectingWebSocket from 'reconnecting-websocket';
+import { URL } from '../helpers/wsocket';
 import { SelectItem } from '../models/selectitem';
 import { Icon } from './icon';
 import './select.css';
@@ -37,9 +37,9 @@ export const Select = (properties: SelectProps): JSX.Element => {
   const [value, setValue] = useState<string>();
 
   useEffect(() => {
-    const rws = new ReconnectingWebSocket('ws://127.0.0.1:9090');
+    const ws = new WebSocket(URL);
 
-    rws.addEventListener('message', (message: MessageEvent) => {
+    ws.addEventListener('message', (message: MessageEvent) => {
       const data = JSON.parse(message.data) as CLWS;
       if (data?.name === listName && data.object.SelectItem && data.object.SelectItem.length > 0) {
         setList(data.object.SelectItem);
@@ -50,16 +50,12 @@ export const Select = (properties: SelectProps): JSX.Element => {
       }
     });
 
-    rws.addEventListener('open', () => {
-      rws.send(`{"Get":{"List":"${listName}"}}`);
+    ws.addEventListener('open', () => {
+      ws.send(`{"Get":{"List":"${listName}"}}`);
     });
 
-    rws.onclose = () => {
-      rws.close();
-    };
-
     return (): void => {
-      rws.close();
+      ws.close();
     };
   }, [listName]);
 
