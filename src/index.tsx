@@ -8,9 +8,11 @@ import * as serviceWorker from './serviceWorker';
 // import './index.css';
 
 ReactDOM.render(
-  <BrowserRouter>
-    <Rugo />
-  </BrowserRouter>,
+  <React.StrictMode>
+    <BrowserRouter>
+      <Rugo />
+    </BrowserRouter>
+  </React.StrictMode>,
   document.querySelector('#root'),
 );
 

@@ -1,6 +1,34 @@
 import React from 'react';
 
-export const URL = 'ws://127.0.0.1:9090';
+export const URL = 'http://127.0.0.1:9090/';
+
+type getProperties = {
+  id?: number;
+  name: string;
+};
+
+// export const getList = (name: string) =>
+
+// export const getItem = (id: number, name: string) => {
+//   const body = properties.id
+//     ? JSON.stringify({ Get: { Item: { name: properties.name, id: properties.id } } })
+//     : JSON.stringify({ Get: { List: properties.name } });
+//   fetch(URL, {
+//     method: 'POST',
+//     headers: {
+//       'content-type': 'application/json',
+//       accept: 'application/json',
+//     },
+//     body: body,
+//   })
+//     .then((response) => response.json())
+//     .then((response) => {
+//       console.log(response);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// };
 
 // , { ChangeEvent, Dispatch, SetStateAction, useState }
 
