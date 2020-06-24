@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { List, Search } from '../../components/table';
-import { URL } from '../../helpers/utils';
-import { ScopeList, ScopeListJsonScheme } from '../../models/scope';
+import { Data, Search } from '../../components/table';
+import { GetList } from '../../helpers/fetcher';
+import { ScopeList } from '../../models/scope';
 
 export const Scopes = (): JSX.Element => {
   const history = useHistory();
-  const [data, setData] = useState<ScopeList[]>([]);
+  const [data, error] = GetList('ScopeList');
   const [search, setSearch] = useState('');
-  const [error, setError] = useState<string>();
 
-  const [paginationData, Paginate] = List({
+  const [paginationData, Paginate] = Data({
     data: data,
     search: search,
   });
@@ -18,28 +17,6 @@ export const Scopes = (): JSX.Element => {
   const tableData = (): ScopeList[] => {
     return paginationData();
   };
-
-  useEffect(() => {
-    const ws = new WebSocket(URL);
-
-    ws.addEventListener('message', (message: MessageEvent) => {
-      const data = JSON.parse(message.data) as ScopeListJsonScheme;
-      if (data.name && data.name === 'ScopeList' && data.object.ScopeList) {
-        setData(data.object.ScopeList);
-      }
-      if (data.error) {
-        setError(data.error);
-      }
-    });
-
-    ws.addEventListener('open', () => {
-      ws.send('{"Get":{"List":"ScopeList"}}');
-    });
-
-    return (): void => {
-      ws.close();
-    };
-  }, []);
 
   const Body = (): JSX.Element => (
     <>

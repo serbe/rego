@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { List, Search } from '../../components/table';
-import { splitNumbers, URL } from '../../helpers/utils';
-import { SirenList, SirenListJsonScheme } from '../../models/siren';
+import { Data, Search } from '../../components/table';
+import { GetList } from '../../helpers/fetcher';
+import { splitNumbers } from '../../helpers/utils';
+import { SirenList } from '../../models/siren';
 
 export const Sirens = (): JSX.Element => {
   const history = useHistory();
-  const [data, setData] = useState<SirenList[]>([]);
+  const [data, error] = GetList('SirenList');
   const [search, setSearch] = useState('');
-  const [error, setError] = useState<string>();
 
-  const [paginationData, Paginate] = List({
+  const [paginationData, Paginate] = Data({
     data: data,
     search: search,
   });
@@ -18,28 +18,6 @@ export const Sirens = (): JSX.Element => {
   const tableData = (): SirenList[] => {
     return paginationData();
   };
-
-  useEffect(() => {
-    const ws = new WebSocket(URL);
-
-    ws.addEventListener('message', (message: MessageEvent) => {
-      const data = JSON.parse(message.data) as SirenListJsonScheme;
-      if (data.name && data.name === 'SirenList' && data.object.SirenList) {
-        setData(data.object.SirenList);
-      }
-      if (data.error) {
-        setError(data.error);
-      }
-    });
-
-    ws.addEventListener('open', () => {
-      ws.send('{"Get":{"List":"SirenList"}}');
-    });
-
-    return (): void => {
-      ws.close();
-    };
-  }, []);
 
   const Body = (): JSX.Element => (
     <>

@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { List, Search } from '../../components/table';
-import { splitNumbers, splitStrings, URL } from '../../helpers/utils';
-import { CompanyList, CompanyListJsonScheme } from '../../models/company';
+import { Data, Search } from '../../components/table';
+import { GetList } from '../../helpers/fetcher';
+import { splitNumbers, splitStrings } from '../../helpers/utils';
+import { CompanyList } from '../../models/company';
+
 export const Companies = (): JSX.Element => {
   const history = useHistory();
-  const [data, setData] = useState<CompanyList[]>([]);
+  const [data, error] = GetList('CompanyList');
   const [search, setSearch] = useState('');
-  const [error, setError] = useState<string>();
 
-  const [paginationData, Paginate] = List({
+  const [paginationData, Paginate] = Data({
     data: data,
     search: search,
   });
@@ -17,28 +18,6 @@ export const Companies = (): JSX.Element => {
   const tableData = (): CompanyList[] => {
     return paginationData();
   };
-
-  useEffect(() => {
-    const ws = new WebSocket(URL);
-
-    ws.addEventListener('message', (message: MessageEvent) => {
-      const data = JSON.parse(message.data) as CompanyListJsonScheme;
-      if (data.name && data.name === 'CompanyList' && data.object.CompanyList) {
-        setData(data.object.CompanyList);
-      }
-      if (data.error) {
-        setError(data.error);
-      }
-    });
-
-    ws.addEventListener('open', () => {
-      ws.send('{"Get":{"List":"CompanyList"}}');
-    });
-
-    return (): void => {
-      ws.close();
-    };
-  }, []);
 
   const Body = (): JSX.Element => (
     <>

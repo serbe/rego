@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { List, Search } from '../../components/table';
-import { URL } from '../../helpers/utils';
-import { DepartmentList, DepartmentListJsonScheme } from '../../models/department';
+import { Data, Search } from '../../components/table';
+import { GetList } from '../../helpers/fetcher';
+import { DepartmentList } from '../../models/department';
 
 export const Departments = (): JSX.Element => {
   const history = useHistory();
-  const [data, setData] = useState<DepartmentList[]>([]);
+  const [data, error] = GetList('DepartmentList');
   const [search, setSearch] = useState('');
-  const [error, setError] = useState<string>();
 
-  const [paginationData, Paginate] = List({
+  const [paginationData, Paginate] = Data({
     data: data,
     search: search,
   });
@@ -18,28 +17,6 @@ export const Departments = (): JSX.Element => {
   const tableData = (): DepartmentList[] => {
     return paginationData();
   };
-
-  useEffect(() => {
-    const ws = new WebSocket(URL);
-
-    ws.addEventListener('message', (message: MessageEvent) => {
-      const data = JSON.parse(message.data) as DepartmentListJsonScheme;
-      if (data.name && data.name === 'DepartmentList' && data.object.DepartmentList) {
-        setData(data.object.DepartmentList);
-      }
-      if (data.error) {
-        setError(data.error);
-      }
-    });
-
-    ws.addEventListener('open', () => {
-      ws.send('{"Get":{"List":"DepartmentList"}}');
-    });
-
-    return (): void => {
-      ws.close();
-    };
-  }, []);
 
   const Body = (): JSX.Element => (
     <>
