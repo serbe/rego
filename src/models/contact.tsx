@@ -89,7 +89,7 @@ export const ContactShortForm = (properties: ContactShortValues): JSX.Element =>
         <Input
           key={`contact-${index}`}
           name={`contact-${index}`}
-          onClick={(): void => history.push(`/contact/${contact.id}`)}
+          onClick={(): void => history.push(`/contacts/${contact.id}`)}
           value={`${contact.name || ''} - ${contact.post_name || ''}`}
           readonly
           classNameDiv="pb-1"
