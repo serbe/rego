@@ -6,50 +6,53 @@ export const URL = 'http://127.0.0.1:9090/api/go/json';
 export const GetItem = (name: string, id: string): [Item, string] => {
   const [item, setItem] = useState<Item>();
   const [error, setError] = useState<string>('');
+  const number_id = Number(id);
 
   useEffect(() => {
-    fetch(URL, {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ Get: { Item: { name: name, id: id } } }),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        const jsonData = response as JsonScheme;
-        switch (jsonData?.name) {
-          case 'Certificate':
-            return setItem(jsonData.object.Certificate);
-          case 'Company':
-            return setItem(jsonData.object.Company);
-          case 'Contact':
-            return setItem(jsonData.object.Contact);
-          case 'Department':
-            return setItem(jsonData.object.Department);
-          case 'Education':
-            return setItem(jsonData.object.Education);
-          case 'Kind':
-            return setItem(jsonData.object.Kind);
-          case 'Post':
-            return setItem(jsonData.object.Post);
-          case 'Practice':
-            return setItem(jsonData.object.Practice);
-          case 'Rank':
-            return setItem(jsonData.object.Rank);
-          case 'Scope':
-            return setItem(jsonData.object.Scope);
-          case 'Siren':
-            return setItem(jsonData.object.Siren);
-          case 'SirenType':
-            return setItem(jsonData.object.SirenType);
-          default:
-            return setError('unknown item');
-        }
+    if (number_id !== 0) {
+      fetch(URL, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ Get: { Item: { name: name, id: number_id } } }),
       })
-      .catch((error) => setError(error as string));
-  }, [name, id]);
+        .then((response) => response.json())
+        .then((response) => {
+          const jsonData = response as JsonScheme;
+          switch (jsonData?.name) {
+            case 'Certificate':
+              return setItem(jsonData.object.Certificate);
+            case 'Company':
+              return setItem(jsonData.object.Company);
+            case 'Contact':
+              return setItem(jsonData.object.Contact);
+            case 'Department':
+              return setItem(jsonData.object.Department);
+            case 'Education':
+              return setItem(jsonData.object.Education);
+            case 'Kind':
+              return setItem(jsonData.object.Kind);
+            case 'Post':
+              return setItem(jsonData.object.Post);
+            case 'Practice':
+              return setItem(jsonData.object.Practice);
+            case 'Rank':
+              return setItem(jsonData.object.Rank);
+            case 'Scope':
+              return setItem(jsonData.object.Scope);
+            case 'Siren':
+              return setItem(jsonData.object.Siren);
+            case 'SirenType':
+              return setItem(jsonData.object.SirenType);
+            default:
+              return setError('unknown item');
+          }
+        })
+        .catch((error) => setError(error as string));
+    }
+  }, [name, number_id]);
 
   return [item, error];
 };
