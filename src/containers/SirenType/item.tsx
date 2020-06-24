@@ -7,14 +7,14 @@ import { SirenType, SirenTypeNameInput, SirenTypeRadiusInput } from '../../model
 export const SirenTypeItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('SirenType', id);
   const [name, setName] = useState('');
   const [radius, setRadius] = useState(0);
   const [note, setNote] = useState('');
 
   useEffect(() => {
-    if (data?.id !== 0) {
+    if (data?.id) {
       const c = data as SirenType;
       setName(c.name || '');
       setRadius(c.radius || 0);

@@ -7,14 +7,14 @@ import { Kind, KindNameInput, KindShortNameInput } from '../../models/kind';
 export const KindItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Kind', id);
   const [name, setName] = useState('');
   const [shortName, setShortName] = useState('');
   const [note, setNote] = useState('');
 
   useEffect(() => {
-    if (data?.id !== 0) {
+    if (data?.id) {
       const c = data as Kind;
       setName(c.name || '');
       setShortName(c.short_name || '');

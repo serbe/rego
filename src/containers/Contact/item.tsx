@@ -18,7 +18,7 @@ import { RankIDSelect } from '../../models/rank';
 export const ContactItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Contact', id);
   const [name, setName] = useState('');
   const [postID, setPostID] = useState(0);
@@ -33,7 +33,7 @@ export const ContactItem = (): JSX.Element => {
   const [note, setNote] = useState('');
 
   useEffect(() => {
-    if (data?.id !== 0) {
+    if (data?.id) {
       const c = data as Contact;
       setName(c.name || '');
       setCompanyID(c.company_id || 0);

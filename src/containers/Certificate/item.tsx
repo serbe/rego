@@ -13,7 +13,7 @@ import { NoteInput, ParameterTypes } from '../../models/impersonal';
 export const CertificateItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Certificate', id);
   const [sNumber, setSNumber] = useState('');
   const [contactID, setContactID] = useState(0);
@@ -22,7 +22,7 @@ export const CertificateItem = (): JSX.Element => {
   const [note, setNote] = useState('');
 
   useEffect(() => {
-    if (data?.id !== 0) {
+    if (data?.id) {
       const c = data as Certificate;
       setSNumber(c.num || '');
       setContactID(c.contact_id || 0);

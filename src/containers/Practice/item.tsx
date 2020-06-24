@@ -9,7 +9,7 @@ import { Practice, PracticeDateInput, PracticeTopicInput } from '../../models/pr
 export const PracticeItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Practice', id);
   const [companyID, setCompanyID] = useState(0);
   const [kindID, setKindID] = useState(0);
@@ -18,7 +18,7 @@ export const PracticeItem = (): JSX.Element => {
   const [note, setNote] = useState('');
 
   useEffect(() => {
-    if (data?.id !== 0) {
+    if (data?.id) {
       const c = data as Practice;
       setCompanyID(c.company_id || 0);
       setKindID(c.kind_id || 0);

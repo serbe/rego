@@ -7,13 +7,13 @@ import { Scope, ScopeNameInput } from '../../models/scope';
 export const ScopeItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Scope', id);
   const [name, setName] = useState('');
   const [note, setNote] = useState('');
 
   useEffect(() => {
-    if (data?.id !== 0) {
+    if (data?.id) {
       const c = data as Scope;
       setName(c.name || '');
       setNote(c.note || '');

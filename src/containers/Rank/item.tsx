@@ -7,13 +7,13 @@ import { Rank, RankNameInput } from '../../models/rank';
 export const RankItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Rank', id);
   const [name, setName] = useState('');
   const [note, setNote] = useState('');
 
   useEffect(() => {
-    if (data?.id !== 0) {
+    if (data?.id) {
       const c = data as Rank;
       setName(c.name || '');
       setNote(c.note || '');

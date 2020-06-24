@@ -7,14 +7,14 @@ import { Post, PostGOSwitch, PostNameInput } from '../../models/post';
 export const PostItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Post', id);
   const [name, setName] = useState('');
   const [go, setGo] = useState(false);
   const [note, setNote] = useState('');
 
   useEffect(() => {
-    if (data?.id !== 0) {
+    if (data?.id) {
       const c = data as Post;
       setName(c.name || '');
       setGo(c.go || false);

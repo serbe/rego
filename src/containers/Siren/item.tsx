@@ -19,8 +19,8 @@ import { SirenTypeIDSelect } from '../../models/sirentype';
 export const SirenItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(false);
-  const [data, error] = GetItem('SirenType', id);
+  const [loaded, setLoaded] = useState(id === '0' || false);
+  const [data, error] = GetItem('Siren', id);
   const [numberID, setNumberID] = useState(0);
   const [numberPassport, setNumberPassport] = useState('');
   const [sirenTypeID, setSirenTypeID] = useState(0);
@@ -36,7 +36,7 @@ export const SirenItem = (): JSX.Element => {
   const [note, setNote] = useState('');
 
   useEffect(() => {
-    if (data?.id !== 0) {
+    if (data?.id) {
       const c = data as Siren;
       setNumberID(c.num_id || 0);
       setNumberPassport(c.num_pass || '');

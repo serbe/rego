@@ -7,13 +7,13 @@ import { NoteInput, ParameterTypes } from '../../models/impersonal';
 export const DepartmentItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Department', id);
   const [name, setName] = useState('');
   const [note, setNote] = useState('');
 
   useEffect(() => {
-    if (data?.id !== 0) {
+    if (data?.id) {
       const c = data as Department;
       setName(c.name || '');
       setNote(c.note || '');

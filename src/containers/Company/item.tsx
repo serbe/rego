@@ -18,7 +18,7 @@ import { ScopeIDSelect } from '../../models/scope';
 export const CompanyItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Company', id);
   const [name, setName] = useState('');
   const [scopeID, setScopeID] = useState(0);
@@ -31,7 +31,7 @@ export const CompanyItem = (): JSX.Element => {
   const [note, setNote] = useState('');
 
   useEffect(() => {
-    if (data?.id !== 0) {
+    if (data?.id) {
       const c = data as Company;
       setName(c.name || '');
       setScopeID(c.scope_id || 0);
