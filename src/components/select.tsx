@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { URL } from '../helpers/wsocket';
-import { SelectItem } from '../models/selectitem';
+import { SelectItem } from '../models/impersonal';
 import { Icon } from './icon';
+import { GetSelect } from '../helpers/fetcher';
 import './select.css';
 
 export interface SelectValues {
@@ -19,45 +19,13 @@ interface SelectProps {
   setter: (event: number) => void;
 }
 
-type CLWS = {
-  name: string;
-  object: {
-    SelectItem?: SelectItem[];
-  };
-  error?: string;
-};
-
 export const Select = (properties: SelectProps): JSX.Element => {
   const { name, id, label, icon, color, listName, setter } = properties;
 
   const [opened, setOpened] = useState(false);
   const [itemID, setItemID] = useState(id || 0);
-  const [list, setList] = useState<SelectItem[]>([{ id: 0, name: '' }]);
-  const [error, setError] = useState<string>();
+  const [list, error] = GetSelect(listName);
   const [value, setValue] = useState<string>();
-
-  useEffect(() => {
-    const ws = new WebSocket(URL);
-
-    ws.addEventListener('message', (message: MessageEvent) => {
-      const data = JSON.parse(message.data) as CLWS;
-      if (data?.name === listName && data.object.SelectItem && data.object.SelectItem.length > 0) {
-        setList(data.object.SelectItem);
-      }
-
-      if (data.error) {
-        setError(data.error);
-      }
-    });
-
-    ws.addEventListener('open', () => {
-      ws.send(`{"Get":{"List":"${listName}"}}`);
-    });
-
-    return (): void => {
-      ws.close();
-    };
-  }, [listName]);
 
   useEffect(() => {
     if (list[0].id !== 0) {
