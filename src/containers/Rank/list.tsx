@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Data, Search } from '../../components/table';
+import { Bar, Data } from '../../components/table';
 import { GetList } from '../../helpers/fetcher';
 import { RankList } from '../../models/rank';
 
@@ -38,7 +38,7 @@ export const Ranks = (): JSX.Element => {
     <></>
   ) : (
     <>
-      <Search value={search} setter={setSearch} />
+      <Bar value={search} setter={setSearch} name="ranks" />
       <table className="table is-narrow">
         <tbody>
           <tr>

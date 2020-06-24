@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Data, Search } from '../../components/table';
+import { Bar, Data } from '../../components/table';
 import { GetList } from '../../helpers/fetcher';
 import { CertificateList } from '../../models/certificate';
 
@@ -54,7 +54,7 @@ export const Certificates = (): JSX.Element => {
     <></>
   ) : (
     <>
-      <Search value={search} setter={setSearch} />
+      <Bar value={search} setter={setSearch} name="certificates" />
       <table className="table is-narrow">
         <tbody>
           <tr>

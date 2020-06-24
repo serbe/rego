@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Data, Search } from '../../components/table';
+import { Bar, Data } from '../../components/table';
 import { GetList } from '../../helpers/fetcher';
 import { KindList } from '../../models/kind';
 
@@ -39,7 +39,7 @@ export const Kinds = (): JSX.Element => {
     <></>
   ) : (
     <>
-      <Search value={search} setter={setSearch} />
+      <Bar value={search} setter={setSearch} name="kinds" />
       <table className="table is-narrow">
         <tbody>
           <tr>

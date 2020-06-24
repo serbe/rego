@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Data, Search } from '../../components/table';
+import { Bar, Data } from '../../components/table';
 import { GetList } from '../../helpers/fetcher';
 import { splitNumbers } from '../../helpers/utils';
 import { SirenList } from '../../models/siren';
@@ -41,7 +41,7 @@ export const Sirens = (): JSX.Element => {
     <></>
   ) : (
     <>
-      <Search value={search} setter={setSearch} />
+      <Bar value={search} setter={setSearch} name="sirens" />
       <table className="table is-narrow">
         <tbody>
           <tr>

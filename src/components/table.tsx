@@ -1,7 +1,8 @@
 import React, { useEffect, useReducer } from 'react';
 import { List } from '../models/impersonal';
-import { Input, StringInputProperties } from './input';
+import { Input } from './input';
 import { Pagination } from './pagination';
+import { NavLink } from 'react-router-dom';
 
 export type SData = {
   id: number;
@@ -18,6 +19,12 @@ export type PaginateProperties = {
 export type DataProperties = {
   data: List[];
   search: string;
+};
+
+type BarProperties = {
+  value: string;
+  setter: (value: string) => void;
+  name: string;
 };
 
 type State = {
@@ -151,19 +158,28 @@ export const Data = (properties: DataProperties): [() => List[], JSX.Element] =>
   ];
 };
 
-export const Search = (properties: StringInputProperties): JSX.Element => (
-  <div className="control mb-4" key="TableSearch">
-    <Input
-      name="search"
-      className="input is-expanded"
-      placeholder="Поиск"
-      onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
-        properties.setter(event.target.value)
-      }
-      value={properties.value}
-    />
-  </div>
-);
+export const Bar = (properties: BarProperties): JSX.Element => {
+  return (
+    <div className="field is-grouped">
+      <div className="control mb-4" key="TableNewItem">
+        <NavLink className="button" to={`/${properties.name}/0`}>
+          Создать
+        </NavLink>
+      </div>
+      <div className="control mb-4 is-expanded" key="TableSearch">
+        <Input
+          name="search"
+          className="input is-expanded"
+          placeholder="Поиск"
+          onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
+            properties.setter(event.target.value)
+          }
+          value={properties.value}
+        />
+      </div>
+    </div>
+  );
+};
 
 export const Paginate = (properties: PaginateProperties): JSX.Element => {
   const { filteredDataLength, itemsPerPage, currentPage, setter } = properties;
