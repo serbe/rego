@@ -1,16 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-import { CertificateList } from '../models/certificate';
-import { CompanyList } from '../models/company';
-import { ContactList } from '../models/contact';
-import { DepartmentList } from '../models/department';
-import { EducationList } from '../models/education';
-import { KindList } from '../models/kind';
-import { PostList } from '../models/post';
-import { PracticeList } from '../models/practice';
-import { RankList } from '../models/rank';
-import { ScopeList } from '../models/scope';
-import { SirenList } from '../models/siren';
-import { SirenTypeList } from '../models/sirentype';
+import { List } from '../models/impersonal';
 import { Input, StringInputProperties } from './input';
 import { Pagination } from './pagination';
 
@@ -26,27 +15,13 @@ export type PaginateProperties = {
   setter: (value: number) => void;
 };
 
-export type dataType =
-  | CertificateList
-  | CompanyList
-  | ContactList
-  | DepartmentList
-  | EducationList
-  | KindList
-  | PostList
-  | PracticeList
-  | RankList
-  | ScopeList
-  | SirenList
-  | SirenTypeList;
-
-export type ListProperties = {
-  data: dataType[];
+export type DataProperties = {
+  data: List[];
   search: string;
 };
 
 type State = {
-  filteredData: dataType[];
+  filteredData: List[];
   currentPage: number;
   searchValues: SData[];
   filteredDataLength: number;
@@ -54,9 +29,9 @@ type State = {
 };
 
 type Action =
-  | { type: 'searchLessThanTwo'; value: dataType[]; valueLength: number }
-  | { type: 'changeSearch'; value: dataType[]; search: string }
-  | { type: 'setFilteredData'; value: dataType[] }
+  | { type: 'searchLessThanTwo'; value: List[]; valueLength: number }
+  | { type: 'changeSearch'; value: List[]; search: string }
+  | { type: 'setFilteredData'; value: List[] }
   | { type: 'setCurrentPage'; value: number }
   | { type: 'setSearchValues'; value: SData[] }
   | { type: 'setFilteredDataLength'; value: number };
@@ -115,7 +90,7 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-export const List = (properties: ListProperties): [() => dataType[], JSX.Element] => {
+export const Data = (properties: DataProperties): [() => List[], JSX.Element] => {
   const { data, search } = properties;
   type td = typeof properties.data;
 
