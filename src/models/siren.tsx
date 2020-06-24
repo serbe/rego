@@ -2,22 +2,6 @@ import React, { ChangeEvent } from 'react';
 import { FormField } from '../components/formfield';
 import { NumberInputProperties, StringInputProperties } from '../components/input';
 
-export type SirenJsonScheme = {
-  name: string;
-  object: {
-    Siren?: Siren;
-  };
-  error?: string;
-};
-
-export type SirenListJsonScheme = {
-  name: string;
-  object: {
-    SirenList?: SirenList[];
-  };
-  error?: string;
-};
-
 export type Siren = {
   id: number;
   num_id?: number;
