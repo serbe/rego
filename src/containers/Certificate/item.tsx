@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { URL } from '../../helpers/utils';
+import { GetItem } from '../../helpers/fetcher';
 import {
+  Certificate,
   CertificateDateInput,
-  CertificateJsonScheme,
   CertificateNumberInput,
 } from '../../models/certificate';
 import { CompanyIDSelect } from '../../models/company';
@@ -14,7 +14,7 @@ export const CertificateItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState('');
+  const [data, error] = GetItem('Certificate', id);
   const [sNumber, setSNumber] = useState('');
   const [contactID, setContactID] = useState(0);
   const [companyID, setCompanyID] = useState(0);
@@ -22,34 +22,16 @@ export const CertificateItem = (): JSX.Element => {
   const [note, setNote] = useState('');
 
   useEffect(() => {
-    if (id !== '0') {
-      const ws = new WebSocket(URL);
-
-      ws.addEventListener('message', (message: MessageEvent) => {
-        const data = JSON.parse(message.data) as CertificateJsonScheme;
-        if (data?.name === 'Certificate' && data.object.Certificate) {
-          const c = data.object.Certificate;
-          setSNumber(c.num || '');
-          setContactID(c.contact_id || 0);
-          setCompanyID(c.company_id || 0);
-          setCertDate(c.cert_date || '');
-          setNote(c.note || '');
-          setLoaded(true);
-        }
-        if (data.error) {
-          setError(data.error);
-        }
-      });
-
-      ws.addEventListener('open', () => {
-        ws.send(`{"Get":{"Item":{"id": ${id}, "name": "Certificate"}}}`);
-      });
-
-      return (): void => {
-        ws.close();
-      };
+    if (data?.id !== 0) {
+      const c = data as Certificate;
+      setSNumber(c.num || '');
+      setContactID(c.contact_id || 0);
+      setCompanyID(c.company_id || 0);
+      setCertDate(c.cert_date || '');
+      setNote(c.note || '');
+      setLoaded(true);
     }
-  }, [id]);
+  }, [data]);
 
   return (
     <div>

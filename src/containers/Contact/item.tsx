@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { addEmptyString, numberToString, URL } from '../../helpers/utils';
+import { GetItem } from '../../helpers/fetcher';
+import { addEmptyString, numberToString } from '../../helpers/utils';
 import { CompanyIDSelect } from '../../models/company';
-import { ContactBirthdayInput, ContactJsonScheme, ContactNameInput } from '../../models/contact';
+import { Contact, ContactBirthdayInput, ContactNameInput } from '../../models/contact';
 import { DepartmentIDSelect } from '../../models/department';
 import {
   EmailInputs,
@@ -18,7 +19,7 @@ export const ContactItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState('');
+  const [data, error] = GetItem('Contact', id);
   const [name, setName] = useState('');
   const [postID, setPostID] = useState(0);
   const [departmentID, setDepartmentID] = useState(0);
@@ -32,40 +33,22 @@ export const ContactItem = (): JSX.Element => {
   const [note, setNote] = useState('');
 
   useEffect(() => {
-    if (id !== '0') {
-      const ws = new WebSocket(URL);
-
-      ws.addEventListener('message', (message: MessageEvent) => {
-        const data = JSON.parse(message.data) as ContactJsonScheme;
-        if (data?.name === 'Contact' && data.object.Contact) {
-          const c = data.object.Contact;
-          setName(c.name || '');
-          setCompanyID(c.company_id || 0);
-          setPostID(c.post_id || 0);
-          setDepartmentID(c.department_id || 0);
-          setPostGoID(c.post_go_id || 0);
-          setRankID(c.rank_id || 0);
-          setBirthday(c.birthday || '');
-          setEmails(addEmptyString(c.emails));
-          setPhones(addEmptyString(numberToString(c.phones)));
-          setFaxes(addEmptyString(numberToString(c.faxes)));
-          setNote(c.note || '');
-          setLoaded(true);
-        }
-        if (data.error) {
-          setError(data.error);
-        }
-      });
-
-      ws.addEventListener('open', () => {
-        ws.send(`{"Get":{"Item":{"id": ${id}, "name": "Contact"}}}`);
-      });
-
-      return (): void => {
-        ws.close();
-      };
+    if (data?.id !== 0) {
+      const c = data as Contact;
+      setName(c.name || '');
+      setCompanyID(c.company_id || 0);
+      setPostID(c.post_id || 0);
+      setDepartmentID(c.department_id || 0);
+      setPostGoID(c.post_go_id || 0);
+      setRankID(c.rank_id || 0);
+      setBirthday(c.birthday || '');
+      setEmails(addEmptyString(c.emails));
+      setPhones(addEmptyString(numberToString(c.phones)));
+      setFaxes(addEmptyString(numberToString(c.faxes)));
+      setNote(c.note || '');
+      setLoaded(true);
     }
-  }, [id]);
+  }, [data]);
 
   return (
     <div>

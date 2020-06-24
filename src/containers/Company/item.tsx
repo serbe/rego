@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { addEmptyString, numberToString, URL } from '../../helpers/utils';
-import { CompanyJsonScheme, CompanyNameInput } from '../../models/company';
+import { GetItem } from '../../helpers/fetcher';
+import { addEmptyString, numberToString } from '../../helpers/utils';
+import { Company, CompanyNameInput } from '../../models/company';
 import { ContactShort, ContactShortForm } from '../../models/contact';
 import {
   AddressInput,
@@ -18,7 +19,7 @@ export const CompanyItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState('');
+  const [data, error] = GetItem('Company', id);
   const [name, setName] = useState('');
   const [scopeID, setScopeID] = useState(0);
   const [address, setAddress] = useState('');
@@ -30,38 +31,20 @@ export const CompanyItem = (): JSX.Element => {
   const [note, setNote] = useState('');
 
   useEffect(() => {
-    if (id !== '0') {
-      const ws = new WebSocket(URL);
-
-      ws.addEventListener('message', (message: MessageEvent) => {
-        const data = JSON.parse(message.data) as CompanyJsonScheme;
-        if (data?.name === 'Company' && data.object.Company) {
-          const c = data.object.Company;
-          setName(c.name || '');
-          setScopeID(c.scope_id || 0);
-          setAddress(c.address || '');
-          setEmails(addEmptyString(c.emails));
-          setPhones(addEmptyString(numberToString(c.phones)));
-          setFaxes(addEmptyString(numberToString(c.faxes)));
-          setPractices(c.practices || []);
-          setContacts(c.contacts || []);
-          setNote(c.note || '');
-          setLoaded(true);
-        }
-        if (data.error) {
-          setError(data.error);
-        }
-      });
-
-      ws.addEventListener('open', () => {
-        ws.send(`{"Get":{"Item":{"id": ${id}, "name": "Company"}}}`);
-      });
-
-      return (): void => {
-        ws.close();
-      };
+    if (data?.id !== 0) {
+      const c = data as Company;
+      setName(c.name || '');
+      setScopeID(c.scope_id || 0);
+      setAddress(c.address || '');
+      setEmails(addEmptyString(c.emails));
+      setPhones(addEmptyString(numberToString(c.phones)));
+      setFaxes(addEmptyString(numberToString(c.faxes)));
+      setPractices(c.practices || []);
+      setContacts(c.contacts || []);
+      setNote(c.note || '');
+      setLoaded(true);
     }
-  }, [id]);
+  }, [data]);
 
   return (
     <div>

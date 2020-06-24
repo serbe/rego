@@ -1,43 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { URL } from '../../helpers/utils';
-import { DepartmentJsonScheme, DepartmentNameInput } from '../../models/department';
+import { GetItem } from '../../helpers/fetcher';
+import { Department, DepartmentNameInput } from '../../models/department';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 
 export const DepartmentItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState('');
+  const [data, error] = GetItem('Department', id);
   const [name, setName] = useState('');
   const [note, setNote] = useState('');
 
   useEffect(() => {
-    if (id !== '0') {
-      const ws = new WebSocket(URL);
-
-      ws.addEventListener('message', (message: MessageEvent) => {
-        const data = JSON.parse(message.data) as DepartmentJsonScheme;
-        if (data?.name === 'Department' && data.object.Department) {
-          const c = data.object.Department;
-          setName(c.name || '');
-          setNote(c.note || '');
-          setLoaded(true);
-        }
-        if (data.error) {
-          setError(data.error);
-        }
-      });
-
-      ws.addEventListener('open', () => {
-        ws.send(`{"Get":{"Item":{"id": ${id}, "name": "Department"}}}`);
-      });
-
-      return (): void => {
-        ws.close();
-      };
+    if (data?.id !== 0) {
+      const c = data as Department;
+      setName(c.name || '');
+      setNote(c.note || '');
+      setLoaded(true);
     }
-  }, [id]);
+  }, [data]);
 
   return (
     <div>
