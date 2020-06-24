@@ -15,7 +15,7 @@ const mainItems = [
 const dropdownItems = [
   { link: '/departments', name: 'Отделы' },
   { link: '/educations', name: 'Обучение' },
-  { link: '/kinds', name: 'Типы' },
+  { link: '/kinds', name: 'Типы тренировок' },
   { link: '/posts', name: 'Должности' },
   { link: '/practices', name: 'Учения' },
   { link: '/ranks', name: 'Чины' },
