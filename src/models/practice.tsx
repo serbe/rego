@@ -4,22 +4,6 @@ import { DatePicker, DatePickerValues } from '../components/datepicker';
 import { FormField } from '../components/formfield';
 import { Input, StringInputProperties } from '../components/input';
 
-export type PracticeJsonScheme = {
-  name: string;
-  object: {
-    Practice?: Practice;
-  };
-  error?: string;
-};
-
-export type PracticeListJsonScheme = {
-  name: string;
-  object: {
-    PracticeList?: PracticeList[];
-  };
-  error?: string;
-};
-
 export interface PracticeValues {
   practices: PracticeList[];
 }

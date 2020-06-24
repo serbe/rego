@@ -3,22 +3,6 @@ import { FormField } from '../components/formfield';
 import { NumberInputProperties, StringInputProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
 
-export type SirenTypeJsonScheme = {
-  name: string;
-  object: {
-    SirenType?: SirenType;
-  };
-  error?: string;
-};
-
-export type SirenTypeListJsonScheme = {
-  name: string;
-  object: {
-    SirenTypeList?: SirenTypeList[];
-  };
-  error?: string;
-};
-
 export type SirenType = {
   id: number;
   name?: string;

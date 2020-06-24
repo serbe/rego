@@ -3,22 +3,6 @@ import { FormField } from '../components/formfield';
 import { StringInputProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
 
-export type RankJsonScheme = {
-  name: string;
-  object: {
-    Rank?: Rank;
-  };
-  error?: string;
-};
-
-export type RankListJsonScheme = {
-  name: string;
-  object: {
-    RankList?: RankList[];
-  };
-  error?: string;
-};
-
 export type Rank = {
   id: number;
   name?: string;
