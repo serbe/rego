@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import { List } from '../models/impersonal';
 import { Input } from './input';
 import { Pagination } from './pagination';
-import { NavLink } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 export type SData = {
   id: number;
@@ -159,12 +159,13 @@ export const Data = (properties: DataProperties): [() => List[], JSX.Element] =>
 };
 
 export const Bar = (properties: BarProperties): JSX.Element => {
+  const history = useHistory();
   return (
     <div className="field is-grouped">
       <div className="control mb-4" key="TableNewItem">
-        <NavLink className="button" to={`/${properties.name}/0`}>
+        <button className="button" onClick={() => history.push(`/${properties.name}/0`)}>
           Создать
-        </NavLink>
+        </button>
       </div>
       <div className="control mb-4 is-expanded" key="TableSearch">
         <Input
