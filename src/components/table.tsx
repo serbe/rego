@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { List } from '../models/impersonal';
+import { Button } from './button';
 import { Input } from './input';
 import { Pagination } from './pagination';
 
@@ -164,9 +165,7 @@ export const Bar = (properties: BarProperties): JSX.Element => {
   return (
     <div className="field is-grouped">
       <div className="control mb-4" key="TableNewItem">
-        <button className="button" onClick={() => history.push(`/${properties.name}/0`)}>
-          Создать
-        </button>
+        <Button onClick={() => history.push(`/${properties.name}/0`)}>Создать</Button>
       </div>
       <div className="control mb-4 is-expanded" key="TableSearch">
         <Input
