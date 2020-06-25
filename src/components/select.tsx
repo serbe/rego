@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import { GetSelect } from '../helpers/fetcher';
 import { SelectItem } from '../models/impersonal';
 import { Icon } from './icon';
-import { GetSelect } from '../helpers/fetcher';
 import './select.css';
 
 export interface SelectValues {

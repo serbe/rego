@@ -1,7 +1,38 @@
 import { useEffect, useState } from 'react';
+
 import { Item, JsonScheme, List, SelectItem } from '../models/impersonal';
 
+type AuthJson = {
+  token?: string;
+  error?: string;
+};
+
 export const URL = 'http://127.0.0.1:9090/api/go/json';
+
+export const Login = (name: string, password: string): [string | undefined, string | undefined] => {
+  const [token, setToken] = useState<string>();
+  const [error, setError] = useState<string>();
+
+  useEffect(() => {
+    fetch(URL, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ Login: { name: name, password: password } }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        const jsonData = response as AuthJson;
+        setToken(jsonData.token);
+        setError(jsonData.error);
+        return;
+      })
+      .catch((error) => setError(error as string));
+  }, [name, password]);
+  return [token, error];
+};
 
 export const GetItem = (name: string, id: string): [Item, string] => {
   const [item, setItem] = useState<Item>();
