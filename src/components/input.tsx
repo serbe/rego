@@ -1,4 +1,5 @@
 import React, { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
+
 import { Icon } from './icon';
 
 export type StringInputProperties = {

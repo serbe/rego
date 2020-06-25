@@ -1,8 +1,10 @@
+import './select.css';
+
 import React, { ChangeEvent, useEffect, useState } from 'react';
+
 import { GetSelect } from '../helpers/fetcher';
 import { SelectItem } from '../models/impersonal';
 import { Icon } from './icon';
-import './select.css';
 
 export interface SelectValues {
   id: number;

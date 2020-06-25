@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { Route, Switch } from 'react-router-dom';
+
 import { CertificateItem, Certificates } from '../Certificate';
 import { Companies, CompanyItem } from '../Company';
 import { ContactItem, Contacts } from '../Contact';

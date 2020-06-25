@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+
 import { GetItem } from '../../helpers/fetcher';
 import { addEmptyString, numberToString } from '../../helpers/utils';
 import { Company, CompanyNameInput } from '../../models/company';

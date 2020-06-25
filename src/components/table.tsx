@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
+
 import { List } from '../models/impersonal';
 import { Input } from './input';
 import { Pagination } from './pagination';
