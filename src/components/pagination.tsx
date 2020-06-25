@@ -8,9 +8,9 @@ interface PaginationProps {
 
 interface ItemProps {
   check: boolean;
+  ellipsis?: boolean;
   index: number;
   link?: number;
-  ellipsis?: boolean;
 }
 
 export const Pagination = (properties: PaginationProps): JSX.Element => {
@@ -21,9 +21,9 @@ export const Pagination = (properties: PaginationProps): JSX.Element => {
     currentPage > 1 ? (
       <a
         className="pagination-previous"
-        onClick={(): void => setter(currentPage - 1)}
-        key="PaginationPrev"
         href="#prev"
+        key="PaginationPrev"
+        onClick={(): void => setter(currentPage - 1)}
       >
         Назад
       </a>
@@ -37,9 +37,9 @@ export const Pagination = (properties: PaginationProps): JSX.Element => {
     currentPage < lastPage ? (
       <a
         className="pagination-next"
-        onClick={(): void => setter(currentPage + 1)}
-        key="PaginationNext"
         href="#next"
+        key="PaginationNext"
+        onClick={(): void => setter(currentPage + 1)}
       >
         Далее
       </a>
@@ -59,8 +59,8 @@ export const Pagination = (properties: PaginationProps): JSX.Element => {
         ) : (
           <a
             className={link === currentPage ? 'pagination-link is-current' : 'pagination-link'}
-            onClick={link === currentPage || !link ? undefined : (): void => setter(link)}
             href="#item"
+            onClick={link === currentPage || !link ? undefined : (): void => setter(link)}
           >
             {link}
           </a>

@@ -7,14 +7,14 @@ import { Input } from './input';
 import { Pagination } from './pagination';
 
 export type SData = {
-  id: number;
   data: string;
+  id: number;
 };
 
 export type PaginateProperties = {
+  currentPage: number;
   filteredDataLength: number;
   itemsPerPage: number;
-  currentPage: number;
   setter: (value: number) => void;
 };
 
@@ -24,17 +24,17 @@ export type DataProperties = {
 };
 
 type BarProperties = {
-  value: string;
-  setter: (value: string) => void;
   name: string;
+  setter: (value: string) => void;
+  value: string;
 };
 
 type State = {
-  filteredData: List[];
   currentPage: number;
-  searchValues: SData[];
+  filteredData: List[];
   filteredDataLength: number;
   itemsPerPage: number;
+  searchValues: SData[];
 };
 
 type Action =
@@ -46,11 +46,11 @@ type Action =
   | { type: 'setFilteredDataLength'; value: number };
 
 const initialArguments = {
-  filteredData: [],
   currentPage: 0,
-  searchValues: [],
+  filteredData: [],
   filteredDataLength: 0,
   itemsPerPage: 20,
+  searchValues: [],
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -152,9 +152,9 @@ export const Data = (properties: DataProperties): [() => List[], JSX.Element] =>
   return [
     paginationData,
     Paginate({
+      currentPage: currentPage,
       filteredDataLength: filteredDataLength,
       itemsPerPage: itemsPerPage,
-      currentPage: currentPage,
       setter: setCurrentPage,
     }),
   ];
@@ -169,8 +169,8 @@ export const Bar = (properties: BarProperties): JSX.Element => {
       </div>
       <div className="control mb-4 is-expanded" key="TableSearch">
         <Input
-          name="search"
           className="input is-expanded"
+          name="search"
           placeholder="Поиск"
           onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
             properties.setter(event.target.value)

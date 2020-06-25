@@ -12,12 +12,12 @@ export interface SelectValues {
 }
 
 interface SelectProps {
-  name: string;
-  id?: number;
-  icon?: string;
   color?: 'primary' | 'info' | 'success' | 'warning' | 'danger';
+  icon?: string;
+  id?: number;
   label?: string;
   listName: string;
+  name: string;
   setter: (event: number) => void;
 }
 
@@ -77,11 +77,11 @@ export const Select = (properties: SelectProps): JSX.Element => {
         key={`${name}-control`}
       >
         <input
-          name={name}
-          className={`input ${color ? `is-${color}` : ''}`}
-          type="text"
-          aria-haspopup="true"
           aria-controls="dropdown-menu"
+          aria-haspopup="true"
+          className={`input ${color ? `is-${color}` : ''}`}
+          name={name}
+          type="text"
           value={currentValue()}
           onChange={(event: ChangeEvent<HTMLInputElement>): void => {
             setValue(event.target.value);
@@ -96,10 +96,10 @@ export const Select = (properties: SelectProps): JSX.Element => {
         />
         {icon && (
           <Icon
-            icon={icon}
-            position="left"
             color={color !== 'primary' ? color : undefined}
+            icon={icon}
             key="SelectIconLeft"
+            position="left"
           />
         )}
       </div>

@@ -6,10 +6,10 @@ export type DatePickerValues = {
 };
 
 interface DatePickerProps {
-  name: string;
-  value?: string;
-  setter: (value: string) => void;
   label?: string;
+  name: string;
+  setter: (value: string) => void;
+  value?: string;
 }
 
 const listDate = (date: Date): string[] => {

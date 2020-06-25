@@ -13,6 +13,8 @@ export const RankItem = (): JSX.Element => {
   const [name, setName] = useState('');
   const [note, setNote] = useState('');
 
+  const submit = () = {};
+
   useEffect(() => {
     if (data?.id) {
       const c = data as Rank;
@@ -31,7 +33,9 @@ export const RankItem = (): JSX.Element => {
 
           <div className="field is-grouped">
             <div className="control">
-              <button className="button">Сохранить</button>
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
             </div>
             <div className="control">
               <button className="button" onClick={() => history.go(-1)}>
