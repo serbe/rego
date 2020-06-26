@@ -1,12 +1,16 @@
 import React from 'react';
 
-export function stringNoNull(value?: string): string {
-  return value || '';
-}
+export const optionString = (value: string): string | undefined => {
+  return value === '' ? undefined : value;
+};
 
-export function numberNoNull(value?: number): number {
+export const stringNoNull = (value?: string): string => {
+  return value || '';
+};
+
+export const numberNoNull = (value?: number): number => {
   return value || 0;
-}
+};
 
 export const addEmptyString = (values?: string[]): string[] => {
   let list: string[] = [];

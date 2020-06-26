@@ -205,3 +205,24 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
 
   return [list, error];
 };
+
+export const SetItem = (name: string, body: string): string | undefined => {
+  const [error, setError] = useState<string>();
+
+  fetch(URL, {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: `{ Set: { ${name}: ${body} } }`,
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      const jsonData = response as JsonScheme;
+      return setError(jsonData?.error);
+    })
+    .catch((error) => setError(error as string));
+
+  return error;
+};
