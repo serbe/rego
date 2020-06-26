@@ -213,7 +213,7 @@ export const InsertItem = (name: string, body: string): void => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: `{Insert:{"${name}":${body}}}`,
+    body: `{"Insert":{"${name}":${body}}}`,
   })
     .then((response) => response.json())
     .then((response) => {
@@ -234,7 +234,7 @@ export const UpdateItem = (name: string, body: string): void => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: `{Update:{"${name}":${body}}}`,
+    body: `{"Update":{"${name}":${body}}}`,
   })
     .then((response) => response.json())
     .then((response) => {
