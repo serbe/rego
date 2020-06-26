@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem, SetItem } from '../../helpers/fetcher';
+import { GetItem, InsertItem, UpdateItem } from '../../helpers/fetcher';
 import { optionString } from '../../helpers/utils';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { Rank, RankNameInput } from '../../models/rank';
@@ -15,13 +15,17 @@ export const RankItem = (): JSX.Element => {
   const [note, setNote] = useState('');
 
   const submit = (): void => {
+    const number_id = Number(id);
     const item: Rank = {
-      id: Number(id),
+      id: number_id,
       name: optionString(name),
       note: optionString(note),
     };
 
-    SetItem('Rank', JSON.stringify(item));
+    number_id === 0
+      ? InsertItem('Rank', JSON.stringify(item))
+      : UpdateItem('Rank', JSON.stringify(item));
+    return;
   };
 
   useEffect(() => {

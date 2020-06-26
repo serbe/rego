@@ -206,23 +206,44 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
   return [list, error];
 };
 
-export const SetItem = (name: string, body: string): string | undefined => {
-  const [error, setError] = useState<string>();
-
+export const InsertItem = (name: string, body: string): void => {
   fetch(URL, {
     method: 'POST',
     mode: 'cors',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: `{ Set: { ${name}: ${body} } }`,
+    body: `{Insert:{"${name}":${body}}}`,
   })
     .then((response) => response.json())
     .then((response) => {
       const jsonData = response as JsonScheme;
-      return setError(jsonData?.error);
+      if (jsonData?.error) {
+        console.log(jsonData?.error);
+      }
+      console.log(response);
+      return;
     })
-    .catch((error) => setError(error as string));
+    .catch((error) => console.log(error));
+};
 
-  return error;
+export const UpdateItem = (name: string, body: string): void => {
+  fetch(URL, {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: `{Update:{"${name}":${body}}}`,
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      const jsonData = response as JsonScheme;
+      if (jsonData?.error) {
+        console.log(jsonData?.error);
+      }
+      console.log(response);
+      return;
+    })
+    .catch((error) => console.log(error));
 };
