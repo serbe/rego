@@ -100,18 +100,21 @@ export const ContactIDSelect = (properties: SelectValues): JSX.Element => (
   />
 );
 
-export const ContactEducations = (properties: ContactEducationsValues): JSX.Element => (
-  <div className="field">
-    <label className="label" htmlFor="education-1-input">
-      Даты обучения в УМЦ
-    </label>
-    {properties.educations.map((education, index) => (
-      <Input
-        name={`education-${index}-input`}
-        key={`education-${index}`}
-        value={education}
-        classNameDiv="pb-1"
-      />
-    ))}
-  </div>
-);
+export const ContactEducations = (properties: ContactEducationsValues): JSX.Element =>
+  properties.educations.length > 0 ? (
+    <div className="field">
+      <label className="label" htmlFor="education-1-input">
+        Даты обучения в УМЦ
+      </label>
+      {properties.educations.map((education, index) => (
+        <Input
+          name={`education-${index}-input`}
+          key={`education-${index}`}
+          value={education}
+          classNameDiv="pb-1"
+        />
+      ))}
+    </div>
+  ) : (
+    <></>
+  );
