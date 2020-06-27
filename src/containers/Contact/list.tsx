@@ -32,7 +32,7 @@ export const Contacts = (): JSX.Element => {
             {contact.name}
           </td>
           <td
-            onClick={(): void => history.push(`/compaines/${contact.company_id || 0}`)}
+            onClick={(): void => history.push(`/companies/${contact.company_id || 0}`)}
             role="gridcell"
             className="is-hidden-mobile w250 link"
           >
