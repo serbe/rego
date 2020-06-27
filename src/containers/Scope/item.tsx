@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem } from '../../helpers/fetcher';
+import { GetItem, SetItem } from '../../helpers/fetcher';
+import { optionString } from '../../helpers/utils';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { Scope, ScopeNameInput } from '../../models/scope';
 
@@ -12,6 +13,19 @@ export const ScopeItem = (): JSX.Element => {
   const [data, error] = GetItem('Scope', id);
   const [name, setName] = useState('');
   const [note, setNote] = useState('');
+
+  const submit = (): void => {
+    const number_id = Number(id);
+    const item: Scope = {
+      id: number_id,
+      name: optionString(name),
+      note: optionString(note),
+    };
+
+    SetItem(number_id, 'Scope', JSON.stringify(item));
+    history.go(-1);
+    return;
+  };
 
   useEffect(() => {
     if (data?.id) {
@@ -31,7 +45,9 @@ export const ScopeItem = (): JSX.Element => {
 
           <div className="field is-grouped">
             <div className="control">
-              <button className="button">Сохранить</button>
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
             </div>
             <div className="control">
               <button className="button" onClick={() => history.go(-1)}>

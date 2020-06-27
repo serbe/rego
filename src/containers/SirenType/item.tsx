@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem } from '../../helpers/fetcher';
+import { GetItem, SetItem } from '../../helpers/fetcher';
+import { optionNumber, optionString } from '../../helpers/utils';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { SirenType, SirenTypeNameInput, SirenTypeRadiusInput } from '../../models/sirentype';
 
@@ -13,6 +14,20 @@ export const SirenTypeItem = (): JSX.Element => {
   const [name, setName] = useState('');
   const [radius, setRadius] = useState(0);
   const [note, setNote] = useState('');
+
+  const submit = (): void => {
+    const number_id = Number(id);
+    const item: SirenType = {
+      id: number_id,
+      name: optionString(name),
+      radius: optionNumber(radius),
+      note: optionString(note),
+    };
+
+    SetItem(number_id, 'SirenType', JSON.stringify(item));
+    history.go(-1);
+    return;
+  };
 
   useEffect(() => {
     if (data?.id) {
@@ -34,7 +49,9 @@ export const SirenTypeItem = (): JSX.Element => {
 
           <div className="field is-grouped">
             <div className="control">
-              <button className="button">Сохранить</button>
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
             </div>
             <div className="control">
               <button className="button" onClick={() => history.go(-1)}>

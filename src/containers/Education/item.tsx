@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem } from '../../helpers/fetcher';
+import { GetItem, SetItem } from '../../helpers/fetcher';
+import { optionNumber, optionString } from '../../helpers/utils';
 import {
   Education,
   EducationEndDateInput,
@@ -17,18 +18,34 @@ export const EducationItem = (): JSX.Element => {
   const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Education', id);
   const [contactID, setContactID] = useState(0);
-  const [postID, setPostID] = useState(0);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [postID, setPostID] = useState(0);
   const [note, setNote] = useState('');
+
+  const submit = (): void => {
+    const number_id = Number(id);
+    const item: Education = {
+      id: number_id,
+      contact_id: optionNumber(contactID),
+      start_date: optionString(startDate),
+      end_date: optionString(endDate),
+      post_id: optionNumber(postID),
+      note: optionString(note),
+    };
+
+    SetItem(number_id, 'Education', JSON.stringify(item));
+    history.go(-1);
+    return;
+  };
 
   useEffect(() => {
     if (data?.id) {
       const c = data as Education;
       setContactID(c.contact_id || 0);
-      setPostID(c.post_id || 0);
       setStartDate(c.start_date || '');
       setEndDate(c.end_date || '');
+      setPostID(c.post_id || 0);
       setNote(c.note || '');
       setLoaded(true);
     }
@@ -54,7 +71,9 @@ export const EducationItem = (): JSX.Element => {
 
           <div className="field is-grouped">
             <div className="control">
-              <button className="button">Сохранить</button>
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
             </div>
             <div className="control">
               <button className="button" onClick={() => history.go(-1)}>

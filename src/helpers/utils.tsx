@@ -4,6 +4,18 @@ export const optionString = (value: string): string | undefined => {
   return value === '' ? undefined : value;
 };
 
+export const optionNumber = (value: number): number | undefined => {
+  return value === 0 ? undefined : value;
+};
+
+export const filterArrayString = (values: string[]): string[] => {
+  return values.filter((value: string) => value !== '');
+};
+
+export const filterArrayNumber = (values: string[]): number[] => {
+  return values.map((value: string) => Number(value)).filter((value: number) => value !== 0);
+};
+
 export const stringNoNull = (value?: string): string => {
   return value || '';
 };

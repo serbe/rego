@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem } from '../../helpers/fetcher';
+import { GetItem, SetItem } from '../../helpers/fetcher';
+import { optionString } from '../../helpers/utils';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { Post, PostGOSwitch, PostNameInput } from '../../models/post';
 
@@ -13,6 +14,20 @@ export const PostItem = (): JSX.Element => {
   const [name, setName] = useState('');
   const [go, setGo] = useState(false);
   const [note, setNote] = useState('');
+
+  const submit = (): void => {
+    const number_id = Number(id);
+    const item: Post = {
+      id: number_id,
+      name: optionString(name),
+      go: go,
+      note: optionString(note),
+    };
+
+    SetItem(number_id, 'Post', JSON.stringify(item));
+    history.go(-1);
+    return;
+  };
 
   useEffect(() => {
     if (data?.id) {
@@ -34,7 +49,9 @@ export const PostItem = (): JSX.Element => {
 
           <div className="field is-grouped">
             <div className="control">
-              <button className="button">Сохранить</button>
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
             </div>
             <div className="control">
               <button className="button" onClick={() => history.go(-1)}>

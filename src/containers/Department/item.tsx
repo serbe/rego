@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem } from '../../helpers/fetcher';
+import { GetItem, SetItem } from '../../helpers/fetcher';
+import { optionString } from '../../helpers/utils';
 import { Department, DepartmentNameInput } from '../../models/department';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 
@@ -12,6 +13,19 @@ export const DepartmentItem = (): JSX.Element => {
   const [data, error] = GetItem('Department', id);
   const [name, setName] = useState('');
   const [note, setNote] = useState('');
+
+  const submit = (): void => {
+    const number_id = Number(id);
+    const item: Department = {
+      id: number_id,
+      name: optionString(name),
+      note: optionString(note),
+    };
+
+    SetItem(number_id, 'Department', JSON.stringify(item));
+    history.go(-1);
+    return;
+  };
 
   useEffect(() => {
     if (data?.id) {
@@ -30,9 +44,9 @@ export const DepartmentItem = (): JSX.Element => {
           <NoteInput value={note} setter={setNote} />
 
           <div className="field is-grouped">
-            <div className="control">
-              <button className="button">Сохранить</button>
-            </div>
+            <button className="button" onClick={() => submit()}>
+              Сохранить
+            </button>
             <div className="control">
               <button className="button" onClick={() => history.go(-1)}>
                 Закрыть

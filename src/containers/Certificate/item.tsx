@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem } from '../../helpers/fetcher';
+import { GetItem, SetItem } from '../../helpers/fetcher';
+import { optionNumber, optionString } from '../../helpers/utils';
 import {
   Certificate,
   CertificateDateInput,
@@ -21,6 +22,22 @@ export const CertificateItem = (): JSX.Element => {
   const [companyID, setCompanyID] = useState(0);
   const [certDate, setCertDate] = useState('');
   const [note, setNote] = useState('');
+
+  const submit = (): void => {
+    const number_id = Number(id);
+    const item: Certificate = {
+      id: number_id,
+      num: optionString(sNumber),
+      contact_id: optionNumber(contactID),
+      company_id: optionNumber(companyID),
+      cert_date: optionString(certDate),
+      note: optionString(note),
+    };
+
+    SetItem(number_id, 'Certificate', JSON.stringify(item));
+    history.go(-1);
+    return;
+  };
 
   useEffect(() => {
     if (data?.id) {
@@ -46,7 +63,9 @@ export const CertificateItem = (): JSX.Element => {
 
           <div className="field is-grouped">
             <div className="control">
-              <button className="button">Сохранить</button>
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
             </div>
             <div className="control">
               <button className="button" onClick={() => history.go(-1)}>

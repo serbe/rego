@@ -206,7 +206,12 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
   return [list, error];
 };
 
-export const InsertItem = (name: string, body: string): void => {
+export const SetItem = (id: number, name: string, body: string): void => {
+  id === 0 ? InsertItem(name, body) : UpdateItem(name, body);
+  return;
+};
+
+const InsertItem = (name: string, body: string): void => {
   fetch(URL, {
     method: 'POST',
     mode: 'cors',
@@ -227,7 +232,7 @@ export const InsertItem = (name: string, body: string): void => {
     .catch((error) => console.log(error));
 };
 
-export const UpdateItem = (name: string, body: string): void => {
+const UpdateItem = (name: string, body: string): void => {
   fetch(URL, {
     method: 'POST',
     mode: 'cors',

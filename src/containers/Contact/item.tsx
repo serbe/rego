@@ -1,10 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem } from '../../helpers/fetcher';
-import { addEmptyString, numberToString } from '../../helpers/utils';
+import { GetItem, SetItem } from '../../helpers/fetcher';
+import {
+  addEmptyString,
+  filterArrayNumber,
+  filterArrayString,
+  numberToString,
+  optionNumber,
+  optionString,
+} from '../../helpers/utils';
 import { CompanyIDSelect } from '../../models/company';
-import { Contact, ContactBirthdayInput, ContactNameInput } from '../../models/contact';
+import {
+  Contact,
+  ContactBirthdayInput,
+  ContactEducations,
+  ContactNameInput,
+} from '../../models/contact';
 import { DepartmentIDSelect } from '../../models/department';
 import {
   EmailInputs,
@@ -22,31 +34,55 @@ export const ContactItem = (): JSX.Element => {
   const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Contact', id);
   const [name, setName] = useState('');
-  const [postID, setPostID] = useState(0);
+  const [companyID, setCompanyID] = useState(0);
   const [departmentID, setDepartmentID] = useState(0);
+  const [postID, setPostID] = useState(0);
   const [postGoID, setPostGoID] = useState(0);
   const [rankID, setRankID] = useState(0);
+  const [birthday, setBirthday] = useState('');
+  const [note, setNote] = useState('');
   const [emails, setEmails] = useState(['']);
   const [phones, setPhones] = useState(['']);
   const [faxes, setFaxes] = useState(['']);
-  const [companyID, setCompanyID] = useState(0);
-  const [birthday, setBirthday] = useState('');
-  const [note, setNote] = useState('');
+  const [educations, setEducations] = useState<string[]>([]);
+
+  const submit = (): void => {
+    const number_id = Number(id);
+    const item: Contact = {
+      id: number_id,
+      name: optionString(name),
+      company_id: optionNumber(companyID),
+      department_id: optionNumber(departmentID),
+      post_id: optionNumber(postID),
+      post_go_id: optionNumber(postGoID),
+      rank_id: optionNumber(rankID),
+      birthday: optionString(birthday),
+      note: optionString(note),
+      emails: filterArrayString(emails),
+      phones: filterArrayNumber(phones),
+      faxes: filterArrayNumber(faxes),
+    };
+
+    SetItem(number_id, 'Contact', JSON.stringify(item));
+    history.go(-1);
+    return;
+  };
 
   useEffect(() => {
     if (data?.id) {
       const c = data as Contact;
       setName(c.name || '');
       setCompanyID(c.company_id || 0);
-      setPostID(c.post_id || 0);
       setDepartmentID(c.department_id || 0);
+      setPostID(c.post_id || 0);
       setPostGoID(c.post_go_id || 0);
       setRankID(c.rank_id || 0);
       setBirthday(c.birthday || '');
+      setNote(c.note || '');
       setEmails(addEmptyString(c.emails));
       setPhones(addEmptyString(numberToString(c.phones)));
       setFaxes(addEmptyString(numberToString(c.faxes)));
-      setNote(c.note || '');
+      setEducations(c.educations || []);
       setLoaded(true);
     }
   }, [data]);
@@ -93,11 +129,15 @@ export const ContactItem = (): JSX.Element => {
             </div>
           </div>
 
+          <ContactEducations educations={educations} />
+
           <NoteInput value={note} setter={setNote} />
 
           <div className="field is-grouped">
             <div className="control">
-              <button className="button">Сохранить</button>
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
             </div>
             <div className="control">
               <button className="button" onClick={() => history.go(-1)}>

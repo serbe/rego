@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem } from '../../helpers/fetcher';
+import { GetItem, SetItem } from '../../helpers/fetcher';
+import { optionNumber, optionString } from '../../helpers/utils';
 import { CompanyIDSelect } from '../../models/company';
 import { AddressInput, ContactIDSelect, NoteInput, ParameterTypes } from '../../models/impersonal';
 import {
@@ -35,6 +36,30 @@ export const SirenItem = (): JSX.Element => {
   const [stage, setStage] = useState(0);
   const [own, setOwn] = useState('');
   const [note, setNote] = useState('');
+
+  const submit = (): void => {
+    const number_id = Number(id);
+    const item: Siren = {
+      id: number_id,
+      num_id: optionNumber(numberID),
+      num_pass: optionString(numberPassport),
+      siren_type_id: optionNumber(sirenTypeID),
+      address: optionString(address),
+      radio: optionString(radio),
+      desk: optionString(desk),
+      contact_id: optionNumber(contactID),
+      company_id: optionNumber(companyID),
+      latitude: optionString(latitude),
+      longitude: optionString(longitude),
+      stage: optionNumber(stage),
+      own: optionString(own),
+      note: optionString(note),
+    };
+
+    SetItem(number_id, 'Siren', JSON.stringify(item));
+    history.go(-1);
+    return;
+  };
 
   useEffect(() => {
     if (data?.id) {
@@ -76,7 +101,9 @@ export const SirenItem = (): JSX.Element => {
 
           <div className="field is-grouped">
             <div className="control">
-              <button className="button">Сохранить</button>
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
             </div>
             <div className="control">
               <button className="button" onClick={() => history.go(-1)}>

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem } from '../../helpers/fetcher';
+import { GetItem, SetItem } from '../../helpers/fetcher';
+import { optionNumber, optionString } from '../../helpers/utils';
 import { CompanyIDSelect } from '../../models/company';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { KindIDSelect } from '../../models/kind';
@@ -14,9 +15,25 @@ export const PracticeItem = (): JSX.Element => {
   const [data, error] = GetItem('Practice', id);
   const [companyID, setCompanyID] = useState(0);
   const [kindID, setKindID] = useState(0);
-  const [date, setDate] = useState('');
   const [topic, setTopic] = useState('');
+  const [date, setDate] = useState('');
   const [note, setNote] = useState('');
+
+  const submit = (): void => {
+    const number_id = Number(id);
+    const item: Practice = {
+      id: number_id,
+      company_id: optionNumber(companyID),
+      kind_id: optionNumber(kindID),
+      topic: optionString(topic),
+      date_of_practice: optionString(date),
+      note: optionString(note),
+    };
+
+    SetItem(number_id, 'Practice', JSON.stringify(item));
+    history.go(-1);
+    return;
+  };
 
   useEffect(() => {
     if (data?.id) {
@@ -42,7 +59,9 @@ export const PracticeItem = (): JSX.Element => {
 
           <div className="field is-grouped">
             <div className="control">
-              <button className="button">Сохранить</button>
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
             </div>
             <div className="control">
               <button className="button" onClick={() => history.go(-1)}>
