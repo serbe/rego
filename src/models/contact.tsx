@@ -10,6 +10,10 @@ export interface ContactShortValues {
   contacts: ContactShort[];
 }
 
+export interface ContactEducationsValues {
+  educations: string[];
+}
+
 export type Contact = {
   id: number;
   name?: string;
@@ -25,22 +29,6 @@ export type Contact = {
   faxes?: number[];
   educations?: string[];
 };
-
-export interface ContactForm {
-  id: number;
-  name: string;
-  company_id: number;
-  department_id: number;
-  post_id: number;
-  post_go_id: number;
-  rank_id: number;
-  birthday: string;
-  note: string;
-  emails: string[];
-  phones: string[];
-  faxes: string[];
-  educations?: string[];
-}
 
 export type ContactList = {
   id: number;
@@ -110,4 +98,20 @@ export const ContactIDSelect = (properties: SelectValues): JSX.Element => (
     name="contact"
     setter={properties.setter}
   />
+);
+
+export const ContactEducations = (properties: ContactEducationsValues): JSX.Element => (
+  <div className="field">
+    <label className="label" htmlFor="education-1-input">
+      Даты обучения в УМЦ
+    </label>
+    {properties.educations.map((education, index) => (
+      <Input
+        name={`education-${index}-input`}
+        key={`education-${index}`}
+        value={education}
+        classNameDiv="pb-1"
+      />
+    ))}
+  </div>
 );
