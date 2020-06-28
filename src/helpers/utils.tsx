@@ -8,6 +8,11 @@ export const optionNumber = (value: number): number | undefined => {
   return value === 0 ? undefined : value;
 };
 
+export const optionDate = (value: string): string | undefined => {
+  const date = new Date(value);
+  return date.toString() === value ? value : undefined;
+};
+
 export const filterArrayString = (values: string[]): string[] => {
   return values.filter((value: string) => value !== '');
 };

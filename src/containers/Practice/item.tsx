@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { GetItem, SetItem } from '../../helpers/fetcher';
-import { optionNumber, optionString } from '../../helpers/utils';
+import { optionDate, optionNumber, optionString } from '../../helpers/utils';
 import { CompanyIDSelect } from '../../models/company';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { KindIDSelect } from '../../models/kind';
@@ -26,7 +26,7 @@ export const PracticeItem = (): JSX.Element => {
       company_id: optionNumber(companyID),
       kind_id: optionNumber(kindID),
       topic: optionString(topic),
-      date_of_practice: optionString(date),
+      date_of_practice: optionDate(date),
       note: optionString(note),
     };
 

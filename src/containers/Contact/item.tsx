@@ -7,6 +7,7 @@ import {
   filterArrayNumber,
   filterArrayString,
   numberToString,
+  optionDate,
   optionNumber,
   optionString,
 } from '../../helpers/utils';
@@ -56,7 +57,7 @@ export const ContactItem = (): JSX.Element => {
       post_id: optionNumber(postID),
       post_go_id: optionNumber(postGoID),
       rank_id: optionNumber(rankID),
-      birthday: optionString(birthday),
+      birthday: optionDate(birthday),
       note: optionString(note),
       emails: filterArrayString(emails),
       phones: filterArrayNumber(phones),

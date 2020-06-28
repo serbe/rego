@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { GetItem, SetItem } from '../../helpers/fetcher';
-import { optionNumber, optionString } from '../../helpers/utils';
+import { optionDate, optionNumber, optionString } from '../../helpers/utils';
 import {
   Education,
   EducationEndDateInput,
@@ -28,8 +28,8 @@ export const EducationItem = (): JSX.Element => {
     const item: Education = {
       id: number_id,
       contact_id: optionNumber(contactID),
-      start_date: optionString(startDate),
-      end_date: optionString(endDate),
+      start_date: optionDate(startDate),
+      end_date: optionDate(endDate),
       post_id: optionNumber(postID),
       note: optionString(note),
     };

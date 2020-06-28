@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { GetItem, SetItem } from '../../helpers/fetcher';
-import { optionNumber, optionString } from '../../helpers/utils';
+import { optionDate, optionNumber, optionString } from '../../helpers/utils';
 import {
   Certificate,
   CertificateDateInput,
@@ -30,7 +30,7 @@ export const CertificateItem = (): JSX.Element => {
       num: optionString(sNumber),
       contact_id: optionNumber(contactID),
       company_id: optionNumber(companyID),
-      cert_date: optionString(certDate),
+      cert_date: optionDate(certDate),
       note: optionString(note),
     };
 
