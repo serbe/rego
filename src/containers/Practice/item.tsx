@@ -13,11 +13,11 @@ export const PracticeItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Practice', id);
-  const [companyID, setCompanyID] = useState(0);
-  const [kindID, setKindID] = useState(0);
-  const [topic, setTopic] = useState('');
-  const [date, setDate] = useState('');
-  const [note, setNote] = useState('');
+  const [companyID, setCompanyID] = useState<number | undefined>();
+  const [kindID, setKindID] = useState<number | undefined>();
+  const [topic, setTopic] = useState<string | undefined>();
+  const [date, setDate] = useState<string | undefined>();
+  const [note, setNote] = useState<string | undefined>();
 
   const submit = (): void => {
     const number_id = Number(id);
@@ -38,11 +38,11 @@ export const PracticeItem = (): JSX.Element => {
   useEffect(() => {
     if (data?.id) {
       const c = data as Practice;
-      setCompanyID(c.company_id || 0);
-      setKindID(c.kind_id || 0);
-      setTopic(c.topic || '');
-      setDate(c.date_of_practice || '');
-      setNote(c.note || '');
+      setCompanyID(c.company_id);
+      setKindID(c.kind_id);
+      setTopic(c.topic);
+      setDate(c.date_of_practice);
+      setNote(c.note);
       setLoaded(true);
     }
   }, [data]);
@@ -51,8 +51,8 @@ export const PracticeItem = (): JSX.Element => {
     <div>
       {loaded && !error && (
         <>
-          <CompanyIDSelect id={companyID} setter={setCompanyID} />
-          <KindIDSelect id={kindID} setter={setKindID} />
+          <CompanyIDSelect id={companyID || 0} setter={setCompanyID} />
+          <KindIDSelect id={kindID || 0} setter={setKindID} />
           <PracticeTopicInput value={topic} setter={setTopic} />
           <PracticeDateInput value={date} setter={setDate} />
           <NoteInput value={note} setter={setNote} />

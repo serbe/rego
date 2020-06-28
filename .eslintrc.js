@@ -47,6 +47,7 @@ module.exports = {
     'jsx-a11y/label-has-associated-control': 'warn',
     'jsx-a11y/no-autofocus': 'warn',
     'unicorn/no-null': 'warn',
+    'unicorn/no-useless-undefined': 'warn',
     // '@typescript-eslint/camelcase': 'warn',
     // '@typescript-eslint/indent': 'off',
     // '@typescript-eslint/no-non-null-assertion': 'off',

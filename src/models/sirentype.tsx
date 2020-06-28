@@ -42,7 +42,7 @@ export const SirenTypeNameInput = (properties: StringInputProperties): JSX.Eleme
 export const SirenTypeRadiusInput = (properties: NumberInputProperties): JSX.Element => (
   <FormField
     name="siren_type_radius"
-    value={properties.value.toString()}
+    value={properties.value}
     onChange={(event: ChangeEvent<HTMLInputElement>): void =>
       properties.setter(Number(event.target.value))
     }

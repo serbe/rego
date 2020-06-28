@@ -11,9 +11,9 @@ export const PostItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Post', id);
-  const [name, setName] = useState('');
+  const [name, setName] = useState<string | undefined>();
   const [go, setGo] = useState(false);
-  const [note, setNote] = useState('');
+  const [note, setNote] = useState<string | undefined>();
 
   const submit = (): void => {
     const number_id = Number(id);
@@ -32,9 +32,9 @@ export const PostItem = (): JSX.Element => {
   useEffect(() => {
     if (data?.id) {
       const c = data as Post;
-      setName(c.name || '');
+      setName(c.name);
       setGo(c.go || false);
-      setNote(c.note || '');
+      setNote(c.note);
       setLoaded(true);
     }
   }, [data]);

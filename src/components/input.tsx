@@ -1,15 +1,15 @@
-import React, { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, MouseEvent } from 'react';
 
 import { Icon } from './icon';
 
 export type StringInputProperties = {
-  value: string;
-  setter: (value: string) => void;
+  value?: string;
+  setter: (value?: string) => void;
 };
 
 export type NumberInputProperties = {
-  value: number;
-  setter: (value: number) => void;
+  value?: number;
+  setter: (value?: number) => void;
 };
 
 export type BooleanInputProperties = {
@@ -30,7 +30,7 @@ interface InputProps {
   placeholder?: string;
   readonly?: boolean;
   type?: 'text' | 'password' | 'email' | 'tel';
-  value?: string;
+  value?: number | string;
 }
 
 export const Input = (properties: InputProps): JSX.Element => {
@@ -50,11 +50,11 @@ export const Input = (properties: InputProps): JSX.Element => {
     value,
   } = properties;
 
-  const [inputValue, setInputValue] = useState('');
+  // const [inputValue, setInputValue] = useState<number | string | undefined>();
 
-  useEffect(() => {
-    setInputValue(value || '');
-  }, [value]);
+  // useEffect(() => {
+  //   setInputValue(value === '' || value === 0 ? undefined : value);
+  // }, [value]);
 
   const divClasses = `control ${classNameDiv || ''} ${icon ? 'has-icons-left' : ''} ${
     iconRight ? 'has-icons-right' : ''
@@ -64,7 +64,7 @@ export const Input = (properties: InputProps): JSX.Element => {
     <div className={divClasses}>
       <input
         className={`${className || ''} input`}
-        defaultValue={inputValue}
+        value={value}
         disabled={disabled}
         id={name}
         key={name}

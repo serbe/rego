@@ -28,10 +28,10 @@ export const CompanyItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Company', id);
-  const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
-  const [scopeID, setScopeID] = useState(0);
-  const [note, setNote] = useState('');
+  const [name, setName] = useState<string | undefined>();
+  const [address, setAddress] = useState<string | undefined>();
+  const [scopeID, setScopeID] = useState<number | undefined>();
+  const [note, setNote] = useState<string | undefined>();
   const [emails, setEmails] = useState(['']);
   const [phones, setPhones] = useState(['']);
   const [faxes, setFaxes] = useState(['']);
@@ -59,10 +59,10 @@ export const CompanyItem = (): JSX.Element => {
   useEffect(() => {
     if (data?.id) {
       const c = data as Company;
-      setName(c.name || '');
-      setAddress(c.address || '');
-      setScopeID(c.scope_id || 0);
-      setNote(c.note || '');
+      setName(c.name);
+      setAddress(c.address);
+      setScopeID(c.scope_id);
+      setNote(c.note);
       setEmails(addEmptyString(c.emails));
       setPhones(addEmptyString(numberToString(c.phones)));
       setFaxes(addEmptyString(numberToString(c.faxes)));
@@ -77,7 +77,7 @@ export const CompanyItem = (): JSX.Element => {
       {loaded && !error && (
         <>
           <CompanyNameInput value={name} setter={setName} />
-          <ScopeIDSelect id={scopeID} setter={setScopeID} />
+          <ScopeIDSelect id={scopeID || 0} setter={setScopeID} />
           <AddressInput value={address} setter={setAddress} />
 
           <div className="columns">

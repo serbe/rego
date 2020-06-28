@@ -31,7 +31,7 @@ export type SirenList = {
 export const SirenNumberIDInput = (properties: NumberInputProperties): JSX.Element => (
   <FormField
     name="siren_number_id"
-    value={properties.value.toString()}
+    value={properties.value}
     onChange={(event: ChangeEvent<HTMLInputElement>): void =>
       properties.setter(Number(event.target.value))
     }
@@ -43,7 +43,7 @@ export const SirenNumberIDInput = (properties: NumberInputProperties): JSX.Eleme
 export const SirenNumberPassportInput = (properties: StringInputProperties): JSX.Element => (
   <FormField
     name="siren_number_passport"
-    value={properties.value.toString()}
+    value={properties.value}
     onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
     label="Номер по паспорту"
     icon="tag"
@@ -93,7 +93,7 @@ export const SirenLongtitudeInput = (properties: StringInputProperties): JSX.Ele
 export const SirenStageInput = (properties: NumberInputProperties): JSX.Element => (
   <FormField
     name="siren_stage"
-    value={properties.value.toString()}
+    value={properties.value}
     onChange={(event: ChangeEvent<HTMLInputElement>): void =>
       properties.setter(Number(event.target.value))
     }

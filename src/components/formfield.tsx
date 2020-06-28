@@ -15,7 +15,7 @@ interface FormFieldProps {
   readonly?: boolean;
   rounded?: boolean;
   type?: 'text' | 'password' | 'email' | 'tel';
-  value?: string;
+  value?: number | string;
 }
 
 export const FormField = (properties: FormFieldProps): JSX.Element => {

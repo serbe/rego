@@ -23,19 +23,19 @@ export const SirenItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Siren', id);
-  const [numberID, setNumberID] = useState(0);
-  const [numberPassport, setNumberPassport] = useState('');
-  const [sirenTypeID, setSirenTypeID] = useState(0);
-  const [address, setAddress] = useState('');
-  const [radio, setRadio] = useState('');
-  const [desk, setDesk] = useState('');
-  const [contactID, setContactID] = useState(0);
-  const [companyID, setCompanyID] = useState(0);
-  const [latitude, setLatitude] = useState('');
-  const [longitude, setLongitude] = useState('');
-  const [stage, setStage] = useState(0);
-  const [own, setOwn] = useState('');
-  const [note, setNote] = useState('');
+  const [numberID, setNumberID] = useState<number | undefined>();
+  const [numberPassport, setNumberPassport] = useState<string | undefined>();
+  const [sirenTypeID, setSirenTypeID] = useState<number | undefined>();
+  const [address, setAddress] = useState<string | undefined>();
+  const [radio, setRadio] = useState<string | undefined>();
+  const [desk, setDesk] = useState<string | undefined>();
+  const [contactID, setContactID] = useState<number | undefined>();
+  const [companyID, setCompanyID] = useState<number | undefined>();
+  const [latitude, setLatitude] = useState<string | undefined>();
+  const [longitude, setLongitude] = useState<string | undefined>();
+  const [stage, setStage] = useState<number | undefined>();
+  const [own, setOwn] = useState<string | undefined>();
+  const [note, setNote] = useState<string | undefined>();
 
   const submit = (): void => {
     const number_id = Number(id);
@@ -64,19 +64,19 @@ export const SirenItem = (): JSX.Element => {
   useEffect(() => {
     if (data?.id) {
       const c = data as Siren;
-      setNumberID(c.num_id || 0);
-      setNumberPassport(c.num_pass || '');
-      setSirenTypeID(c.siren_type_id || 0);
-      setAddress(c.address || '');
-      setRadio(c.radio || '');
-      setDesk(c.desk || '');
-      setContactID(c.contact_id || 0);
-      setCompanyID(c.company_id || 0);
-      setLatitude(c.latitude || '');
-      setLongitude(c.longitude || '');
-      setStage(c.stage || 0);
-      setOwn(c.own || '');
-      setNote(c.note || '');
+      setNumberID(c.num_id);
+      setNumberPassport(c.num_pass);
+      setSirenTypeID(c.siren_type_id);
+      setAddress(c.address);
+      setRadio(c.radio);
+      setDesk(c.desk);
+      setContactID(c.contact_id);
+      setCompanyID(c.company_id);
+      setLatitude(c.latitude);
+      setLongitude(c.longitude);
+      setStage(c.stage);
+      setOwn(c.own);
+      setNote(c.note);
       setLoaded(true);
     }
   }, [data]);
@@ -85,14 +85,14 @@ export const SirenItem = (): JSX.Element => {
     <div>
       {loaded && !error && (
         <>
-          <SirenNumberIDInput value={numberID} setter={setNumberID} />
+          <SirenNumberIDInput value={numberID || 0} setter={setNumberID} />
           <SirenNumberPassportInput value={numberPassport} setter={setNumberPassport} />
-          <SirenTypeIDSelect id={sirenTypeID} setter={setSirenTypeID} />
+          <SirenTypeIDSelect id={sirenTypeID || 0} setter={setSirenTypeID} />
           <AddressInput value={address} setter={setAddress} />
           <SirenRadioInput value={radio} setter={setRadio} />
           <SirenDeskInput value={desk} setter={setDesk} />
-          <ContactIDSelect id={contactID} setter={setContactID} />
-          <CompanyIDSelect id={companyID} setter={setCompanyID} />
+          <ContactIDSelect id={contactID || 0} setter={setContactID} />
+          <CompanyIDSelect id={companyID || 0} setter={setCompanyID} />
           <SirenLatitudeInput value={latitude} setter={setLatitude} />
           <SirenLongtitudeInput value={longitude} setter={setLongitude} />
           <SirenStageInput value={stage} setter={setStage} />

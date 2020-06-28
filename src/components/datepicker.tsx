@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
 export type DatePickerValues = {
-  value: string;
-  setter: (value: string) => void;
+  value?: string;
+  setter: (value?: string) => void;
 };
 
 interface DatePickerProps {

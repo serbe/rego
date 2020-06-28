@@ -34,14 +34,14 @@ export const ContactItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Contact', id);
-  const [name, setName] = useState('');
-  const [companyID, setCompanyID] = useState(0);
-  const [departmentID, setDepartmentID] = useState(0);
-  const [postID, setPostID] = useState(0);
-  const [postGoID, setPostGoID] = useState(0);
-  const [rankID, setRankID] = useState(0);
-  const [birthday, setBirthday] = useState('');
-  const [note, setNote] = useState('');
+  const [name, setName] = useState<string | undefined>();
+  const [companyID, setCompanyID] = useState<number | undefined>();
+  const [departmentID, setDepartmentID] = useState<number | undefined>();
+  const [postID, setPostID] = useState<number | undefined>();
+  const [postGoID, setPostGoID] = useState<number | undefined>();
+  const [rankID, setRankID] = useState<number | undefined>();
+  const [birthday, setBirthday] = useState<string | undefined>();
+  const [note, setNote] = useState<string | undefined>();
   const [emails, setEmails] = useState(['']);
   const [phones, setPhones] = useState(['']);
   const [faxes, setFaxes] = useState(['']);
@@ -72,14 +72,14 @@ export const ContactItem = (): JSX.Element => {
   useEffect(() => {
     if (data?.id) {
       const c = data as Contact;
-      setName(c.name || '');
-      setCompanyID(c.company_id || 0);
-      setDepartmentID(c.department_id || 0);
-      setPostID(c.post_id || 0);
-      setPostGoID(c.post_go_id || 0);
-      setRankID(c.rank_id || 0);
-      setBirthday(c.birthday || '');
-      setNote(c.note || '');
+      setName(c.name);
+      setCompanyID(c.company_id);
+      setDepartmentID(c.department_id);
+      setPostID(c.post_id);
+      setPostGoID(c.post_go_id);
+      setRankID(c.rank_id);
+      setBirthday(c.birthday);
+      setNote(c.note);
       setEmails(addEmptyString(c.emails));
       setPhones(addEmptyString(numberToString(c.phones)));
       setFaxes(addEmptyString(numberToString(c.faxes)));
@@ -93,22 +93,22 @@ export const ContactItem = (): JSX.Element => {
       {loaded && !error && (
         <>
           <ContactNameInput value={name} setter={setName} />
-          <CompanyIDSelect id={companyID} setter={setCompanyID} />
+          <CompanyIDSelect id={companyID || 0} setter={setCompanyID} />
 
           <div className="columns">
             <div className="column is-half">
-              <PostIDSelect id={postID} setter={setPostID} />
+              <PostIDSelect id={postID || 0} setter={setPostID} />
             </div>
             <div className="column is-half">
-              <DepartmentIDSelect id={departmentID} setter={setDepartmentID} />
+              <DepartmentIDSelect id={departmentID || 0} setter={setDepartmentID} />
             </div>
           </div>
           <div className="columns">
             <div className="column is-half">
-              <PostGoIDSelect id={postGoID} setter={setPostGoID} />
+              <PostGoIDSelect id={postGoID || 0} setter={setPostGoID} />
             </div>
             <div className="column is-half">
-              <RankIDSelect id={rankID} setter={setRankID} />
+              <RankIDSelect id={rankID || 0} setter={setRankID} />
             </div>
           </div>
 

@@ -17,11 +17,11 @@ export const EducationItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Education', id);
-  const [contactID, setContactID] = useState(0);
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [postID, setPostID] = useState(0);
-  const [note, setNote] = useState('');
+  const [contactID, setContactID] = useState<number | undefined>();
+  const [startDate, setStartDate] = useState<string | undefined>();
+  const [endDate, setEndDate] = useState<string | undefined>();
+  const [postID, setPostID] = useState<number | undefined>();
+  const [note, setNote] = useState<string | undefined>();
 
   const submit = (): void => {
     const number_id = Number(id);
@@ -42,11 +42,11 @@ export const EducationItem = (): JSX.Element => {
   useEffect(() => {
     if (data?.id) {
       const c = data as Education;
-      setContactID(c.contact_id || 0);
-      setStartDate(c.start_date || '');
-      setEndDate(c.end_date || '');
-      setPostID(c.post_id || 0);
-      setNote(c.note || '');
+      setContactID(c.contact_id);
+      setStartDate(c.start_date);
+      setEndDate(c.end_date);
+      setPostID(c.post_id);
+      setNote(c.note);
       setLoaded(true);
     }
   }, [data]);
@@ -55,8 +55,8 @@ export const EducationItem = (): JSX.Element => {
     <div>
       {loaded && !error && (
         <>
-          <EducationNameSelect id={contactID} setter={setContactID} />
-          <PostGoIDSelect id={postID} setter={setPostID} />
+          <EducationNameSelect id={contactID || 0} setter={setContactID} />
+          <PostGoIDSelect id={postID || 0} setter={setPostID} />
 
           <div className="columns">
             <div className="column">

@@ -11,9 +11,9 @@ export const KindItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Kind', id);
-  const [name, setName] = useState('');
-  const [shortName, setShortName] = useState('');
-  const [note, setNote] = useState('');
+  const [name, setName] = useState<string | undefined>();
+  const [shortName, setShortName] = useState<string | undefined>();
+  const [note, setNote] = useState<string | undefined>();
 
   const submit = (): void => {
     const number_id = Number(id);
@@ -32,9 +32,9 @@ export const KindItem = (): JSX.Element => {
   useEffect(() => {
     if (data?.id) {
       const c = data as Kind;
-      setName(c.name || '');
-      setShortName(c.short_name || '');
-      setNote(c.note || '');
+      setName(c.name);
+      setShortName(c.short_name);
+      setNote(c.note);
       setLoaded(true);
     }
   }, [data]);

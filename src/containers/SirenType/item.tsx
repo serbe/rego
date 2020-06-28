@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { GetItem, SetItem } from '../../helpers/fetcher';
-import { optionNumber, optionString } from '../../helpers/utils';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { SirenType, SirenTypeNameInput, SirenTypeRadiusInput } from '../../models/sirentype';
 
@@ -11,17 +10,17 @@ export const SirenTypeItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('SirenType', id);
-  const [name, setName] = useState('');
-  const [radius, setRadius] = useState(0);
-  const [note, setNote] = useState('');
+  const [name, setName] = useState<string | undefined>();
+  const [radius, setRadius] = useState<number | undefined>();
+  const [note, setNote] = useState<string | undefined>();
 
   const submit = (): void => {
     const number_id = Number(id);
     const item: SirenType = {
       id: number_id,
-      name: optionString(name),
-      radius: optionNumber(radius),
-      note: optionString(note),
+      name: name,
+      radius: radius,
+      note: note,
     };
 
     SetItem(number_id, 'SirenType', JSON.stringify(item));
@@ -32,9 +31,9 @@ export const SirenTypeItem = (): JSX.Element => {
   useEffect(() => {
     if (data?.id) {
       const c = data as SirenType;
-      setName(c.name || '');
-      setRadius(c.radius || 0);
-      setNote(c.note || '');
+      setName(c.name);
+      setRadius(c.radius);
+      setNote(c.note);
       setLoaded(true);
     }
   }, [data]);
