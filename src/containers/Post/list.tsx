@@ -43,7 +43,7 @@ export const Posts = (): JSX.Element => {
   ) : (
     <>
       <Bar value={search} setter={setSearch} name="posts" />
-      <table className="table is-narrow">
+      <table className="table is-narrow is-fullwidth">
         <tbody>
           <tr>
             <th>Наименование должности</th>

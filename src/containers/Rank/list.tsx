@@ -40,7 +40,7 @@ export const Ranks = (): JSX.Element => {
   ) : (
     <>
       <Bar value={search} setter={setSearch} name="ranks" />
-      <table className="table is-narrow">
+      <table className="table is-narrow is-fullwidth">
         <tbody>
           <tr>
             <th className="w250">Наименование чина</th>

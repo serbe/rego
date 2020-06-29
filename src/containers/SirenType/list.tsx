@@ -41,7 +41,7 @@ export const SirenTypes = (): JSX.Element => {
   ) : (
     <>
       <Bar value={search} setter={setSearch} name="sirentypes" />
-      <table className="table is-narrow">
+      <table className="table is-narrow is-fullwidth">
         <tbody>
           <tr>
             <th className="w250">Тип сирены</th>

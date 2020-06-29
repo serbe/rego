@@ -41,7 +41,7 @@ export const Kinds = (): JSX.Element => {
   ) : (
     <>
       <Bar value={search} setter={setSearch} name="kinds" />
-      <table className="table is-narrow">
+      <table className="table is-narrow is-fullwidth">
         <tbody>
           <tr>
             <th>Тип тренировки</th>

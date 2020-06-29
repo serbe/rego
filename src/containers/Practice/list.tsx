@@ -41,7 +41,7 @@ export const Practices = (): JSX.Element => {
   ) : (
     <>
       <Bar value={search} setter={setSearch} name="practices" />
-      <table className="table is-narrow">
+      <table className="table is-narrow is-fullwidth">
         <tbody>
           <tr>
             <th className="nowrap">Дата тренировки</th>

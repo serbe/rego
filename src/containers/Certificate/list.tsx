@@ -56,7 +56,7 @@ export const Certificates = (): JSX.Element => {
   ) : (
     <>
       <Bar value={search} setter={setSearch} name="certificates" />
-      <table className="table is-narrow">
+      <table className="table is-narrow is-fullwidth">
         <tbody>
           <tr>
             <th>Номер</th>

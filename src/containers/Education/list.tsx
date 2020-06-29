@@ -42,7 +42,7 @@ export const Educations = (): JSX.Element => {
   ) : (
     <>
       <Bar value={search} setter={setSearch} name="educations" />
-      <table className="table is-narrow">
+      <table className="table is-narrow is-fullwidth">
         <tbody>
           <tr>
             <th>Полное имя обучаемого</th>

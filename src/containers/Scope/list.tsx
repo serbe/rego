@@ -40,7 +40,7 @@ export const Scopes = (): JSX.Element => {
   ) : (
     <>
       <Bar value={search} setter={setSearch} name="scopes" />
-      <table className="table is-narrow">
+      <table className="table is-narrow is-fullwidth">
         <tbody>
           <tr>
             <th className="w250">Сфера деятельности</th>
