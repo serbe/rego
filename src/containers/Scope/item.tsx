@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { GetItem, SetItem } from '../../helpers/fetcher';
-import { optionString } from '../../helpers/utils';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { Scope, ScopeNameInput } from '../../models/scope';
 
@@ -11,15 +10,15 @@ export const ScopeItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Scope', id);
-  const [name, setName] = useState<string | undefined>();
-  const [note, setNote] = useState<string | undefined>();
+  const [name, setName] = useState<string>();
+  const [note, setNote] = useState<string>();
 
   const submit = (): void => {
     const number_id = Number(id);
     const item: Scope = {
       id: number_id,
-      name: optionString(name),
-      note: optionString(note),
+      name: name,
+      note: note,
     };
 
     SetItem(number_id, 'Scope', JSON.stringify(item));

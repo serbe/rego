@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { GetItem, SetItem } from '../../helpers/fetcher';
-import { optionString } from '../../helpers/utils';
 import { Department, DepartmentNameInput } from '../../models/department';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 
@@ -11,15 +10,15 @@ export const DepartmentItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Department', id);
-  const [name, setName] = useState<string | undefined>();
-  const [note, setNote] = useState<string | undefined>();
+  const [name, setName] = useState<string>();
+  const [note, setNote] = useState<string>();
 
   const submit = (): void => {
     const number_id = Number(id);
     const item: Department = {
       id: number_id,
-      name: optionString(name),
-      note: optionString(note),
+      name: name,
+      note: note,
     };
 
     SetItem(number_id, 'Department', JSON.stringify(item));

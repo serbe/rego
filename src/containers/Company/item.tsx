@@ -7,8 +7,6 @@ import {
   filterArrayNumber,
   filterArrayString,
   numberToString,
-  optionNumber,
-  optionString,
 } from '../../helpers/utils';
 import { Company, CompanyNameInput } from '../../models/company';
 import { ContactShort, ContactShortForm } from '../../models/contact';
@@ -28,10 +26,10 @@ export const CompanyItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Company', id);
-  const [name, setName] = useState<string | undefined>();
-  const [address, setAddress] = useState<string | undefined>();
-  const [scopeID, setScopeID] = useState<number | undefined>();
-  const [note, setNote] = useState<string | undefined>();
+  const [name, setName] = useState<string>();
+  const [address, setAddress] = useState<string>();
+  const [scopeID, setScopeID] = useState<number>();
+  const [note, setNote] = useState<string>();
   const [emails, setEmails] = useState(['']);
   const [phones, setPhones] = useState(['']);
   const [faxes, setFaxes] = useState(['']);
@@ -42,10 +40,10 @@ export const CompanyItem = (): JSX.Element => {
     const number_id = Number(id);
     const item: Company = {
       id: number_id,
-      name: optionString(name),
-      address: optionString(address),
-      scope_id: optionNumber(scopeID),
-      note: optionString(note),
+      name: name,
+      address: address,
+      scope_id: scopeID,
+      note: note,
       emails: filterArrayString(emails),
       phones: filterArrayNumber(phones),
       faxes: filterArrayNumber(faxes),
@@ -77,7 +75,7 @@ export const CompanyItem = (): JSX.Element => {
       {loaded && !error && (
         <>
           <CompanyNameInput value={name} setter={setName} />
-          <ScopeIDSelect id={scopeID || 0} setter={setScopeID} />
+          <ScopeIDSelect id={scopeID} setter={setScopeID} />
           <AddressInput value={address} setter={setAddress} />
 
           <div className="columns">

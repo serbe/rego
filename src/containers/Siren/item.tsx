@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { GetItem, SetItem } from '../../helpers/fetcher';
-import { optionNumber, optionString } from '../../helpers/utils';
 import { CompanyIDSelect } from '../../models/company';
 import { AddressInput, ContactIDSelect, NoteInput, ParameterTypes } from '../../models/impersonal';
 import {
@@ -23,37 +22,37 @@ export const SirenItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Siren', id);
-  const [numberID, setNumberID] = useState<number | undefined>();
-  const [numberPassport, setNumberPassport] = useState<string | undefined>();
-  const [sirenTypeID, setSirenTypeID] = useState<number | undefined>();
-  const [address, setAddress] = useState<string | undefined>();
-  const [radio, setRadio] = useState<string | undefined>();
-  const [desk, setDesk] = useState<string | undefined>();
-  const [contactID, setContactID] = useState<number | undefined>();
-  const [companyID, setCompanyID] = useState<number | undefined>();
-  const [latitude, setLatitude] = useState<string | undefined>();
-  const [longitude, setLongitude] = useState<string | undefined>();
-  const [stage, setStage] = useState<number | undefined>();
-  const [own, setOwn] = useState<string | undefined>();
-  const [note, setNote] = useState<string | undefined>();
+  const [numberID, setNumberID] = useState<number>();
+  const [numberPassport, setNumberPassport] = useState<string>();
+  const [sirenTypeID, setSirenTypeID] = useState<number>();
+  const [address, setAddress] = useState<string>();
+  const [radio, setRadio] = useState<string>();
+  const [desk, setDesk] = useState<string>();
+  const [contactID, setContactID] = useState<number>();
+  const [companyID, setCompanyID] = useState<number>();
+  const [latitude, setLatitude] = useState<string>();
+  const [longitude, setLongitude] = useState<string>();
+  const [stage, setStage] = useState<number>();
+  const [own, setOwn] = useState<string>();
+  const [note, setNote] = useState<string>();
 
   const submit = (): void => {
     const number_id = Number(id);
     const item: Siren = {
       id: number_id,
-      num_id: optionNumber(numberID),
-      num_pass: optionString(numberPassport),
-      siren_type_id: optionNumber(sirenTypeID),
-      address: optionString(address),
-      radio: optionString(radio),
-      desk: optionString(desk),
-      contact_id: optionNumber(contactID),
-      company_id: optionNumber(companyID),
-      latitude: optionString(latitude),
-      longitude: optionString(longitude),
-      stage: optionNumber(stage),
-      own: optionString(own),
-      note: optionString(note),
+      num_id: numberID,
+      num_pass: numberPassport,
+      siren_type_id: sirenTypeID,
+      address: address,
+      radio: radio,
+      desk: desk,
+      contact_id: contactID,
+      company_id: companyID,
+      latitude: latitude,
+      longitude: longitude,
+      stage: stage,
+      own: own,
+      note: note,
     };
 
     SetItem(number_id, 'Siren', JSON.stringify(item));
@@ -85,14 +84,14 @@ export const SirenItem = (): JSX.Element => {
     <div>
       {loaded && !error && (
         <>
-          <SirenNumberIDInput value={numberID || 0} setter={setNumberID} />
+          <SirenNumberIDInput value={numberID} setter={setNumberID} />
           <SirenNumberPassportInput value={numberPassport} setter={setNumberPassport} />
-          <SirenTypeIDSelect id={sirenTypeID || 0} setter={setSirenTypeID} />
+          <SirenTypeIDSelect id={sirenTypeID} setter={setSirenTypeID} />
           <AddressInput value={address} setter={setAddress} />
           <SirenRadioInput value={radio} setter={setRadio} />
           <SirenDeskInput value={desk} setter={setDesk} />
-          <ContactIDSelect id={contactID || 0} setter={setContactID} />
-          <CompanyIDSelect id={companyID || 0} setter={setCompanyID} />
+          <ContactIDSelect id={contactID} setter={setContactID} />
+          <CompanyIDSelect id={companyID} setter={setCompanyID} />
           <SirenLatitudeInput value={latitude} setter={setLatitude} />
           <SirenLongtitudeInput value={longitude} setter={setLongitude} />
           <SirenStageInput value={stage} setter={setStage} />

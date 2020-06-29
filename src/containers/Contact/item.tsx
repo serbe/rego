@@ -7,9 +7,6 @@ import {
   filterArrayNumber,
   filterArrayString,
   numberToString,
-  optionDate,
-  optionNumber,
-  optionString,
 } from '../../helpers/utils';
 import { CompanyIDSelect } from '../../models/company';
 import {
@@ -34,14 +31,14 @@ export const ContactItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Contact', id);
-  const [name, setName] = useState<string | undefined>();
-  const [companyID, setCompanyID] = useState<number | undefined>();
-  const [departmentID, setDepartmentID] = useState<number | undefined>();
-  const [postID, setPostID] = useState<number | undefined>();
-  const [postGoID, setPostGoID] = useState<number | undefined>();
-  const [rankID, setRankID] = useState<number | undefined>();
-  const [birthday, setBirthday] = useState<string | undefined>();
-  const [note, setNote] = useState<string | undefined>();
+  const [name, setName] = useState<string>();
+  const [companyID, setCompanyID] = useState<number>();
+  const [departmentID, setDepartmentID] = useState<number>();
+  const [postID, setPostID] = useState<number>();
+  const [postGoID, setPostGoID] = useState<number>();
+  const [rankID, setRankID] = useState<number>();
+  const [birthday, setBirthday] = useState<string>();
+  const [note, setNote] = useState<string>();
   const [emails, setEmails] = useState(['']);
   const [phones, setPhones] = useState(['']);
   const [faxes, setFaxes] = useState(['']);
@@ -51,14 +48,14 @@ export const ContactItem = (): JSX.Element => {
     const number_id = Number(id);
     const item: Contact = {
       id: number_id,
-      name: optionString(name),
-      company_id: optionNumber(companyID),
-      department_id: optionNumber(departmentID),
-      post_id: optionNumber(postID),
-      post_go_id: optionNumber(postGoID),
-      rank_id: optionNumber(rankID),
-      birthday: optionDate(birthday),
-      note: optionString(note),
+      name: name,
+      company_id: companyID,
+      department_id: departmentID,
+      post_id: postID,
+      post_go_id: postGoID,
+      rank_id: rankID,
+      birthday: birthday,
+      note: note,
       emails: filterArrayString(emails),
       phones: filterArrayNumber(phones),
       faxes: filterArrayNumber(faxes),
@@ -93,22 +90,22 @@ export const ContactItem = (): JSX.Element => {
       {loaded && !error && (
         <>
           <ContactNameInput value={name} setter={setName} />
-          <CompanyIDSelect id={companyID || 0} setter={setCompanyID} />
+          <CompanyIDSelect id={companyID} setter={setCompanyID} />
 
           <div className="columns">
             <div className="column is-half">
-              <PostIDSelect id={postID || 0} setter={setPostID} />
+              <PostIDSelect id={postID} setter={setPostID} />
             </div>
             <div className="column is-half">
-              <DepartmentIDSelect id={departmentID || 0} setter={setDepartmentID} />
+              <DepartmentIDSelect id={departmentID} setter={setDepartmentID} />
             </div>
           </div>
           <div className="columns">
             <div className="column is-half">
-              <PostGoIDSelect id={postGoID || 0} setter={setPostGoID} />
+              <PostGoIDSelect id={postGoID} setter={setPostGoID} />
             </div>
             <div className="column is-half">
-              <RankIDSelect id={rankID || 0} setter={setRankID} />
+              <RankIDSelect id={rankID} setter={setRankID} />
             </div>
           </div>
 

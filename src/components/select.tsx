@@ -7,8 +7,8 @@ import { SelectItem } from '../models/impersonal';
 import { Icon } from './icon';
 
 export interface SelectValues {
-  id: number;
-  setter: (event: number) => void;
+  id?: number;
+  setter: (event?: number) => void;
 }
 
 interface SelectProps {
@@ -18,7 +18,7 @@ interface SelectProps {
   label?: string;
   listName: string;
   name: string;
-  setter: (event: number) => void;
+  setter: (event?: number) => void;
 }
 
 export const Select = (properties: SelectProps): JSX.Element => {
@@ -112,7 +112,7 @@ export const Select = (properties: SelectProps): JSX.Element => {
               onMouseDown={(): void => {
                 setItemID(ListItem.id);
                 setValue(ListItem.name);
-                setter(ListItem.id);
+                setter(ListItem.id === 0 ? undefined : ListItem.id);
               }}
               role="row"
               tabIndex={index}

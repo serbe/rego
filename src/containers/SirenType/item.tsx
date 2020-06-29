@@ -10,9 +10,9 @@ export const SirenTypeItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('SirenType', id);
-  const [name, setName] = useState<string | undefined>();
-  const [radius, setRadius] = useState<number | undefined>();
-  const [note, setNote] = useState<string | undefined>();
+  const [name, setName] = useState<string>();
+  const [radius, setRadius] = useState<number>();
+  const [note, setNote] = useState<string>();
 
   const submit = (): void => {
     const number_id = Number(id);

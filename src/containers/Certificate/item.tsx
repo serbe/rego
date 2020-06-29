@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { GetItem, SetItem } from '../../helpers/fetcher';
-import { optionDate, optionNumber } from '../../helpers/utils';
 import {
   Certificate,
   CertificateDateInput,
@@ -17,20 +16,20 @@ export const CertificateItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Certificate', id);
-  const [sNumber, setSNumber] = useState<string | undefined>();
-  const [contactID, setContactID] = useState<number | undefined>();
-  const [companyID, setCompanyID] = useState<number | undefined>();
-  const [certDate, setCertDate] = useState<string | undefined>();
-  const [note, setNote] = useState<string | undefined>();
+  const [sNumber, setSNumber] = useState<string>();
+  const [contactID, setContactID] = useState<number>();
+  const [companyID, setCompanyID] = useState<number>();
+  const [certDate, setCertDate] = useState<string>();
+  const [note, setNote] = useState<string>();
 
   const submit = (): void => {
     const number_id = Number(id);
     const item: Certificate = {
       id: number_id,
       num: sNumber,
-      contact_id: optionNumber(contactID),
-      company_id: optionNumber(companyID),
-      cert_date: optionDate(certDate),
+      contact_id: contactID,
+      company_id: companyID,
+      cert_date: certDate,
       note: note,
     };
 
@@ -56,8 +55,8 @@ export const CertificateItem = (): JSX.Element => {
       {loaded && !error && (
         <>
           <CertificateNumberInput value={sNumber} setter={setSNumber} />
-          <ContactIDSelect id={contactID || 0} setter={setContactID} />
-          <CompanyIDSelect id={companyID || 0} setter={setCompanyID} />
+          <ContactIDSelect id={contactID} setter={setContactID} />
+          <CompanyIDSelect id={companyID} setter={setCompanyID} />
           <CertificateDateInput value={certDate} setter={setCertDate} />
           <NoteInput value={note} setter={setNote} />
 

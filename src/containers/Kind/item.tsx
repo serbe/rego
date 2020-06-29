@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { GetItem, SetItem } from '../../helpers/fetcher';
-import { optionString } from '../../helpers/utils';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { Kind, KindNameInput, KindShortNameInput } from '../../models/kind';
 
@@ -11,17 +10,17 @@ export const KindItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Kind', id);
-  const [name, setName] = useState<string | undefined>();
-  const [shortName, setShortName] = useState<string | undefined>();
-  const [note, setNote] = useState<string | undefined>();
+  const [name, setName] = useState<string>();
+  const [shortName, setShortName] = useState<string>();
+  const [note, setNote] = useState<string>();
 
   const submit = (): void => {
     const number_id = Number(id);
     const item: Kind = {
       id: number_id,
-      name: optionString(name),
-      short_name: optionString(shortName),
-      note: optionString(note),
+      name: name,
+      short_name: shortName,
+      note: note,
     };
 
     SetItem(number_id, 'Kind', JSON.stringify(item));

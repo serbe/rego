@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { GetItem, SetItem } from '../../helpers/fetcher';
-import { optionDate, optionNumber, optionString } from '../../helpers/utils';
 import { CompanyIDSelect } from '../../models/company';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { KindIDSelect } from '../../models/kind';
@@ -13,21 +12,21 @@ export const PracticeItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Practice', id);
-  const [companyID, setCompanyID] = useState<number | undefined>();
-  const [kindID, setKindID] = useState<number | undefined>();
-  const [topic, setTopic] = useState<string | undefined>();
-  const [date, setDate] = useState<string | undefined>();
-  const [note, setNote] = useState<string | undefined>();
+  const [companyID, setCompanyID] = useState<number>();
+  const [kindID, setKindID] = useState<number>();
+  const [topic, setTopic] = useState<string>();
+  const [date, setDate] = useState<string>();
+  const [note, setNote] = useState<string>();
 
   const submit = (): void => {
     const number_id = Number(id);
     const item: Practice = {
       id: number_id,
-      company_id: optionNumber(companyID),
-      kind_id: optionNumber(kindID),
-      topic: optionString(topic),
-      date_of_practice: optionDate(date),
-      note: optionString(note),
+      company_id: companyID,
+      kind_id: kindID,
+      topic: topic,
+      date_of_practice: date,
+      note: note,
     };
 
     SetItem(number_id, 'Practice', JSON.stringify(item));
@@ -51,8 +50,8 @@ export const PracticeItem = (): JSX.Element => {
     <div>
       {loaded && !error && (
         <>
-          <CompanyIDSelect id={companyID || 0} setter={setCompanyID} />
-          <KindIDSelect id={kindID || 0} setter={setKindID} />
+          <CompanyIDSelect id={companyID} setter={setCompanyID} />
+          <KindIDSelect id={kindID} setter={setKindID} />
           <PracticeTopicInput value={topic} setter={setTopic} />
           <PracticeDateInput value={date} setter={setDate} />
           <NoteInput value={note} setter={setNote} />

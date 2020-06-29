@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { GetItem, SetItem } from '../../helpers/fetcher';
-import { optionDate, optionNumber, optionString } from '../../helpers/utils';
 import {
   Education,
   EducationEndDateInput,
@@ -17,21 +16,21 @@ export const EducationItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(id === '0' || false);
   const [data, error] = GetItem('Education', id);
-  const [contactID, setContactID] = useState<number | undefined>();
-  const [startDate, setStartDate] = useState<string | undefined>();
-  const [endDate, setEndDate] = useState<string | undefined>();
-  const [postID, setPostID] = useState<number | undefined>();
-  const [note, setNote] = useState<string | undefined>();
+  const [contactID, setContactID] = useState<number>();
+  const [startDate, setStartDate] = useState<string>();
+  const [endDate, setEndDate] = useState<string>();
+  const [postID, setPostID] = useState<number>();
+  const [note, setNote] = useState<string>();
 
   const submit = (): void => {
     const number_id = Number(id);
     const item: Education = {
       id: number_id,
-      contact_id: optionNumber(contactID),
-      start_date: optionDate(startDate),
-      end_date: optionDate(endDate),
-      post_id: optionNumber(postID),
-      note: optionString(note),
+      contact_id: contactID,
+      start_date: startDate,
+      end_date: endDate,
+      post_id: postID,
+      note: note,
     };
 
     SetItem(number_id, 'Education', JSON.stringify(item));
@@ -55,8 +54,8 @@ export const EducationItem = (): JSX.Element => {
     <div>
       {loaded && !error && (
         <>
-          <EducationNameSelect id={contactID || 0} setter={setContactID} />
-          <PostGoIDSelect id={postID || 0} setter={setPostID} />
+          <EducationNameSelect id={contactID} setter={setContactID} />
+          <PostGoIDSelect id={postID} setter={setPostID} />
 
           <div className="columns">
             <div className="column">
