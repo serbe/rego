@@ -1,28 +1,4 @@
-import React, { useState } from 'react';
-
-export function useString(initValue?: string): [string | undefined, (newValue?: string) => void] {
-  const [value, setValue] = useState<string | undefined>(initValue);
-
-  function setter(newValue: string | undefined): void {
-    setValue(newValue === '' ? undefined : newValue);
-  }
-
-  return [value, setter];
-}
-
-export const optionString = (value?: string): string | undefined => {
-  return value === '' ? undefined : value;
-};
-
-export const optionNumber = (value?: number): number | undefined => {
-  return value === 0 ? undefined : value;
-};
-
-export const optionDate = (value?: string): string | undefined => {
-  if (!value) return value;
-  const date = new Date(value);
-  return date.toString() === value ? value : undefined;
-};
+import React from 'react';
 
 export const filterArrayString = (values: string[]): string[] => {
   return values.filter((value: string) => value !== '');

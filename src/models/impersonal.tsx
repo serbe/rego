@@ -1,4 +1,4 @@
-import React, { ChangeEvent, KeyboardEvent, SetStateAction } from 'react';
+import React, { ChangeEvent, SetStateAction } from 'react';
 
 import { FormField } from '../components/formfield';
 import { Input, StringInputProperties } from '../components/input';
@@ -185,7 +185,6 @@ export const NoteInput = (properties: StringInputProperties): JSX.Element => (
     name="note"
     value={properties.value}
     onChange={(event: ChangeEvent<HTMLInputElement>): void => {
-      console.log(properties.value, event.target.value);
       properties.setter(event.target.value);
     }}
     label="Заметки"
