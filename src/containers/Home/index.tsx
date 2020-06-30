@@ -1,19 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-
-import { EducationShort } from '../../models/education';
-import { PracticeShort } from '../../models/practice';
-import { rws } from '../../netapi';
 import './index.css';
 
-type HomeWS = {
-  name: string;
-  object: {
-    EducationShort?: EducationShort[];
-    PracticeShort?: PracticeShort[];
-  };
-  error?: string;
-};
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+
+import { GetList } from '../../helpers/fetcher';
+import { EducationShort } from '../../models/education';
+import { PracticeShort } from '../../models/practice';
 
 const trClass = (date: string): string => {
   const m = new Date();
@@ -35,91 +27,79 @@ const tinyDate = (date: string): string => {
   return date;
 };
 
-export const Home = (): JSX.Element => {
-  const [hasError, setErrors] = useState<string>();
-  const [educations, setEducations] = useState<EducationShort[]>([]);
-  const [practices, setPractices] = useState<PracticeShort[]>([]);
-
-  useEffect(() => {
-    rws.addEventListener('message', (message: MessageEvent) => {
-      const data: HomeWS = JSON.parse(message.data);
-      if (data.name && data.name === 'PracticeNear' && data.object.PracticeShort) {
-        setPractices(data.object.PracticeShort);
-      }
-      if (data.name && data.name === 'EducationNear' && data.object.EducationShort) {
-        setEducations(data.object.EducationShort);
-      }
-      if (data.error) {
-        setErrors(data.error);
-      }
-    });
-    rws.send('{"Get":{"List":"EducationNear"}}');
-    rws.send('{"Get":{"List":"PracticeNear"}}');
-
-    return (): void => {
-      rws.removeEventListener('message', (message: MessageEvent) => {
-        console.log('removeEventListener', message);
-      });
-    };
-  }, []);
-
-  const EducationTable = (): JSX.Element => (
+const EducationTable = (educations: EducationShort[]): JSX.Element => {
+  const history = useHistory();
+  return (
     <table className="table is-narrow">
       <tbody>
         {educations.map((row, index) => (
           <tr key={index} className={trClass(row.start_date)}>
-            <td>
-              <Link to={`/education/${row.id}`} className="has-text-black">
-                {tinyDate(row.start_date)}
-              </Link>
+            <td
+              className="has-text-black"
+              onMouseDown={(): void => history.push(`/education/${row.id}`)}
+              role="gridcell"
+            >
+              {tinyDate(row.start_date)}
             </td>
-            <td>
-              <Link to={`/contact/${row.contact_id}`} className="has-text-black">
-                {row.contact_name}
-              </Link>
+            <td
+              className="has-text-black"
+              onMouseDown={(): void => history.push(`/contact/${row.contact_id}`)}
+              role="gridcell"
+            >
+              {row.contact_name}
             </td>
           </tr>
         ))}
       </tbody>
     </table>
   );
+};
 
-  const PracticeTable = (): JSX.Element => (
+const PracticeTable = (practices: PracticeShort[]): JSX.Element => {
+  const history = useHistory();
+  return (
     <table className="table is-narrow">
       <tbody>
         {practices.map((row, index) => (
           <tr key={index} className={trClass(row.date_of_practice)}>
-            <td>
-              <Link to={`/practice/${row.id}`} className="has-text-black">
-                {tinyDate(row.date_of_practice)}
-              </Link>
+            <td
+              className="has-text-black"
+              onMouseDown={(): void => history.push(`/practice/${row.id}`)}
+              role="gridcell"
+            >
+              {tinyDate(row.date_of_practice)}
             </td>
-            <td>
-              <Link to={`/kind/${row.kind_id}`} className="has-text-black">
-                {row.kind_short_name}
-              </Link>
+            <td
+              className="has-text-black"
+              onMouseDown={(): void => history.push(`/kind/${row.kind_id}`)}
+              role="gridcell"
+            >
+              {row.kind_short_name}
             </td>
-            <td>
-              <Link to={`/company/${row.company_id}`} className="has-text-black">
-                {row.company_name}
-              </Link>
+            <td
+              className="has-text-black"
+              onMouseDown={(): void => history.push(`/company/${row.company_id}`)}
+              role="gridcell"
+            >
+              {row.company_name}
             </td>
           </tr>
         ))}
       </tbody>
     </table>
   );
+};
 
-  return hasError ? (
+export const Home = (): JSX.Element => {
+  const [educations, educationsError] = GetList('EducationNear');
+  const [practices, practicesError] = GetList('PracticeNear');
+
+  return practicesError || educationsError ? (
     <div>No data</div>
   ) : (
     <div className="columns is-mobile">
-      <div className="column is-4">
-        <EducationTable />
-      </div>
-      <div className="column is-4 is-offset-4">
-        <PracticeTable />
-      </div>
+      <div className="column is-4">{EducationTable(educations as EducationShort[])}</div>
+      <div className="column is-4 is-offset-4">{PracticeTable(practices as PracticeShort[])}</div>
     </div>
   );
 };

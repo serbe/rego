@@ -1,224 +1,199 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useReducer } from 'react';
+import { useHistory } from 'react-router-dom';
 
+import { List } from '../models/impersonal';
+import { Button } from './button';
+import { Input } from './input';
 import { Pagination } from './pagination';
-import { ModelsList } from '../models/lists';
 
-export type Column = {
-  field: string;
-  fieldFunc?: (value: string) => string;
-  label?: string;
-  witdh?: string;
-  array?: boolean;
-  linkBase?: string;
-  linkField?: string;
-  className?: string;
-};
-
-type SData = {
-  id: number;
+export type SData = {
   data: string;
+  id: number;
 };
 
-export type RowClassFunc = {
-  rowFunc: (value: string) => string;
-  rowFuncField: string;
+export type PaginateProperties = {
+  currentPage: number;
+  filteredDataLength: number;
+  itemsPerPage: number;
+  setter: (value: number) => void;
 };
 
-const splitArray = (items: string[]): JSX.Element => (
-  <>
-    {items.map((arrayItem, index) => (
-      <div key={`div${index}`}>{arrayItem}</div>
-    ))}
-  </>
-);
+export type DataProperties = {
+  data: List[];
+  search: string;
+};
 
-interface TableProps {
-  data: ModelsList[];
-  columns: Column[];
-  rowClass?: RowClassFunc;
-  className?: string;
-  loaded?: boolean;
-  paginate?: number;
-  nohead?: boolean;
-  hoverable?: boolean;
-  striped?: boolean;
-  bordered?: boolean;
-}
+type BarProperties = {
+  name: string;
+  setter: (value: string) => void;
+  value: string;
+};
 
-export const Table = (properties: TableProps): JSX.Element => {
-  const [currentPage, setCurrentPage] = useState(0);
-  const [search, setSearch] = useState<string>('');
-  const [searchValues, setSearchValues] = useState<SData[]>([]);
-  const [fData, setFData] = useState<ModelsList[]>([]);
-  const [fLength, setFLength] = useState(0);
+type State = {
+  currentPage: number;
+  filteredData: List[];
+  filteredDataLength: number;
+  itemsPerPage: number;
+  searchValues: SData[];
+};
 
-  const {
-    data,
-    columns,
-    className,
-    paginate,
-    nohead,
-    rowClass,
-    hoverable,
-    striped,
-    bordered,
-  } = properties;
+type Action =
+  | { type: 'searchLessThanTwo'; value: List[]; valueLength: number }
+  | { type: 'changeSearch'; value: List[]; search: string }
+  | { type: 'setFilteredData'; value: List[] }
+  | { type: 'setCurrentPage'; value: number }
+  | { type: 'setSearchValues'; value: SData[] }
+  | { type: 'setFilteredDataLength'; value: number };
 
-  const itemsOnPage = paginate || 20;
+const initialArguments = {
+  currentPage: 0,
+  filteredData: [],
+  filteredDataLength: 0,
+  itemsPerPage: 20,
+  searchValues: [],
+};
+
+const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    case 'searchLessThanTwo':
+      if (state.filteredDataLength !== action.valueLength) {
+        return { ...state, filteredDataLength: action.valueLength, filteredData: action.value };
+      }
+      return state;
+    case 'changeSearch': {
+      const searchArray = action.search.toLowerCase().split(' ');
+      const temporaryFilteredData = action.value.filter((_, index) =>
+        searchArray.every((value: string) => state.searchValues[index].data.includes(value)),
+      );
+      const temporaryFilteredLength = temporaryFilteredData.length;
+      if (temporaryFilteredLength !== state.filteredDataLength) {
+        if (
+          state.currentPage > 1 &&
+          state.currentPage + 1 > Math.ceil(temporaryFilteredLength / state.itemsPerPage)
+        ) {
+          return {
+            ...state,
+            currentPage: Math.ceil(temporaryFilteredLength / state.itemsPerPage) - 1,
+            filteredData: temporaryFilteredData,
+            filteredDataLength: temporaryFilteredLength,
+          };
+        }
+        return {
+          ...state,
+          filteredData: temporaryFilteredData,
+          filteredDataLength: temporaryFilteredLength,
+        };
+      }
+      return state;
+    }
+    case 'setFilteredData':
+      return { ...state, filteredData: action.value };
+    case 'setCurrentPage':
+      return { ...state, currentPage: action.value };
+    case 'setSearchValues':
+      return { ...state, searchValues: action.value };
+    case 'setFilteredDataLength':
+      return { ...state, filteredDataLength: action.value };
+    default:
+      return state;
+  }
+};
+
+export const Data = (properties: DataProperties): [() => List[], JSX.Element] => {
+  const { data, search } = properties;
+  type td = typeof properties.data;
+
+  const [{ filteredData, currentPage, filteredDataLength, itemsPerPage }, dispatch] = useReducer(
+    reducer,
+    initialArguments,
+  );
+
+  const setCurrentPage = (page: number): void => {
+    dispatch({
+      type: 'setCurrentPage',
+      value: page,
+    });
+  };
 
   useEffect(() => {
-    const sv: SData[] = [];
-    data.map((row, index): void => {
-      let rowString = '';
-      const values = Object.values(row);
-      values.map((value): void => {
-        if (value && typeof value !== 'number') {
-          if (typeof value === 'string') {
-            rowString += value;
-          } else if (Array.isArray(value)) {
-            rowString += value.join('');
+    const sv: SData[] = data.map(
+      (row, index): SData => {
+        const values = Object.values(row);
+        const rowString: string[] = values.map((value) => {
+          if (value && typeof value !== 'number') {
+            if (typeof value === 'string') {
+              return value;
+            } else if (Array.isArray(value)) {
+              return value.join('');
+            }
           }
-        }
-      });
-      sv.push({ id: index, data: rowString.toLowerCase() });
-    });
-    setSearchValues(sv);
-    setFData(data);
-    setFLength(data.length);
+          return '';
+        });
+        return { id: index, data: rowString.join('').toLowerCase() };
+      },
+    );
+    dispatch({ type: 'setSearchValues', value: sv });
+    dispatch({ type: 'setFilteredData', value: data });
+    dispatch({ type: 'setFilteredDataLength', value: data.length });
   }, [data]);
 
   useEffect(() => {
     if (search.length < 2) {
-      const dataLength = data.length;
-      if (fLength !== dataLength) {
-        setFData(data);
-        setFLength(dataLength);
-      }
+      dispatch({ type: 'searchLessThanTwo', value: data, valueLength: data.length });
     } else {
-      const searchArray = search.toLowerCase().split(' ');
-      const filteredData = data.filter((_, index) =>
-        searchArray.every((value: string) => searchValues[index].data.includes(value)),
-      );
-      const filteredLength = filteredData.length;
-      if (filteredLength !== fLength) {
-        if (currentPage + 1 > Math.ceil(filteredLength / itemsOnPage)) {
-          setCurrentPage(Math.ceil(filteredLength / itemsOnPage) - 1);
-        }
-        setFData(filteredData);
-        setFLength(filteredLength);
-      }
+      dispatch({ type: 'changeSearch', value: data, search: search });
     }
-  }, [search, itemsOnPage]);
+  }, [search, data]);
 
-  const paginationData = (): ModelsList[] => {
-    return fData.slice(currentPage * itemsOnPage, (currentPage + 1) * itemsOnPage);
+  const paginationData = (): td => {
+    return filteredData.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
   };
 
-  const changeSearch = (event: ChangeEvent<HTMLInputElement>): void => {
-    setSearch(event.target.value);
-  };
+  return [
+    paginationData,
+    Paginate({
+      currentPage: currentPage,
+      filteredDataLength: filteredDataLength,
+      itemsPerPage: itemsPerPage,
+      setter: setCurrentPage,
+    }),
+  ];
+};
 
+export const Bar = (properties: BarProperties): JSX.Element => {
+  const history = useHistory();
+  return (
+    <div className="field is-grouped">
+      <div className="control mb-4" key="TableNewItem">
+        <Button onClick={() => history.push(`/${properties.name}/0`)}>Создать</Button>
+      </div>
+      <div className="control mb-4 is-expanded" key="TableSearch">
+        <Input
+          className="input is-expanded"
+          name="search"
+          placeholder="Поиск"
+          onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
+            properties.setter(event.target.value)
+          }
+          value={properties.value}
+        />
+      </div>
+    </div>
+  );
+};
+
+export const Paginate = (properties: PaginateProperties): JSX.Element => {
+  const { filteredDataLength, itemsPerPage, currentPage, setter } = properties;
   const receiveChildValue = (value: number): void => {
-    setCurrentPage(value - 1);
+    setter(value - 1);
   };
-
-  const tableClasses = `${className ? className : ''} table is-fullwidth is-narrow mwt ${
-    hoverable ? 'is-hoverable' : ''
-  } ${striped ? 'is-striped' : ''} ${bordered ? 'is-bordered' : ''}`;
-
-  const Heading = (): JSX.Element | null =>
-    nohead ? null : (
-      <thead>
-        <tr>
-          {columns.map<JSX.Element>((column: Column, index: number) => (
-            <th key={`th${index}`} className={column.className}>
-              {column.label}
-            </th>
-          ))}
-        </tr>
-      </thead>
-    );
-
-  const Td = (field: string[] | string, isArray?: boolean): JSX.Element =>
-    isArray && field && Array.isArray(field) ? splitArray(field) : <>{field}</>;
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const TableRow = (row: any): JSX.Element => (
-    <>
-      {columns.map((column: Column, index: number) => (
-        <td key={`td${row.id}${index}`} className={column.className}>
-          {column.linkField && column.linkBase ? (
-            <Link to={column.linkBase + row[column.linkField]} className="has-text-dark">
-              {Td(
-                column.fieldFunc ? column.fieldFunc(row[column.field]) : row[column.field],
-                column.array,
-              )}
-            </Link>
-          ) : (
-            Td(
-              column.fieldFunc ? column.fieldFunc(row[column.field]) : row[column.field],
-              column.array,
-            )
-          )}
-        </td>
-      ))}
-    </>
-  );
-
-  const TableAllRows = (): JSX.Element => (
-    <>
-      {paginationData().map((item, index) => (
-        <tr
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          className={rowClass ? rowClass.rowFunc((item as any)[rowClass.rowFuncField]) : undefined}
-          key={`tr${item.id}${index}`}
-        >
-          {TableRow(item)}
-        </tr>
-      ))}
-    </>
-  );
-
-  const TBody = (): JSX.Element | null =>
-    data && data.length > 0 ? (
-      <tbody>
-        <TableAllRows />
-      </tbody>
-    ) : null;
-
-  const Paginate = (): JSX.Element | null =>
-    paginate && fLength / itemsOnPage > 2 ? (
-      <Pagination
-        currentPage={currentPage + 1}
-        lastPage={Math.ceil(fLength / itemsOnPage)}
-        callback={receiveChildValue}
-      />
-    ) : null;
-
-  const Search = (): JSX.Element => (
-    <p className="control mb1 mwt" key="TableSearch">
-      <input
-        className="input is-expanded"
-        type="search"
-        placeholder="Поиск"
-        onChange={changeSearch}
-        value={search}
-        autoFocus
-      />
-    </p>
-  );
-
-  return !data ? (
-    <div>Loading data</div>
+  return filteredDataLength / itemsPerPage > 2 ? (
+    <Pagination
+      currentPage={currentPage + 1}
+      lastPage={Math.ceil(filteredDataLength / itemsPerPage)}
+      setter={receiveChildValue}
+    />
   ) : (
-    <>
-      <Search />
-      <table className={tableClasses}>
-        <Heading />
-        <TBody />
-      </table>
-      <Paginate />
-    </>
+    <></>
   );
 };

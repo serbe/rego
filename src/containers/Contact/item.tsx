@@ -1,284 +1,150 @@
-import React, { useCallback, useState, useEffect, ChangeEvent } from 'react';
-import { useParams } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 
-import { Contact } from '../../models/contact';
-import { SelectItem } from '../../models/selectitem';
-import { rws } from '../../netapi';
-import { FormField } from '../../components/formfield';
-import { Input } from '../../components/input';
-import { Select } from '../../components/select';
-import { DatePicker } from '../../components/datepicker';
-import { addEmptyString, numberToString } from '../../helpers/utils';
-
-type CLWS = {
-  name: string;
-  object: {
-    Contact?: Contact;
-    SelectItem?: SelectItem[];
-  };
-  error?: string;
-};
-
-const onSubmit = (data: any) => console.log(data);
+import { GetItem, SetItem } from '../../helpers/fetcher';
+import {
+  addEmptyString,
+  filterArrayNumber,
+  filterArrayString,
+  numberToString,
+} from '../../helpers/utils';
+import { CompanyIDSelect } from '../../models/company';
+import {
+  Contact,
+  ContactBirthdayInput,
+  ContactEducations,
+  ContactNameInput,
+} from '../../models/contact';
+import { DepartmentIDSelect } from '../../models/department';
+import {
+  EmailInputs,
+  FaxInputs,
+  NoteInput,
+  ParameterTypes,
+  PhoneInputs,
+} from '../../models/impersonal';
+import { PostGoIDSelect, PostIDSelect } from '../../models/post';
+import { RankIDSelect } from '../../models/rank';
 
 export const ContactItem = (): JSX.Element => {
-  const { register, handleSubmit, watch, errors } = useForm();
-
-  const [error, setError] = useState<string>();
+  const history = useHistory();
+  const { id } = useParams<ParameterTypes>();
+  const [loaded, setLoaded] = useState(id === '0' || false);
+  const [data, error] = GetItem('Contact', id);
   const [name, setName] = useState<string>();
   const [companyID, setCompanyID] = useState<number>();
-  const [postID, setPostID] = useState<number>();
   const [departmentID, setDepartmentID] = useState<number>();
+  const [postID, setPostID] = useState<number>();
   const [postGoID, setPostGoID] = useState<number>();
   const [rankID, setRankID] = useState<number>();
   const [birthday, setBirthday] = useState<string>();
-  const [emails, setEmails] = useState<string[]>();
-  const [phones, setPhones] = useState<string[]>();
-  const [faxes, setFaxes] = useState<string[]>();
-  const { id } = useParams();
-  const [loaded, setLoaded] = useState(false);
+  const [note, setNote] = useState<string>();
+  const [emails, setEmails] = useState(['']);
+  const [phones, setPhones] = useState(['']);
+  const [faxes, setFaxes] = useState(['']);
+  const [educations, setEducations] = useState<string[]>([]);
+
+  const submit = (): void => {
+    const number_id = Number(id);
+    const item: Contact = {
+      id: number_id,
+      name: name,
+      company_id: companyID,
+      department_id: departmentID,
+      post_id: postID,
+      post_go_id: postGoID,
+      rank_id: rankID,
+      birthday: birthday,
+      note: note,
+      emails: filterArrayString(emails),
+      phones: filterArrayNumber(phones),
+      faxes: filterArrayNumber(faxes),
+    };
+
+    SetItem(number_id, 'Contact', JSON.stringify(item));
+    history.go(-1);
+    return;
+  };
 
   useEffect(() => {
-    rws.addEventListener('message', (message: MessageEvent) => {
-      const data: CLWS = JSON.parse(message.data);
-      if (data?.name === 'Contact' && data.object.Contact) {
-        setName(data.object.Contact.name);
-        setCompanyID(data.object.Contact.company_id);
-        setPostID(data.object.Contact.post_id);
-        setDepartmentID(data.object.Contact.department_id);
-        setPostGoID(data.object.Contact.post_go_id);
-        setRankID(data.object.Contact.rank_id);
-        setBirthday(data.object.Contact.birthday);
-        setEmails(addEmptyString(data.object.Contact.emails));
-        setPhones(addEmptyString(numberToString(data.object.Contact.phones)));
-        setFaxes(addEmptyString(numberToString(data.object.Contact.faxes)));
-        setLoaded(true);
-      }
-      if (data.error) {
-        setError(data.error);
-      }
-    });
-    rws.send(`{"Get":{"Item":{"id": ${id}, "name": "Contact"}}}`);
-
-    return function cleanup(): void {
-      rws.removeEventListener('message', (message: unknown) => {
-        console.log('removeEventListener', message);
-      });
-    };
-  }, [id]);
-
-  // const onChangeName = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-  //   const { value } = event.target;
-  //   setName(value);
-  // }, []);
-
-  const onChangeCompany = useCallback((value: number) => {
-    setCompanyID(value);
-  }, []);
-
-  const onChangePost = useCallback((value: number) => {
-    setPostID(value);
-  }, []);
-
-  const onChangeDepartment = useCallback((value: number) => {
-    setDepartmentID(value);
-  }, []);
-
-  const onChangePostGO = useCallback((value: number) => {
-    setPostGoID(value);
-  }, []);
-
-  const onChangeRank = useCallback((value: number) => {
-    setRankID(value);
-  }, []);
-
-  const onChangeBirthday = useCallback((value: string) => {
-    setBirthday(value);
-  }, []);
-
-  // const onChangeDepartment = useCallback((value: number) => {
-  //   setDepartmentID(value);
-  // }, []);
-
-  // const onChangeDepartment = useCallback((value: number) => {
-  //   setDepartmentID(value);
-  // }, []);
-
-  const Name = (): JSX.Element => (
-    <FormField
-      name="name"
-      formRef={register}
-      label="Фамилия Имя Отчество"
-      icon="user"
-      defaultValue={name}
-      // onChange={(event: ChangeEvent<HTMLInputElement>): void => {
-      //   // const { value } = event.target;
-      //   setName(event.target.value);
-      // }}
-    />
-  );
-
-  const Company = (): JSX.Element => (
-    <Select
-      name="company"
-      label="Организация"
-      listName="CompanySelect"
-      id={companyID}
-      icon="building"
-      callback={onChangeCompany}
-    />
-  );
-
-  const Post = (): JSX.Element => (
-    <Select
-      label="Должность"
-      listName="PostSelect"
-      id={postID}
-      icon="tag"
-      callback={onChangePost}
-    />
-  );
-
-  const Department = (): JSX.Element => (
-    <Select
-      label="Отдел"
-      listName="DepartmentSelect"
-      id={departmentID}
-      icon="tag"
-      callback={onChangeDepartment}
-    />
-  );
-
-  const PostGO = (): JSX.Element => (
-    <Select
-      label="Должность ГО"
-      listName="PostGoSelect"
-      id={postGoID}
-      icon="tag"
-      callback={onChangePostGO}
-    />
-  );
-
-  const Rank = (): JSX.Element => (
-    <Select label="Звание" listName="RankSelect" id={rankID} icon="tag" callback={onChangeRank} />
-  );
-
-  const Birthday = (): JSX.Element => (
-    <DatePicker label="Дата рождения" value={birthday} callback={onChangeBirthday} />
-  );
-
-  const Emails = (): JSX.Element => (
-    <div className="field">
-      <label className="label">Электронный адрес</label>
-      {emails
-        ? emails.map((email, index) => (
-            <Input
-              icon="envelope"
-              key={`email-${index}`}
-              defaultValue={email}
-              placeholder="Электронный адрес"
-              onBlur={(event): void => {
-                let values = emails;
-                values[index] = event.target.value;
-                values = addEmptyString(values);
-                setEmails(values);
-              }}
-            />
-          ))
-        : null}
-    </div>
-  );
-
-  const Phones = (): JSX.Element => (
-    <div className="field">
-      <label className="label">Телефон</label>
-      {phones
-        ? phones.map((phone, index) => (
-            <Input
-              type="tel"
-              icon="phone"
-              key={`phone-${index}`}
-              defaultValue={phone.toString()}
-              placeholder="Телефон"
-              onBlur={(event): void => {
-                let values = phones;
-                values[index] = event.target.value;
-                values = addEmptyString(values);
-                setPhones(values);
-              }}
-              classNameDiv="pb5"
-            />
-          ))
-        : null}
-    </div>
-  );
-
-  const Faxes = (): JSX.Element => (
-    <div className="field">
-      <label className="label">Факс</label>
-      {faxes
-        ? faxes.map((fax, index) => (
-            <Input
-              type="tel"
-              icon="fax"
-              key={`fax-${index}`}
-              defaultValue={fax.toString()}
-              placeholder="Факс"
-              onBlur={(event): void => {
-                let values = faxes;
-                values[index] = event.target.value;
-                values = addEmptyString(values);
-                setFaxes(values);
-              }}
-            />
-          ))
-        : null}
-    </div>
-  );
+    if (data?.id) {
+      const c = data as Contact;
+      setName(c.name);
+      setCompanyID(c.company_id);
+      setDepartmentID(c.department_id);
+      setPostID(c.post_id);
+      setPostGoID(c.post_go_id);
+      setRankID(c.rank_id);
+      setBirthday(c.birthday);
+      setNote(c.note);
+      setEmails(addEmptyString(c.emails));
+      setPhones(addEmptyString(numberToString(c.phones)));
+      setFaxes(addEmptyString(numberToString(c.faxes)));
+      setEducations(c.educations || []);
+      setLoaded(true);
+    }
+  }, [data]);
 
   return (
     <div>
-      {loaded && !error ? (
+      {loaded && !error && (
         <>
-          <Name />
-          <Company />
+          <ContactNameInput value={name} setter={setName} />
+          <CompanyIDSelect id={companyID} setter={setCompanyID} />
+
           <div className="columns">
             <div className="column is-half">
-              <Post key="post" />
+              <PostIDSelect id={postID} setter={setPostID} />
             </div>
             <div className="column is-half">
-              <Department />
+              <DepartmentIDSelect id={departmentID} setter={setDepartmentID} />
             </div>
           </div>
           <div className="columns">
             <div className="column is-half">
-              <PostGO />
+              <PostGoIDSelect id={postGoID} setter={setPostGoID} />
             </div>
             <div className="column is-half">
-              <Rank />
+              <RankIDSelect id={rankID} setter={setRankID} />
             </div>
           </div>
 
           <div className="columns">
             <div className="column is-one-third">
-              <Birthday />
+              <ContactBirthdayInput value={birthday} setter={setBirthday} />
             </div>
           </div>
 
           <div className="columns">
             <div className="column">
-              <Emails />
+              <EmailInputs emails={emails} setter={setEmails} />
             </div>
             <div className="column">
-              <Phones />
+              <PhoneInputs phones={phones} setter={setPhones} />
             </div>
             <div className="column">
-              <Faxes />
+              <FaxInputs phones={faxes} setter={setFaxes} />
+            </div>
+          </div>
+
+          <ContactEducations educations={educations} />
+
+          <NoteInput value={note} setter={setNote} />
+
+          <div className="field is-grouped">
+            <div className="control">
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
+            </div>
+            <div className="control">
+              <button className="button" onClick={() => history.go(-1)}>
+                Закрыть
+              </button>
             </div>
           </div>
         </>
-      ) : null}
+      )}
     </div>
   );
 };

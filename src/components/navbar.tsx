@@ -1,8 +1,31 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+
 import { Button } from './button';
 
-const NavbarNotLogged = (): JSX.Element => (
+interface Setter {
+  setter: (value: boolean) => void;
+}
+
+const mainItems = [
+  { link: '/contacts', name: 'Контакты' },
+  { link: '/companies', name: 'Организации' },
+  { link: '/sirens', name: 'Сирены' },
+];
+
+const dropdownItems = [
+  { link: '/departments', name: 'Отделы' },
+  { link: '/educations', name: 'Обучение' },
+  { link: '/kinds', name: 'Типы тренировок' },
+  { link: '/posts', name: 'Должности' },
+  { link: '/practices', name: 'Учения' },
+  { link: '/ranks', name: 'Чины' },
+  { link: '/scopes', name: 'Сферы' },
+  { link: '/certificates', name: 'Удостоверения' },
+  { link: '/sirentypes', name: 'Типы сирен' },
+];
+
+const NavbarNotLogged: JSX.Element = (
   <div className="navbar-brand">
     <NavLink className="navbar-item" key="NavbarNotLogged" to="/login">
       Авторизация
@@ -10,75 +33,62 @@ const NavbarNotLogged = (): JSX.Element => (
   </div>
 );
 
-const NavbarDropdown = (): JSX.Element => (
-  <div className="navbar-dropdown">
-    <NavLink activeClassName="is-active" className="navbar-item" to="/departments">
-      Отделы
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/educations">
-      Обучение
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/kinds">
-      Типы
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/posts">
-      Должности
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/practices">
-      Учения
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/ranks">
-      Чины
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/scopes">
-      Сферы
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/certificates">
-      Удостоверения
-    </NavLink>
-    <hr className="navbar-divider" />
-    <NavLink activeClassName="is-active" className="navbar-item" to="/sirentypes">
-      Типы сирен
-    </NavLink>
+const MainItems = (value: Setter): JSX.Element => (
+  <>
+    {mainItems.map((item, index) => (
+      <NavLink
+        activeClassName="is-active"
+        className="navbar-item"
+        to={item.link}
+        key={`main-items-${index}`}
+        onClick={() => value.setter(false)}
+      >
+        {item.name}
+      </NavLink>
+    ))}
+  </>
+);
+
+const NavbarDropdown = (value: Setter): JSX.Element => (
+  <div className="navbar-dropdown" key="navbar-dropdown">
+    {dropdownItems.map((item, index) => (
+      <NavLink
+        activeClassName="is-active"
+        className="navbar-item"
+        to={item.link}
+        key={`navbar-dropdown-${index}`}
+        onClick={() => value.setter(false)}
+      >
+        {item.name}
+      </NavLink>
+    ))}
   </div>
 );
 
-const DropdownItem = (): JSX.Element => (
-  <div className="navbar-item has-dropdown is-hoverable">
-    <a href="#directory" className="navbar-link">
-      Справочники
-    </a>
-    <NavbarDropdown />
+const NavBarStart = (value: Setter): JSX.Element => (
+  <div className="navbar-start" key="navbar-start">
+    <MainItems setter={value.setter} />
+    <div className="navbar-item has-dropdown is-hoverable" key="dropdown-items">
+      <a href="#directory" className="navbar-link">
+        Справочники
+      </a>
+      <NavbarDropdown setter={value.setter} />
+    </div>
   </div>
 );
 
-const NavbarEnd = (): JSX.Element => (
-  <div className="navbar-end">
+const NavbarEnd: JSX.Element = (
+  <div className="navbar-end" key="navbar-end">
     <div className="navbar-item has-dropdown is-hoverable">
       <a href="#user" className="navbar-link">
         name
       </a>
       <div className="navbar-dropdown is-right">
         <div className="navbar-item">
-          <Button color="link">Выход</Button>
+          <Button className="is-link">Выход</Button>
         </div>
       </div>
     </div>
-  </div>
-);
-
-const NavbarStart = (): JSX.Element => (
-  <div className="navbar-start">
-    <NavLink activeClassName="is-active" className="navbar-item" to="/contacts">
-      Контакты
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/companies">
-      Организации
-    </NavLink>
-    <NavLink activeClassName="is-active" className="navbar-item" to="/sirens">
-      Сирены
-    </NavLink>
-    <DropdownItem />
   </div>
 );
 
@@ -93,37 +103,35 @@ export const NavBar = (): JSX.Element => {
   };
 
   return (
-    <nav aria-label="main navigation" className="navbar is-dark" role="navigation">
-      <div className="container">
-        {auth ? (
-          <>
-            <div className="navbar-brand">
-              <NavLink activeClassName="is-active" className="navbar-item" exact={true} to="/">
-                ЕДДС
-              </NavLink>
-              <a
-                aria-expanded="false"
-                aria-label="menu"
-                className={open ? 'navbar-burger is-active' : 'navbar-burger'}
-                data-target="navbarData"
-                role="button"
-                href="#button"
-                onClick={handleToggle}
-              >
-                <span aria-hidden="true" />
-                <span aria-hidden="true" />
-                <span aria-hidden="true" />
-              </a>
-            </div>
-            <div id="navbarData" className={open ? 'navbar-menu is-active' : 'navbar-menu'}>
-              <NavbarStart />
-              <NavbarEnd />
-            </div>
-          </>
-        ) : (
-          <NavbarNotLogged />
-        )}
-      </div>
+    <nav className="navbar is-dark" role="navigation" aria-label="dropdown navigation">
+      {auth ? (
+        <>
+          <div className="navbar-brand">
+            <NavLink activeClassName="is-active" className="navbar-item" exact={true} to="/">
+              ЕДДС
+            </NavLink>
+            <a
+              aria-expanded="false"
+              aria-label="menu"
+              className={open ? 'navbar-burger is-active' : 'navbar-burger'}
+              data-target="navbarData"
+              role="button"
+              href="#button"
+              onClick={handleToggle}
+            >
+              <span aria-hidden="true" />
+              <span aria-hidden="true" />
+              <span aria-hidden="true" />
+            </a>
+          </div>
+          <div id="navbarData" className={open ? 'navbar-menu is-active' : 'navbar-menu'}>
+            <NavBarStart setter={setOpen} />
+            {NavbarEnd}
+          </div>
+        </>
+      ) : (
+        NavbarNotLogged
+      )}
     </nav>
   );
 };

@@ -1,14 +1,15 @@
+import './rugo.css';
+
 import React from 'react';
-import { Router } from './containers/Router';
 
 import { NavBar } from './components/navbar';
-import './rugo.css';
+import { Router } from './containers/Router';
 
 const Rugo = (): JSX.Element => {
   return (
     <>
       <NavBar />
-      <div className="container pv1">
+      <div className="container py-4 centered-content">
         <Router />
       </div>
     </>

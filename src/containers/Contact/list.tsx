@@ -1,64 +1,69 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
-import { Table, Column } from '../../components/table';
+import { Bar, Data } from '../../components/table';
+import { GetList } from '../../helpers/fetcher';
+import { splitNumbers } from '../../helpers/utils';
 import { ContactList } from '../../models/contact';
-import { rws } from '../../netapi';
-
-type CLWS = {
-  name: string;
-  object: {
-    ContactList?: ContactList[];
-  };
-  error?: string;
-};
 
 export const Contacts = (): JSX.Element => {
-  const [contacts, setContacts] = useState<ContactList[]>([]);
-  const [error, setError] = useState<string>();
+  const history = useHistory();
+  const [data, error] = GetList('ContactList');
+  const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    rws.addEventListener('message', (message: MessageEvent) => {
-      const data: CLWS = JSON.parse(message.data);
-      if (data.name && data.name === 'ContactList' && data.object.ContactList) {
-        setContacts(data.object.ContactList);
-      }
-      if (data.error) {
-        setError(data.error);
-      }
-    });
-    rws.send('{"Get":{"List":"ContactList"}}');
+  const [paginationData, Paginate] = Data({
+    data: data,
+    search: search,
+  });
 
-    return (): void => {
-      rws.removeEventListener('message', (message: MessageEvent) => {
-        console.log('removeEventListener', message);
-      });
-    };
-  }, []);
+  const tableData = (): ContactList[] => {
+    return paginationData();
+  };
 
-  const columns: Column[] = [
-    {
-      field: 'name',
-      label: 'Фамилия Имя Отчество',
-      linkBase: '/contacts/',
-      linkField: 'id',
-      className: 'w250',
-    },
-    {
-      field: 'company_name',
-      label: 'Организация',
-      linkBase: '/compaines/',
-      linkField: 'company_id',
-      className: 'is-hidden-mobile w250',
-    },
-    { field: 'post_name', label: 'Должность', className: 'is-hidden-touch w250' },
-    { field: 'phones', label: 'Телефоны', array: true, className: 'w95' },
-    {
-      field: 'faxes',
-      label: 'Факсы',
-      array: true,
-      className: 'is-hidden-mobile w95',
-    },
-  ];
+  const Body = (): JSX.Element => (
+    <>
+      {tableData().map((contact, index) => (
+        <tr key={`tr${contact.id}${index}`}>
+          <td
+            onClick={(): void => history.push(`/contacts/${contact.id}`)}
+            role="gridcell"
+            className="w250 link"
+          >
+            {contact.name}
+          </td>
+          <td
+            onClick={(): void => history.push(`/companies/${contact.company_id || 0}`)}
+            role="gridcell"
+            className="is-hidden-mobile w250 link"
+          >
+            {contact.company_name}
+          </td>
+          <td className="is-hidden-touch w250">{contact.post_name}</td>
+          <td className="w95">{splitNumbers(contact.phones)}</td>
+          <td className="is-hidden-mobile w95">{splitNumbers(contact.faxes)}</td>
+        </tr>
+      ))}
+    </>
+  );
 
-  return error ? <div>No data</div> : <Table data={contacts} columns={columns} paginate={20} />;
+  return error ? (
+    <></>
+  ) : (
+    <>
+      <Bar value={search} setter={setSearch} name="contacts" />
+      <table className="table is-narrow is-fullwidth">
+        <tbody>
+          <tr>
+            <th className="w250">Фамилия Имя Отчество</th>
+            <th className="is-hidden-mobile w250">Организация</th>
+            <th className="is-hidden-touch w250">Должность</th>
+            <th className="w95">Телефоны</th>
+            <th className="is-hidden-mobile w95">Факсы</th>
+          </tr>
+          <Body />
+        </tbody>
+      </table>
+      {Paginate}
+    </>
+  );
 };

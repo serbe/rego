@@ -10,15 +10,13 @@ interface IconProps {
 
 export const Icon = (properties: IconProps): JSX.Element => {
   const { children, className, color, position, icon } = properties;
-
-  const spanClasses = `${className} icon ${color ? `has-text-${color}` : ''} ${
+  const spanClasses = `icon ${className || ''} ${color ? `has-text-${color}` : ''} ${
     position ? `is-${position}` : ''
   }`;
-  const iClasses = `fas fa-${icon}`;
 
   return (
     <span className={spanClasses}>
-      <i className={iClasses}>{children}</i>
+      <i className={`fas fa-${icon}`}>{children}</i>
     </span>
   );
 };

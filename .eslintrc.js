@@ -1,6 +1,8 @@
 module.exports = {
+  root: true,
   parser: '@typescript-eslint/parser',
   extends: [
+    'react-app',
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
@@ -45,7 +47,8 @@ module.exports = {
     'jsx-a11y/label-has-associated-control': 'warn',
     'jsx-a11y/no-autofocus': 'warn',
     'unicorn/no-null': 'warn',
-    '@typescript-eslint/camelcase': 'warn',
+    'unicorn/no-useless-undefined': 'warn',
+    // '@typescript-eslint/camelcase': 'warn',
     // '@typescript-eslint/indent': 'off',
     // '@typescript-eslint/no-non-null-assertion': 'off',
     // '@typescript-eslint/no-explicit-any': 'off',

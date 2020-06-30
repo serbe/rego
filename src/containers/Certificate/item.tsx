@@ -1,127 +1,79 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 
-// import { Input } from '../../components/input';
-// import { Button } from '../../components/button';
-// import { Select } from '../../components/select';
-import { Certificate } from '../../models/certificate';
-// import { SelectItem } from '../../models/selectitem';
-// import { fetchData } from '../../helpers/utils';
+import { GetItem, SetItem } from '../../helpers/fetcher';
+import {
+  Certificate,
+  CertificateDateInput,
+  CertificateNumberInput,
+} from '../../models/certificate';
+import { CompanyIDSelect } from '../../models/company';
+import { ContactIDSelect } from '../../models/contact';
+import { NoteInput, ParameterTypes } from '../../models/impersonal';
 
 export const CertificateItem = (): JSX.Element => {
-  const { id } = useParams();
-  const [error, setError] = useState(false);
-  const [certificate, setCertificate] = useState<Certificate>();
+  const history = useHistory();
+  const { id } = useParams<ParameterTypes>();
+  const [loaded, setLoaded] = useState(id === '0' || false);
+  const [data, error] = GetItem('Certificate', id);
+  const [sNumber, setSNumber] = useState<string>();
+  const [contactID, setContactID] = useState<number>();
+  const [companyID, setCompanyID] = useState<number>();
+  const [certDate, setCertDate] = useState<string>();
+  const [note, setNote] = useState<string>();
 
-  // useEffect(() => {
-  //   if (id) {
-  //     fetchData(`/api/go/certificate/item/${id}`)
-  //       .then((responseJson) =>
-  //         responseJson.Certificate ? setCertificate(responseJson.Certificate) : setErrors(true),
-  //       )
-  //       .catch((error) => setErrors(error));
-  //   }
-  // }, [id]);
+  const submit = (): void => {
+    const number_id = Number(id);
+    const item: Certificate = {
+      id: number_id,
+      num: sNumber,
+      contact_id: contactID,
+      company_id: companyID,
+      cert_date: certDate,
+      note: note,
+    };
 
-  // useEffect(() => {
-  //   if (id) {
-  //     fetchData(`/api/go/scope/select`)
-  //       .then(responseJson =>
-  //         responseJson.SelectItem ? setScopes(responseJson.SelectItem) : setErrors(true),
-  //       )
-  //       .catch(error => setErrors(error));
-  //   }
-  // }, [id]);
+    SetItem(number_id, 'Certificate', JSON.stringify(item));
+    history.go(-1);
+    return;
+  };
 
-  // useEffect(() => {
-  //   if (certificate) {
-  //     setScope(scopes.find(v => v.id === company.scope_id));
-  //     setEmails(addEmptyString(company.emails));
-  //     setPhones(addEmptyString(numberToString(company.phones)));
-  //     setFaxes(addEmptyString(numberToString(company.faxes)));
-  //   }
-  // }, [company, scopes]);
-
-  // const Submit = () => {
-  //   if (company && scopes && scope) {
-  //     let values = {
-  //       id: company.id,
-  //       name: company.name,
-  //       address: company.address,
-  //       scope_id: scopes.filter((item) => item.name === scope.name).map((item) => item.id)[0],
-  //       note: company.note,
-  //       emails: emails.filter((value) => value !== ""),
-  //       phones: phones.filter((value) => value !== "").map((value) => parseInt(value, 10)),
-  //       faxes: faxes.filter((value) => value !== "").map((value) => parseInt(value, 10)),
-  //     };
-
-  //     // Object.keys(values).forEach((key) => {
-  //     //   if (
-  //     //     !Array.isArray(values[key]) &&
-  //     //     (values[key] === undefined || values[key] === "")
-  //     //   ) {
-  //     //     delete values[key];
-  //     //   }
-  //     // });
-
-  //     // this.close();
-  //   }
-  // }
+  useEffect(() => {
+    if (data?.id) {
+      const c = data as Certificate;
+      setSNumber(c.num);
+      setContactID(c.contact_id);
+      setCompanyID(c.company_id);
+      setCertDate(c.cert_date);
+      setNote(c.note);
+      setLoaded(true);
+    }
+  }, [data]);
 
   return (
-    <div className="container mw768">
-      {!error && certificate ? (
-        <div>
-          {/* <Input
-            name="note"
-            value={certificate.num}
-            label
-            placeholder="Серийный номер удостоверения"
-            iconLeft="tag"
-            onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-              setCertificate({ ...certificate, num: event.currentTarget.value })
-            }
-          />
+    <div>
+      {loaded && !error && (
+        <>
+          <CertificateNumberInput value={sNumber} setter={setSNumber} />
+          <ContactIDSelect id={contactID} setter={setContactID} />
+          <CompanyIDSelect id={companyID} setter={setCompanyID} />
+          <CertificateDateInput value={certDate} setter={setCertDate} />
+          <NoteInput value={note} setter={setNote} />
 
-          <Input
-            name="note"
-            value={certificate.note}
-            label
-            placeholder="Заметка"
-            iconLeft="sticky-note"
-            onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-              setCertificate({ ...certificate, note: event.currentTarget.value })
-            }
-          /> */}
-
-          <div className="field is-grouped is-grouped-centered">
+          <div className="field is-grouped">
             <div className="control">
-              {/* <Button
-                color="primary"
-                // @click="submit"
-              >
+              <button className="button" onClick={() => submit()}>
                 Сохранить
-              </Button> */}
+              </button>
             </div>
-            <div className="control">{/* <Button>Закрыть</Button> */}</div>
             <div className="control">
-              {/* <Button
-                color="danger"
-                // onClick={() => {return confirm('Вы действительно хотите удалить эту запись?')}}
-              >
-                Удалить
-              </Button> */}
+              <button className="button" onClick={() => history.go(-1)}>
+                Закрыть
+              </button>
             </div>
           </div>
-
-          {/* <button className="button" onClick={handleSubmit(onSubmit)}>
-            on submit
-          </button>
-          <Button className="button" onClick={handleSubmit(onSubmit)}>
-            on submit
-          </Button> */}
-        </div>
-      ) : undefined}
+        </>
+      )}
     </div>
   );
 };

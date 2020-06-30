@@ -1,51 +1,74 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
-// import { Table } from '../../components/table';
+import { Bar, Data } from '../../components/table';
+import { GetList } from '../../helpers/fetcher';
 import { CertificateList } from '../../models/certificate';
-// import { fetchData } from '../../helpers/utils';
 
 export const Certificates = (): JSX.Element => {
-  const [hasError, setErrors] = useState(false);
-  const [certificates, setCertificates] = useState<CertificateList[]>([]);
+  const history = useHistory();
+  const [data, error] = GetList('CertificateList');
+  const [search, setSearch] = useState('');
 
-  // useEffect(() => {
-  //   fetchData('/api/go/certificate/list')
-  //     .then((response) =>
-  //       response.CertificateList ? setCertificates(response.CertificateList) : setErrors(true),
-  //     )
-  //     .catch((error) => setErrors(error));
-  // }, []);
+  const [paginationData, Paginate] = Data({
+    data: data,
+    search: search,
+  });
 
-  const columns = [
-    {
-      field: 'num',
-      label: 'Номер',
-      linkBase: '/certificates/',
-      linkField: 'id',
-    },
-    {
-      field: 'contact_name',
-      label: 'Фамилия Имя Отчество',
-    },
-    {
-      field: 'company_name',
-      label: 'Учебно-методический центр',
-      linkBase: '/companies/',
-      linkField: 'company_id',
-      className: 'is-hidden-mobile',
-    },
-    { field: 'cert_date', label: 'Дата' },
-    {
-      field: 'note',
-      label: 'Заметка',
-      className: 'is-hidden-mobile',
-    },
-  ];
+  const tableData = (): CertificateList[] => {
+    return paginationData();
+  };
 
-  return hasError ? (
-    <div>No data</div>
+  const Body = (): JSX.Element => (
+    <>
+      {tableData().map((certificate, index) => (
+        <tr key={`tr${certificate.id}${index}`}>
+          <td
+            onClick={(): void => history.push(`/certificates/${certificate.id}`)}
+            role="gridcell"
+            className="link nowrap"
+          >
+            {certificate.num}
+          </td>
+          <td
+            onClick={(): void => history.push(`/contacts/${certificate.contact_id || 0}`)}
+            role="gridcell"
+            className="link"
+          >
+            {certificate.contact_name}
+          </td>
+          <td
+            onClick={(): void => history.push(`/companies/${certificate.company_id || 0}`)}
+            role="gridcell"
+            className="is-hidden-mobile link"
+          >
+            {certificate.company_name}
+          </td>
+          <td className="nowrap">{certificate.cert_date}</td>
+          <td className="is-hidden-mobile">{certificate.note}</td>
+        </tr>
+      ))}
+    </>
+  );
+
+  return error ? (
+    <></>
   ) : (
-    // <Table data={certificates} columns={columns} hoverable narrow striped paginate={20} />
-    <div></div>
+    <>
+      <Bar value={search} setter={setSearch} name="certificates" />
+      <table className="table is-narrow is-fullwidth">
+        <tbody>
+          <tr>
+            <th>Номер</th>
+            <th>Фамилия Имя Отчество</th>
+            <th className="is-hidden-mobile">Учебно-методический центр</th>
+            <th>Дата</th>
+            <th className="is-hidden-mobile">Заметка</th>
+          </tr>
+          <Body />
+        </tbody>
+      </table>
+      {Paginate}
+    </>
   );
 };

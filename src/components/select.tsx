@@ -1,58 +1,33 @@
-import React, { useState, useEffect } from 'react';
-
-import { Icon } from './icon';
-import { SelectItem } from '../models/selectitem';
-import { rws } from '../netapi';
-
 import './select.css';
 
-interface SelectProps {
-  name?: string;
+import React, { ChangeEvent, useEffect, useState } from 'react';
+
+import { GetSelect } from '../helpers/fetcher';
+import { SelectItem } from '../models/impersonal';
+import { Icon } from './icon';
+
+export interface SelectValues {
   id?: number;
-  icon?: string;
-  color?: 'primary' | 'info' | 'success' | 'warning' | 'danger';
-  // state?: string;
-  label?: string;
-  listName?: string;
-  callback: (event: number) => void;
+  setter: (event?: number) => void;
 }
 
-type CLWS = {
+interface SelectProps {
+  color?: 'primary' | 'info' | 'success' | 'warning' | 'danger';
+  icon?: string;
+  id?: number;
+  label?: string;
+  listName: string;
   name: string;
-  object: {
-    SelectItem?: SelectItem[];
-  };
-  error?: string;
-};
+  setter: (event?: number) => void;
+}
 
 export const Select = (properties: SelectProps): JSX.Element => {
-  const { name, id, label, icon, color, listName, callback } = properties;
+  const { name, id, label, icon, color, listName, setter } = properties;
 
   const [opened, setOpened] = useState(false);
-  const [itemID, setItemID] = useState(id ? id : 0);
-  const [list, setList] = useState<SelectItem[]>([{ id: 0, name: '' }]);
-  const [error, setError] = useState<string>();
+  const [itemID, setItemID] = useState(id || 0);
+  const [list, error] = GetSelect(listName);
   const [value, setValue] = useState<string>();
-
-  useEffect(() => {
-    rws.addEventListener('message', (message: MessageEvent) => {
-      const data: CLWS = JSON.parse(message.data);
-      if (data?.name === listName && data.object.SelectItem && data.object.SelectItem.length > 0) {
-        setList(data.object.SelectItem);
-      }
-
-      if (data.error) {
-        setError(data.error);
-      }
-    });
-    rws.send(`{"Get":{"List":"${listName}"}}`);
-
-    return function cleanup(): void {
-      rws.removeEventListener('message', (message: unknown) => {
-        console.log('removeEventListener', message);
-      });
-    };
-  }, [listName]);
 
   useEffect(() => {
     if (list[0].id !== 0) {
@@ -62,33 +37,16 @@ export const Select = (properties: SelectProps): JSX.Element => {
       setValue('');
     } else {
       const currentItem = list.find((item) => item.id === id);
-      setValue(currentItem ? currentItem.name : '');
+      setValue(currentItem?.name || '');
     }
   }, [list, id]);
 
-  const Label = (): JSX.Element | null =>
-    label ? (
-      <label className="label" key="SelectLabel">
-        {label}
-      </label>
-    ) : null;
-
-  const LeftIcon = (): JSX.Element | null =>
-    icon ? (
-      <Icon
-        icon={icon}
-        position="left"
-        color={color !== 'primary' ? color : undefined}
-        key="SelectIconLeft"
-      />
-    ) : null;
-
   const currentValue = (): string => {
     if (opened) {
-      return value ? value : '';
+      return value || '';
     }
     const currentItem = list.find((item) => item.id === itemID);
-    return currentItem ? currentItem.name : '';
+    return currentItem?.name || '';
   };
 
   const filteredList = (): SelectItem[] => {
@@ -107,37 +65,25 @@ export const Select = (properties: SelectProps): JSX.Element => {
     );
   };
 
-  const DropdownContent = (): JSX.Element | null =>
-    error || !opened ? null : (
-      <div className="select-box">
-        {filteredList().map((ListItem) => (
-          <div
-            className="select-item"
-            key={ListItem.id}
-            onClick={(): void => {
-              setItemID(ListItem.id);
-              setValue(ListItem.name);
-              callback(ListItem.id);
-            }}
-          >
-            {ListItem.name}
-          </div>
-        ))}
-      </div>
-    );
-
   return (
-    <div className="field">
-      <Label />
-      <div className={`control is-expanded select is-fullwidth ${icon ? 'has-icons-left' : ''}`}>
+    <div className="field" key={name}>
+      {label && (
+        <label className="label" key="SelectLabel">
+          {label}
+        </label>
+      )}
+      <div
+        className={`control is-expanded select is-fullwidth ${icon ? 'has-icons-left' : ''}`}
+        key={`${name}-control`}
+      >
         <input
-          name={name}
-          className={`input ${color ? `is-${color}` : ''}`}
-          type="text"
-          aria-haspopup="true"
           aria-controls="dropdown-menu"
+          aria-haspopup="true"
+          className={`input ${color ? `is-${color}` : ''}`}
+          name={name}
+          type="text"
           value={currentValue()}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
+          onChange={(event: ChangeEvent<HTMLInputElement>): void => {
             setValue(event.target.value);
           }}
           onFocus={(): void => {
@@ -146,10 +92,36 @@ export const Select = (properties: SelectProps): JSX.Element => {
           onBlur={(): void => {
             setTimeout(() => setOpened(false), 300);
           }}
+          key={`${name}-input`}
         />
-        <LeftIcon />
+        {icon && (
+          <Icon
+            color={color !== 'primary' ? color : undefined}
+            icon={icon}
+            key="SelectIconLeft"
+            position="left"
+          />
+        )}
       </div>
-      <DropdownContent />
+      {!error && opened && (
+        <div className="select-box" key={`${name}-dropdown`}>
+          {filteredList().map((ListItem, index) => (
+            <div
+              className="select-item"
+              key={`${name}-${index}`}
+              onMouseDown={(): void => {
+                setItemID(ListItem.id);
+                setValue(ListItem.name);
+                setter(ListItem.id === 0 ? undefined : ListItem.id);
+              }}
+              role="row"
+              tabIndex={index}
+            >
+              {ListItem.name}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

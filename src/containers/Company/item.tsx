@@ -1,307 +1,115 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 
-// import { input } from '../../components/input';
-// import { button } from '../../components/button';
-// import { Select } from '../../components/select';
-import { Company } from '../../models/company';
-import { SelectItem } from '../../models/selectitem';
-import { addEmptyString, numberToString } from '../../helpers/utils';
+import { GetItem, SetItem } from '../../helpers/fetcher';
+import {
+  addEmptyString,
+  filterArrayNumber,
+  filterArrayString,
+  numberToString,
+} from '../../helpers/utils';
+import { Company, CompanyNameInput } from '../../models/company';
+import { ContactShort, ContactShortForm } from '../../models/contact';
+import {
+  AddressInput,
+  EmailInputs,
+  FaxInputs,
+  NoteInput,
+  ParameterTypes,
+  PhoneInputs,
+} from '../../models/impersonal';
+import { PracticeList, PracticeListForm } from '../../models/practice';
+import { ScopeIDSelect } from '../../models/scope';
 
 export const CompanyItem = (): JSX.Element => {
-  const { id } = useParams();
-  const [error, setError] = useState(false);
-  const [company, setCompany] = useState<Company>();
-  const [scope, setScope] = useState<SelectItem>();
-  const [scopes, setScopes] = useState<SelectItem[]>();
+  const history = useHistory();
+  const { id } = useParams<ParameterTypes>();
+  const [loaded, setLoaded] = useState(id === '0' || false);
+  const [data, error] = GetItem('Company', id);
+  const [name, setName] = useState<string>();
+  const [address, setAddress] = useState<string>();
+  const [scopeID, setScopeID] = useState<number>();
+  const [note, setNote] = useState<string>();
   const [emails, setEmails] = useState(['']);
   const [phones, setPhones] = useState(['']);
   const [faxes, setFaxes] = useState(['']);
+  const [practices, setPractices] = useState<PracticeList[]>([]);
+  const [contacts, setContacts] = useState<ContactShort[]>([]);
 
-  const handleEmails = (key: number, value: string): void => {
-    const newEmails = emails;
-    newEmails[key] = value;
-    setEmails(newEmails);
+  const submit = (): void => {
+    const number_id = Number(id);
+    const item: Company = {
+      id: number_id,
+      name: name,
+      address: address,
+      scope_id: scopeID,
+      note: note,
+      emails: filterArrayString(emails),
+      phones: filterArrayNumber(phones),
+      faxes: filterArrayNumber(faxes),
+    };
+
+    SetItem(number_id, 'Company', JSON.stringify(item));
+    history.go(-1);
+    return;
   };
-
-  const blurEmails = (): void => {
-    const newEmails = addEmptyString(emails);
-    setEmails(newEmails);
-  };
-
-  const handlePhones = (key: number, value: string): void => {
-    const newPhones = phones;
-    newPhones[key] = value;
-    setPhones(newPhones);
-  };
-
-  const blurPhones = (): void => {
-    const newPhones = addEmptyString(phones);
-    setPhones(newPhones);
-  };
-
-  const handleFaxes = (key: number, value: string): void => {
-    const newFaxes = phones;
-    newFaxes[key] = value;
-    setFaxes(newFaxes);
-  };
-
-  const blurFaxes = (): void => {
-    const newFaxes = addEmptyString(faxes);
-    setFaxes(newFaxes);
-  };
-
-  // useEffect(() => {
-  //   if (id) {
-  //     fetchData(`/api/go/company/item/${id}`)
-  //       .then((responseJson) =>
-  //         responseJson.Company ? setCompany(responseJson.Company) : setErrors(true),
-  //       )
-  //       .catch((error) => setErrors(error));
-  //   }
-  // }, [id]);
-
-  // useEffect(() => {
-  //   if (id) {
-  //     fetchData(`/api/go/scope/select`)
-  //       .then((responseJson) =>
-  //         responseJson.SelectItem ? setScopes(responseJson.SelectItem) : setErrors(true),
-  //       )
-  //       .catch((error) => setErrors(error));
-  //   }
-  // }, [id]);
 
   useEffect(() => {
-    if (company && scopes) {
-      setScope(scopes.find((v) => v.id === company.scope_id));
-      setEmails(addEmptyString(company.emails));
-      setPhones(addEmptyString(numberToString(company.phones)));
-      setFaxes(addEmptyString(numberToString(company.faxes)));
+    if (data?.id) {
+      const c = data as Company;
+      setName(c.name);
+      setAddress(c.address);
+      setScopeID(c.scope_id);
+      setNote(c.note);
+      setEmails(addEmptyString(c.emails));
+      setPhones(addEmptyString(numberToString(c.phones)));
+      setFaxes(addEmptyString(numberToString(c.faxes)));
+      setPractices(c.practices || []);
+      setContacts(c.contacts || []);
+      setLoaded(true);
     }
-  }, [company, scopes]);
-
-  // const Submit = () => {
-  //   if (company && scopes && scope) {
-  //     let values = {
-  //       id: company.id,
-  //       name: company.name,
-  //       address: company.address,
-  //       scope_id: scopes.filter((item) => item.name === scope.name).map((item) => item.id)[0],
-  //       note: company.note,
-  //       emails: emails.filter((value) => value !== ""),
-  //       phones: phones.filter((value) => value !== "").map((value) => parseInt(value, 10)),
-  //       faxes: faxes.filter((value) => value !== "").map((value) => parseInt(value, 10)),
-  //     };
-
-  //     // Object.keys(values).forEach((key) => {
-  //     //   if (
-  //     //     !Array.isArray(values[key]) &&
-  //     //     (values[key] === undefined || values[key] === "")
-  //     //   ) {
-  //     //     delete values[key];
-  //     //   }
-  //     // });
-
-  //     // this.close();
-  //   }
-  // }
-
-  const Scopes = (): JSX.Element | null =>
-    scopes && scope ? (
-      <select /* selected={scope} */ /* itemName="scope" */
-      /* list={scopes} */
-      /* label="Сфера деятельности" */
-      />
-    ) : null;
-
-  const Emails = (): JSX.Element | null =>
-    emails ? (
-      <>
-        {emails.map((email, index) => (
-          <input
-            key={email.toString()}
-            name={`email[${index}]`}
-            value={email}
-            type="email"
-            placeholder="Электронный адрес"
-            /* iconLeft="envelope" */
-            onBlur={blurEmails}
-            // pattern='/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
-            // error="Неправильный email"
-            onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-              handleEmails(index, event.currentTarget.value)
-            }
-          />
-        ))}
-      </>
-    ) : null;
-
-  const Phones = (): JSX.Element | null =>
-    phones ? (
-      <>
-        {phones.map((phone, index) => (
-          <input
-            key={phone.toString()}
-            name={`phone[${index}]`}
-            value={phone}
-            type="tel"
-            placeholder="Телефон"
-            /* iconLeft="phone" */
-            onBlur={blurPhones}
-            onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-              handlePhones(index, event.currentTarget.value)
-            }
-          />
-        ))}
-      </>
-    ) : null;
-
-  const Faxes = (): JSX.Element | null =>
-    faxes ? (
-      <>
-        {faxes.map((fax, index) => (
-          <input
-            key={fax.toString()}
-            name={`fax[${index}]`}
-            value={fax}
-            type="tel"
-            placeholder="Факс"
-            /* iconLeft="phone" */
-            onBlur={blurFaxes}
-            onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-              handleFaxes(index, event.currentTarget.value)
-            }
-          />
-        ))}
-      </>
-    ) : null;
-
-  const Practices = (): JSX.Element | null =>
-    company && company.practices ? (
-      <div className="field" key="practices">
-        <label className="label">Тренировки</label>
-        {company.practices.map((practice) => (
-          <NavLink to={`/practice/${practice.id}`} key={practice.id}>
-            <input
-              value={`${practice.date_str} - ${practice.kind_name} - ${practice.topic}`}
-              /* iconLeft="history"
-              readonly */
-            />
-          </NavLink>
-        ))}
-      </div>
-    ) : null;
-
-  const Contacts = (): JSX.Element | null =>
-    company && company.contacts ? (
-      <div className="field" key="contacts">
-        <label className="label">Сотрудники</label>
-        {company.contacts.map((contact) => (
-          <NavLink to={`/contact/${contact.id}`} key={contact.id}>
-            <input
-              value={`${contact.name} - ${contact.post_name}`} /* iconLeft="user" readonly */
-            />
-          </NavLink>
-        ))}
-      </div>
-    ) : null;
+  }, [data]);
 
   return (
-    <div className="container mw768">
-      {!error && company ? (
-        <div>
-          <input
-            name="name"
-            value={company.name}
-            /* label */
-            placeholder="Наименование организации"
-            /* iconLeft="building" */
-            onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-              setCompany({ ...company, name: event.currentTarget.value })
-            }
-          />
-
-          <Scopes />
-
-          <input
-            name="address"
-            value={company.address}
-            /* label */
-            placeholder="Адрес"
-            /* iconLeft="address-card" */
-            onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-              setCompany({ ...company, address: event.currentTarget.value })
-            }
-          />
+    <div>
+      {loaded && !error && (
+        <>
+          <CompanyNameInput value={name} setter={setName} />
+          <ScopeIDSelect id={scopeID} setter={setScopeID} />
+          <AddressInput value={address} setter={setAddress} />
 
           <div className="columns">
             <div className="column">
-              <div className="field">
-                <label className="label">Электронный адрес</label>
-                <Emails />
-              </div>
+              <EmailInputs emails={emails} setter={setEmails} />
             </div>
-
             <div className="column">
-              <div className="field">
-                <label className="label">Телефон</label>
-                <Phones />
-              </div>
+              <PhoneInputs phones={phones} setter={setPhones} />
             </div>
-
             <div className="column">
-              <div className="field">
-                <label className="label">Факс</label>
-                <Faxes />
-              </div>
+              <FaxInputs phones={faxes} setter={setFaxes} />
             </div>
           </div>
 
-          <Practices />
+          <PracticeListForm practices={practices} />
 
-          <Contacts />
+          <ContactShortForm contacts={contacts} />
 
-          <input
-            name="note"
-            value={company.note}
-            /* label */
-            placeholder="Заметка"
-            /* iconLeft="sticky-note" */
-            onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-              setCompany({ ...company, note: event.currentTarget.value })
-            }
-          />
+          <NoteInput value={note} setter={setNote} />
 
-          <div className="field is-grouped is-grouped-centered">
+          <div className="field is-grouped">
             <div className="control">
-              <button
-                color="primary"
-                // @click="submit"
-              >
+              <button className="button" onClick={() => submit()}>
                 Сохранить
               </button>
             </div>
             <div className="control">
-              <button>Закрыть</button>
-            </div>
-            <div className="control">
-              <button
-                color="danger"
-                // onClick={() => {return confirm('Вы действительно хотите удалить эту запись?')}}
-              >
-                Удалить
+              <button className="button" onClick={() => history.go(-1)}>
+                Закрыть
               </button>
             </div>
           </div>
-
-          {/* <button className="button" onClick={handleSubmit(onSubmit)}>
-            on submit
-          </button>
-          <button className="button" onClick={handleSubmit(onSubmit)}>
-            on submit
-          </button> */}
-        </div>
-      ) : null}
+        </>
+      )}
     </div>
   );
 };

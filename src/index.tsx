@@ -1,3 +1,5 @@
+import './index.scss';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
@@ -5,13 +7,14 @@ import { BrowserRouter } from 'react-router-dom';
 import Rugo from './rugo';
 import * as serviceWorker from './serviceWorker';
 
-import './index.scss';
 // import './index.css';
 
 ReactDOM.render(
-  <BrowserRouter>
-    <Rugo />
-  </BrowserRouter>,
+  <React.StrictMode>
+    <BrowserRouter>
+      <Rugo />
+    </BrowserRouter>
+  </React.StrictMode>,
   document.querySelector('#root'),
 );
 
