@@ -1,23 +1,8 @@
 import React, { ChangeEvent } from 'react';
+
 import { FormField } from '../components/formfield';
 import { NumberInputProperties, StringInputProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
-
-export type SirenTypeJsonScheme = {
-  name: string;
-  object: {
-    SirenType?: SirenType;
-  };
-  error?: string;
-};
-
-export type SirenTypeListJsonScheme = {
-  name: string;
-  object: {
-    SirenTypeList?: SirenTypeList[];
-  };
-  error?: string;
-};
 
 export type SirenType = {
   id: number;
@@ -57,7 +42,7 @@ export const SirenTypeNameInput = (properties: StringInputProperties): JSX.Eleme
 export const SirenTypeRadiusInput = (properties: NumberInputProperties): JSX.Element => (
   <FormField
     name="siren_type_radius"
-    value={properties.value.toString()}
+    value={properties.value}
     onChange={(event: ChangeEvent<HTMLInputElement>): void =>
       properties.setter(Number(event.target.value))
     }

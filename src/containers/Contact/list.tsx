@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { List, Search } from '../../components/table';
-import { splitNumbers, URL } from '../../helpers/utils';
-import { ContactList, ContactListJsonScheme } from '../../models/contact';
+
+import { Bar, Data } from '../../components/table';
+import { GetList } from '../../helpers/fetcher';
+import { splitNumbers } from '../../helpers/utils';
+import { ContactList } from '../../models/contact';
 
 export const Contacts = (): JSX.Element => {
   const history = useHistory();
-  const [data, setData] = useState<ContactList[]>([]);
+  const [data, error] = GetList('ContactList');
   const [search, setSearch] = useState('');
-  const [error, setError] = useState<string>();
 
-  const [paginationData, Paginate] = List({
+  const [paginationData, Paginate] = Data({
     data: data,
     search: search,
   });
@@ -18,28 +19,6 @@ export const Contacts = (): JSX.Element => {
   const tableData = (): ContactList[] => {
     return paginationData();
   };
-
-  useEffect(() => {
-    const ws = new WebSocket(URL);
-
-    ws.addEventListener('message', (message: MessageEvent) => {
-      const data = JSON.parse(message.data) as ContactListJsonScheme;
-      if (data.name && data.name === 'ContactList' && data.object.ContactList) {
-        setData(data.object.ContactList);
-      }
-      if (data.error) {
-        setError(data.error);
-      }
-    });
-
-    ws.addEventListener('open', () => {
-      ws.send('{"Get":{"List":"ContactList"}}');
-    });
-
-    return (): void => {
-      ws.close();
-    };
-  }, []);
 
   const Body = (): JSX.Element => (
     <>
@@ -53,7 +32,7 @@ export const Contacts = (): JSX.Element => {
             {contact.name}
           </td>
           <td
-            onClick={(): void => history.push(`/compaines/${contact.company_id || 0}`)}
+            onClick={(): void => history.push(`/companies/${contact.company_id || 0}`)}
             role="gridcell"
             className="is-hidden-mobile w250 link"
           >
@@ -71,8 +50,8 @@ export const Contacts = (): JSX.Element => {
     <></>
   ) : (
     <>
-      <Search value={search} setter={setSearch} />
-      <table className="table is-narrow">
+      <Bar value={search} setter={setSearch} name="contacts" />
+      <table className="table is-narrow is-fullwidth">
         <tbody>
           <tr>
             <th className="w250">Фамилия Имя Отчество</th>

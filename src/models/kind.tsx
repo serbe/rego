@@ -1,23 +1,8 @@
 import React, { ChangeEvent } from 'react';
+
 import { FormField } from '../components/formfield';
 import { StringInputProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
-
-export type KindJsonScheme = {
-  name: string;
-  object: {
-    Kind?: Kind;
-  };
-  error?: string;
-};
-
-export type KindListJsonScheme = {
-  name: string;
-  object: {
-    KindList?: KindList[];
-  };
-  error?: string;
-};
 
 export type Kind = {
   id: number;

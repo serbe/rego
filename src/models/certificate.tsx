@@ -1,23 +1,8 @@
 import React, { ChangeEvent } from 'react';
+
 import { DatePicker, DatePickerValues } from '../components/datepicker';
 import { FormField } from '../components/formfield';
 import { StringInputProperties } from '../components/input';
-
-export type CertificateJsonScheme = {
-  name: string;
-  object: {
-    Certificate?: Certificate;
-  };
-  error?: string;
-};
-
-export type CertificateListJsonScheme = {
-  name: string;
-  object: {
-    CertificateList?: CertificateList[];
-  };
-  error?: string;
-};
 
 export type Certificate = {
   id: number;

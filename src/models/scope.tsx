@@ -1,23 +1,8 @@
 import React, { ChangeEvent } from 'react';
+
 import { FormField } from '../components/formfield';
 import { StringInputProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
-
-export type ScopeJsonScheme = {
-  name: string;
-  object: {
-    Scope?: Scope;
-  };
-  error?: string;
-};
-
-export type ScopeListJsonScheme = {
-  name: string;
-  object: {
-    ScopeList?: ScopeList[];
-  };
-  error?: string;
-};
 
 export type Scope = {
   id: number;

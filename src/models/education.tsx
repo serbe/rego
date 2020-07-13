@@ -1,22 +1,7 @@
 import React from 'react';
+
 import { DatePicker, DatePickerValues } from '../components/datepicker';
 import { Select, SelectValues } from '../components/select';
-
-export type EducationJsonScheme = {
-  name: string;
-  object: {
-    Education?: Education;
-  };
-  error?: string;
-};
-
-export type EducationListJsonScheme = {
-  name: string;
-  object: {
-    EducationList?: EducationList[];
-  };
-  error?: string;
-};
 
 export type Education = {
   id: number;

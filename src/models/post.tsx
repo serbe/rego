@@ -1,23 +1,8 @@
 import React, { ChangeEvent } from 'react';
+
 import { FormField } from '../components/formfield';
 import { BooleanInputProperties, StringInputProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
-
-export type PostJsonScheme = {
-  name: string;
-  object: {
-    Post?: Post;
-  };
-  error?: string;
-};
-
-export type PostListJsonScheme = {
-  name: string;
-  object: {
-    PostList?: PostList[];
-  };
-  error?: string;
-};
 
 export type Post = {
   id: number;

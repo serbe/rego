@@ -1,72 +1,56 @@
 import React, { useEffect, useReducer } from 'react';
-import { CertificateList } from '../models/certificate';
-import { CompanyList } from '../models/company';
-import { ContactList } from '../models/contact';
-import { DepartmentList } from '../models/department';
-import { EducationList } from '../models/education';
-import { KindList } from '../models/kind';
-import { PostList } from '../models/post';
-import { PracticeList } from '../models/practice';
-import { RankList } from '../models/rank';
-import { ScopeList } from '../models/scope';
-import { SirenList } from '../models/siren';
-import { SirenTypeList } from '../models/sirentype';
-import { Input, StringInputProperties } from './input';
+import { useHistory } from 'react-router-dom';
+
+import { List } from '../models/impersonal';
+import { Button } from './button';
+import { Input } from './input';
 import { Pagination } from './pagination';
 
 export type SData = {
-  id: number;
   data: string;
+  id: number;
 };
 
 export type PaginateProperties = {
+  currentPage: number;
   filteredDataLength: number;
   itemsPerPage: number;
-  currentPage: number;
   setter: (value: number) => void;
 };
 
-export type dataType =
-  | CertificateList
-  | CompanyList
-  | ContactList
-  | DepartmentList
-  | EducationList
-  | KindList
-  | PostList
-  | PracticeList
-  | RankList
-  | ScopeList
-  | SirenList
-  | SirenTypeList;
-
-export type ListProperties = {
-  data: dataType[];
+export type DataProperties = {
+  data: List[];
   search: string;
 };
 
+type BarProperties = {
+  name: string;
+  setter: (value: string) => void;
+  value: string;
+};
+
 type State = {
-  filteredData: dataType[];
   currentPage: number;
-  searchValues: SData[];
+  filteredData: List[];
   filteredDataLength: number;
   itemsPerPage: number;
+  searchValues: SData[];
 };
 
 type Action =
-  | { type: 'searchLessThanTwo'; value: dataType[]; valueLength: number }
-  | { type: 'changeSearch'; value: dataType[]; search: string }
-  | { type: 'setFilteredData'; value: dataType[] }
+  | { type: 'searchLessThanTwo'; value: List[]; valueLength: number }
+  | { type: 'changeSearch'; value: List[]; search: string }
+  | { type: 'setFilteredData'; value: List[] }
   | { type: 'setCurrentPage'; value: number }
   | { type: 'setSearchValues'; value: SData[] }
   | { type: 'setFilteredDataLength'; value: number };
 
 const initialArguments = {
-  filteredData: [],
   currentPage: 0,
-  searchValues: [],
+  filteredData: [],
   filteredDataLength: 0,
   itemsPerPage: 20,
+  searchValues: [],
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -115,7 +99,7 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-export const List = (properties: ListProperties): [() => dataType[], JSX.Element] => {
+export const Data = (properties: DataProperties): [() => List[], JSX.Element] => {
   const { data, search } = properties;
   type td = typeof properties.data;
 
@@ -168,27 +152,35 @@ export const List = (properties: ListProperties): [() => dataType[], JSX.Element
   return [
     paginationData,
     Paginate({
+      currentPage: currentPage,
       filteredDataLength: filteredDataLength,
       itemsPerPage: itemsPerPage,
-      currentPage: currentPage,
       setter: setCurrentPage,
     }),
   ];
 };
 
-export const Search = (properties: StringInputProperties): JSX.Element => (
-  <div className="control mb-4" key="TableSearch">
-    <Input
-      name="search"
-      className="input is-expanded"
-      placeholder="Поиск"
-      onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
-        properties.setter(event.target.value)
-      }
-      value={properties.value}
-    />
-  </div>
-);
+export const Bar = (properties: BarProperties): JSX.Element => {
+  const history = useHistory();
+  return (
+    <div className="field is-grouped">
+      <div className="control mb-4" key="TableNewItem">
+        <Button onClick={() => history.push(`/${properties.name}/0`)}>Создать</Button>
+      </div>
+      <div className="control mb-4 is-expanded" key="TableSearch">
+        <Input
+          className="input is-expanded"
+          name="search"
+          placeholder="Поиск"
+          onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
+            properties.setter(event.target.value)
+          }
+          value={properties.value}
+        />
+      </div>
+    </div>
+  );
+};
 
 export const Paginate = (properties: PaginateProperties): JSX.Element => {
   const { filteredDataLength, itemsPerPage, currentPage, setter } = properties;

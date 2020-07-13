@@ -14,22 +14,6 @@ export interface ContactEducationsValues {
   educations: string[];
 }
 
-export type ContactJsonScheme = {
-  name: string;
-  object: {
-    Contact?: Contact;
-  };
-  error?: string;
-};
-
-export type ContactListJsonScheme = {
-  name: string;
-  object: {
-    ContactList?: ContactList[];
-  };
-  error?: string;
-};
-
 export type Contact = {
   id: number;
   name?: string;

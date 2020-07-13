@@ -1,25 +1,10 @@
 import React, { ChangeEvent } from 'react';
+
 import { FormField } from '../components/formfield';
 import { StringInputProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
 import { ContactShort } from './contact';
 import { PracticeList } from './practice';
-
-export type CompanyJsonScheme = {
-  name: string;
-  object: {
-    Company?: Company;
-  };
-  error?: string;
-};
-
-export type CompanyListJsonScheme = {
-  name: string;
-  object: {
-    CompanyList?: CompanyList[];
-  };
-  error?: string;
-};
 
 export type Company = {
   id: number;

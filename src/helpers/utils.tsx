@@ -1,7 +1,5 @@
 import React from 'react';
 
-export const URL = 'ws://127.0.0.1:9090/api/go/';
-
 export const filterArrayString = (values: string[]): string[] => {
   return values.filter((value: string) => value !== '');
 };

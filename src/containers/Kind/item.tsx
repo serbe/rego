@@ -1,45 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { URL } from '../../helpers/utils';
+
+import { GetItem, SetItem } from '../../helpers/fetcher';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
-import { KindJsonScheme, KindNameInput, KindShortNameInput } from '../../models/kind';
+import { Kind, KindNameInput, KindShortNameInput } from '../../models/kind';
 
 export const KindItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState('');
-  const [name, setName] = useState('');
-  const [shortName, setShortName] = useState('');
-  const [note, setNote] = useState('');
+  const [loaded, setLoaded] = useState(id === '0' || false);
+  const [data, error] = GetItem('Kind', id);
+  const [name, setName] = useState<string>();
+  const [shortName, setShortName] = useState<string>();
+  const [note, setNote] = useState<string>();
+
+  const submit = (): void => {
+    const number_id = Number(id);
+    const item: Kind = {
+      id: number_id,
+      name: name,
+      short_name: shortName,
+      note: note,
+    };
+
+    SetItem(number_id, 'Kind', JSON.stringify(item));
+    history.go(-1);
+    return;
+  };
 
   useEffect(() => {
-    if (id !== '0') {
-      const ws = new WebSocket(URL);
-
-      ws.addEventListener('message', (message: MessageEvent) => {
-        const data = JSON.parse(message.data) as KindJsonScheme;
-        if (data?.name === 'Kind' && data.object.Kind) {
-          const c = data.object.Kind;
-          setName(c.name || '');
-          setShortName(c.short_name || '');
-          setNote(c.note || '');
-          setLoaded(true);
-        }
-        if (data.error) {
-          setError(data.error);
-        }
-      });
-
-      ws.addEventListener('open', () => {
-        ws.send(`{"Get":{"Item":{"id": ${id}, "name": "Kind"}}}`);
-      });
-
-      return (): void => {
-        ws.close();
-      };
+    if (data?.id) {
+      const c = data as Kind;
+      setName(c.name);
+      setShortName(c.short_name);
+      setNote(c.note);
+      setLoaded(true);
     }
-  }, [id]);
+  }, [data]);
 
   return (
     <div>
@@ -51,7 +48,9 @@ export const KindItem = (): JSX.Element => {
 
           <div className="field is-grouped">
             <div className="control">
-              <button className="button">Сохранить</button>
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
             </div>
             <div className="control">
               <button className="button" onClick={() => history.go(-1)}>

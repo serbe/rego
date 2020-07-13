@@ -2,64 +2,32 @@ import './select.css';
 
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
-import { URL } from '../helpers/wsocket';
-import { SelectItem } from '../models/selectitem';
+import { GetSelect } from '../helpers/fetcher';
+import { SelectItem } from '../models/impersonal';
 import { Icon } from './icon';
 
 export interface SelectValues {
-  id: number;
-  setter: (event: number) => void;
+  id?: number;
+  setter: (event?: number) => void;
 }
 
 interface SelectProps {
-  name: string;
-  id?: number;
-  icon?: string;
   color?: 'primary' | 'info' | 'success' | 'warning' | 'danger';
+  icon?: string;
+  id?: number;
   label?: string;
   listName: string;
-  setter: (event: number) => void;
-}
-
-type CLWS = {
   name: string;
-  object: {
-    SelectItem?: SelectItem[];
-  };
-  error?: string;
-};
+  setter: (event?: number) => void;
+}
 
 export const Select = (properties: SelectProps): JSX.Element => {
   const { name, id, label, icon, color, listName, setter } = properties;
 
   const [opened, setOpened] = useState(false);
   const [itemID, setItemID] = useState(id || 0);
-  const [list, setList] = useState<SelectItem[]>([{ id: 0, name: '' }]);
-  const [error, setError] = useState<string>();
+  const [list, error] = GetSelect(listName);
   const [value, setValue] = useState<string>();
-
-  useEffect(() => {
-    const ws = new WebSocket(URL);
-
-    ws.addEventListener('message', (message: MessageEvent) => {
-      const data = JSON.parse(message.data) as CLWS;
-      if (data?.name === listName && data.object.SelectItem && data.object.SelectItem.length > 0) {
-        setList(data.object.SelectItem);
-      }
-
-      if (data.error) {
-        setError(data.error);
-      }
-    });
-
-    ws.addEventListener('open', () => {
-      ws.send(`{"Get":{"List":"${listName}"}}`);
-    });
-
-    return (): void => {
-      ws.close();
-    };
-  }, [listName]);
 
   useEffect(() => {
     if (list[0].id !== 0) {
@@ -109,11 +77,11 @@ export const Select = (properties: SelectProps): JSX.Element => {
         key={`${name}-control`}
       >
         <input
-          name={name}
-          className={`input ${color ? `is-${color}` : ''}`}
-          type="text"
-          aria-haspopup="true"
           aria-controls="dropdown-menu"
+          aria-haspopup="true"
+          className={`input ${color ? `is-${color}` : ''}`}
+          name={name}
+          type="text"
           value={currentValue()}
           onChange={(event: ChangeEvent<HTMLInputElement>): void => {
             setValue(event.target.value);
@@ -128,10 +96,10 @@ export const Select = (properties: SelectProps): JSX.Element => {
         />
         {icon && (
           <Icon
-            icon={icon}
-            position="left"
             color={color !== 'primary' ? color : undefined}
+            icon={icon}
             key="SelectIconLeft"
+            position="left"
           />
         )}
       </div>
@@ -144,7 +112,7 @@ export const Select = (properties: SelectProps): JSX.Element => {
               onMouseDown={(): void => {
                 setItemID(ListItem.id);
                 setValue(ListItem.name);
-                setter(ListItem.id);
+                setter(ListItem.id === 0 ? undefined : ListItem.id);
               }}
               role="row"
               tabIndex={index}

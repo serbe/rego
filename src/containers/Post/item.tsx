@@ -1,45 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { URL } from '../../helpers/utils';
+
+import { GetItem, SetItem } from '../../helpers/fetcher';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
-import { PostGOSwitch, PostJsonScheme, PostNameInput } from '../../models/post';
+import { Post, PostGOSwitch, PostNameInput } from '../../models/post';
 
 export const PostItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState('');
-  const [name, setName] = useState('');
+  const [loaded, setLoaded] = useState(id === '0' || false);
+  const [data, error] = GetItem('Post', id);
+  const [name, setName] = useState<string>();
   const [go, setGo] = useState(false);
-  const [note, setNote] = useState('');
+  const [note, setNote] = useState<string>();
+
+  const submit = (): void => {
+    const number_id = Number(id);
+    const item: Post = {
+      id: number_id,
+      name: name,
+      go: go,
+      note: note,
+    };
+
+    SetItem(number_id, 'Post', JSON.stringify(item));
+    history.go(-1);
+    return;
+  };
 
   useEffect(() => {
-    if (id !== '0') {
-      const ws = new WebSocket(URL);
-
-      ws.addEventListener('message', (message: MessageEvent) => {
-        const data = JSON.parse(message.data) as PostJsonScheme;
-        if (data?.name === 'Post' && data.object.Post) {
-          const c = data.object.Post;
-          setName(c.name || '');
-          setGo(c.go || false);
-          setNote(c.note || '');
-          setLoaded(true);
-        }
-        if (data.error) {
-          setError(data.error);
-        }
-      });
-
-      ws.addEventListener('open', () => {
-        ws.send(`{"Get":{"Item":{"id": ${id}, "name": "Post"}}}`);
-      });
-
-      return (): void => {
-        ws.close();
-      };
+    if (data?.id) {
+      const c = data as Post;
+      setName(c.name);
+      setGo(c.go || false);
+      setNote(c.note);
+      setLoaded(true);
     }
-  }, [id]);
+  }, [data]);
 
   return (
     <div>
@@ -51,7 +48,9 @@ export const PostItem = (): JSX.Element => {
 
           <div className="field is-grouped">
             <div className="control">
-              <button className="button">Сохранить</button>
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
             </div>
             <div className="control">
               <button className="button" onClick={() => history.go(-1)}>

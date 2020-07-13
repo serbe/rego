@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { List, Search } from '../../components/table';
-import { URL } from '../../helpers/utils';
-import { RankList, RankListJsonScheme } from '../../models/rank';
+
+import { Bar, Data } from '../../components/table';
+import { GetList } from '../../helpers/fetcher';
+import { RankList } from '../../models/rank';
 
 export const Ranks = (): JSX.Element => {
   const history = useHistory();
-  const [data, setData] = useState<RankList[]>([]);
+  const [data, error] = GetList('RankList');
   const [search, setSearch] = useState('');
-  const [error, setError] = useState<string>();
 
-  const [paginationData, Paginate] = List({
+  const [paginationData, Paginate] = Data({
     data: data,
     search: search,
   });
@@ -18,28 +18,6 @@ export const Ranks = (): JSX.Element => {
   const tableData = (): RankList[] => {
     return paginationData();
   };
-
-  useEffect(() => {
-    const ws = new WebSocket(URL);
-
-    ws.addEventListener('message', (message: MessageEvent) => {
-      const data = JSON.parse(message.data) as RankListJsonScheme;
-      if (data.name && data.name === 'RankList' && data.object.RankList) {
-        setData(data.object.RankList);
-      }
-      if (data.error) {
-        setError(data.error);
-      }
-    });
-
-    ws.addEventListener('open', () => {
-      ws.send('{"Get":{"List":"RankList"}}');
-    });
-
-    return (): void => {
-      ws.close();
-    };
-  }, []);
 
   const Body = (): JSX.Element => (
     <>
@@ -61,8 +39,8 @@ export const Ranks = (): JSX.Element => {
     <></>
   ) : (
     <>
-      <Search value={search} setter={setSearch} />
-      <table className="table is-narrow">
+      <Bar value={search} setter={setSearch} name="ranks" />
+      <table className="table is-narrow is-fullwidth">
         <tbody>
           <tr>
             <th className="w250">Наименование чина</th>

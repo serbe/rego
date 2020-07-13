@@ -1,23 +1,8 @@
 import React, { ChangeEvent } from 'react';
+
 import { FormField } from '../components/formfield';
 import { StringInputProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
-
-export type DepartmentJsonScheme = {
-  name: string;
-  object: {
-    Department?: Department;
-  };
-  error?: string;
-};
-
-export type DepartmentListJsonScheme = {
-  name: string;
-  object: {
-    DepartmentList?: DepartmentList[];
-  };
-  error?: string;
-};
 
 export type Department = {
   id: number;
