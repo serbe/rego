@@ -1,14 +1,15 @@
-import React, { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, MouseEvent } from 'react';
+
 import { Icon } from './icon';
 
 export type StringInputProperties = {
-  value: string;
-  setter: (value: string) => void;
+  value?: string;
+  setter: (value?: string) => void;
 };
 
 export type NumberInputProperties = {
-  value: number;
-  setter: (value: number) => void;
+  value?: number;
+  setter: (value?: number) => void;
 };
 
 export type BooleanInputProperties = {
@@ -17,43 +18,43 @@ export type BooleanInputProperties = {
 };
 
 interface InputProps {
-  name: string;
   className?: string;
   classNameDiv?: string;
-  value?: string;
   disabled?: boolean;
   icon?: string;
   iconRight?: string;
-  onClick?: (event: MouseEvent<HTMLInputElement, globalThis.MouseEvent>) => void;
-  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  name: string;
   onBlur?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onClick?: (event: MouseEvent<HTMLInputElement, globalThis.MouseEvent>) => void;
   placeholder?: string;
   readonly?: boolean;
   type?: 'text' | 'password' | 'email' | 'tel';
+  value?: number | string;
 }
 
 export const Input = (properties: InputProps): JSX.Element => {
   const {
-    name,
     className,
     classNameDiv,
     disabled,
     icon,
     iconRight,
-    onClick,
-    onChange,
+    name,
     onBlur,
+    onChange,
+    onClick,
     placeholder,
     readonly,
     type,
     value,
   } = properties;
 
-  const [inputValue, setInputValue] = useState('');
+  // const [inputValue, setInputValue] = useState<number | string | undefined>();
 
-  useEffect(() => {
-    setInputValue(value || '');
-  }, [value]);
+  // useEffect(() => {
+  //   setInputValue(value === '' || value === 0 ? undefined : value);
+  // }, [value]);
 
   const divClasses = `control ${classNameDiv || ''} ${icon ? 'has-icons-left' : ''} ${
     iconRight ? 'has-icons-right' : ''
@@ -62,18 +63,18 @@ export const Input = (properties: InputProps): JSX.Element => {
   return (
     <div className={divClasses}>
       <input
-        name={name}
+        className={`${className || ''} input`}
+        value={value}
+        disabled={disabled}
         id={name}
         key={name}
-        className={`${className || ''} input`}
-        disabled={disabled}
-        onClick={onClick}
-        onChange={onChange}
+        name={name}
         onBlur={onBlur}
+        onChange={onChange}
+        onClick={onClick}
         placeholder={placeholder}
         readOnly={readonly}
         type={type}
-        defaultValue={inputValue}
       />
       {icon && <Icon position={'left'} icon={icon} />}
       {iconRight && <Icon position={'right'} icon={iconRight} />}

@@ -1,9 +1,11 @@
+import './index.css';
+
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+
 import { URL } from '../../helpers/utils';
 import { EducationShort } from '../../models/education';
 import { PracticeShort } from '../../models/practice';
-import './index.css';
 
 type HomeWS = {
   name: string;
@@ -67,7 +69,7 @@ export const Home = (): JSX.Element => {
   }, []);
 
   const EducationTable = (): JSX.Element => (
-    <table className="table is-narrow">
+    <table className="table is-narrow is-fullwidth">
       <tbody>
         {educations.map((row, index) => (
           <tr key={index} className={trClass(row.start_date)}>
@@ -92,7 +94,7 @@ export const Home = (): JSX.Element => {
   );
 
   const PracticeTable = (): JSX.Element => (
-    <table className="table is-narrow">
+    <table className="table is-narrow is-fullwidth">
       <tbody>
         {practices.map((row, index) => (
           <tr key={index} className={trClass(row.date_of_practice)}>

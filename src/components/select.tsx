@@ -1,8 +1,10 @@
+import './select.css';
+
 import React, { ChangeEvent, useEffect, useState } from 'react';
+
 import { URL } from '../helpers/wsocket';
 import { SelectItem } from '../models/selectitem';
 import { Icon } from './icon';
-import './select.css';
 
 export interface SelectValues {
   id: number;

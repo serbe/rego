@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
 export type DatePickerValues = {
-  value: string;
-  setter: (value: string) => void;
+  value?: string;
+  setter: (value?: string) => void;
 };
 
 interface DatePickerProps {
-  name: string;
-  value?: string;
-  setter: (value: string) => void;
   label?: string;
+  name: string;
+  setter: (value?: string) => void;
+  value?: string;
 }
 
 const listDate = (date: Date): string[] => {
@@ -64,7 +64,7 @@ export const DatePicker = (properties: DatePickerProps): JSX.Element => {
     const strdate = `${year}-${month}-${day}`;
     if (strdate !== rawDate) {
       setRawDate(strdate);
-      setter(strdate);
+      setter(year !== ' ' && month !== ' ' && day !== ' ' ? strdate : undefined);
     }
   }, [day, month, setter, rawDate, year]);
 

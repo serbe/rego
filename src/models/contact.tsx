@@ -1,5 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import { useHistory } from 'react-router-dom';
+
 import { DatePicker, DatePickerValues } from '../components/datepicker';
 import { FormField } from '../components/formfield';
 import { Input, StringInputProperties } from '../components/input';
@@ -7,6 +8,10 @@ import { Select, SelectValues } from '../components/select';
 
 export interface ContactShortValues {
   contacts: ContactShort[];
+}
+
+export interface ContactEducationsValues {
+  educations: string[];
 }
 
 export type ContactJsonScheme = {
@@ -41,22 +46,6 @@ export type Contact = {
   educations?: string[];
 };
 
-export interface ContactForm {
-  id: number;
-  name: string;
-  company_id: number;
-  department_id: number;
-  post_id: number;
-  post_go_id: number;
-  rank_id: number;
-  birthday: string;
-  note: string;
-  emails: string[];
-  phones: string[];
-  faxes: string[];
-  educations?: string[];
-}
-
 export type ContactList = {
   id: number;
   name?: string;
@@ -77,20 +66,20 @@ export type ContactShort = {
 
 export const ContactNameInput = (properties: StringInputProperties): JSX.Element => (
   <FormField
-    name="name"
-    value={properties.value}
-    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
-    label="Фамилия Имя Отчество"
     icon="user"
+    label="Фамилия Имя Отчество"
+    name="name"
+    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    value={properties.value}
   />
 );
 
 export const ContactBirthdayInput = (properties: DatePickerValues): JSX.Element => (
   <DatePicker
-    name="birthday"
     label="Дата рождения"
-    value={properties.value}
+    name="birthday"
     setter={properties.setter}
+    value={properties.value}
   />
 );
 
@@ -103,13 +92,13 @@ export const ContactShortForm = (properties: ContactShortValues): JSX.Element =>
       </label>
       {properties.contacts.map((contact, index) => (
         <Input
+          className="link"
+          classNameDiv="pb-1"
           key={`contact-${index}`}
           name={`contact-${index}`}
-          onClick={(): void => history.push(`/contact/${contact.id}`)}
-          value={`${contact.name || ''} - ${contact.post_name || ''}`}
+          onClick={(): void => history.push(`/contacts/${contact.id}`)}
           readonly
-          classNameDiv="pb-1"
-          className="link"
+          value={`${contact.name || ''} - ${contact.post_name || ''}`}
         />
       ))}
     </div>
@@ -118,11 +107,30 @@ export const ContactShortForm = (properties: ContactShortValues): JSX.Element =>
 
 export const ContactIDSelect = (properties: SelectValues): JSX.Element => (
   <Select
-    name="contact"
+    icon="user"
+    id={properties.id}
     label="Фамилия Имя Отчество"
     listName="ContactSelect"
-    id={properties.id}
-    icon="user"
+    name="contact"
     setter={properties.setter}
   />
 );
+
+export const ContactEducations = (properties: ContactEducationsValues): JSX.Element =>
+  properties.educations.length > 0 ? (
+    <div className="field">
+      <label className="label" htmlFor="education-1-input">
+        Даты обучения в УМЦ
+      </label>
+      {properties.educations.map((education, index) => (
+        <Input
+          name={`education-${index}-input`}
+          key={`education-${index}`}
+          value={education}
+          classNameDiv="pb-1"
+        />
+      ))}
+    </div>
+  ) : (
+    <></>
+  );

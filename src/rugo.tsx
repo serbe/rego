@@ -1,7 +1,9 @@
-import React from 'react';
-import { Router } from './containers/Router';
-import { NavBar } from './components/navbar';
 import './rugo.css';
+
+import React from 'react';
+
+import { NavBar } from './components/navbar';
+import { Router } from './containers/Router';
 
 const Rugo = (): JSX.Element => {
   return (
