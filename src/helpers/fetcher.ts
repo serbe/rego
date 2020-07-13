@@ -1,234 +1,254 @@
-import React, { createContext, Dispatch, ReactNode, useMemo, useReducer } from 'react';
+import { useEffect, useState } from 'react';
 
-import { Certificate, CertificateList } from '../models/certificate';
-import { Company, CompanyList } from '../models/company';
-import { Contact, ContactList } from '../models/contact';
-import { Department, DepartmentList } from '../models/department';
-import { Education, EducationList, EducationShort } from '../models/education';
-import { Kind, KindList } from '../models/kind';
-import { Post, PostList } from '../models/post';
-import { Practice, PracticeList, PracticeShort } from '../models/practice';
-import { Rank, RankList } from '../models/rank';
-import { Scope, ScopeList } from '../models/scope';
-import { Siren, SirenList } from '../models/siren';
-import { SirenType, SirenTypeList } from '../models/sirentype';
+import { Item, JsonScheme, List, SelectItem } from '../models/impersonal';
+
+type AuthJson = {
+  token?: string;
+  error?: string;
+};
 
 export const URL = 'http://127.0.0.1:9090/api/go/json';
 
-// export const ws = new WebSocket(URL);
+export const Login = (name: string, password: string): [string | undefined, string | undefined] => {
+  const [token, setToken] = useState<string>();
+  const [error, setError] = useState<string>();
 
-const initialArguments: State = {
-  data: null,
-  token: '',
-  isAuth: false,
-  getList: null,
-  getItem: null,
+  useEffect(() => {
+    fetch(URL, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ Login: { name: name, password: password } }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        const jsonData = response as AuthJson;
+        setToken(jsonData.token);
+        setError(jsonData.error);
+        return;
+      })
+      .catch((error) => setError(error as string));
+  }, [name, password]);
+  return [token, error];
 };
 
-const initContext: SocketValues = {
-  state: initialArguments,
-  dispatch: () => null,
-};
+export const GetItem = (name: string, id: string): [Item, string] => {
+  const [item, setItem] = useState<Item>();
+  const [error, setError] = useState<string>('');
+  const number_id = Number(id);
 
-export const SocketContext = createContext<SocketValues>(initContext);
-
-export type State = {
-  data: JsonScheme;
-  token: string;
-  isAuth: boolean;
-  getList: ((name: string) => void) | null;
-  getItem: ((name: string, id: number) => void) | null;
-};
-
-export type SocketValues = {
-  state: State;
-  dispatch: Dispatch<ReducerActions>;
-};
-
-type SocketProperties = {
-  children: ReactNode;
-};
-
-type JsonScheme =
-  | null
-  | { name: 'Certificate'; object: { Certificate?: Certificate }; error?: string }
-  | { name: 'CertificateList'; object: { CertificateList?: CertificateList[] }; error?: string }
-  | { name: 'Company'; object: { Company?: Company }; error?: string }
-  | { name: 'CompanyList'; object: { CompanyList?: CompanyList[] }; error?: string }
-  | { name: 'Contact'; object: { Contact?: Contact }; error?: string }
-  | { name: 'ContactList'; object: { ContactList?: ContactList[] }; error?: string }
-  | { name: 'Department'; object: { Department?: Department }; error?: string }
-  | { name: 'DepartmentList'; object: { DepartmentList?: DepartmentList[] }; error?: string }
-  | { name: 'Education'; object: { Education?: Education }; error?: string }
-  | { name: 'EducationList'; object: { EducationList?: EducationList[] }; error?: string }
-  | { name: 'EducationNear'; object: { EducationShort?: EducationShort[] }; error?: string }
-  | { name: 'Kind'; object: { Kind?: Kind }; error?: string }
-  | { name: 'KindList'; object: { KindList?: KindList[] }; error?: string }
-  | { name: 'Post'; object: { Post?: Post }; error?: string }
-  | { name: 'PostList'; object: { PostList?: PostList[] }; error?: string }
-  | { name: 'Practice'; object: { Practice?: Practice }; error?: string }
-  | { name: 'PracticeList'; object: { PracticeList?: PracticeList[] }; error?: string }
-  | { name: 'PracticeNear'; object: { PracticeShort?: PracticeShort[] }; error?: string }
-  | { name: 'Rank'; object: { Rank?: Rank }; error?: string }
-  | { name: 'RankList'; object: { RankList?: RankList[] }; error?: string }
-  | { name: 'Scope'; object: { Scope?: Scope }; error?: string }
-  | { name: 'ScopeList'; object: { ScopeList?: ScopeList[] }; error?: string }
-  | { name: 'Siren'; object: { Siren?: Siren }; error?: string }
-  | { name: 'SirenList'; object: { SirenList?: SirenList[] }; error?: string }
-  | { name: 'SirenType'; object: { SirenType?: SirenType }; error?: string }
-  | { name: 'SirenTypeList'; object: { SirenTypeList?: SirenTypeList[] }; error?: string };
-
-type ReducerActions =
-  | { name: 'ClearEducationNear' }
-  | { name: 'ClearCertificate' }
-  | { name: 'ClearCertificateList' }
-  | { name: 'ClearCompany' }
-  | { name: 'ClearCompanyList' }
-  | { name: 'ClearContact' }
-  | { name: 'ClearContactList' }
-  | { name: 'ClearPracticeNear' }
-  | { name: 'GetEducationNear' }
-  | { name: 'GetCertificate' }
-  | { name: 'GetCertificateList' }
-  | { name: 'GetCompany' }
-  | { name: 'GetCompanyList' }
-  | { name: 'GetContact' }
-  | { name: 'GetContactList' }
-  | { name: 'GetPracticeNear' }
-  | JsonScheme;
-
-const reducer = (state: State, action: ReducerActions): State => {
-  switch (action.name) {
-    case 'Certificate':
-      return { ...state, certificate: action.object.Certificate, error: action.error };
-    case 'CertificateList':
-      return {
-        ...state,
-        certificateList: action.object.CertificateList || [],
-        error: action.error,
-      };
-    case 'Company':
-      return { ...state, company: action.object.Company, error: action.error };
-    case 'CompanyList':
-      return { ...state, companyList: action.object.CompanyList || [], error: action.error };
-    case 'Contact':
-      return { ...state, contact: action.object.Contact, error: action.error };
-    case 'ClearContactList':
-      return { ...state, contactList: [], error: undefined };
-    case 'GetContactList': {
-      state.rws.send('{"Get":{"List":"ContactList"}}');
-      return state;
+  useEffect(() => {
+    if (number_id !== 0) {
+      fetch(URL, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ Get: { Item: { name: name, id: number_id } } }),
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          const jsonData = response as JsonScheme;
+          switch (jsonData?.name) {
+            case 'Certificate':
+              return setItem(jsonData.object.Certificate);
+            case 'Company':
+              return setItem(jsonData.object.Company);
+            case 'Contact':
+              return setItem(jsonData.object.Contact);
+            case 'Department':
+              return setItem(jsonData.object.Department);
+            case 'Education':
+              return setItem(jsonData.object.Education);
+            case 'Kind':
+              return setItem(jsonData.object.Kind);
+            case 'Post':
+              return setItem(jsonData.object.Post);
+            case 'Practice':
+              return setItem(jsonData.object.Practice);
+            case 'Rank':
+              return setItem(jsonData.object.Rank);
+            case 'Scope':
+              return setItem(jsonData.object.Scope);
+            case 'Siren':
+              return setItem(jsonData.object.Siren);
+            case 'SirenType':
+              return setItem(jsonData.object.SirenType);
+            default:
+              return setError('unknown item');
+          }
+        })
+        .catch((error) => setError(error as string));
     }
-    case 'ContactList':
-      return { ...state, contactList: action.object.ContactList || [], error: action.error };
-    case 'Department':
-      return { ...state, department: action.object.Department, error: action.error };
-    case 'DepartmentList':
-      return { ...state, departmentList: action.object.DepartmentList || [], error: action.error };
-    case 'Education':
-      return { ...state, education: action.object.Education, error: action.error };
-    case 'EducationList':
-      return { ...state, educationList: action.object.EducationList || [], error: action.error };
-    case 'ClearEducationNear':
-      return { ...state, educationShort: [], error: undefined };
-    case 'GetEducationNear': {
-      state.rws.send('{"Get":{"List":"EducationNear"}}');
-      return state;
-    }
-    case 'EducationNear':
-      return { ...state, educationShort: action.object.EducationShort || [], error: action.error };
-    case 'Kind':
-      return { ...state, kind: action.object.Kind, error: action.error };
-    case 'KindList':
-      return { ...state, kindList: action.object.KindList || [], error: action.error };
-    case 'Post':
-      return { ...state, post: action.object.Post, error: action.error };
-    case 'PostList':
-      return { ...state, postList: action.object.PostList || [], error: action.error };
-    case 'Practice':
-      return { ...state, practice: action.object.Practice, error: action.error };
-    case 'PracticeList':
-      return { ...state, practiceList: action.object.PracticeList || [], error: action.error };
-    case 'ClearPracticeNear':
-      return { ...state, practiceShort: [], error: undefined };
-    case 'GetPracticeNear': {
-      state.rws.send('{"Get":{"List":"PracticeNear"}}');
-      return state;
-    }
-    case 'PracticeNear': {
-      return { ...state, practiceShort: action.object.PracticeShort || [], error: action.error };
-    }
-    case 'Rank':
-      return { ...state, rank: action.object.Rank, error: action.error };
-    case 'RankList':
-      return { ...state, rankList: action.object.RankList || [], error: action.error };
-    case 'Scope':
-      return { ...state, scope: action.object.Scope, error: action.error };
-    case 'ScopeList':
-      return { ...state, scopeList: action.object.ScopeList || [], error: action.error };
-    case 'Siren':
-      return { ...state, siren: action.object.Siren, error: action.error };
-    case 'SirenList':
-      return { ...state, sirenList: action.object.SirenList || [], error: action.error };
-    case 'SirenType':
-      return { ...state, sirenType: action.object.SirenType, error: action.error };
-    case 'SirenTypeList':
-      return { ...state, sirenTypeList: action.object.SirenTypeList || [], error: action.error };
-    default:
-      return state;
-  }
+  }, [name, number_id]);
+
+  return [item, error];
 };
 
-// {
-//   Certificate,
-//   CertificateList,
-//   Company,
-//   CompanyList,
-//   Contact,
-//   ContactList,
-//   Department,
-//   DepartmentList,
-//   Education,
-//   EducationList,
-//   EducationShort,
-//   Kind,
-//   KindList,
-//   Post,
-//   PostList,
-//   Practice,
-//   PracticeList,
-//   Rank,
-//   RankList,
-//   Scope,
-//   ScopeList,
-//   Siren,
-//   SirenList,
-//   SirenType,
-//   SirenTypeList,
-//   Error,
-// },
+export const GetList = (name: string): [List[], string] => {
+  const [list, setList] = useState<List[]>([]);
+  const [error, setError] = useState<string>('');
 
-export const Socket = (properties: SocketProperties): JSX.Element => {
-  const { children } = properties;
-  const [state, dispatch] = useReducer(reducer, initialArguments);
+  useEffect(() => {
+    fetch(URL, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ Get: { List: name } }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        const jsonData = response as JsonScheme;
+        switch (jsonData?.name) {
+          case 'CertificateList':
+            return setList(jsonData.object.CertificateList);
+          case 'CompanyList':
+            return setList(jsonData.object.CompanyList);
+          case 'ContactList':
+            return setList(jsonData.object.ContactList);
+          case 'DepartmentList':
+            return setList(jsonData.object.DepartmentList);
+          case 'EducationList':
+            return setList(jsonData.object.EducationList);
+          case 'EducationNear':
+            return setList(jsonData.object.EducationShort);
+          case 'KindList':
+            return setList(jsonData.object.KindList);
+          case 'PostList':
+            return setList(jsonData.object.PostList);
+          case 'PracticeList':
+            return setList(jsonData.object.PracticeList);
+          case 'PracticeNear':
+            return setList(jsonData.object.PracticeShort);
+          case 'RankList':
+            return setList(jsonData.object.RankList);
+          case 'ScopeList':
+            return setList(jsonData.object.ScopeList);
+          case 'SirenList':
+            return setList(jsonData.object.SirenList);
+          case 'SirenTypeList':
+            return setList(jsonData.object.SirenTypeList);
+          default:
+            return setError('unknown list');
+        }
+      })
+      .catch((error) => setError(error as string));
+  }, [name]);
 
-  state.rws.addEventListener('message', (message: MessageEvent) => {
-    const data = JSON.parse(message.data) as JsonScheme;
-    dispatch(data);
-  });
+  return [list, error];
+};
 
-  state.rws.addEventListener('close', () => {
-    console.log('close rws');
-    state.rws.close();
-  });
+export const GetSelect = (name: string): [SelectItem[], string] => {
+  const [list, setSelect] = useState<SelectItem[]>([{ id: 0, name: '' }]);
+  const [error, setError] = useState<string>('');
 
-  const contentValues = useMemo(
-    () => ({
-      state,
-      dispatch,
-    }),
-    [state, dispatch],
-  );
+  useEffect(() => {
+    fetch(URL, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ Get: { List: name } }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        const jsonData = response as JsonScheme;
+        switch (jsonData?.name) {
+          case 'CompanySelect':
+            return jsonData.object.SelectItem.length > 0
+              ? setSelect(jsonData.object.SelectItem)
+              : setSelect([{ id: 0, name: '' }]);
+          case 'ContactSelect':
+            return jsonData.object.SelectItem.length > 0
+              ? setSelect(jsonData.object.SelectItem)
+              : setSelect([{ id: 0, name: '' }]);
+          case 'DepartmentSelect':
+            return jsonData.object.SelectItem.length > 0
+              ? setSelect(jsonData.object.SelectItem)
+              : setSelect([{ id: 0, name: '' }]);
+          case 'KindSelect':
+            return jsonData.object.SelectItem.length > 0
+              ? setSelect(jsonData.object.SelectItem)
+              : setSelect([{ id: 0, name: '' }]);
+          case 'PostSelect':
+            return jsonData.object.SelectItem.length > 0
+              ? setSelect(jsonData.object.SelectItem)
+              : setSelect([{ id: 0, name: '' }]);
+          case 'PostGoSelect':
+            return jsonData.object.SelectItem.length > 0
+              ? setSelect(jsonData.object.SelectItem)
+              : setSelect([{ id: 0, name: '' }]);
+          case 'RankSelect':
+            return jsonData.object.SelectItem.length > 0
+              ? setSelect(jsonData.object.SelectItem)
+              : setSelect([{ id: 0, name: '' }]);
+          case 'ScopeSelect':
+            return jsonData.object.SelectItem.length > 0
+              ? setSelect(jsonData.object.SelectItem)
+              : setSelect([{ id: 0, name: '' }]);
+          case 'SirenTypeSelect':
+            return jsonData.object.SelectItem.length > 0
+              ? setSelect(jsonData.object.SelectItem)
+              : setSelect([{ id: 0, name: '' }]);
+          default:
+            return setError('unknown list');
+        }
+      })
+      .catch((error) => setError(error as string));
+  }, [name]);
 
-  return <SocketContext.Provider value={contentValues}>{children}</SocketContext.Provider>;
+  return [list, error];
+};
+
+export const SetItem = (id: number, name: string, body: string): void => {
+  id === 0 ? InsertItem(name, body) : UpdateItem(name, body);
+  return;
+};
+
+const InsertItem = (name: string, body: string): void => {
+  fetch(URL, {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: `{"Insert":{"${name}":${body}}}`,
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      const jsonData = response as JsonScheme;
+      if (jsonData?.error) {
+        console.log(jsonData?.error);
+      }
+      console.log(response);
+      return;
+    })
+    .catch((error) => console.log(error));
+};
+
+const UpdateItem = (name: string, body: string): void => {
+  fetch(URL, {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: `{"Update":{"${name}":${body}}}`,
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      const jsonData = response as JsonScheme;
+      if (jsonData?.error) {
+        console.log(jsonData?.error);
+      }
+      console.log(response);
+      return;
+    })
+    .catch((error) => console.log(error));
 };
