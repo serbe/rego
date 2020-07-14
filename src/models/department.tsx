@@ -31,7 +31,9 @@ export const DepartmentNameInput = (properties: StringInputProperties): JSX.Elem
   <FormField
     name="name"
     value={properties.value}
-    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void =>
+      properties.setter(event.target.value === '' ? undefined : event.target.value)
+    }
     label="Наименование отдела"
     icon="tag"
   />

@@ -28,7 +28,9 @@ export const CertificateNumberInput = (properties: StringInputProperties): JSX.E
   <FormField
     name="num"
     value={properties.value}
-    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void =>
+      properties.setter(event.target.value === '' ? undefined : event.target.value)
+    }
     label="Серийный номер удостоверения"
     icon="tag"
   />

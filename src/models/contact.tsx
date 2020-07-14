@@ -53,7 +53,9 @@ export const ContactNameInput = (properties: StringInputProperties): JSX.Element
     icon="user"
     label="Фамилия Имя Отчество"
     name="name"
-    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void =>
+      properties.setter(event.target.value === '' ? undefined : event.target.value)
+    }
     value={properties.value}
   />
 );

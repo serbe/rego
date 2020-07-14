@@ -32,7 +32,9 @@ export const RankNameInput = (properties: StringInputProperties): JSX.Element =>
     icon="tag"
     label="Наименование чина"
     name="name"
-    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void =>
+      properties.setter(event.target.value === '' ? undefined : event.target.value)
+    }
     value={properties.value}
   />
 );

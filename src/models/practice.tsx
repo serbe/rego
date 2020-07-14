@@ -69,7 +69,9 @@ export const PracticeTopicInput = (properties: StringInputProperties): JSX.Eleme
   <FormField
     name="practice-topic"
     value={properties.value}
-    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void =>
+      properties.setter(event.target.value === '' ? undefined : event.target.value)
+    }
     label="Тема тренировки"
     icon="tag"
   />

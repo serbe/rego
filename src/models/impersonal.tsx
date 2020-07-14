@@ -185,7 +185,7 @@ export const NoteInput = (properties: StringInputProperties): JSX.Element => (
     name="note"
     value={properties.value}
     onChange={(event: ChangeEvent<HTMLInputElement>): void => {
-      properties.setter(event.target.value);
+      properties.setter(event.target.value === '' ? undefined : event.target.value);
     }}
     label="Заметки"
     icon="comment"
@@ -196,7 +196,9 @@ export const AddressInput = (properties: StringInputProperties): JSX.Element => 
   <FormField
     name="address"
     value={properties.value}
-    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void =>
+      properties.setter(event.target.value === '' ? undefined : event.target.value)
+    }
     label="Адрес"
     icon="address-card"
   />

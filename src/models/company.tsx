@@ -45,7 +45,9 @@ export const CompanyNameInput = (properties: StringInputProperties): JSX.Element
   <FormField
     name="company-name"
     value={properties.value}
-    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void =>
+      properties.setter(event.target.value === '' ? undefined : event.target.value)
+    }
     label="Наименование организации"
     icon="building"
   />
