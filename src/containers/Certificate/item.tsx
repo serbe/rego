@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem, SetItem } from '../../helpers/fetcher';
+import { GetItem, SetItem, Status } from '../../helpers/fetcher';
 import {
   Certificate,
   CertificateDateInput,
@@ -22,6 +22,8 @@ export const CertificateItem = (): JSX.Element => {
   const [certDate, setCertDate] = useState<string>();
   const [note, setNote] = useState<string>();
 
+  let status = Status.Loading;
+
   const submit = (): void => {
     const number_id = Number(id);
     const item: Certificate = {
@@ -33,10 +35,15 @@ export const CertificateItem = (): JSX.Element => {
       note: note,
     };
 
-    SetItem(number_id, 'Certificate', JSON.stringify(item));
-    history.go(-1);
+    [status] = SetItem(number_id, 'Certificate', JSON.stringify(item));
     return;
   };
+
+  useEffect(() => {
+    if (status === Status.Complete) {
+      history.go(-1);
+    }
+  }, [history, status]);
 
   useEffect(() => {
     if (data?.id) {

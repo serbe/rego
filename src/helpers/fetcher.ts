@@ -7,7 +7,8 @@ type AuthJson = {
   error?: string;
 };
 
-enum Status {
+export enum Status {
+  Init,
   Loading,
   Error,
   Complete,
@@ -38,62 +39,6 @@ export const Login = (name: string, password: string): [string | undefined, stri
       .catch((error) => setError(error as string));
   }, [name, password]);
   return [token, error];
-};
-
-export const GetItem = (name: string, id: string): [Item, string] => {
-  const [item, setItem] = useState<Item>();
-  const [error, setError] = useState<string>('');
-  const number_id = Number(id);
-
-  useEffect(() => {
-    const ws = new WebSocket(URL);
-
-    if (number_id !== 0) {
-      ws.addEventListener('message', (message: MessageEvent) => {
-        const text = message.data as string;
-        const jsonData = JSON.parse(text) as JsonScheme;
-
-        switch (jsonData?.name) {
-          case 'Certificate':
-            return setItem(jsonData.object.Certificate);
-          case 'Company':
-            return setItem(jsonData.object.Company);
-          case 'Contact':
-            return setItem(jsonData.object.Contact);
-          case 'Department':
-            return setItem(jsonData.object.Department);
-          case 'Education':
-            return setItem(jsonData.object.Education);
-          case 'Kind':
-            return setItem(jsonData.object.Kind);
-          case 'Post':
-            return setItem(jsonData.object.Post);
-          case 'Practice':
-            return setItem(jsonData.object.Practice);
-          case 'Rank':
-            return setItem(jsonData.object.Rank);
-          case 'Scope':
-            return setItem(jsonData.object.Scope);
-          case 'Siren':
-            return setItem(jsonData.object.Siren);
-          case 'SirenType':
-            return setItem(jsonData.object.SirenType);
-          default:
-            return setError('unknown item');
-        }
-      });
-
-      ws.addEventListener('open', () => {
-        ws.send(`{"Get":{"Item":{"name":"${name}","id":${number_id}}}}`);
-      });
-    }
-
-    return (): void => {
-      ws.close();
-    };
-  }, [name, number_id]);
-
-  return [item, error];
 };
 
 export const GetList = (name: string): [List[], string] => {
@@ -217,8 +162,64 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
   return [list, error];
 };
 
+export const GetItem = (name: string, id: string): [Item, string] => {
+  const [item, setItem] = useState<Item>();
+  const [error, setError] = useState<string>('');
+  const number_id = Number(id);
+
+  useEffect(() => {
+    const ws = new WebSocket(URL);
+
+    if (number_id !== 0) {
+      ws.addEventListener('message', (message: MessageEvent) => {
+        const text = message.data as string;
+        const jsonData = JSON.parse(text) as JsonScheme;
+
+        switch (jsonData?.name) {
+          case 'Certificate':
+            return setItem(jsonData.object.Certificate);
+          case 'Company':
+            return setItem(jsonData.object.Company);
+          case 'Contact':
+            return setItem(jsonData.object.Contact);
+          case 'Department':
+            return setItem(jsonData.object.Department);
+          case 'Education':
+            return setItem(jsonData.object.Education);
+          case 'Kind':
+            return setItem(jsonData.object.Kind);
+          case 'Post':
+            return setItem(jsonData.object.Post);
+          case 'Practice':
+            return setItem(jsonData.object.Practice);
+          case 'Rank':
+            return setItem(jsonData.object.Rank);
+          case 'Scope':
+            return setItem(jsonData.object.Scope);
+          case 'Siren':
+            return setItem(jsonData.object.Siren);
+          case 'SirenType':
+            return setItem(jsonData.object.SirenType);
+          default:
+            return setError('unknown item');
+        }
+      });
+
+      ws.addEventListener('open', () => {
+        ws.send(`{"Get":{"Item":{"name":"${name}","id":${number_id}}}}`);
+      });
+    }
+
+    return (): void => {
+      ws.close();
+    };
+  }, [name, number_id]);
+
+  return [item, error];
+};
+
 export const SetItem = (id: number, name: string, body: string): [Status] => {
-  const [status, setStatus] = useState(Status.Loading);
+  const [status, setStatus] = useState(Status.Init);
 
   useEffect(() => {
     const ws = new WebSocket(URL);
@@ -236,6 +237,7 @@ export const SetItem = (id: number, name: string, body: string): [Status] => {
 
     ws.addEventListener('open', () => {
       ws.send(`{"${id === 0 ? 'Insert' : 'Update'}":{"${name}":${body}}}`);
+      setStatus(Status.Loading);
     });
 
     return (): void => {
