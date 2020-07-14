@@ -50,12 +50,6 @@ export const Input = (properties: InputProps): JSX.Element => {
     value,
   } = properties;
 
-  // const [inputValue, setInputValue] = useState<number | string | undefined>();
-
-  // useEffect(() => {
-  //   setInputValue(value === '' || value === 0 ? undefined : value);
-  // }, [value]);
-
   const divClasses = `control ${classNameDiv || ''} ${icon ? 'has-icons-left' : ''} ${
     iconRight ? 'has-icons-right' : ''
   }`;
@@ -64,7 +58,7 @@ export const Input = (properties: InputProps): JSX.Element => {
     <div className={divClasses}>
       <input
         className={`${className || ''} input`}
-        value={value}
+        defaultValue={value}
         disabled={disabled}
         id={name}
         key={name}
