@@ -7,6 +7,12 @@ type AuthJson = {
   error?: string;
 };
 
+enum Status {
+  Loading,
+  Error,
+  Complete,
+}
+
 export const URL = 'ws://127.0.0.1:9090/api/go';
 
 export const Login = (name: string, password: string): [string | undefined, string | undefined] => {
@@ -211,49 +217,31 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
   return [list, error];
 };
 
-export const SetItem = (id: number, name: string, body: string): void => {
-  id === 0 ? InsertItem(name, body) : UpdateItem(name, body);
-  return;
-};
+export const SetItem = (id: number, name: string, body: string): [Status] => {
+  const [status, setStatus] = useState(Status.Loading);
 
-const InsertItem = (name: string, body: string): void => {
-  fetch(URL, {
-    method: 'POST',
-    mode: 'cors',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: `{"Insert":{"${name}":${body}}}`,
-  })
-    .then((response) => response.json())
-    .then((response) => {
-      const jsonData = response as JsonScheme;
-      if (jsonData?.error) {
-        console.log(jsonData?.error);
-      }
-      console.log(response);
-      return;
-    })
-    .catch((error) => console.log(error));
-};
+  useEffect(() => {
+    const ws = new WebSocket(URL);
 
-const UpdateItem = (name: string, body: string): void => {
-  fetch(URL, {
-    method: 'POST',
-    mode: 'cors',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: `{"Update":{"${name}":${body}}}`,
-  })
-    .then((response) => response.json())
-    .then((response) => {
-      const jsonData = response as JsonScheme;
-      if (jsonData?.error) {
-        console.log(jsonData?.error);
+    ws.addEventListener('message', (message: MessageEvent) => {
+      const text = message.data as string;
+      const jsonData = JSON.parse(text) as JsonScheme;
+
+      if (jsonData?.error && jsonData.error !== '') {
+        setStatus(Status.Error);
+      } else {
+        setStatus(Status.Complete);
       }
-      console.log(response);
-      return;
-    })
-    .catch((error) => console.log(error));
+    });
+
+    ws.addEventListener('open', () => {
+      ws.send(`{"${id === 0 ? 'Insert' : 'Update'}":{"${name}":${body}}}`);
+    });
+
+    return (): void => {
+      ws.close();
+    };
+  }, [body, id, name]);
+
+  return [status];
 };
