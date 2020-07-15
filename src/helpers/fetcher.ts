@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { MutableRefObject, useEffect, useState } from 'react';
 
 import { Item, JsonScheme, List, SelectItem } from '../models/impersonal';
 
@@ -218,32 +218,60 @@ export const GetItem = (name: string, id: string): [Item, string] => {
   return [item, error];
 };
 
-export const SetItem = (id: number, name: string, body: string): [Status] => {
-  const [status, setStatus] = useState(Status.Init);
+// export const SetItem = (id: number, name: string, body: string): [Status] => {
+//   const [status, setStatus] = useState(Status.Init);
 
-  useEffect(() => {
-    const ws = new WebSocket(URL);
+//   useEffect(() => {
+//     const ws = new WebSocket(URL);
 
-    ws.addEventListener('message', (message: MessageEvent) => {
-      const text = message.data as string;
-      const jsonData = JSON.parse(text) as JsonScheme;
+//     ws.addEventListener('message', (message: MessageEvent) => {
+//       const text = message.data as string;
+//       const jsonData = JSON.parse(text) as JsonScheme;
 
-      if (jsonData?.error && jsonData.error !== '') {
-        setStatus(Status.Error);
-      } else {
-        setStatus(Status.Complete);
-      }
-    });
+//       if (jsonData?.error && jsonData.error !== '') {
+//         setStatus(Status.Error);
+//       } else {
+//         setStatus(Status.Complete);
+//       }
+//     });
 
-    ws.addEventListener('open', () => {
-      ws.send(`{"${id === 0 ? 'Insert' : 'Update'}":{"${name}":${body}}}`);
-      setStatus(Status.Loading);
-    });
+//     ws.addEventListener('open', () => {
+//       ws.send(`{"${id === 0 ? 'Insert' : 'Update'}":{"${name}":${body}}}`);
+//       setStatus(Status.Loading);
+//     });
 
-    return (): void => {
-      ws.close();
-    };
-  }, [body, id, name]);
+//     return (): void => {
+//       ws.close();
+//     };
+//   }, [body, id, name]);
 
-  return [status];
+//   return [status];
+// };
+
+export const SetItem = (
+  ws: MutableRefObject<WebSocket | undefined>,
+  id: number,
+  name: string,
+  item: Item,
+): void => {
+  // useEffect(() => {
+  // ws.addEventListener('message', (message: MessageEvent) => {
+  //   const text = message.data as string;
+  //   const jsonData = JSON.parse(text) as JsonScheme;
+
+  //   if (jsonData?.error && jsonData.error !== '') {
+  //     setStatus(Status.Error);
+  //   } else {
+  //     setStatus(Status.Complete);
+  //   }
+  // });
+
+  ws.current?.send(`{"${id === 0 ? 'Insert' : 'Update'}":{"${name}":${JSON.stringify(item)}}}`);
+
+  //   return (): void => {
+  //     ws.close();
+  //   };
+  // }, [body, id, name]);
+
+  // return [status];
 };

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem, SetItem } from '../../helpers/fetcher';
+import { SetItem, URL } from '../../helpers/fetcher';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { SirenType, SirenTypeNameInput, SirenTypeRadiusInput } from '../../models/sirentype';
 
@@ -9,10 +9,13 @@ export const SirenTypeItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(id === '0' || false);
-  const [data, error] = GetItem('SirenType', id);
   const [name, setName] = useState<string>();
   const [radius, setRadius] = useState<number>();
   const [note, setNote] = useState<string>();
+  const [data, setData] = useState<SirenType>();
+  const [error, setError] = useState<string>();
+
+  const ws = useRef<WebSocket>();
 
   const submit = (): void => {
     const number_id = Number(id);
@@ -23,10 +26,14 @@ export const SirenTypeItem = (): JSX.Element => {
       note: note,
     };
 
-    SetItem(number_id, 'SirenType', JSON.stringify(item));
+    SetItem(ws, number_id, 'SirenType', item);
     history.go(-1);
     return;
   };
+
+  useEffect(() => {
+    ws.current = new WebSocket(URL);
+  }, []);
 
   useEffect(() => {
     if (data?.id) {
