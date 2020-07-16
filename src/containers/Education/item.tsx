@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem, SetItem } from '../../helpers/fetcher';
+import { GetItem } from '../../helpers/fetcher';
 import {
   Education,
   EducationEndDateInput,
@@ -33,7 +33,7 @@ export const EducationItem = (): JSX.Element => {
       note: note,
     };
 
-    SetItem(number_id, 'Education', JSON.stringify(item));
+    // SetItem(number_id, 'Education', JSON.stringify(item));
     history.go(-1);
     return;
   };

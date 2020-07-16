@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
 
 import { FormField } from '../components/formfield';
 import { NumberInputProperties, StringInputProperties } from '../components/input';
@@ -16,6 +16,19 @@ export type SirenTypeList = {
   name?: string;
   radius?: number;
   note?: string;
+};
+
+type JsonItemScheme = { name: 'SirenType'; object: { SirenType: SirenType }; error: string };
+
+export const SirenTypeGetItem = (
+  message: MessageEvent,
+  setData: Dispatch<SetStateAction<SirenType | undefined>>,
+): void => {
+  const text = message.data as string;
+  const jsonData = JSON.parse(text) as JsonItemScheme;
+  if (jsonData?.name === 'SirenType') {
+    setData(jsonData.object.SirenType);
+  }
 };
 
 export const SirenTypeIDSelect = (properties: SelectValues): JSX.Element => (

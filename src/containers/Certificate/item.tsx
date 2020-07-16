@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem, SetItem, Status } from '../../helpers/fetcher';
+import { GetItem, SetItem } from '../../helpers/fetcher';
 import {
   Certificate,
   CertificateDateInput,
@@ -22,7 +22,7 @@ export const CertificateItem = (): JSX.Element => {
   const [certDate, setCertDate] = useState<string>();
   const [note, setNote] = useState<string>();
 
-  let status = Status.Loading;
+  const ws = useRef<WebSocket>();
 
   const submit = (): void => {
     const number_id = Number(id);
@@ -35,15 +35,17 @@ export const CertificateItem = (): JSX.Element => {
       note: note,
     };
 
-    [status] = SetItem(number_id, 'Certificate', JSON.stringify(item));
+    SetItem(ws, number_id, 'Certificate', item);
+
+    // [status] = SetItem(number_id, 'Certificate', JSON.stringify(item));
     return;
   };
 
   useEffect(() => {
-    if (status === Status.Complete) {
-      history.go(-1);
-    }
-  }, [history, status]);
+    // if (status === Status.Complete) {
+    //   history.go(-1);
+    // }
+  }, []);
 
   useEffect(() => {
     if (data?.id) {

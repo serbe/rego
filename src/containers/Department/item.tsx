@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem, SetItem } from '../../helpers/fetcher';
+import { GetItem } from '../../helpers/fetcher';
 import { Department, DepartmentNameInput } from '../../models/department';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 
@@ -21,7 +21,7 @@ export const DepartmentItem = (): JSX.Element => {
       note: note,
     };
 
-    SetItem(number_id, 'Department', JSON.stringify(item));
+    // SetItem(number_id, 'Department', JSON.stringify(item));
     history.go(-1);
     return;
   };

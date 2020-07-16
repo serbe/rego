@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem, SetItem } from '../../helpers/fetcher';
+import { GetItem } from '../../helpers/fetcher';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { Kind, KindNameInput, KindShortNameInput } from '../../models/kind';
 
@@ -23,7 +23,7 @@ export const KindItem = (): JSX.Element => {
       note: note,
     };
 
-    SetItem(number_id, 'Kind', JSON.stringify(item));
+    // SetItem(number_id, 'Kind', JSON.stringify(item));
     history.go(-1);
     return;
   };

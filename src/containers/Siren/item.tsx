@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem, SetItem } from '../../helpers/fetcher';
 import { CompanyIDSelect } from '../../models/company';
 import { AddressInput, ContactIDSelect, NoteInput, ParameterTypes } from '../../models/impersonal';
 import {
@@ -21,7 +20,7 @@ export const SirenItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [loaded, setLoaded] = useState(id === '0' || false);
-  const [data, error] = GetItem('Siren', id);
+  const [data, setData] = useState<Siren>();
   const [numberID, setNumberID] = useState<number>();
   const [numberPassport, setNumberPassport] = useState<string>();
   const [sirenTypeID, setSirenTypeID] = useState<number>();
@@ -55,14 +54,14 @@ export const SirenItem = (): JSX.Element => {
       note: note,
     };
 
-    SetItem(number_id, 'Siren', JSON.stringify(item));
+    // SetItem(number_id, 'Siren', JSON.stringify(item));
     history.go(-1);
     return;
   };
 
   useEffect(() => {
     if (data?.id) {
-      const c = data as Siren;
+      const c = data;
       setNumberID(c.num_id);
       setNumberPassport(c.num_pass);
       setSirenTypeID(c.siren_type_id);
@@ -82,7 +81,7 @@ export const SirenItem = (): JSX.Element => {
 
   return (
     <div>
-      {loaded && !error && (
+      {loaded && (
         <>
           <SirenNumberIDInput value={numberID} setter={setNumberID} />
           <SirenNumberPassportInput value={numberPassport} setter={setNumberPassport} />

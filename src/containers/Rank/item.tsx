@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem, SetItem } from '../../helpers/fetcher';
+import { GetItem } from '../../helpers/fetcher';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { Rank, RankNameInput } from '../../models/rank';
 
@@ -21,7 +21,7 @@ export const RankItem = (): JSX.Element => {
       note: note,
     };
 
-    SetItem(number_id, 'Rank', JSON.stringify(item));
+    // SetItem(number_id, 'Rank', JSON.stringify(item));
     history.go(-1);
     return;
   };

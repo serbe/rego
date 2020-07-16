@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem, SetItem } from '../../helpers/fetcher';
+import { GetItem } from '../../helpers/fetcher';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { Post, PostGOSwitch, PostNameInput } from '../../models/post';
 
@@ -23,7 +23,7 @@ export const PostItem = (): JSX.Element => {
       note: note,
     };
 
-    SetItem(number_id, 'Post', JSON.stringify(item));
+    // SetItem(number_id, 'Post', JSON.stringify(item));
     history.go(-1);
     return;
   };

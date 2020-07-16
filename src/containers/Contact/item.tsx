@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem, SetItem } from '../../helpers/fetcher';
+import { GetItem } from '../../helpers/fetcher';
 import {
   addEmptyString,
   filterArrayNumber,
@@ -61,7 +61,7 @@ export const ContactItem = (): JSX.Element => {
       faxes: filterArrayNumber(faxes),
     };
 
-    SetItem(number_id, 'Contact', JSON.stringify(item));
+    // SetItem(number_id, 'Contact', JSON.stringify(item));
     history.go(-1);
     return;
   };
