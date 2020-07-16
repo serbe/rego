@@ -53,7 +53,8 @@ export type JsonScheme =
   | { name: 'SirenList'; object: { SirenList: SirenList[] }; error: string }
   | { name: 'SirenType'; object: { SirenType: SirenType }; error: string }
   | { name: 'SirenTypeList'; object: { SirenTypeList: SirenTypeList[] }; error: string }
-  | { name: 'SirenTypeSelect'; object: { SelectItem: SelectItem[] }; error: string };
+  | { name: 'SirenTypeSelect'; object: { SelectItem: SelectItem[] }; error: string }
+  | { name: ''; object: { Res: number }; error: string };
 
 export type SelectItem = {
   id: number;

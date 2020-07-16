@@ -187,96 +187,6 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
   return [list, error];
 };
 
-// export const GetItem = (name: string, id: string): [Item, string] => {
-//   const [item, setItem] = useState<Item>();
-//   const [error, setError] = useState<string>('');
-//   const number_id = Number(id);
-
-//   useEffect(() => {
-//     const ws = new WebSocket(URL);
-
-//     if (number_id !== 0) {
-//       ws.addEventListener('message', (message: MessageEvent) => {
-//         const text = message.data as string;
-//         const jsonData = JSON.parse(text) as JsonScheme;
-
-//         switch (jsonData?.name) {
-//           case 'Certificate':
-//             return setItem(jsonData.object.Certificate);
-//           case 'Company':
-//             return setItem(jsonData.object.Company);
-//           case 'Contact':
-//             return setItem(jsonData.object.Contact);
-//           case 'Department':
-//             return setItem(jsonData.object.Department);
-//           case 'Education':
-//             return setItem(jsonData.object.Education);
-//           case 'Kind':
-//             return setItem(jsonData.object.Kind);
-//           case 'Post':
-//             return setItem(jsonData.object.Post);
-//           case 'Practice':
-//             return setItem(jsonData.object.Practice);
-//           case 'Rank':
-//             return setItem(jsonData.object.Rank);
-//           case 'Scope':
-//             return setItem(jsonData.object.Scope);
-//           case 'Siren':
-//             return setItem(jsonData.object.Siren);
-//           case 'SirenType':
-//             return setItem(jsonData.object.SirenType);
-//           default:
-//             return setError('unknown item');
-//         }
-//       });
-
-//       ws.addEventListener('open', () => {
-//         ws.send(`{"Get":{"Item":{"name":"${name}","id":${number_id}}}}`);
-//       });
-//     }
-
-//     return (): void => {
-//       ws.close();
-//     };
-//   }, [name, number_id]);
-
-//   return [item, error];
-// };
-
-// export const SetItem = (id: number, name: string, body: string): [Status] => {
-//   const [status, setStatus] = useState(Status.Init);
-
-//   useEffect(() => {
-//     const ws = new WebSocket(URL);
-
-//     ws.addEventListener('message', (message: MessageEvent) => {
-//       const text = message.data as string;
-//       const jsonData = JSON.parse(text) as JsonScheme;
-
-//       if (jsonData?.error && jsonData.error !== '') {
-//         setStatus(Status.Error);
-//       } else {
-//         setStatus(Status.Complete);
-//       }
-//     });
-
-//     ws.addEventListener('open', () => {
-//       ws.send(`{"${id === 0 ? 'Insert' : 'Update'}":{"${name}":${body}}}`);
-//       setStatus(Status.Loading);
-//     });
-
-//     return (): void => {
-//       ws.close();
-//     };
-//   }, [body, id, name]);
-
-//   return [status];
-// };
-
-// export const SetItem = (id: number, name: string, item: Item): string => {
-//   return `{"${id === 0 ? 'Insert' : 'Update'}":{"${name}":${JSON.stringify(item)}}}`;
-// };
-
 export const SetItem = (
   ws: MutableRefObject<WebSocket | undefined>,
   id: number,
@@ -288,8 +198,8 @@ export const SetItem = (
     const text = message.data as string;
     const jsonData = JSON.parse(text) as JsonScheme;
 
-    if (jsonData?.object) {
-      console.log(jsonData);
+    if (jsonData?.name === '' && jsonData.object.Res) {
+      console.log(jsonData.object.Res);
       status(true);
     }
   });

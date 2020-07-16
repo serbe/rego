@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
+import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
 import { CompanyIDSelect } from '../../models/company';
 import { AddressInput, ContactIDSelect, NoteInput, ParameterTypes } from '../../models/impersonal';
 import {
   Siren,
   SirenDeskInput,
+  SirenGetItem,
   SirenLatitudeInput,
   SirenLongtitudeInput,
   SirenNumberIDInput,
@@ -19,8 +21,6 @@ import { SirenTypeIDSelect } from '../../models/sirentype';
 export const SirenItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(id === '0' || false);
-  const [data, setData] = useState<Siren>();
   const [numberID, setNumberID] = useState<number>();
   const [numberPassport, setNumberPassport] = useState<string>();
   const [sirenTypeID, setSirenTypeID] = useState<number>();
@@ -34,6 +34,10 @@ export const SirenItem = (): JSX.Element => {
   const [stage, setStage] = useState<number>();
   const [own, setOwn] = useState<string>();
   const [note, setNote] = useState<string>();
+  const [data, setData] = useState<Siren>();
+  const [status, setStatus] = useState(false);
+
+  const ws = useRef<WebSocket>();
 
   const submit = (): void => {
     const number_id = Number(id);
@@ -54,10 +58,19 @@ export const SirenItem = (): JSX.Element => {
       note: note,
     };
 
-    // SetItem(number_id, 'Siren', JSON.stringify(item));
-    history.go(-1);
-    return;
+    SetItem(ws, number_id, 'Siren', item, setStatus);
   };
+
+  useEffect(() => {
+    ws.current = new WebSocket(URL);
+
+    AddEventOpenItem(ws, 'Siren', id);
+    AddEventMessageGet(ws, SirenGetItem, setData);
+
+    return (): void => {
+      ws.current?.close();
+    };
+  }, [id]);
 
   useEffect(() => {
     if (data?.id) {
@@ -75,42 +88,40 @@ export const SirenItem = (): JSX.Element => {
       setStage(c.stage);
       setOwn(c.own);
       setNote(c.note);
-      setLoaded(true);
     }
-  }, [data]);
+    if (status) {
+      history.go(-1);
+    }
+  }, [data, history, status]);
 
   return (
     <div>
-      {loaded && (
-        <>
-          <SirenNumberIDInput value={numberID} setter={setNumberID} />
-          <SirenNumberPassportInput value={numberPassport} setter={setNumberPassport} />
-          <SirenTypeIDSelect id={sirenTypeID} setter={setSirenTypeID} />
-          <AddressInput value={address} setter={setAddress} />
-          <SirenRadioInput value={radio} setter={setRadio} />
-          <SirenDeskInput value={desk} setter={setDesk} />
-          <ContactIDSelect id={contactID} setter={setContactID} />
-          <CompanyIDSelect id={companyID} setter={setCompanyID} />
-          <SirenLatitudeInput value={latitude} setter={setLatitude} />
-          <SirenLongtitudeInput value={longitude} setter={setLongitude} />
-          <SirenStageInput value={stage} setter={setStage} />
-          <SirenOwnInput value={own} setter={setOwn} />
-          <NoteInput value={note} setter={setNote} />
+      <SirenNumberIDInput value={numberID} setter={setNumberID} />
+      <SirenNumberPassportInput value={numberPassport} setter={setNumberPassport} />
+      <SirenTypeIDSelect id={sirenTypeID} setter={setSirenTypeID} />
+      <AddressInput value={address} setter={setAddress} />
+      <SirenRadioInput value={radio} setter={setRadio} />
+      <SirenDeskInput value={desk} setter={setDesk} />
+      <ContactIDSelect id={contactID} setter={setContactID} />
+      <CompanyIDSelect id={companyID} setter={setCompanyID} />
+      <SirenLatitudeInput value={latitude} setter={setLatitude} />
+      <SirenLongtitudeInput value={longitude} setter={setLongitude} />
+      <SirenStageInput value={stage} setter={setStage} />
+      <SirenOwnInput value={own} setter={setOwn} />
+      <NoteInput value={note} setter={setNote} />
 
-          <div className="field is-grouped">
-            <div className="control">
-              <button className="button" onClick={() => submit()}>
-                Сохранить
-              </button>
-            </div>
-            <div className="control">
-              <button className="button" onClick={() => history.go(-1)}>
-                Закрыть
-              </button>
-            </div>
-          </div>
-        </>
-      )}
+      <div className="field is-grouped">
+        <div className="control">
+          <button className="button" onClick={() => submit()}>
+            Сохранить
+          </button>
+        </div>
+        <div className="control">
+          <button className="button" onClick={() => history.go(-1)}>
+            Закрыть
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
