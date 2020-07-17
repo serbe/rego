@@ -13,6 +13,7 @@ export const KindItem = (): JSX.Element => {
   const [note, setNote] = useState<string>();
   const [data, setData] = useState<Kind>();
   const [status, setStatus] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   const ws = useRef<WebSocket>();
 
@@ -31,8 +32,8 @@ export const KindItem = (): JSX.Element => {
   useEffect(() => {
     ws.current = NewWS;
 
-    AddEventOpenItem(ws, 'Kind', id);
-    AddEventMessageGet(ws, KindGetItem, setData);
+    AddEventOpenItem(ws, 'Kind', id, setLoaded);
+    AddEventMessageGet(ws, KindGetItem, setData, setLoaded);
 
     return (): void => {
       ws.current?.close();
@@ -53,22 +54,26 @@ export const KindItem = (): JSX.Element => {
 
   return (
     <div>
-      <KindNameInput value={name} setter={setName} />
-      <KindShortNameInput value={shortName} setter={setShortName} />
-      <NoteInput value={note} setter={setNote} />
+      {loaded && (
+        <>
+          <KindNameInput value={name} setter={setName} />
+          <KindShortNameInput value={shortName} setter={setShortName} />
+          <NoteInput value={note} setter={setNote} />
 
-      <div className="field is-grouped">
-        <div className="control">
-          <button className="button" onClick={() => submit()}>
-            Сохранить
-          </button>
-        </div>
-        <div className="control">
-          <button className="button" onClick={() => history.go(-1)}>
-            Закрыть
-          </button>
-        </div>
-      </div>
+          <div className="field is-grouped">
+            <div className="control">
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
+            </div>
+            <div className="control">
+              <button className="button" onClick={() => history.go(-1)}>
+                Закрыть
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

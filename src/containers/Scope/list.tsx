@@ -29,7 +29,6 @@ export const Scopes = (): JSX.Element => {
           className="link"
         >
           <td className="w250">{scope.name}</td>
-          <td className="w250">{scope.note}</td>
         </tr>
       ))}
     </>
@@ -44,7 +43,6 @@ export const Scopes = (): JSX.Element => {
         <tbody>
           <tr>
             <th className="w250">Сфера деятельности</th>
-            <th className="w250">Заметка</th>
           </tr>
           <Body />
         </tbody>

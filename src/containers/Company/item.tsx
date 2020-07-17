@@ -35,6 +35,7 @@ export const CompanyItem = (): JSX.Element => {
   const [contacts, setContacts] = useState<ContactShort[]>([]);
   const [data, setData] = useState<Company>();
   const [status, setStatus] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   const ws = useRef<WebSocket>();
 
@@ -57,8 +58,8 @@ export const CompanyItem = (): JSX.Element => {
   useEffect(() => {
     ws.current = NewWS;
 
-    AddEventOpenItem(ws, 'Company', id);
-    AddEventMessageGet(ws, CompanyGetItem, setData);
+    AddEventOpenItem(ws, 'Company', id, setLoaded);
+    AddEventMessageGet(ws, CompanyGetItem, setData, setLoaded);
 
     return (): void => {
       ws.current?.close();
@@ -85,40 +86,44 @@ export const CompanyItem = (): JSX.Element => {
 
   return (
     <div>
-      <CompanyNameInput value={name} setter={setName} />
-      <ScopeIDSelect id={scopeID} setter={setScopeID} />
-      <AddressInput value={address} setter={setAddress} />
+      {loaded && (
+        <>
+          <CompanyNameInput value={name} setter={setName} />
+          <ScopeIDSelect id={scopeID} setter={setScopeID} />
+          <AddressInput value={address} setter={setAddress} />
 
-      <div className="columns">
-        <div className="column">
-          <EmailInputs emails={emails} setter={setEmails} />
-        </div>
-        <div className="column">
-          <PhoneInputs phones={phones} setter={setPhones} />
-        </div>
-        <div className="column">
-          <FaxInputs phones={faxes} setter={setFaxes} />
-        </div>
-      </div>
+          <div className="columns">
+            <div className="column">
+              <EmailInputs emails={emails} setter={setEmails} />
+            </div>
+            <div className="column">
+              <PhoneInputs phones={phones} setter={setPhones} />
+            </div>
+            <div className="column">
+              <FaxInputs phones={faxes} setter={setFaxes} />
+            </div>
+          </div>
 
-      <PracticeListForm practices={practices} />
+          <PracticeListForm practices={practices} />
 
-      <ContactShortForm contacts={contacts} />
+          <ContactShortForm contacts={contacts} />
 
-      <NoteInput value={note} setter={setNote} />
+          <NoteInput value={note} setter={setNote} />
 
-      <div className="field is-grouped">
-        <div className="control">
-          <button className="button" onClick={() => submit()}>
-            Сохранить
-          </button>
-        </div>
-        <div className="control">
-          <button className="button" onClick={() => history.go(-1)}>
-            Закрыть
-          </button>
-        </div>
-      </div>
+          <div className="field is-grouped">
+            <div className="control">
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
+            </div>
+            <div className="control">
+              <button className="button" onClick={() => history.go(-1)}>
+                Закрыть
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

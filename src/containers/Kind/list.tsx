@@ -30,7 +30,6 @@ export const Kinds = (): JSX.Element => {
         >
           <td className="w250">{kind.name}</td>
           <td className="w250">{kind.short_name}</td>
-          <td className="is-hidden-mobile">{kind.note}</td>
         </tr>
       ))}
     </>
@@ -46,7 +45,6 @@ export const Kinds = (): JSX.Element => {
           <tr>
             <th>Тип тренировки</th>
             <th>Сокращенное наименование</th>
-            <th className="is-hidden-mobile">Заметка</th>
           </tr>
           <Body />
         </tbody>

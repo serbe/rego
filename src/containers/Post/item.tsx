@@ -13,6 +13,7 @@ export const PostItem = (): JSX.Element => {
   const [note, setNote] = useState<string>();
   const [data, setData] = useState<Post>();
   const [status, setStatus] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   const ws = useRef<WebSocket>();
 
@@ -31,8 +32,8 @@ export const PostItem = (): JSX.Element => {
   useEffect(() => {
     ws.current = NewWS;
 
-    AddEventOpenItem(ws, 'Post', id);
-    AddEventMessageGet(ws, PostGetItem, setData);
+    AddEventOpenItem(ws, 'Post', id, setLoaded);
+    AddEventMessageGet(ws, PostGetItem, setData, setLoaded);
 
     return (): void => {
       ws.current?.close();
@@ -53,22 +54,26 @@ export const PostItem = (): JSX.Element => {
 
   return (
     <div>
-      <PostNameInput value={name} setter={setName} />
-      <PostGOSwitch value={go} setter={setGo} />
-      <NoteInput value={note} setter={setNote} />
+      {loaded && (
+        <>
+          <PostNameInput value={name} setter={setName} />
+          <PostGOSwitch value={go} setter={setGo} />
+          <NoteInput value={note} setter={setNote} />
 
-      <div className="field is-grouped">
-        <div className="control">
-          <button className="button" onClick={() => submit()}>
-            Сохранить
-          </button>
-        </div>
-        <div className="control">
-          <button className="button" onClick={() => history.go(-1)}>
-            Закрыть
-          </button>
-        </div>
-      </div>
+          <div className="field is-grouped">
+            <div className="control">
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
+            </div>
+            <div className="control">
+              <button className="button" onClick={() => history.go(-1)}>
+                Закрыть
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

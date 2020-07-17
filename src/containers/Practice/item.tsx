@@ -22,6 +22,7 @@ export const PracticeItem = (): JSX.Element => {
   const [note, setNote] = useState<string>();
   const [data, setData] = useState<Practice>();
   const [status, setStatus] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   const ws = useRef<WebSocket>();
 
@@ -42,8 +43,8 @@ export const PracticeItem = (): JSX.Element => {
   useEffect(() => {
     ws.current = NewWS;
 
-    AddEventOpenItem(ws, 'Practice', id);
-    AddEventMessageGet(ws, PracticeGetItem, setData);
+    AddEventOpenItem(ws, 'Practice', id, setLoaded);
+    AddEventMessageGet(ws, PracticeGetItem, setData, setLoaded);
 
     return (): void => {
       ws.current?.close();
@@ -65,24 +66,28 @@ export const PracticeItem = (): JSX.Element => {
 
   return (
     <div>
-      <CompanyIDSelect id={companyID} setter={setCompanyID} />
-      <KindIDSelect id={kindID} setter={setKindID} />
-      <PracticeTopicInput value={topic} setter={setTopic} />
-      <PracticeDateInput value={date} setter={setDate} />
-      <NoteInput value={note} setter={setNote} />
+      {loaded && (
+        <>
+          <CompanyIDSelect id={companyID} setter={setCompanyID} />
+          <KindIDSelect id={kindID} setter={setKindID} />
+          <PracticeTopicInput value={topic} setter={setTopic} />
+          <PracticeDateInput value={date} setter={setDate} />
+          <NoteInput value={note} setter={setNote} />
 
-      <div className="field is-grouped">
-        <div className="control">
-          <button className="button" onClick={() => submit()}>
-            Сохранить
-          </button>
-        </div>
-        <div className="control">
-          <button className="button" onClick={() => history.go(-1)}>
-            Закрыть
-          </button>
-        </div>
-      </div>
+          <div className="field is-grouped">
+            <div className="control">
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
+            </div>
+            <div className="control">
+              <button className="button" onClick={() => history.go(-1)}>
+                Закрыть
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

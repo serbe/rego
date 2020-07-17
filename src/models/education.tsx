@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 
 import { DatePicker, DatePickerValues } from '../components/datepicker';
 import { Select, SelectValues } from '../components/select';
@@ -30,6 +30,19 @@ export type EducationShort = {
   contact_id: number;
   contact_name: string;
   start_date: string;
+};
+
+type JsonItemScheme = { name: 'Education'; object: { Education: Education }; error: string };
+
+export const EducationGetItem = (
+  message: MessageEvent,
+  setData: Dispatch<SetStateAction<Education | undefined>>,
+): void => {
+  const text = message.data as string;
+  const jsonData = JSON.parse(text) as JsonItemScheme;
+  if (jsonData?.name === 'Education') {
+    setData(jsonData.object.Education);
+  }
 };
 
 export const EducationNameSelect = (properties: SelectValues): JSX.Element => (

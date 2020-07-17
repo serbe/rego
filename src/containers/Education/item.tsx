@@ -22,6 +22,7 @@ export const EducationItem = (): JSX.Element => {
   const [note, setNote] = useState<string>();
   const [data, setData] = useState<Education>();
   const [status, setStatus] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   const ws = useRef<WebSocket>();
 
@@ -42,8 +43,8 @@ export const EducationItem = (): JSX.Element => {
   useEffect(() => {
     ws.current = NewWS;
 
-    AddEventOpenItem(ws, 'Education', id);
-    AddEventMessageGet(ws, EducationGetItem, setData);
+    AddEventOpenItem(ws, 'Education', id, setLoaded);
+    AddEventMessageGet(ws, EducationGetItem, setData, setLoaded);
 
     return (): void => {
       ws.current?.close();
@@ -66,32 +67,36 @@ export const EducationItem = (): JSX.Element => {
 
   return (
     <div>
-      <EducationNameSelect id={contactID} setter={setContactID} />
-      <PostGoIDSelect id={postID} setter={setPostID} />
+      {loaded && (
+        <>
+          <EducationNameSelect id={contactID} setter={setContactID} />
+          <PostGoIDSelect id={postID} setter={setPostID} />
 
-      <div className="columns">
-        <div className="column">
-          <EducationStartDateInput value={startDate} setter={setStartDate} />
-        </div>
-        <div className="column">
-          <EducationEndDateInput value={endDate} setter={setEndDate} />
-        </div>
-      </div>
+          <div className="columns">
+            <div className="column">
+              <EducationStartDateInput value={startDate} setter={setStartDate} />
+            </div>
+            <div className="column">
+              <EducationEndDateInput value={endDate} setter={setEndDate} />
+            </div>
+          </div>
 
-      <NoteInput value={note} setter={setNote} />
+          <NoteInput value={note} setter={setNote} />
 
-      <div className="field is-grouped">
-        <div className="control">
-          <button className="button" onClick={() => submit()}>
-            Сохранить
-          </button>
-        </div>
-        <div className="control">
-          <button className="button" onClick={() => history.go(-1)}>
-            Закрыть
-          </button>
-        </div>
-      </div>
+          <div className="field is-grouped">
+            <div className="control">
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
+            </div>
+            <div className="control">
+              <button className="button" onClick={() => history.go(-1)}>
+                Закрыть
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

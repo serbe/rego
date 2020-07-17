@@ -12,6 +12,7 @@ export const DepartmentItem = (): JSX.Element => {
   const [note, setNote] = useState<string>();
   const [data, setData] = useState<Department>();
   const [status, setStatus] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   const ws = useRef<WebSocket>();
 
@@ -29,8 +30,8 @@ export const DepartmentItem = (): JSX.Element => {
   useEffect(() => {
     ws.current = NewWS;
 
-    AddEventOpenItem(ws, 'Department', id);
-    AddEventMessageGet(ws, DepartmentGetItem, setData);
+    AddEventOpenItem(ws, 'Department', id, setLoaded);
+    AddEventMessageGet(ws, DepartmentGetItem, setData, setLoaded);
 
     return (): void => {
       ws.current?.close();
@@ -50,19 +51,23 @@ export const DepartmentItem = (): JSX.Element => {
 
   return (
     <div>
-      <DepartmentNameInput value={name} setter={setName} />
-      <NoteInput value={note} setter={setNote} />
+      {loaded && (
+        <>
+          <DepartmentNameInput value={name} setter={setName} />
+          <NoteInput value={note} setter={setNote} />
 
-      <div className="field is-grouped">
-        <button className="button" onClick={() => submit()}>
-          Сохранить
-        </button>
-        <div className="control">
-          <button className="button" onClick={() => history.go(-1)}>
-            Закрыть
-          </button>
-        </div>
-      </div>
+          <div className="field is-grouped">
+            <button className="button" onClick={() => submit()}>
+              Сохранить
+            </button>
+            <div className="control">
+              <button className="button" onClick={() => history.go(-1)}>
+                Закрыть
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

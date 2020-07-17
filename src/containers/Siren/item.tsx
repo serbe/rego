@@ -36,6 +36,7 @@ export const SirenItem = (): JSX.Element => {
   const [note, setNote] = useState<string>();
   const [data, setData] = useState<Siren>();
   const [status, setStatus] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   const ws = useRef<WebSocket>();
 
@@ -64,8 +65,8 @@ export const SirenItem = (): JSX.Element => {
   useEffect(() => {
     ws.current = NewWS;
 
-    AddEventOpenItem(ws, 'Siren', id);
-    AddEventMessageGet(ws, SirenGetItem, setData);
+    AddEventOpenItem(ws, 'Siren', id, setLoaded);
+    AddEventMessageGet(ws, SirenGetItem, setData, setLoaded);
 
     return (): void => {
       ws.current?.close();
@@ -96,32 +97,36 @@ export const SirenItem = (): JSX.Element => {
 
   return (
     <div>
-      <SirenNumberIDInput value={numberID} setter={setNumberID} />
-      <SirenNumberPassportInput value={numberPassport} setter={setNumberPassport} />
-      <SirenTypeIDSelect id={sirenTypeID} setter={setSirenTypeID} />
-      <AddressInput value={address} setter={setAddress} />
-      <SirenRadioInput value={radio} setter={setRadio} />
-      <SirenDeskInput value={desk} setter={setDesk} />
-      <ContactIDSelect id={contactID} setter={setContactID} />
-      <CompanyIDSelect id={companyID} setter={setCompanyID} />
-      <SirenLatitudeInput value={latitude} setter={setLatitude} />
-      <SirenLongtitudeInput value={longitude} setter={setLongitude} />
-      <SirenStageInput value={stage} setter={setStage} />
-      <SirenOwnInput value={own} setter={setOwn} />
-      <NoteInput value={note} setter={setNote} />
+      {loaded && (
+        <>
+          <SirenNumberIDInput value={numberID} setter={setNumberID} />
+          <SirenNumberPassportInput value={numberPassport} setter={setNumberPassport} />
+          <SirenTypeIDSelect id={sirenTypeID} setter={setSirenTypeID} />
+          <AddressInput value={address} setter={setAddress} />
+          <SirenRadioInput value={radio} setter={setRadio} />
+          <SirenDeskInput value={desk} setter={setDesk} />
+          <ContactIDSelect id={contactID} setter={setContactID} />
+          <CompanyIDSelect id={companyID} setter={setCompanyID} />
+          <SirenLatitudeInput value={latitude} setter={setLatitude} />
+          <SirenLongtitudeInput value={longitude} setter={setLongitude} />
+          <SirenStageInput value={stage} setter={setStage} />
+          <SirenOwnInput value={own} setter={setOwn} />
+          <NoteInput value={note} setter={setNote} />
 
-      <div className="field is-grouped">
-        <div className="control">
-          <button className="button" onClick={() => submit()}>
-            Сохранить
-          </button>
-        </div>
-        <div className="control">
-          <button className="button" onClick={() => history.go(-1)}>
-            Закрыть
-          </button>
-        </div>
-      </div>
+          <div className="field is-grouped">
+            <div className="control">
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
+            </div>
+            <div className="control">
+              <button className="button" onClick={() => history.go(-1)}>
+                Закрыть
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

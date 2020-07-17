@@ -22,6 +22,7 @@ export const CertificateItem = (): JSX.Element => {
   const [note, setNote] = useState<string>();
   const [data, setData] = useState<Certificate>();
   const [status, setStatus] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   const ws = useRef<WebSocket>();
 
@@ -42,19 +43,13 @@ export const CertificateItem = (): JSX.Element => {
   useEffect(() => {
     ws.current = NewWS;
 
-    AddEventOpenItem(ws, 'Certificate', id);
-    AddEventMessageGet(ws, CertificateGetItem, setData);
+    AddEventOpenItem(ws, 'Certificate', id, setLoaded);
+    AddEventMessageGet(ws, CertificateGetItem, setData, setLoaded);
 
     return (): void => {
       ws.current?.close();
     };
   }, [id]);
-
-  useEffect(() => {
-    // if (status === Status.Complete) {
-    //   history.go(-1);
-    // }
-  }, []);
 
   useEffect(() => {
     if (data?.id) {
@@ -72,24 +67,28 @@ export const CertificateItem = (): JSX.Element => {
 
   return (
     <div>
-      <CertificateNumberInput value={sNumber} setter={setSNumber} />
-      <ContactIDSelect id={contactID} setter={setContactID} />
-      <CompanyIDSelect id={companyID} setter={setCompanyID} />
-      <CertificateDateInput value={certDate} setter={setCertDate} />
-      <NoteInput value={note} setter={setNote} />
+      {loaded && (
+        <>
+          <CertificateNumberInput value={sNumber} setter={setSNumber} />
+          <ContactIDSelect id={contactID} setter={setContactID} />
+          <CompanyIDSelect id={companyID} setter={setCompanyID} />
+          <CertificateDateInput value={certDate} setter={setCertDate} />
+          <NoteInput value={note} setter={setNote} />
 
-      <div className="field is-grouped">
-        <div className="control">
-          <button className="button" onClick={() => submit()}>
-            Сохранить
-          </button>
-        </div>
-        <div className="control">
-          <button className="button" onClick={() => history.go(-1)}>
-            Закрыть
-          </button>
-        </div>
-      </div>
+          <div className="field is-grouped">
+            <div className="control">
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
+            </div>
+            <div className="control">
+              <button className="button" onClick={() => history.go(-1)}>
+                Закрыть
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

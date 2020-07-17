@@ -18,6 +18,7 @@ export const SirenTypeItem = (): JSX.Element => {
   const [note, setNote] = useState<string>();
   const [data, setData] = useState<SirenType>();
   const [status, setStatus] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   const ws = useRef<WebSocket>();
 
@@ -36,8 +37,8 @@ export const SirenTypeItem = (): JSX.Element => {
   useEffect(() => {
     ws.current = NewWS;
 
-    AddEventOpenItem(ws, 'SirenType', id);
-    AddEventMessageGet(ws, SirenTypeGetItem, setData);
+    AddEventOpenItem(ws, 'SirenType', id, setLoaded);
+    AddEventMessageGet(ws, SirenTypeGetItem, setData, setLoaded);
 
     return (): void => {
       ws.current?.close();
@@ -58,22 +59,26 @@ export const SirenTypeItem = (): JSX.Element => {
 
   return (
     <div>
-      <SirenTypeNameInput value={name} setter={setName} />
-      <SirenTypeRadiusInput value={radius} setter={setRadius} />
-      <NoteInput value={note} setter={setNote} />
+      {loaded && (
+        <>
+          <SirenTypeNameInput value={name} setter={setName} />
+          <SirenTypeRadiusInput value={radius} setter={setRadius} />
+          <NoteInput value={note} setter={setNote} />
 
-      <div className="field is-grouped">
-        <div className="control">
-          <button className="button" onClick={() => submit()}>
-            Сохранить
-          </button>
-        </div>
-        <div className="control">
-          <button className="button" onClick={() => history.go(-1)}>
-            Закрыть
-          </button>
-        </div>
-      </div>
+          <div className="field is-grouped">
+            <div className="control">
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
+            </div>
+            <div className="control">
+              <button className="button" onClick={() => history.go(-1)}>
+                Закрыть
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

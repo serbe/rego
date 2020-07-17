@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { DatePicker, DatePickerValues } from '../components/datepicker';
@@ -46,6 +46,19 @@ export type ContactShort = {
   department_name?: string;
   post_name?: string;
   post_go_name?: string;
+};
+
+type JsonItemScheme = { name: 'Contact'; object: { Contact: Contact }; error: string };
+
+export const ContactGetItem = (
+  message: MessageEvent,
+  setData: Dispatch<SetStateAction<Contact | undefined>>,
+): void => {
+  const text = message.data as string;
+  const jsonData = JSON.parse(text) as JsonItemScheme;
+  if (jsonData?.name === 'Contact') {
+    setData(jsonData.object.Contact);
+  }
 };
 
 export const ContactNameInput = (properties: StringInputProperties): JSX.Element => (

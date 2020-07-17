@@ -29,7 +29,6 @@ export const Departments = (): JSX.Element => {
           className="link"
         >
           <td className="w250">{department.name}</td>
-          <td className="w250">{department.note}</td>
         </tr>
       ))}
     </>
@@ -44,7 +43,6 @@ export const Departments = (): JSX.Element => {
         <tbody>
           <tr>
             <th className="w250">Наименование отдела</th>
-            <th className="w250">Заметка</th>
           </tr>
           <Body />
         </tbody>

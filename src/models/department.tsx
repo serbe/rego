@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
 
 import { FormField } from '../components/formfield';
 import { StringInputProperties } from '../components/input';
@@ -14,6 +14,19 @@ export type DepartmentList = {
   id: number;
   name?: string;
   note?: string;
+};
+
+type JsonItemScheme = { name: 'Department'; object: { Department: Department }; error: string };
+
+export const DepartmentGetItem = (
+  message: MessageEvent,
+  setData: Dispatch<SetStateAction<Department | undefined>>,
+): void => {
+  const text = message.data as string;
+  const jsonData = JSON.parse(text) as JsonItemScheme;
+  if (jsonData?.name === 'Department') {
+    setData(jsonData.object.Department);
+  }
 };
 
 export const DepartmentIDSelect = (properties: SelectValues): JSX.Element => (

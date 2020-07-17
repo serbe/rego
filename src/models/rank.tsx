@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
 
 import { FormField } from '../components/formfield';
 import { StringInputProperties } from '../components/input';
@@ -14,6 +14,19 @@ export type RankList = {
   id: number;
   name?: string;
   note?: string;
+};
+
+type JsonItemScheme = { name: 'Rank'; object: { Rank: Rank }; error: string };
+
+export const RankGetItem = (
+  message: MessageEvent,
+  setData: Dispatch<SetStateAction<Rank | undefined>>,
+): void => {
+  const text = message.data as string;
+  const jsonData = JSON.parse(text) as JsonItemScheme;
+  if (jsonData?.name === 'Rank') {
+    setData(jsonData.object.Rank);
+  }
 };
 
 export const RankIDSelect = (properties: SelectValues): JSX.Element => (

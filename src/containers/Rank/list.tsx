@@ -29,7 +29,6 @@ export const Ranks = (): JSX.Element => {
           className="link"
         >
           <td className="w250">{rank.name}</td>
-          <td className="w250">{rank.note}</td>
         </tr>
       ))}
     </>
@@ -44,7 +43,6 @@ export const Ranks = (): JSX.Element => {
         <tbody>
           <tr>
             <th className="w250">Наименование чина</th>
-            <th className="w250">Заметка</th>
           </tr>
           <Body />
         </tbody>

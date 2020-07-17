@@ -23,11 +23,13 @@ type JsonItemScheme = { name: 'SirenType'; object: { SirenType: SirenType }; err
 export const SirenTypeGetItem = (
   message: MessageEvent,
   setData: Dispatch<SetStateAction<SirenType | undefined>>,
+  setLoaded: Dispatch<SetStateAction<boolean>>,
 ): void => {
   const text = message.data as string;
   const jsonData = JSON.parse(text) as JsonItemScheme;
   if (jsonData?.name === 'SirenType') {
     setData(jsonData.object.SirenType);
+    setLoaded(true);
   }
 };
 

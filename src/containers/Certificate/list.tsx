@@ -45,7 +45,6 @@ export const Certificates = (): JSX.Element => {
             {certificate.company_name}
           </td>
           <td className="nowrap">{certificate.cert_date}</td>
-          <td className="is-hidden-mobile">{certificate.note}</td>
         </tr>
       ))}
     </>
@@ -63,7 +62,6 @@ export const Certificates = (): JSX.Element => {
             <th>Фамилия Имя Отчество</th>
             <th className="is-hidden-mobile">Учебно-методический центр</th>
             <th>Дата</th>
-            <th className="is-hidden-mobile">Заметка</th>
           </tr>
           <Body />
         </tbody>

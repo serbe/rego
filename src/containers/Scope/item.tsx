@@ -12,6 +12,7 @@ export const ScopeItem = (): JSX.Element => {
   const [note, setNote] = useState<string>();
   const [data, setData] = useState<Scope>();
   const [status, setStatus] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   const ws = useRef<WebSocket>();
 
@@ -29,8 +30,8 @@ export const ScopeItem = (): JSX.Element => {
   useEffect(() => {
     ws.current = NewWS;
 
-    AddEventOpenItem(ws, 'Scope', id);
-    AddEventMessageGet(ws, ScopeGetItem, setData);
+    AddEventOpenItem(ws, 'Scope', id, setLoaded);
+    AddEventMessageGet(ws, ScopeGetItem, setData, setLoaded);
 
     return (): void => {
       ws.current?.close();
@@ -50,21 +51,25 @@ export const ScopeItem = (): JSX.Element => {
 
   return (
     <div>
-      <ScopeNameInput value={name} setter={setName} />
-      <NoteInput value={note} setter={setNote} />
+      {loaded && (
+        <>
+          <ScopeNameInput value={name} setter={setName} />
+          <NoteInput value={note} setter={setNote} />
 
-      <div className="field is-grouped">
-        <div className="control">
-          <button className="button" onClick={() => submit()}>
-            Сохранить
-          </button>
-        </div>
-        <div className="control">
-          <button className="button" onClick={() => history.go(-1)}>
-            Закрыть
-          </button>
-        </div>
-      </div>
+          <div className="field is-grouped">
+            <div className="control">
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
+            </div>
+            <div className="control">
+              <button className="button" onClick={() => history.go(-1)}>
+                Закрыть
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

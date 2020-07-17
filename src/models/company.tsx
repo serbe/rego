@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
 
 import { FormField } from '../components/formfield';
 import { StringInputProperties } from '../components/input';
@@ -28,6 +28,19 @@ export type CompanyList = {
   phones?: number[];
   faxes?: number[];
   practices?: string[];
+};
+
+type JsonItemScheme = { name: 'Company'; object: { Company: Company }; error: string };
+
+export const CompanyGetItem = (
+  message: MessageEvent,
+  setData: Dispatch<SetStateAction<Company | undefined>>,
+): void => {
+  const text = message.data as string;
+  const jsonData = JSON.parse(text) as JsonItemScheme;
+  if (jsonData?.name === 'Company') {
+    setData(jsonData.object.Company);
+  }
 };
 
 export const CompanyIDSelect = (properties: SelectValues): JSX.Element => (

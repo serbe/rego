@@ -15,12 +15,15 @@ export const AddEventOpenItem = (
   ws: MutableRefObject<WebSocket | undefined>,
   name: string,
   id: string,
+  setLoaded: Dispatch<SetStateAction<boolean>>,
 ): void => {
   const number_id = Number(id);
   if (number_id !== 0) {
     ws.current?.addEventListener('open', () => {
       ws.current?.send(`{"Get":{"Item":{"name":"${name}","id":${number_id}}}}`);
     });
+  } else {
+    setLoaded(true);
   }
 };
 
@@ -35,11 +38,16 @@ export const AddEventOpenList = (
 
 export const AddEventMessageGet = (
   ws: MutableRefObject<WebSocket | undefined>,
-  fn: (message: MessageEvent, setData: Dispatch<SetStateAction<Item>>) => void,
+  fn: (
+    message: MessageEvent,
+    setData: Dispatch<SetStateAction<Item>>,
+    setLoaded: Dispatch<SetStateAction<boolean>>,
+  ) => void,
   setData: Dispatch<SetStateAction<Item>>,
+  setLoaded: Dispatch<SetStateAction<boolean>>,
 ): void => {
   ws.current?.addEventListener('message', (event: MessageEvent) => {
-    fn(event, setData);
+    fn(event, setData, setLoaded);
   });
 };
 
@@ -201,7 +209,6 @@ export const SetItem = (
     const jsonData = JSON.parse(text) as JsonScheme;
 
     if (jsonData?.name === '' && jsonData.object.Res) {
-      console.log(jsonData.object.Res);
       status(true);
     }
   });

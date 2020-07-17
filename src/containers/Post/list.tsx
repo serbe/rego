@@ -32,7 +32,6 @@ export const Posts = (): JSX.Element => {
           <td className="w9">
             <input type="checkbox" checked={post.go} />
           </td>
-          <td className="is-hidden-mobile">{post.note}</td>
         </tr>
       ))}
     </>
@@ -48,7 +47,6 @@ export const Posts = (): JSX.Element => {
           <tr>
             <th>Наименование должности</th>
             <th className="w9">ГО</th>
-            <th className="is-hidden-mobile">Заметка</th>
           </tr>
           <Body />
         </tbody>

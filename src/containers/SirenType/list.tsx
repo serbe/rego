@@ -30,7 +30,6 @@ export const SirenTypes = (): JSX.Element => {
         >
           <td className="w250">{siren_type.name}</td>
           <td className="w95">{siren_type.radius}</td>
-          <td className="w250">{siren_type.note}</td>
         </tr>
       ))}
     </>
@@ -46,7 +45,6 @@ export const SirenTypes = (): JSX.Element => {
           <tr>
             <th className="w250">Тип сирены</th>
             <th className="w95">Радиус действия</th>
-            <th className="w250">Заметка</th>
           </tr>
           <Body />
         </tbody>
