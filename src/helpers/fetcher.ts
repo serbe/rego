@@ -9,6 +9,8 @@ type AuthJson = {
 
 export const URL = 'ws://127.0.0.1:9090/api/go';
 
+export const NewWS = new WebSocket(URL);
+
 export const AddEventOpenItem = (
   ws: MutableRefObject<WebSocket | undefined>,
   name: string,

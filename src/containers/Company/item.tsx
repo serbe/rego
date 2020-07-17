@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem } from '../../helpers/fetcher';
+import { AddEventMessageGet, AddEventOpenItem, NewWS, SetItem } from '../../helpers/fetcher';
 import {
   addEmptyString,
   filterArrayNumber,
   filterArrayString,
   numberToString,
 } from '../../helpers/utils';
-import { Company, CompanyNameInput } from '../../models/company';
+import { Company, CompanyGetItem, CompanyNameInput } from '../../models/company';
 import { ContactShort, ContactShortForm } from '../../models/contact';
 import {
   AddressInput,
@@ -24,8 +24,6 @@ import { ScopeIDSelect } from '../../models/scope';
 export const CompanyItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(id === '0' || false);
-  const [data, error] = GetItem('Company', id);
   const [name, setName] = useState<string>();
   const [address, setAddress] = useState<string>();
   const [scopeID, setScopeID] = useState<number>();
@@ -35,6 +33,10 @@ export const CompanyItem = (): JSX.Element => {
   const [faxes, setFaxes] = useState(['']);
   const [practices, setPractices] = useState<PracticeList[]>([]);
   const [contacts, setContacts] = useState<ContactShort[]>([]);
+  const [data, setData] = useState<Company>();
+  const [status, setStatus] = useState(false);
+
+  const ws = useRef<WebSocket>();
 
   const submit = (): void => {
     const number_id = Number(id);
@@ -49,14 +51,23 @@ export const CompanyItem = (): JSX.Element => {
       faxes: filterArrayNumber(faxes),
     };
 
-    // SetItem(number_id, 'Company', JSON.stringify(item));
-    history.go(-1);
-    return;
+    SetItem(ws, number_id, 'Company', item, setStatus);
   };
 
   useEffect(() => {
+    ws.current = NewWS;
+
+    AddEventOpenItem(ws, 'Company', id);
+    AddEventMessageGet(ws, CompanyGetItem, setData);
+
+    return (): void => {
+      ws.current?.close();
+    };
+  }, [id]);
+
+  useEffect(() => {
     if (data?.id) {
-      const c = data as Company;
+      const c = data;
       setName(c.name);
       setAddress(c.address);
       setScopeID(c.scope_id);
@@ -66,50 +77,48 @@ export const CompanyItem = (): JSX.Element => {
       setFaxes(addEmptyString(numberToString(c.faxes)));
       setPractices(c.practices || []);
       setContacts(c.contacts || []);
-      setLoaded(true);
     }
-  }, [data]);
+    if (status) {
+      history.go(-1);
+    }
+  }, [data, history, status]);
 
   return (
     <div>
-      {loaded && !error && (
-        <>
-          <CompanyNameInput value={name} setter={setName} />
-          <ScopeIDSelect id={scopeID} setter={setScopeID} />
-          <AddressInput value={address} setter={setAddress} />
+      <CompanyNameInput value={name} setter={setName} />
+      <ScopeIDSelect id={scopeID} setter={setScopeID} />
+      <AddressInput value={address} setter={setAddress} />
 
-          <div className="columns">
-            <div className="column">
-              <EmailInputs emails={emails} setter={setEmails} />
-            </div>
-            <div className="column">
-              <PhoneInputs phones={phones} setter={setPhones} />
-            </div>
-            <div className="column">
-              <FaxInputs phones={faxes} setter={setFaxes} />
-            </div>
-          </div>
+      <div className="columns">
+        <div className="column">
+          <EmailInputs emails={emails} setter={setEmails} />
+        </div>
+        <div className="column">
+          <PhoneInputs phones={phones} setter={setPhones} />
+        </div>
+        <div className="column">
+          <FaxInputs phones={faxes} setter={setFaxes} />
+        </div>
+      </div>
 
-          <PracticeListForm practices={practices} />
+      <PracticeListForm practices={practices} />
 
-          <ContactShortForm contacts={contacts} />
+      <ContactShortForm contacts={contacts} />
 
-          <NoteInput value={note} setter={setNote} />
+      <NoteInput value={note} setter={setNote} />
 
-          <div className="field is-grouped">
-            <div className="control">
-              <button className="button" onClick={() => submit()}>
-                Сохранить
-              </button>
-            </div>
-            <div className="control">
-              <button className="button" onClick={() => history.go(-1)}>
-                Закрыть
-              </button>
-            </div>
-          </div>
-        </>
-      )}
+      <div className="field is-grouped">
+        <div className="control">
+          <button className="button" onClick={() => submit()}>
+            Сохранить
+          </button>
+        </div>
+        <div className="control">
+          <button className="button" onClick={() => history.go(-1)}>
+            Закрыть
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

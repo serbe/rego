@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem, SetItem } from '../../helpers/fetcher';
+import { AddEventMessageGet, AddEventOpenItem, NewWS, SetItem } from '../../helpers/fetcher';
 import {
   Certificate,
   CertificateDateInput,
+  CertificateGetItem,
   CertificateNumberInput,
 } from '../../models/certificate';
 import { CompanyIDSelect } from '../../models/company';
@@ -14,13 +15,13 @@ import { NoteInput, ParameterTypes } from '../../models/impersonal';
 export const CertificateItem = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(id === '0' || false);
-  const [data, error] = GetItem('Certificate', id);
   const [sNumber, setSNumber] = useState<string>();
   const [contactID, setContactID] = useState<number>();
   const [companyID, setCompanyID] = useState<number>();
   const [certDate, setCertDate] = useState<string>();
   const [note, setNote] = useState<string>();
+  const [data, setData] = useState<Certificate>();
+  const [status, setStatus] = useState(false);
 
   const ws = useRef<WebSocket>();
 
@@ -35,11 +36,19 @@ export const CertificateItem = (): JSX.Element => {
       note: note,
     };
 
-    SetItem(ws, number_id, 'Certificate', item);
-
-    // [status] = SetItem(number_id, 'Certificate', JSON.stringify(item));
-    return;
+    SetItem(ws, number_id, 'Certificate', item, setStatus);
   };
+
+  useEffect(() => {
+    ws.current = NewWS;
+
+    AddEventOpenItem(ws, 'Certificate', id);
+    AddEventMessageGet(ws, CertificateGetItem, setData);
+
+    return (): void => {
+      ws.current?.close();
+    };
+  }, [id]);
 
   useEffect(() => {
     // if (status === Status.Complete) {
@@ -49,40 +58,38 @@ export const CertificateItem = (): JSX.Element => {
 
   useEffect(() => {
     if (data?.id) {
-      const c = data as Certificate;
+      const c = data;
       setSNumber(c.num);
       setContactID(c.contact_id);
       setCompanyID(c.company_id);
       setCertDate(c.cert_date);
       setNote(c.note);
-      setLoaded(true);
     }
-  }, [data]);
+    if (status) {
+      history.go(-1);
+    }
+  }, [data, history, status]);
 
   return (
     <div>
-      {loaded && !error && (
-        <>
-          <CertificateNumberInput value={sNumber} setter={setSNumber} />
-          <ContactIDSelect id={contactID} setter={setContactID} />
-          <CompanyIDSelect id={companyID} setter={setCompanyID} />
-          <CertificateDateInput value={certDate} setter={setCertDate} />
-          <NoteInput value={note} setter={setNote} />
+      <CertificateNumberInput value={sNumber} setter={setSNumber} />
+      <ContactIDSelect id={contactID} setter={setContactID} />
+      <CompanyIDSelect id={companyID} setter={setCompanyID} />
+      <CertificateDateInput value={certDate} setter={setCertDate} />
+      <NoteInput value={note} setter={setNote} />
 
-          <div className="field is-grouped">
-            <div className="control">
-              <button className="button" onClick={() => submit()}>
-                Сохранить
-              </button>
-            </div>
-            <div className="control">
-              <button className="button" onClick={() => history.go(-1)}>
-                Закрыть
-              </button>
-            </div>
-          </div>
-        </>
-      )}
+      <div className="field is-grouped">
+        <div className="control">
+          <button className="button" onClick={() => submit()}>
+            Сохранить
+          </button>
+        </div>
+        <div className="control">
+          <button className="button" onClick={() => history.go(-1)}>
+            Закрыть
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

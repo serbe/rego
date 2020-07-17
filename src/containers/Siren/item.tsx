@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
+import { AddEventMessageGet, AddEventOpenItem, NewWS, SetItem } from '../../helpers/fetcher';
 import { CompanyIDSelect } from '../../models/company';
 import { AddressInput, ContactIDSelect, NoteInput, ParameterTypes } from '../../models/impersonal';
 import {
@@ -62,7 +62,7 @@ export const SirenItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    ws.current = new WebSocket(URL);
+    ws.current = NewWS;
 
     AddEventOpenItem(ws, 'Siren', id);
     AddEventMessageGet(ws, SirenGetItem, setData);
