@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AddEventMessageGet, AddEventOpenItem, NewWS, SetItem } from '../../helpers/fetcher';
+import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { Scope, ScopeGetItem, ScopeNameInput } from '../../models/scope';
 
@@ -28,10 +28,10 @@ export const ScopeItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    ws.current = NewWS;
+    ws.current = new WebSocket(URL);
 
     AddEventOpenItem(ws, 'Scope', id, setLoaded);
-    AddEventMessageGet(ws, ScopeGetItem, setData, setLoaded);
+    AddEventMessageGet(ws, ScopeGetItem, setData);
 
     return (): void => {
       ws.current?.close();
@@ -39,15 +39,18 @@ export const ScopeItem = (): JSX.Element => {
   }, [id]);
 
   useEffect(() => {
-    if (data?.id) {
-      const c = data;
-      setName(c.name);
-      setNote(c.note);
+    if (data) {
+      setName(data.name);
+      setNote(data.note);
+      setLoaded(true);
     }
+  }, [data]);
+
+  useEffect(() => {
     if (status) {
       history.go(-1);
     }
-  }, [data, history, status]);
+  }, [history, status]);
 
   return (
     <div>

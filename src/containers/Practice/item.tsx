@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AddEventMessageGet, AddEventOpenItem, NewWS, SetItem } from '../../helpers/fetcher';
+import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
 import { CompanyIDSelect } from '../../models/company';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { KindIDSelect } from '../../models/kind';
@@ -41,28 +41,32 @@ export const PracticeItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    ws.current = NewWS;
+    ws.current = new WebSocket(URL);
 
     AddEventOpenItem(ws, 'Practice', id, setLoaded);
-    AddEventMessageGet(ws, PracticeGetItem, setData, setLoaded);
+    AddEventMessageGet(ws, PracticeGetItem, setData);
 
     return (): void => {
       ws.current?.close();
     };
   }, [id]);
+
   useEffect(() => {
-    if (data?.id) {
-      const c = data;
-      setCompanyID(c.company_id);
-      setKindID(c.kind_id);
-      setTopic(c.topic);
-      setDate(c.date_of_practice);
-      setNote(c.note);
+    if (data) {
+      setCompanyID(data.company_id);
+      setKindID(data.kind_id);
+      setTopic(data.topic);
+      setDate(data.date_of_practice);
+      setNote(data.note);
+      setLoaded(true);
     }
+  }, [data]);
+
+  useEffect(() => {
     if (status) {
       history.go(-1);
     }
-  }, [data, history, status]);
+  }, [history, status]);
 
   return (
     <div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AddEventMessageGet, AddEventOpenItem, NewWS, SetItem } from '../../helpers/fetcher';
+import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
 import {
   Education,
   EducationEndDateInput,
@@ -41,10 +41,10 @@ export const EducationItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    ws.current = NewWS;
+    ws.current = new WebSocket(URL);
 
     AddEventOpenItem(ws, 'Education', id, setLoaded);
-    AddEventMessageGet(ws, EducationGetItem, setData, setLoaded);
+    AddEventMessageGet(ws, EducationGetItem, setData);
 
     return (): void => {
       ws.current?.close();
@@ -52,18 +52,21 @@ export const EducationItem = (): JSX.Element => {
   }, [id]);
 
   useEffect(() => {
-    if (data?.id) {
-      const c = data;
-      setContactID(c.contact_id);
-      setStartDate(c.start_date);
-      setEndDate(c.end_date);
-      setPostID(c.post_id);
-      setNote(c.note);
+    if (data) {
+      setContactID(data.contact_id);
+      setStartDate(data.start_date);
+      setEndDate(data.end_date);
+      setPostID(data.post_id);
+      setNote(data.note);
+      setLoaded(true);
     }
+  }, [data]);
+
+  useEffect(() => {
     if (status) {
       history.go(-1);
     }
-  }, [data, history, status]);
+  }, [history, status]);
 
   return (
     <div>

@@ -9,8 +9,6 @@ type AuthJson = {
 
 export const URL = 'ws://127.0.0.1:9090/api/go';
 
-export const NewWS = new WebSocket(URL);
-
 export const AddEventOpenItem = (
   ws: MutableRefObject<WebSocket | undefined>,
   name: string,
@@ -20,34 +18,31 @@ export const AddEventOpenItem = (
   const number_id = Number(id);
   if (number_id !== 0) {
     ws.current?.addEventListener('open', () => {
-      ws.current?.send(`{"Get":{"Item":{"name":"${name}","id":${number_id}}}}`);
+      ws.current?.send(
+        `{"command":{"Get":{"Item":{"name":"${name}","id":${number_id}}}},"addon":"dXNlclVzZXJQYXNzMTI="}`,
+      );
     });
   } else {
     setLoaded(true);
   }
 };
 
-export const AddEventOpenList = (
-  ws: MutableRefObject<WebSocket | undefined>,
-  name: string,
-): void => {
-  ws.current?.addEventListener('open', () => {
-    ws.current?.send(`{"Get":{"List":"${name}"}}`);
-  });
-};
+// export const AddEventOpenList = (
+//   ws: MutableRefObject<WebSocket | undefined>,
+//   name: string,
+// ): void => {
+//   ws.current?.addEventListener('open', () => {
+//     ws.current?.send(`{"command":{"Get":{"List":"${name}"}},"addon":"dXNlclVzZXJQYXNzMTI="}`);
+//   });
+// };
 
 export const AddEventMessageGet = (
   ws: MutableRefObject<WebSocket | undefined>,
-  fn: (
-    message: MessageEvent,
-    setData: Dispatch<SetStateAction<Item>>,
-    setLoaded: Dispatch<SetStateAction<boolean>>,
-  ) => void,
+  fn: (message: MessageEvent, setData: Dispatch<SetStateAction<Item>>) => void,
   setData: Dispatch<SetStateAction<Item>>,
-  setLoaded: Dispatch<SetStateAction<boolean>>,
 ): void => {
   ws.current?.addEventListener('message', (event: MessageEvent) => {
-    fn(event, setData, setLoaded);
+    fn(event, setData);
   });
 };
 
@@ -122,7 +117,7 @@ export const GetList = (name: string): [List[], string] => {
     });
 
     ws.addEventListener('open', () => {
-      ws.send(`{"Get":{"List":"${name}"}}`);
+      ws.send(`{"command":{"Get":{"List":"${name}"}},"addon":""}`);
     });
 
     return (): void => {
@@ -186,7 +181,7 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
     });
 
     ws.addEventListener('open', () => {
-      ws.send(`{"Get":{"List":"${name}"}}`);
+      ws.send(`{"command":{"Get":{"List":"${name}"}},"addon":"dXNlclVzZXJQYXNzMTI="}`);
     });
 
     return (): void => {
@@ -213,5 +208,9 @@ export const SetItem = (
     }
   });
 
-  ws.current?.send(`{"${id === 0 ? 'Insert' : 'Update'}":{"${name}":${JSON.stringify(item)}}}`);
+  ws.current?.send(
+    `{"command":{"${id === 0 ? 'Insert' : 'Update'}":{"${name}":${JSON.stringify(
+      item,
+    )}}},"addon":"dXNlclVzZXJQYXNzMTI="}`,
+  );
 };

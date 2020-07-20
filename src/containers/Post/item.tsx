@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AddEventMessageGet, AddEventOpenItem, NewWS, SetItem } from '../../helpers/fetcher';
+import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { Post, PostGetItem, PostGOSwitch, PostNameInput } from '../../models/post';
 
@@ -30,10 +30,10 @@ export const PostItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    ws.current = NewWS;
+    ws.current = new WebSocket(URL);
 
     AddEventOpenItem(ws, 'Post', id, setLoaded);
-    AddEventMessageGet(ws, PostGetItem, setData, setLoaded);
+    AddEventMessageGet(ws, PostGetItem, setData);
 
     return (): void => {
       ws.current?.close();
@@ -41,16 +41,19 @@ export const PostItem = (): JSX.Element => {
   }, [id]);
 
   useEffect(() => {
-    if (data?.id) {
-      const c = data;
-      setName(c.name);
-      setGo(c.go || false);
-      setNote(c.note);
+    if (data) {
+      setName(data.name);
+      setGo(data.go || false);
+      setNote(data.note);
+      setLoaded(true);
     }
+  }, [data]);
+
+  useEffect(() => {
     if (status) {
       history.go(-1);
     }
-  }, [data, history, status]);
+  }, [history, status]);
 
   return (
     <div>

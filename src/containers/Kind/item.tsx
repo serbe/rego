@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AddEventMessageGet, AddEventOpenItem, NewWS, SetItem } from '../../helpers/fetcher';
+import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { Kind, KindGetItem, KindNameInput, KindShortNameInput } from '../../models/kind';
 
@@ -30,10 +30,10 @@ export const KindItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    ws.current = NewWS;
+    ws.current = new WebSocket(URL);
 
     AddEventOpenItem(ws, 'Kind', id, setLoaded);
-    AddEventMessageGet(ws, KindGetItem, setData, setLoaded);
+    AddEventMessageGet(ws, KindGetItem, setData);
 
     return (): void => {
       ws.current?.close();
@@ -41,16 +41,19 @@ export const KindItem = (): JSX.Element => {
   }, [id]);
 
   useEffect(() => {
-    if (data?.id) {
-      const c = data;
-      setName(c.name);
-      setShortName(c.short_name);
-      setNote(c.note);
+    if (data) {
+      setName(data.name);
+      setShortName(data.short_name);
+      setNote(data.note);
+      setLoaded(true);
     }
+  }, [data]);
+
+  useEffect(() => {
     if (status) {
       history.go(-1);
     }
-  }, [data, history, status]);
+  }, [history, status]);
 
   return (
     <div>

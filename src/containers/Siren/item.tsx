@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AddEventMessageGet, AddEventOpenItem, NewWS, SetItem } from '../../helpers/fetcher';
+import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
 import { CompanyIDSelect } from '../../models/company';
 import { AddressInput, ContactIDSelect, NoteInput, ParameterTypes } from '../../models/impersonal';
 import {
@@ -63,10 +63,10 @@ export const SirenItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    ws.current = NewWS;
+    ws.current = new WebSocket(URL);
 
     AddEventOpenItem(ws, 'Siren', id, setLoaded);
-    AddEventMessageGet(ws, SirenGetItem, setData, setLoaded);
+    AddEventMessageGet(ws, SirenGetItem, setData);
 
     return (): void => {
       ws.current?.close();
@@ -74,26 +74,53 @@ export const SirenItem = (): JSX.Element => {
   }, [id]);
 
   useEffect(() => {
-    if (data?.id) {
-      const c = data;
-      setNumberID(c.num_id);
-      setNumberPassport(c.num_pass);
-      setSirenTypeID(c.siren_type_id);
-      setAddress(c.address);
-      setRadio(c.radio);
-      setDesk(c.desk);
-      setContactID(c.contact_id);
-      setCompanyID(c.company_id);
-      setLatitude(c.latitude);
-      setLongitude(c.longitude);
-      setStage(c.stage);
-      setOwn(c.own);
-      setNote(c.note);
+    if (data) {
+      setNumberID(data.num_id);
+      setNumberPassport(data.num_pass);
+      setSirenTypeID(data.siren_type_id);
+      setAddress(data.address);
+      setRadio(data.radio);
+      setDesk(data.desk);
+      setContactID(data.contact_id);
+      setCompanyID(data.company_id);
+      setLatitude(data.latitude);
+      setLongitude(data.longitude);
+      setStage(data.stage);
+      setOwn(data.own);
+      setNote(data.note);
+      setLoaded(true);
     }
+  }, [data]);
+
+  useEffect(() => {
     if (status) {
       history.go(-1);
     }
-  }, [data, history, status]);
+  }, [history, status]);
+
+  useEffect(() => {
+    if (data) {
+      setNumberID(data.num_id);
+      setNumberPassport(data.num_pass);
+      setSirenTypeID(data.siren_type_id);
+      setAddress(data.address);
+      setRadio(data.radio);
+      setDesk(data.desk);
+      setContactID(data.contact_id);
+      setCompanyID(data.company_id);
+      setLatitude(data.latitude);
+      setLongitude(data.longitude);
+      setStage(data.stage);
+      setOwn(data.own);
+      setNote(data.note);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (status) {
+      history.go(-1);
+    }
+  }, [history, status]);
 
   return (
     <div>

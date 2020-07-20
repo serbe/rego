@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AddEventMessageGet, AddEventOpenItem, NewWS, SetItem } from '../../helpers/fetcher';
+import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
 import {
   Certificate,
   CertificateDateInput,
@@ -41,10 +41,10 @@ export const CertificateItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    ws.current = NewWS;
+    ws.current = new WebSocket(URL);
 
     AddEventOpenItem(ws, 'Certificate', id, setLoaded);
-    AddEventMessageGet(ws, CertificateGetItem, setData, setLoaded);
+    AddEventMessageGet(ws, CertificateGetItem, setData);
 
     return (): void => {
       ws.current?.close();
@@ -52,18 +52,21 @@ export const CertificateItem = (): JSX.Element => {
   }, [id]);
 
   useEffect(() => {
-    if (data?.id) {
-      const c = data;
-      setSNumber(c.num);
-      setContactID(c.contact_id);
-      setCompanyID(c.company_id);
-      setCertDate(c.cert_date);
-      setNote(c.note);
+    if (data) {
+      setSNumber(data.num);
+      setContactID(data.contact_id);
+      setCompanyID(data.company_id);
+      setCertDate(data.cert_date);
+      setNote(data.note);
+      setLoaded(true);
     }
+  }, [data]);
+
+  useEffect(() => {
     if (status) {
       history.go(-1);
     }
-  }, [data, history, status]);
+  }, [history, status]);
 
   return (
     <div>

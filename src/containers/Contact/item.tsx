@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AddEventMessageGet, AddEventOpenItem, NewWS, SetItem } from '../../helpers/fetcher';
+import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
 import {
   addEmptyString,
   filterArrayNumber,
@@ -69,10 +69,10 @@ export const ContactItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    ws.current = NewWS;
+    ws.current = new WebSocket(URL);
 
     AddEventOpenItem(ws, 'Contact', id, setLoaded);
-    AddEventMessageGet(ws, ContactGetItem, setData, setLoaded);
+    AddEventMessageGet(ws, ContactGetItem, setData);
 
     return (): void => {
       ws.current?.close();
@@ -80,25 +80,28 @@ export const ContactItem = (): JSX.Element => {
   }, [id]);
 
   useEffect(() => {
-    if (data?.id) {
-      const c = data;
-      setName(c.name);
-      setCompanyID(c.company_id);
-      setDepartmentID(c.department_id);
-      setPostID(c.post_id);
-      setPostGoID(c.post_go_id);
-      setRankID(c.rank_id);
-      setBirthday(c.birthday);
-      setNote(c.note);
-      setEmails(addEmptyString(c.emails));
-      setPhones(addEmptyString(numberToString(c.phones)));
-      setFaxes(addEmptyString(numberToString(c.faxes)));
-      setEducations(c.educations || []);
+    if (data) {
+      setName(data.name);
+      setCompanyID(data.company_id);
+      setDepartmentID(data.department_id);
+      setPostID(data.post_id);
+      setPostGoID(data.post_go_id);
+      setRankID(data.rank_id);
+      setBirthday(data.birthday);
+      setNote(data.note);
+      setEmails(addEmptyString(data.emails));
+      setPhones(addEmptyString(numberToString(data.phones)));
+      setFaxes(addEmptyString(numberToString(data.faxes)));
+      setEducations(data.educations || []);
+      setLoaded(true);
     }
+  }, [data]);
+
+  useEffect(() => {
     if (status) {
       history.go(-1);
     }
-  }, [data, history, status]);
+  }, [history, status]);
 
   return (
     <div>

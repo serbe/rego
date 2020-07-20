@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AddEventMessageGet, AddEventOpenItem, NewWS, SetItem } from '../../helpers/fetcher';
+import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
 import {
   addEmptyString,
   filterArrayNumber,
@@ -56,10 +56,10 @@ export const CompanyItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    ws.current = NewWS;
+    ws.current = new WebSocket(URL);
 
     AddEventOpenItem(ws, 'Company', id, setLoaded);
-    AddEventMessageGet(ws, CompanyGetItem, setData, setLoaded);
+    AddEventMessageGet(ws, CompanyGetItem, setData);
 
     return (): void => {
       ws.current?.close();
@@ -67,22 +67,25 @@ export const CompanyItem = (): JSX.Element => {
   }, [id]);
 
   useEffect(() => {
-    if (data?.id) {
-      const c = data;
-      setName(c.name);
-      setAddress(c.address);
-      setScopeID(c.scope_id);
-      setNote(c.note);
-      setEmails(addEmptyString(c.emails));
-      setPhones(addEmptyString(numberToString(c.phones)));
-      setFaxes(addEmptyString(numberToString(c.faxes)));
-      setPractices(c.practices || []);
-      setContacts(c.contacts || []);
+    if (data) {
+      setName(data.name);
+      setAddress(data.address);
+      setScopeID(data.scope_id);
+      setNote(data.note);
+      setEmails(addEmptyString(data.emails));
+      setPhones(addEmptyString(numberToString(data.phones)));
+      setFaxes(addEmptyString(numberToString(data.faxes)));
+      setPractices(data.practices || []);
+      setContacts(data.contacts || []);
+      setLoaded(true);
     }
+  }, [data]);
+
+  useEffect(() => {
     if (status) {
       history.go(-1);
     }
-  }, [data, history, status]);
+  }, [history, status]);
 
   return (
     <div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AddEventMessageGet, AddEventOpenItem, NewWS, SetItem } from '../../helpers/fetcher';
+import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import {
   SirenType,
@@ -35,10 +35,10 @@ export const SirenTypeItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    ws.current = NewWS;
+    ws.current = new WebSocket(URL);
 
     AddEventOpenItem(ws, 'SirenType', id, setLoaded);
-    AddEventMessageGet(ws, SirenTypeGetItem, setData, setLoaded);
+    AddEventMessageGet(ws, SirenTypeGetItem, setData);
 
     return (): void => {
       ws.current?.close();
@@ -46,16 +46,19 @@ export const SirenTypeItem = (): JSX.Element => {
   }, [id]);
 
   useEffect(() => {
-    if (data?.id) {
-      const c = data;
-      setName(c.name);
-      setRadius(c.radius);
-      setNote(c.note);
+    if (data) {
+      setName(data.name);
+      setRadius(data.radius);
+      setNote(data.note);
+      setLoaded(true);
     }
+  }, [data, history, status]);
+
+  useEffect(() => {
     if (status) {
       history.go(-1);
     }
-  }, [data, history, status]);
+  }, [history, status]);
 
   return (
     <div>
