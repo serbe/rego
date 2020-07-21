@@ -8,6 +8,7 @@ import { DepartmentItem, Departments } from '../Department';
 import { EducationItem, Educations } from '../Education';
 import { Home } from '../Home';
 import { KindItem, Kinds } from '../Kind';
+import { Login } from '../Login';
 import { PostItem, Posts } from '../Post';
 import { PracticeItem, Practices } from '../Practice';
 import { RankItem, Ranks } from '../Rank';
@@ -19,6 +20,7 @@ export const Router = (): JSX.Element => (
   <Suspense fallback={<div>Loading...</div>}>
     <Switch>
       <Route exact path="/" component={Home} />
+      <Route exact path="/login" component={Login} />
       <Route exact path="/certificates" component={Certificates} />
       <Route exact path="/certificates/:id" component={CertificateItem} />
       <Route exact path="/companies" component={Companies} />

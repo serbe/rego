@@ -46,30 +46,34 @@ export const AddEventMessageGet = (
   });
 };
 
-export const Login = (name: string, password: string): [string | undefined, string | undefined] => {
-  const [token, setToken] = useState<string>();
-  const [error, setError] = useState<string>();
+// export const SendLogin = (
+//   name: string,
+//   password: string,
+// ): [string | undefined, string | undefined] => {
+//   const [token, setToken] = useState<string>();
+//   const [error, setError] = useState<string>();
 
-  useEffect(() => {
-    fetch(URL, {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ Login: { name: name, password: password } }),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        const jsonData = response as AuthJson;
-        setToken(jsonData.token);
-        setError(jsonData.error);
-        return;
-      })
-      .catch((error) => setError(error as string));
-  }, [name, password]);
-  return [token, error];
-};
+//   useEffect(() => {
+//     fetch(URL, {
+//       method: 'POST',
+//       mode: 'cors',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({ Auth: { u: name, p: password } }),
+//       credentials: 'include',
+//     })
+//       .then((response) => response.json())
+//       .then((response) => {
+//         const jsonData = response as AuthJson;
+//         setToken(jsonData.token);
+//         setError(jsonData.error);
+//         return;
+//       })
+//       .catch((error) => setError(error as string));
+//   }, [name, password]);
+//   return [token, error];
+// };
 
 export const GetList = (name: string): [List[], string] => {
   const [list, setList] = useState<List[]>([]);
