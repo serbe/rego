@@ -14,16 +14,17 @@ export const Login = (): JSX.Element => {
   const submit = (): void => {
     fetch('http://127.0.0.1:9090/api/go/login', {
       method: 'POST',
-      mode: 'no-cors',
+      mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ Auth: { u: name, p: btoa(pass) } }),
+      body: JSON.stringify({ u: name, p: btoa(pass) }),
     })
+      .then((response) => response.json())
       .then((response) => {
         // const jsonData = response as AuthJson;
         // setToken(jsonData.token);
-        // setError(jsonData.error);
+        // setError(jsonData.error); R2ZoamttVXNlcmExMg==
         console.log(response);
         return;
       })
@@ -32,28 +33,32 @@ export const Login = (): JSX.Element => {
 
   return (
     <div className="container ">
-      <div className="content has-text-centered">
-        <h2>Авторизация</h2>
-      </div>
-      <FormField
-        name="name"
-        type="text"
-        icon="user"
-        onChange={(event: ChangeEvent<HTMLInputElement>): void => {
-          setName(event.target.value);
-        }}
-      />
-      <FormField
-        name="password"
-        type="password"
-        icon="key"
-        onChange={(event: ChangeEvent<HTMLInputElement>): void => {
-          setPass(event.target.value);
-        }}
-      />
-      <button className="button" onClick={() => submit()}>
-        Сохранить
-      </button>
+      <form className="box">
+        <div className="field has-text-centered">
+          <h2>Авторизация</h2>
+        </div>
+        <FormField
+          name="name"
+          type="text"
+          icon="user"
+          label="Имя пользователя"
+          onChange={(event: ChangeEvent<HTMLInputElement>): void => {
+            setName(event.target.value);
+          }}
+        />
+        <FormField
+          name="password"
+          type="password"
+          icon="key"
+          label="Пароль"
+          onChange={(event: ChangeEvent<HTMLInputElement>): void => {
+            setPass(event.target.value);
+          }}
+        />
+        <button className="button" onClick={() => submit()}>
+          Сохранить
+        </button>
+      </form>
     </div>
   );
 };
