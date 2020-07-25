@@ -16,7 +16,12 @@ export type DepartmentList = {
   note?: string;
 };
 
-type JsonItemScheme = { name: 'Department'; object: { Department: Department }; error: string };
+type JsonItemScheme = {
+  command: 'Get';
+  name: 'Department';
+  object: { Department: Department };
+  error: string;
+};
 
 export const DepartmentGetItem = (
   message: MessageEvent,
@@ -24,7 +29,7 @@ export const DepartmentGetItem = (
 ): void => {
   const text = message.data as string;
   const jsonData = JSON.parse(text) as JsonItemScheme;
-  if (jsonData?.name === 'Department') {
+  if (jsonData?.object) {
     setData(jsonData.object.Department);
   }
 };

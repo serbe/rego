@@ -28,7 +28,7 @@ export type SirenList = {
   phones?: number[];
 };
 
-type JsonItemScheme = { name: 'Siren'; object: { Siren: Siren }; error: string };
+type JsonItemScheme = { command: 'Get'; name: 'Siren'; object: { Siren: Siren }; error: string };
 
 export const SirenGetItem = (
   message: MessageEvent,
@@ -36,7 +36,7 @@ export const SirenGetItem = (
 ): void => {
   const text = message.data as string;
   const jsonData = JSON.parse(text) as JsonItemScheme;
-  if (jsonData?.name === 'Siren') {
+  if (jsonData?.object) {
     setData(jsonData.object.Siren);
   }
 };

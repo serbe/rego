@@ -32,7 +32,12 @@ export type EducationShort = {
   start_date: string;
 };
 
-type JsonItemScheme = { name: 'Education'; object: { Education: Education }; error: string };
+type JsonItemScheme = {
+  command: 'Get';
+  name: 'Education';
+  object: { Education: Education };
+  error: string;
+};
 
 export const EducationGetItem = (
   message: MessageEvent,
@@ -40,7 +45,7 @@ export const EducationGetItem = (
 ): void => {
   const text = message.data as string;
   const jsonData = JSON.parse(text) as JsonItemScheme;
-  if (jsonData?.name === 'Education') {
+  if (jsonData?.object) {
     setData(jsonData.object.Education);
   }
 };

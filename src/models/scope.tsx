@@ -16,7 +16,7 @@ export type ScopeList = {
   note?: string;
 };
 
-type JsonItemScheme = { name: 'Scope'; object: { Scope: Scope }; error: string };
+type JsonItemScheme = { command: 'Get'; name: 'Scope'; object: { Scope: Scope }; error: string };
 
 export const ScopeGetItem = (
   message: MessageEvent,
@@ -24,7 +24,7 @@ export const ScopeGetItem = (
 ): void => {
   const text = message.data as string;
   const jsonData = JSON.parse(text) as JsonItemScheme;
-  if (jsonData?.name === 'Scope') {
+  if (jsonData?.object) {
     setData(jsonData.object.Scope);
   }
 };

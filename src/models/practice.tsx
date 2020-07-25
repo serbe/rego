@@ -39,7 +39,12 @@ export type PracticeShort = {
   date_of_practice: string;
 };
 
-type JsonItemScheme = { name: 'Practice'; object: { Practice: Practice }; error: string };
+type JsonItemScheme = {
+  command: 'Get';
+  name: 'Practice';
+  object: { Practice: Practice };
+  error: string;
+};
 
 export const PracticeGetItem = (
   message: MessageEvent,
@@ -47,7 +52,7 @@ export const PracticeGetItem = (
 ): void => {
   const text = message.data as string;
   const jsonData = JSON.parse(text) as JsonItemScheme;
-  if (jsonData?.name === 'Practice') {
+  if (jsonData?.object) {
     setData(jsonData.object.Practice);
   }
 };

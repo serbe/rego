@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { List } from '../models/impersonal';
+import { List } from '../helpers/fetcher';
 import { Button } from './button';
 import { Input } from './input';
 import { Pagination } from './pagination';

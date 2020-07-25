@@ -48,7 +48,12 @@ export type ContactShort = {
   post_go_name?: string;
 };
 
-type JsonItemScheme = { name: 'Contact'; object: { Contact: Contact }; error: string };
+type JsonItemScheme = {
+  command: 'Get';
+  name: 'Contact';
+  object: { Contact: Contact };
+  error: string;
+};
 
 export const ContactGetItem = (
   message: MessageEvent,
@@ -56,7 +61,7 @@ export const ContactGetItem = (
 ): void => {
   const text = message.data as string;
   const jsonData = JSON.parse(text) as JsonItemScheme;
-  if (jsonData?.name === 'Contact') {
+  if (jsonData?.object) {
     setData(jsonData.object.Contact);
   }
 };

@@ -18,7 +18,7 @@ export type PostList = {
   note?: string;
 };
 
-type JsonItemScheme = { name: 'Post'; object: { Post: Post }; error: string };
+type JsonItemScheme = { command: 'Get'; name: 'Post'; object: { Post: Post }; error: string };
 
 export const PostGetItem = (
   message: MessageEvent,
@@ -26,7 +26,7 @@ export const PostGetItem = (
 ): void => {
   const text = message.data as string;
   const jsonData = JSON.parse(text) as JsonItemScheme;
-  if (jsonData?.name === 'Post') {
+  if (jsonData?.object) {
     setData(jsonData.object.Post);
   }
 };

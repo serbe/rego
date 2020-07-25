@@ -18,7 +18,7 @@ export type KindList = {
   note?: string;
 };
 
-type JsonItemScheme = { name: 'Kind'; object: { Kind: Kind }; error: string };
+type JsonItemScheme = { command: 'Get'; name: 'Kind'; object: { Kind: Kind }; error: string };
 
 export const KindGetItem = (
   message: MessageEvent,
@@ -26,7 +26,7 @@ export const KindGetItem = (
 ): void => {
   const text = message.data as string;
   const jsonData = JSON.parse(text) as JsonItemScheme;
-  if (jsonData?.name === 'Kind') {
+  if (jsonData?.object) {
     setData(jsonData.object.Kind);
   }
 };

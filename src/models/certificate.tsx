@@ -24,7 +24,12 @@ export type CertificateList = {
   note?: string;
 };
 
-type JsonItemScheme = { name: 'Certificate'; object: { Certificate: Certificate }; error: string };
+type JsonItemScheme = {
+  command: 'Get';
+  name: 'Certificate';
+  object: { Certificate: Certificate };
+  error: string;
+};
 
 export const CertificateGetItem = (
   message: MessageEvent,
@@ -32,7 +37,7 @@ export const CertificateGetItem = (
 ): void => {
   const text = message.data as string;
   const jsonData = JSON.parse(text) as JsonItemScheme;
-  if (jsonData?.name === 'Certificate') {
+  if (jsonData?.object) {
     setData(jsonData.object.Certificate);
   }
 };

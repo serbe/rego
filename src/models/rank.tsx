@@ -16,7 +16,7 @@ export type RankList = {
   note?: string;
 };
 
-type JsonItemScheme = { name: 'Rank'; object: { Rank: Rank }; error: string };
+type JsonItemScheme = { command: 'Get'; name: 'Rank'; object: { Rank: Rank }; error: string };
 
 export const RankGetItem = (
   message: MessageEvent,
@@ -24,7 +24,7 @@ export const RankGetItem = (
 ): void => {
   const text = message.data as string;
   const jsonData = JSON.parse(text) as JsonItemScheme;
-  if (jsonData?.name === 'Rank') {
+  if (jsonData?.object) {
     setData(jsonData.object.Rank);
   }
 };

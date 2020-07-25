@@ -30,7 +30,12 @@ export type CompanyList = {
   practices?: string[];
 };
 
-type JsonItemScheme = { name: 'Company'; object: { Company: Company }; error: string };
+type JsonItemScheme = {
+  command: 'Get';
+  name: 'Company';
+  object: { Company: Company };
+  error: string;
+};
 
 export const CompanyGetItem = (
   message: MessageEvent,
@@ -38,7 +43,7 @@ export const CompanyGetItem = (
 ): void => {
   const text = message.data as string;
   const jsonData = JSON.parse(text) as JsonItemScheme;
-  if (jsonData?.name === 'Company') {
+  if (jsonData?.object) {
     setData(jsonData.object.Company);
   }
 };

@@ -2,8 +2,7 @@ import './select.css';
 
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
-import { GetSelect } from '../helpers/fetcher';
-import { SelectItem } from '../models/impersonal';
+import { GetSelect, SelectItem } from '../helpers/fetcher';
 import { Icon } from './icon';
 
 export interface SelectValues {

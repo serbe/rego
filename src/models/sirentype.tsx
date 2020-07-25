@@ -18,7 +18,12 @@ export type SirenTypeList = {
   note?: string;
 };
 
-type JsonItemScheme = { name: 'SirenType'; object: { SirenType: SirenType }; error: string };
+type JsonItemScheme = {
+  command: 'Get';
+  name: 'SirenType';
+  object: { SirenType: SirenType };
+  error: string;
+};
 
 export const SirenTypeGetItem = (
   message: MessageEvent,
@@ -26,7 +31,7 @@ export const SirenTypeGetItem = (
 ): void => {
   const text = message.data as string;
   const jsonData = JSON.parse(text) as JsonItemScheme;
-  if (jsonData?.name === 'SirenType') {
+  if (jsonData?.object) {
     setData(jsonData.object.SirenType);
   }
 };
