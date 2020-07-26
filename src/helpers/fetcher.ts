@@ -13,6 +13,8 @@ import { Scope, ScopeList } from '../models/scope';
 import { Siren, SirenList } from '../models/siren';
 import { SirenType, SirenTypeList } from '../models/sirentype';
 
+export const URL = 'ws://127.0.0.1:9090/api/go';
+
 export type SelectItem = {
   id: number;
   name: string;
@@ -152,8 +154,6 @@ type JsonItemScheme =
 // | { command: 'Get'; name: 'Scope'; object: { Scope: Scope }; error: string }
 // | { command: 'Get'; name: 'Siren'; object: { Siren: Siren }; error: string }
 // | { command: 'Get'; name: 'SirenType'; object: { SirenType: SirenType }; error: string };
-
-export const URL = 'ws://127.0.0.1:9090/api/go';
 
 export const AddEventOpenItem = (
   ws: MutableRefObject<WebSocket | undefined>,
