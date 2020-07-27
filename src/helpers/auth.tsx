@@ -34,14 +34,14 @@ export const AuthContext = createContext<Partial<AuthData>>({});
 //   }
 // }
 
-async function checkAuth(token: string): Promise<boolean> {
+async function checkAuth(token: string, role: number): Promise<boolean> {
   return fetch('http://127.0.0.1:9090/api/go/check', {
     method: 'POST',
     mode: 'cors',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ t: token }),
+    body: JSON.stringify({ t: token, r: role }),
   })
     .then((response) => response.json())
     .then((response) => response as CJson)
@@ -58,14 +58,14 @@ async function InitAuthContext() {
   const auth = useContext(AuthContext);
   const name = localStorage.getItem('u');
   const token = localStorage.getItem('t');
-  const role = localStorage.getItem('r');
+  const role = Number(localStorage.getItem('r'));
 
   if (token && name && role) {
-    const check = await checkAuth(token);
+    const check = await checkAuth(token, role);
     if (check) {
       auth.checked = true;
       auth.name = name;
-      auth.role = Number(role);
+      auth.role = role;
       return;
     }
   }
