@@ -1,7 +1,7 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, Dispatch, ReactNode, useContext, useMemo, useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 
-export type AuthData = {
+export type State = {
   name: string;
   role: number;
   token: string;
@@ -12,7 +12,54 @@ interface CJson {
   r: boolean;
 }
 
-export const AuthContext = createContext<Partial<AuthData>>({});
+const initialArguments: State = {
+  name: '',
+  role: 0,
+  token: '',
+  checked: false,
+};
+
+export const AuthContext = createContext<State>(initialArguments);
+
+export type AuthValues = {
+  state: State;
+  dispatch: Dispatch<ReducerActions>;
+};
+
+interface AuthProperties {
+  children: ReactNode;
+}
+
+type ReducerActions =
+  | {
+      type: 'SetAuth';
+      data: State;
+    }
+  | {
+      type: 'ClearAuth';
+    };
+
+const reducer = (state: State, action: ReducerActions): State => {
+  switch (action.type) {
+    case 'SetAuth': {
+      state.name = action.data.name;
+      state.role = action.data.role;
+      state.token = action.data.token;
+      state.checked = action.data.checked;
+      return state;
+    }
+    case 'ClearAuth': {
+      localStorage.setItem('u', '');
+      localStorage.setItem('t', '');
+      localStorage.setItem('r', '0');
+      state.name = '';
+      state.role = 0;
+      state.token = '';
+      state.checked = false;
+      return state;
+    }
+  }
+};
 
 // export const authReducer = (state, action) => {
 //   switch (action.type) {
@@ -71,3 +118,18 @@ async function InitAuthContext() {
   }
   history.push('/login');
 }
+
+export const Auth = (properties: AuthProperties): JSX.Element => {
+  const { children } = properties;
+  const [state, dispatch] = useReducer(reducer, initialArguments);
+
+  const contentValues = useMemo(
+    () => ({
+      state,
+      dispatch,
+    }),
+    [state, dispatch],
+  );
+
+  return <AuthContext.Provider value={contentValues}>{children}</AuthContext.Provider>;
+};
