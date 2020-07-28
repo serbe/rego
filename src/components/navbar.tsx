@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
+import { AuthContext } from '../helpers/auth';
 import { Button } from './button';
 
 interface Setter {
@@ -95,8 +96,7 @@ const NavbarEnd: JSX.Element = (
 export const NavBar = (): JSX.Element => {
   // const [auth, setAuth] = useState(true);
   // const openClassName = (cn: string): string => (open ? `${cn} is-active` : cn);
-  // InitAuthContext();
-  const auth = true;
+  const { state } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
 
   const handleToggle = (): void => {
@@ -105,7 +105,7 @@ export const NavBar = (): JSX.Element => {
 
   return (
     <nav className="navbar is-dark" role="navigation" aria-label="dropdown navigation">
-      {auth ? (
+      {state.name ? (
         <>
           <div className="navbar-brand">
             <NavLink activeClassName="is-active" className="navbar-item" exact={true} to="/">

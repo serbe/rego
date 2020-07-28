@@ -39,9 +39,6 @@ export const Login = (): JSX.Element => {
 
   return (
     <div className="container w300">
-      <div className="field has-text-centered">
-        <h2>Авторизация</h2>
-      </div>
       <FormField
         name="name"
         type="text"

@@ -1,5 +1,4 @@
-import React, { createContext, Dispatch, ReactNode, useContext, useReducer } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { createContext, Dispatch, ReactNode, useReducer } from 'react';
 
 export type State = {
   name: string;
@@ -24,12 +23,12 @@ type AuthContextType = {
   dispatch: Dispatch<ReducerActions>;
 };
 
-const initialStateContext: AuthContextType = {
-  state: initialState,
-  dispatch: () => {},
-};
+// const initialStateContext: AuthContextType = {
+//   state: initialState,
+//   dispatch: () => {},
+// };
 
-export const AuthContext = createContext<AuthContextType>(initialStateContext);
+export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 interface AuthProperties {
   children: ReactNode;
@@ -66,7 +65,7 @@ const reducer = (state: State, action: ReducerActions): State => {
   }
 };
 
-async function checkAuth(token: string, role: number): Promise<boolean> {
+export async function checkAuth(token: string, role: number): Promise<boolean> {
   return fetch('http://127.0.0.1:9090/api/go/check', {
     method: 'POST',
     mode: 'cors',
@@ -85,30 +84,17 @@ async function checkAuth(token: string, role: number): Promise<boolean> {
     });
 }
 
-export async function InitAuthContext(): Promise<void> {
-  const history = useHistory();
-  const { dispatch } = useContext(AuthContext);
-  const name = localStorage.getItem('u');
-  const token = localStorage.getItem('t');
-  const role = Number(localStorage.getItem('r'));
-
-  if (token && name && role) {
-    const check = await checkAuth(token, role);
-    if (check) {
-      dispatch({
-        type: 'SetAuth',
-        data: {
-          checked: true,
-          name: name,
-          role: role,
-          token: token,
-        },
-      });
-      return;
-    }
-  }
-  return history.push('/login');
-}
+export const getStorage = (): {
+  name: string;
+  token: string;
+  role: number;
+} => {
+  return {
+    name: localStorage.getItem('u') || '',
+    token: localStorage.getItem('t') || '',
+    role: Number(localStorage.getItem('r')) || 0,
+  };
+};
 
 export const Context = (properties: AuthProperties): JSX.Element => {
   const { children } = properties;

@@ -3,8 +3,8 @@ import './rugo.css';
 import React from 'react';
 
 import { NavBar } from './components/navbar';
-import { Router } from './containers/Router';
 import { Context } from './helpers/auth';
+import { Router } from './helpers/router';
 
 const Rugo = (): JSX.Element => {
   return (
