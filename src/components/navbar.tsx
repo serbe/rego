@@ -95,6 +95,7 @@ const NavbarEnd: JSX.Element = (
 export const NavBar = (): JSX.Element => {
   // const [auth, setAuth] = useState(true);
   // const openClassName = (cn: string): string => (open ? `${cn} is-active` : cn);
+  // InitAuthContext();
   const auth = true;
   const [open, setOpen] = useState(false);
 
