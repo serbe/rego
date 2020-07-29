@@ -4,18 +4,18 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
-import { Context } from './helpers/auth';
 import Rugo from './rugo';
 import * as serviceWorker from './serviceWorker';
 
+// import { Context } from './helpers/auth';
 // import './index.css';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Context>
-        <Rugo />
-      </Context>
+      {/* <Context> */}
+      <Rugo />
+      {/* </Context> */}
     </BrowserRouter>
   </React.StrictMode>,
   document.querySelector('#root'),

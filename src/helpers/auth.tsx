@@ -11,7 +11,11 @@ interface CJson {
   r: boolean;
 }
 
-const initialState: State = {
+export interface DispatchProperties {
+  dispatch: Dispatch<ReducerActions>;
+}
+
+export const initialState: State = {
   name: '',
   role: 0,
   token: '',
@@ -29,7 +33,7 @@ interface AuthProperties {
   children: ReactNode;
 }
 
-type ReducerActions =
+export type ReducerActions =
   | {
       type: 'SetAuth';
       data: State;
@@ -38,7 +42,7 @@ type ReducerActions =
       type: 'ClearAuth';
     };
 
-const reducer = (state: State, action: ReducerActions): State => {
+export const reducer = (state: State, action: ReducerActions): State => {
   switch (action.type) {
     case 'SetAuth': {
       localStorage.setItem('u', action.data.name);
@@ -60,6 +64,8 @@ const reducer = (state: State, action: ReducerActions): State => {
       state.checked = false;
       return state;
     }
+    default:
+      return state;
   }
 };
 
@@ -97,7 +103,8 @@ const getStorage = (): {
   };
 };
 
-export const CheckStorage = async (): Promise<State> => {
+export const CheckStorage = async (properties: DispatchProperties): Promise<void> => {
+  const { dispatch } = properties;
   const { name, token, role } = getStorage();
 
   let state: State = {
@@ -123,7 +130,18 @@ export const CheckStorage = async (): Promise<State> => {
     }
     reject(state);
   });
-  return promise;
+  promise
+    .then((s) => {
+      return dispatch({
+        type: 'SetAuth',
+        data: s,
+      });
+    })
+    .catch(() => {
+      dispatch({
+        type: 'ClearAuth',
+      });
+    });
 };
 
 export const Context = (properties: AuthProperties): JSX.Element => {

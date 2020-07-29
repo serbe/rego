@@ -1,43 +1,44 @@
 import './rugo.css';
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 
 import { Login } from './components/login';
 import { NavBar } from './components/navbar';
-import { AuthContext, CheckStorage } from './helpers/auth';
+import { AuthContext, CheckStorage, initialState, reducer } from './helpers/auth';
 import { Router } from './helpers/router';
 
 const Rugo = (): JSX.Element => {
   const [loading, setloading] = useState(false);
-  const { state, dispatch } = useContext(AuthContext);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    CheckStorage()
-      .then((s) => {
-        dispatch({
-          type: 'SetAuth',
-          data: s,
-        });
-        return setloading(true);
-      })
-      .catch(() => {
-        dispatch({
-          type: 'ClearAuth',
-        });
-        return setloading(true);
-      });
+    CheckStorage({ dispatch: dispatch })
+      .then(() => setloading(true))
+      .catch(() => setloading(true));
   }, [dispatch]);
+
+  useEffect(() => {
+    console.log('state', state);
+  }, [state]);
+
+  useEffect(() => {
+    console.log('state.checked', state.checked);
+  }, [state.checked]);
+
+  useEffect(() => {
+    console.log('loading', loading);
+  }, [loading]);
 
   const Content = () =>
     state.checked ? (
-      <>
+      <AuthContext.Provider value={{ state, dispatch }}>
         <NavBar />
         <div className="container py-4 centered-content">
           <Router />
         </div>
-      </>
+      </AuthContext.Provider>
     ) : (
-      <Login />
+      <Login dispatch={dispatch} />
     );
 
   return loading ? <Content /> : <div>Loading...</div>;
