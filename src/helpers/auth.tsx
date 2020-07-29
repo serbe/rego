@@ -1,4 +1,4 @@
-import React, { createContext, Dispatch, ReactNode, useReducer } from 'react';
+import React, { createContext, Dispatch, ReactNode, useMemo, useReducer } from 'react';
 
 export type State = {
   name: string;
@@ -131,13 +131,13 @@ export const Context = (properties: AuthProperties): JSX.Element => {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  // const contentValues = useMemo(
-  //   () => ({
-  //     state,
-  //     dispatch,
-  //   }),
-  //   [state, dispatch],
-  // );
+  const contentValues = useMemo(
+    () => ({
+      state,
+      dispatch,
+    }),
+    [state, dispatch],
+  );
 
-  return <AuthContext.Provider value={{ state, dispatch }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={contentValues}>{children}</AuthContext.Provider>;
 };

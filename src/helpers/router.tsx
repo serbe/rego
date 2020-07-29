@@ -8,7 +8,6 @@ import { DepartmentItem, Departments } from '../containers/Department';
 import { EducationItem, Educations } from '../containers/Education';
 import { Home } from '../containers/Home';
 import { KindItem, Kinds } from '../containers/Kind';
-import { Login } from '../containers/Login';
 import { PostItem, Posts } from '../containers/Post';
 import { PracticeItem, Practices } from '../containers/Practice';
 import { RankItem, Ranks } from '../containers/Rank';
@@ -21,7 +20,6 @@ export const Router = (): JSX.Element => {
     <Suspense fallback={<div>Loading...</div>}>
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/login" component={Login} />
         <Route exact path="/certificates" component={Certificates} />
         <Route exact path="/certificates/:id" component={CertificateItem} />
         <Route exact path="/companies" component={Companies} />

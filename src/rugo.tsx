@@ -1,16 +1,15 @@
 import './rugo.css';
 
 import React, { useContext, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 
+import { Login } from './components/login';
 import { NavBar } from './components/navbar';
 import { AuthContext, CheckStorage } from './helpers/auth';
 import { Router } from './helpers/router';
 
 const Rugo = (): JSX.Element => {
-  const history = useHistory();
   const [loading, setloading] = useState(false);
-  const { dispatch } = useContext(AuthContext);
+  const { state, dispatch } = useContext(AuthContext);
 
   useEffect(() => {
     CheckStorage()
@@ -25,24 +24,23 @@ const Rugo = (): JSX.Element => {
         dispatch({
           type: 'ClearAuth',
         });
-        setloading(true);
-        history.push('/login');
-        return;
+        return setloading(true);
       });
-  }, [dispatch, history]);
+  }, [dispatch]);
 
-  return (
-    <>
-      {loading && (
-        <>
-          <NavBar />
-          <div className="container py-4 centered-content">
-            <Router />
-          </div>
-        </>
-      )}
-    </>
-  );
+  const Content = () =>
+    state.checked ? (
+      <>
+        <NavBar />
+        <div className="container py-4 centered-content">
+          <Router />
+        </div>
+      </>
+    ) : (
+      <Login />
+    );
+
+  return loading ? <Content /> : <div>Loading...</div>;
 };
 
 export default Rugo;

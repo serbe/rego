@@ -1,8 +1,7 @@
 import React, { ChangeEvent, useContext, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 
-import { FormField } from '../../components/formfield';
-import { AuthContext } from '../../helpers/auth';
+import { AuthContext } from '../helpers/auth';
+import { FormField } from './formfield';
 
 interface TJson {
   t: string;
@@ -10,7 +9,6 @@ interface TJson {
 }
 
 export const Login = (): JSX.Element => {
-  const history = useHistory();
   const { dispatch } = useContext(AuthContext);
   const [name, setName] = useState('');
   const [pass, setPass] = useState('');
@@ -36,8 +34,6 @@ export const Login = (): JSX.Element => {
             token: jsonData.t,
           },
         });
-        history.push('/');
-        // setUser(name, jsonData.t, jsonData.r); // GfhjkmUsera12
         return;
       })
       .catch(() => {
