@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
+import { AuthContext } from '../../helpers/auth';
 import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
 import {
   Education,
@@ -13,6 +14,7 @@ import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { PostGoIDSelect } from '../../models/post';
 
 export const EducationItem = (): JSX.Element => {
+  const { state } = useContext(AuthContext);
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [contactID, setContactID] = useState<number>();
@@ -43,13 +45,13 @@ export const EducationItem = (): JSX.Element => {
   useEffect(() => {
     ws.current = new WebSocket(URL);
 
-    AddEventOpenItem(ws, 'Education', id, setLoaded);
+    AddEventOpenItem(ws, 'Education', id, setLoaded, state.token);
     AddEventMessageGet(ws, EducationGetItem, setData);
 
     return (): void => {
       ws.current?.close();
     };
-  }, [id]);
+  }, [id, state.token]);
 
   useEffect(() => {
     if (data) {

@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
+import { AuthContext } from '../../helpers/auth';
 import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
 import {
   addEmptyString,
@@ -28,6 +29,7 @@ import { PostGoIDSelect, PostIDSelect } from '../../models/post';
 import { RankIDSelect } from '../../models/rank';
 
 export const ContactItem = (): JSX.Element => {
+  const { state } = useContext(AuthContext);
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [name, setName] = useState<string>();
@@ -71,13 +73,13 @@ export const ContactItem = (): JSX.Element => {
   useEffect(() => {
     ws.current = new WebSocket(URL);
 
-    AddEventOpenItem(ws, 'Contact', id, setLoaded);
+    AddEventOpenItem(ws, 'Contact', id, setLoaded, state.token);
     AddEventMessageGet(ws, ContactGetItem, setData);
 
     return (): void => {
       ws.current?.close();
     };
-  }, [id]);
+  }, [id, state.token]);
 
   useEffect(() => {
     if (data) {

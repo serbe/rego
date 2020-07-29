@@ -1,5 +1,5 @@
-import React, { Suspense, useContext } from 'react';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import React, { Suspense } from 'react';
+import { Route, Switch } from 'react-router-dom';
 
 import { CertificateItem, Certificates } from '../containers/Certificate';
 import { Companies, CompanyItem } from '../containers/Company';
@@ -15,35 +15,8 @@ import { RankItem, Ranks } from '../containers/Rank';
 import { ScopeItem, Scopes } from '../containers/Scope';
 import { SirenItem, Sirens } from '../containers/Siren';
 import { SirenTypeItem, SirenTypes } from '../containers/SirenType';
-import { AuthContext, checkAuth, getStorage } from './auth';
 
 export const Router = (): JSX.Element => {
-  const history = useHistory();
-  const { dispatch } = useContext(AuthContext);
-  const { name, token, role } = getStorage();
-
-  if (name === '' || token === '' || role === 0) {
-    history.push('/login');
-  } else {
-    checkAuth(token, role)
-      .then((check) =>
-        dispatch({
-          type: 'SetAuth',
-          data: {
-            checked: true,
-            name: name,
-            role: role,
-            token: token,
-          },
-        }),
-      )
-      .catch(() => {
-        dispatch({
-          type: 'ClearAuth',
-        });
-        history.push('/login');
-      });
-  }
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Switch>

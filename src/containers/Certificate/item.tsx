@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
+import { AuthContext } from '../../helpers/auth';
 import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
 import {
   Certificate,
@@ -13,6 +14,7 @@ import { ContactIDSelect } from '../../models/contact';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 
 export const CertificateItem = (): JSX.Element => {
+  const { state } = useContext(AuthContext);
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [sNumber, setSNumber] = useState<string>();
@@ -43,13 +45,13 @@ export const CertificateItem = (): JSX.Element => {
   useEffect(() => {
     ws.current = new WebSocket(URL);
 
-    AddEventOpenItem(ws, 'Certificate', id, setLoaded);
+    AddEventOpenItem(ws, 'Certificate', id, setLoaded, state.token);
     AddEventMessageGet(ws, CertificateGetItem, setData);
 
     return (): void => {
       ws.current?.close();
     };
-  }, [id]);
+  }, [id, state.token]);
 
   useEffect(() => {
     if (data) {

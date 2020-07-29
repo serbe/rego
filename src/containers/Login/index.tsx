@@ -1,12 +1,8 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useContext, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { FormField } from '../../components/formfield';
-
-const setUser = (user: string, token: string, role: number): void => {
-  localStorage.setItem('u', user);
-  localStorage.setItem('t', token);
-  localStorage.setItem('r', role.toString());
-};
+import { AuthContext } from '../../helpers/auth';
 
 interface TJson {
   t: string;
@@ -14,6 +10,8 @@ interface TJson {
 }
 
 export const Login = (): JSX.Element => {
+  const history = useHistory();
+  const { dispatch } = useContext(AuthContext);
   const [name, setName] = useState('');
   const [pass, setPass] = useState('');
 
@@ -29,7 +27,17 @@ export const Login = (): JSX.Element => {
       .then((response) => response.json())
       .then((response) => response as TJson)
       .then((jsonData) => {
-        setUser(name, jsonData.t, jsonData.r); // GfhjkmUsera12
+        dispatch({
+          type: 'SetAuth',
+          data: {
+            checked: true,
+            name: name,
+            role: jsonData.r,
+            token: jsonData.t,
+          },
+        });
+        history.push('/');
+        // setUser(name, jsonData.t, jsonData.r); // GfhjkmUsera12
         return;
       })
       .catch(() => {

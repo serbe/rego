@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
+import { AuthContext } from '../../helpers/auth';
 import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
 import { CompanyIDSelect } from '../../models/company';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
@@ -13,6 +14,7 @@ import {
 } from '../../models/practice';
 
 export const PracticeItem = (): JSX.Element => {
+  const { state } = useContext(AuthContext);
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [companyID, setCompanyID] = useState<number>();
@@ -43,13 +45,13 @@ export const PracticeItem = (): JSX.Element => {
   useEffect(() => {
     ws.current = new WebSocket(URL);
 
-    AddEventOpenItem(ws, 'Practice', id, setLoaded);
+    AddEventOpenItem(ws, 'Practice', id, setLoaded, state.token);
     AddEventMessageGet(ws, PracticeGetItem, setData);
 
     return (): void => {
       ws.current?.close();
     };
-  }, [id]);
+  }, [id, state.token]);
 
   useEffect(() => {
     if (data) {

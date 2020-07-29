@@ -71,14 +71,14 @@ const PracticeTable = (practices: PracticeShort[]): JSX.Element => {
             </td>
             <td
               className="has-text-black"
-              onMouseDown={(): void => history.push(`/kind/${row.kind_id}`)}
+              onMouseDown={(): void => history.push(`/kinds/${row.kind_id}`)}
               role="gridcell"
             >
               {row.kind_short_name}
             </td>
             <td
               className="has-text-black"
-              onMouseDown={(): void => history.push(`/company/${row.company_id}`)}
+              onMouseDown={(): void => history.push(`/companies/${row.company_id}`)}
               role="gridcell"
             >
               {row.company_name}

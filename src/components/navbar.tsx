@@ -8,6 +8,11 @@ interface Setter {
   setter: (value: boolean) => void;
 }
 
+interface OpenState {
+  open: boolean;
+  setter: (value: boolean) => void;
+}
+
 const mainItems = [
   { link: '/contacts', name: 'Контакты' },
   { link: '/companies', name: 'Организации' },
@@ -26,12 +31,14 @@ const dropdownItems = [
   { link: '/sirentypes', name: 'Типы сирен' },
 ];
 
-const NavbarNotLogged: JSX.Element = (
-  <div className="navbar-brand">
-    <NavLink className="navbar-item" key="NavbarNotLogged" to="/login">
-      Авторизация
-    </NavLink>
-  </div>
+const NavbarNotLogged = (): JSX.Element => (
+  <nav className="navbar is-dark" role="navigation">
+    <div className="navbar-brand">
+      <NavLink className="navbar-item" key="NavbarNotLogged" to="/login">
+        Авторизация
+      </NavLink>
+    </div>
+  </nav>
 );
 
 const MainItems = (value: Setter): JSX.Element => (
@@ -78,61 +85,65 @@ const NavBarStart = (value: Setter): JSX.Element => (
   </div>
 );
 
-const NavbarEnd: JSX.Element = (
-  <div className="navbar-end" key="navbar-end">
-    <div className="navbar-item has-dropdown is-hoverable">
-      <a href="#user" className="navbar-link">
-        name
-      </a>
-      <div className="navbar-dropdown is-right">
-        <div className="navbar-item">
-          <Button className="is-link">Выход</Button>
+const NavbarEnd = (): JSX.Element => {
+  const { state } = useContext(AuthContext);
+  const { name } = state;
+  return (
+    <div className="navbar-end" key="navbar-end">
+      <div className="navbar-item has-dropdown is-hoverable">
+        <a href="#user" className="navbar-link">
+          {name}
+        </a>
+        <div className="navbar-dropdown is-right">
+          <div className="navbar-item">
+            <Button className="is-link">Выход</Button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
+
+const BrandBar = (properties: OpenState): JSX.Element => {
+  const { open, setter } = properties;
+  return (
+    <>
+      <NavLink activeClassName="is-active" className="navbar-item" exact={true} to="/">
+        ЕДДС
+      </NavLink>
+      <a
+        aria-expanded="false"
+        aria-label="menu"
+        className={open ? 'navbar-burger is-active' : 'navbar-burger'}
+        data-target="navbarData"
+        role="button"
+        href="#button"
+        onClick={() => setter(!open)}
+      >
+        <span aria-hidden="true" />
+        <span aria-hidden="true" />
+        <span aria-hidden="true" />
+      </a>
+    </>
+  );
+};
 
 export const NavBar = (): JSX.Element => {
-  // const [auth, setAuth] = useState(true);
   // const openClassName = (cn: string): string => (open ? `${cn} is-active` : cn);
   const { state } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
 
-  const handleToggle = (): void => {
-    setOpen(!open);
-  };
-
-  return (
+  return state.role > 0 ? (
     <nav className="navbar is-dark" role="navigation" aria-label="dropdown navigation">
-      {state.name ? (
-        <>
-          <div className="navbar-brand">
-            <NavLink activeClassName="is-active" className="navbar-item" exact={true} to="/">
-              ЕДДС
-            </NavLink>
-            <a
-              aria-expanded="false"
-              aria-label="menu"
-              className={open ? 'navbar-burger is-active' : 'navbar-burger'}
-              data-target="navbarData"
-              role="button"
-              href="#button"
-              onClick={handleToggle}
-            >
-              <span aria-hidden="true" />
-              <span aria-hidden="true" />
-              <span aria-hidden="true" />
-            </a>
-          </div>
-          <div id="navbarData" className={open ? 'navbar-menu is-active' : 'navbar-menu'}>
-            <NavBarStart setter={setOpen} />
-            {NavbarEnd}
-          </div>
-        </>
-      ) : (
-        NavbarNotLogged
-      )}
+      <div className="navbar-brand">
+        <BrandBar open={open} setter={setOpen} />
+      </div>
+      <div id="navbarData" className={open ? 'navbar-menu is-active' : 'navbar-menu'}>
+        <NavBarStart setter={setOpen} />
+        <NavbarEnd />
+      </div>
     </nav>
+  ) : (
+    <NavbarNotLogged />
   );
 };

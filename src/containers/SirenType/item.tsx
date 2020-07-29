@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
+import { AuthContext } from '../../helpers/auth';
 import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
 import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import {
@@ -11,6 +12,7 @@ import {
 } from '../../models/sirentype';
 
 export const SirenTypeItem = (): JSX.Element => {
+  const { state } = useContext(AuthContext);
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [name, setName] = useState<string>();
@@ -37,13 +39,13 @@ export const SirenTypeItem = (): JSX.Element => {
   useEffect(() => {
     ws.current = new WebSocket(URL);
 
-    AddEventOpenItem(ws, 'SirenType', id, setLoaded);
+    AddEventOpenItem(ws, 'SirenType', id, setLoaded, state.token);
     AddEventMessageGet(ws, SirenTypeGetItem, setData);
 
     return (): void => {
       ws.current?.close();
     };
-  }, [id]);
+  }, [id, state.token]);
 
   useEffect(() => {
     if (data) {

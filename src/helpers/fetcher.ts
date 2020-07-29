@@ -1,4 +1,4 @@
-import { Dispatch, MutableRefObject, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, MutableRefObject, SetStateAction, useContext, useEffect, useState } from 'react';
 
 import { Certificate, CertificateList } from '../models/certificate';
 import { Company, CompanyList } from '../models/company';
@@ -12,6 +12,7 @@ import { Rank, RankList } from '../models/rank';
 import { Scope, ScopeList } from '../models/scope';
 import { Siren, SirenList } from '../models/siren';
 import { SirenType, SirenTypeList } from '../models/sirentype';
+import { AuthContext } from './auth';
 
 export const URL = 'ws://127.0.0.1:9090/api/go';
 
@@ -141,46 +142,24 @@ type JsonItemScheme =
   | { command: 'Insert' | 'Update' | 'Delete'; name: 'Siren'; error: string }
   | { command: 'Insert' | 'Update' | 'Delete'; name: 'SirenType'; error: string };
 
-// type JsonItemScheme =
-// | { command: 'Get'; name: 'Certificate'; object: { Certificate: Certificate }; error: string }
-// | { command: 'Get'; name: 'Company'; object: { Company: Company }; error: string }
-// | { command: 'Get'; name: 'Contact'; object: { Contact: Contact }; error: string }
-// | { command: 'Get'; name: 'Department'; object: { Department: Department }; error: string }
-// | { command: 'Get'; name: 'Education'; object: { Education: Education }; error: string }
-// | { command: 'Get'; name: 'Kind'; object: { Kind: Kind }; error: string }
-// | { command: 'Get'; name: 'Post'; object: { Post: Post }; error: string }
-// | { command: 'Get'; name: 'Practice'; object: { Practice: Practice }; error: string }
-// | { command: 'Get'; name: 'Rank'; object: { Rank: Rank }; error: string }
-// | { command: 'Get'; name: 'Scope'; object: { Scope: Scope }; error: string }
-// | { command: 'Get'; name: 'Siren'; object: { Siren: Siren }; error: string }
-// | { command: 'Get'; name: 'SirenType'; object: { SirenType: SirenType }; error: string };
-
 export const AddEventOpenItem = (
   ws: MutableRefObject<WebSocket | undefined>,
   name: string,
   id: string,
   setLoaded: Dispatch<SetStateAction<boolean>>,
+  token: string,
 ): void => {
   const number_id = Number(id);
   if (number_id !== 0) {
     ws.current?.addEventListener('open', () => {
       ws.current?.send(
-        `{"command":{"Get":{"Item":{"name":"${name}","id":${number_id}}}},"addon":"dXNlclVzZXJQYXNzMTI="}`,
+        `{"command":{"Get":{"Item":{"name":"${name}","id":${number_id}}}},"addon":"${token}"}`,
       );
     });
   } else {
     setLoaded(true);
   }
 };
-
-// export const AddEventOpenList = (
-//   ws: MutableRefObject<WebSocket | undefined>,
-//   name: string,
-// ): void => {
-//   ws.current?.addEventListener('open', () => {
-//     ws.current?.send(`{"command":{"Get":{"List":"${name}"}},"addon":"dXNlclVzZXJQYXNzMTI="}`);
-//   });
-// };
 
 export const AddEventMessageGet = (
   ws: MutableRefObject<WebSocket | undefined>,
@@ -192,36 +171,8 @@ export const AddEventMessageGet = (
   });
 };
 
-// export const SendLogin = (
-//   name: string,
-//   password: string,
-// ): [string | undefined, string | undefined] => {
-//   const [token, setToken] = useState<string>();
-//   const [error, setError] = useState<string>();
-
-//   useEffect(() => {
-//     fetch(URL, {
-//       method: 'POST',
-//       mode: 'cors',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({ Auth: { u: name, p: password } }),
-//       credentials: 'include',
-//     })
-//       .then((response) => response.json())
-//       .then((response) => {
-//         const jsonData = response as AuthJson;
-//         setToken(jsonData.token);
-//         setError(jsonData.error);
-//         return;
-//       })
-//       .catch((error) => setError(error as string));
-//   }, [name, password]);
-//   return [token, error];
-// };
-
 export const GetList = (name: string): [List[], string] => {
+  const { state } = useContext(AuthContext);
   const [list, setList] = useState<List[]>([]);
   const [error, setError] = useState<string>('');
 
@@ -269,18 +220,19 @@ export const GetList = (name: string): [List[], string] => {
     });
 
     ws.addEventListener('open', () => {
-      ws.send(`{"command":{"Get":{"List":"${name}"}},"addon":""}`);
+      ws.send(`{"command":{"Get":{"List":"${name}"}},"addon":"${state.token}"}`);
     });
 
     return (): void => {
       ws.close();
     };
-  }, [name]);
+  }, [name, state.token]);
 
   return [list, error];
 };
 
 export const GetSelect = (name: string): [SelectItem[], string] => {
+  const { state } = useContext(AuthContext);
   const [list, setSelect] = useState<SelectItem[]>([{ id: 0, name: '' }]);
   const [error, setError] = useState<string>('');
 
@@ -335,13 +287,13 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
     });
 
     ws.addEventListener('open', () => {
-      ws.send(`{"command":{"Get":{"List":"${name}"}},"addon":"dXNlclVzZXJQYXNzMTI="}`);
+      ws.send(`{"command":{"Get":{"List":"${name}"}},"addon":"${state.token}"}`);
     });
 
     return (): void => {
       ws.close();
     };
-  }, [name]);
+  }, [name, state.token]);
 
   return [list, error];
 };
@@ -353,6 +305,7 @@ export const SetItem = (
   item: Item,
   status: Dispatch<SetStateAction<boolean>>,
 ): void => {
+  const { state } = useContext(AuthContext);
   ws.current?.addEventListener('message', (message: MessageEvent) => {
     const text = message.data as string;
     const jsonData = JSON.parse(text) as JsonItemScheme;
@@ -366,6 +319,6 @@ export const SetItem = (
   ws.current?.send(
     `{"command":{"${id === 0 ? 'Insert' : 'Update'}":{"${name}":${JSON.stringify(
       item,
-    )}}},"addon":"dXNlclVzZXJQYXNzMTI="}`,
+    )}}},"addon":"${state.token}"}`,
   );
 };

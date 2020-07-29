@@ -23,11 +23,6 @@ type AuthContextType = {
   dispatch: Dispatch<ReducerActions>;
 };
 
-// const initialStateContext: AuthContextType = {
-//   state: initialState,
-//   dispatch: () => {},
-// };
-
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 interface AuthProperties {
@@ -46,6 +41,9 @@ type ReducerActions =
 const reducer = (state: State, action: ReducerActions): State => {
   switch (action.type) {
     case 'SetAuth': {
+      localStorage.setItem('u', action.data.name);
+      localStorage.setItem('t', action.data.token);
+      localStorage.setItem('r', action.data.role.toString());
       state.name = action.data.name;
       state.role = action.data.role;
       state.token = action.data.token;
@@ -65,7 +63,10 @@ const reducer = (state: State, action: ReducerActions): State => {
   }
 };
 
-export async function checkAuth(token: string, role: number): Promise<boolean> {
+const checkAuth = async (name: string, token: string, role: number): Promise<boolean> => {
+  if (name === '' || token === '' || role === 0) {
+    return false;
+  }
   return fetch('http://127.0.0.1:9090/api/go/check', {
     method: 'POST',
     mode: 'cors',
@@ -82,9 +83,9 @@ export async function checkAuth(token: string, role: number): Promise<boolean> {
     .catch(() => {
       return false;
     });
-}
+};
 
-export const getStorage = (): {
+const getStorage = (): {
   name: string;
   token: string;
   role: number;
@@ -96,8 +97,38 @@ export const getStorage = (): {
   };
 };
 
+export const CheckStorage = async (): Promise<State> => {
+  const { name, token, role } = getStorage();
+
+  let state: State = {
+    checked: false,
+    name: '',
+    role: 0,
+    token: '',
+  };
+
+  const check = await checkAuth(name, token, role);
+
+  const promise = new Promise<State>((resolve, reject) => {
+    if (check) {
+      state = {
+        checked: true,
+        name: name,
+        role: role,
+        token: token,
+      };
+      resolve(state);
+    } else {
+      reject(state);
+    }
+    reject(state);
+  });
+  return promise;
+};
+
 export const Context = (properties: AuthProperties): JSX.Element => {
   const { children } = properties;
+
   const [state, dispatch] = useReducer(reducer, initialState);
 
   // const contentValues = useMemo(
