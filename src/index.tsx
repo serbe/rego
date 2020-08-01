@@ -7,15 +7,12 @@ import { BrowserRouter } from 'react-router-dom';
 import Rugo from './rugo';
 import * as serviceWorker from './serviceWorker';
 
-// import { Context } from './helpers/auth';
 // import './index.css';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      {/* <Context> */}
       <Rugo />
-      {/* </Context> */}
     </BrowserRouter>
   </React.StrictMode>,
   document.querySelector('#root'),
