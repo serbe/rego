@@ -5,6 +5,7 @@ export type State = {
   role: number;
   token: string;
   checked: boolean;
+  login: boolean;
 };
 
 interface CJson {
@@ -20,6 +21,7 @@ export const initialState: State = {
   role: 0,
   token: '',
   checked: false,
+  login: false,
 };
 
 type AuthContextType = {
@@ -48,21 +50,27 @@ export const reducer = (state: State, action: ReducerActions): State => {
       localStorage.setItem('u', action.data.name);
       localStorage.setItem('t', action.data.token);
       localStorage.setItem('r', action.data.role.toString());
-      state.name = action.data.name;
-      state.role = action.data.role;
-      state.token = action.data.token;
-      state.checked = action.data.checked;
-      return state;
+      return {
+        ...state,
+        name: action.data.name,
+        role: action.data.role,
+        token: action.data.token,
+        checked: action.data.checked,
+        login: action.data.login,
+      };
     }
     case 'ClearAuth': {
       localStorage.setItem('u', '');
       localStorage.setItem('t', '');
       localStorage.setItem('r', '0');
-      state.name = '';
-      state.role = 0;
-      state.token = '';
-      state.checked = false;
-      return state;
+      return {
+        ...state,
+        name: '',
+        role: 0,
+        token: '',
+        checked: true,
+        login: false,
+      };
     }
     default:
       return state;
@@ -103,8 +111,7 @@ const getStorage = (): {
   };
 };
 
-export const CheckStorage = async (properties: DispatchProperties): Promise<void> => {
-  const { dispatch } = properties;
+export const CheckStorage = async (): Promise<State> => {
   const { name, token, role } = getStorage();
 
   let state: State = {
@@ -112,6 +119,7 @@ export const CheckStorage = async (properties: DispatchProperties): Promise<void
     name: '',
     role: 0,
     token: '',
+    login: false,
   };
 
   const check = await checkAuth(name, token, role);
@@ -123,6 +131,7 @@ export const CheckStorage = async (properties: DispatchProperties): Promise<void
         name: name,
         role: role,
         token: token,
+        login: true,
       };
       resolve(state);
     } else {
@@ -130,23 +139,11 @@ export const CheckStorage = async (properties: DispatchProperties): Promise<void
     }
     reject(state);
   });
-  promise
-    .then((s) => {
-      return dispatch({
-        type: 'SetAuth',
-        data: s,
-      });
-    })
-    .catch(() => {
-      dispatch({
-        type: 'ClearAuth',
-      });
-    });
+  return promise;
 };
 
 export const Context = (properties: AuthProperties): JSX.Element => {
   const { children } = properties;
-
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const contentValues = useMemo(
