@@ -1,6 +1,6 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState, useContext } from 'react';
 
-import { DispatchProperties } from '../helpers/auth';
+import { AuthContext } from '../helpers/auth';
 import { FormField } from './formfield';
 
 interface TJson {
@@ -8,8 +8,8 @@ interface TJson {
   r: number;
 }
 
-export const Login = (properties: DispatchProperties): JSX.Element => {
-  const { dispatch } = properties;
+export const Login = (): JSX.Element => {
+  const { dispatch } = useContext(AuthContext);
   const [name, setName] = useState('');
   const [pass, setPass] = useState('');
 
@@ -32,13 +32,12 @@ export const Login = (properties: DispatchProperties): JSX.Element => {
             name: name,
             role: jsonData.r,
             token: jsonData.t,
+            login: true,
           },
         });
-        console.log('then');
         return;
       })
       .catch(() => {
-        console.log('catch');
         return;
       });
   };
