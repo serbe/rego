@@ -29,7 +29,10 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.11.0",
     "@babel/helper-call-delegate": "^7.10.4",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-typescript": "^7.10.4",
     "@testing-library/jest-dom": "^5.11.2",
     "@testing-library/react": "^10.4.7",
     "@testing-library/user-event": "^12.1.0",
@@ -56,6 +59,7 @@
     "eslint-plugin-unicorn": "^21.0.0",
     "node-sass": "^4.14.1",
     "prettier": "^2.0.5",
+    "react-test-renderer": "^16.13.1",
     "source-map-explorer": "^2.4.2",
     "typescript": "^3.9.7"
   }
