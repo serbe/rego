@@ -29,7 +29,14 @@ type AuthContextType = {
   dispatch: Dispatch<ReducerActions>;
 };
 
-export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
+const initialContextValues: AuthContextType = {
+  state: initialState,
+  dispatch: () => {
+    return true;
+  },
+};
+
+export const AuthContext = createContext<AuthContextType>(initialContextValues);
 
 interface AuthProperties {
   children: ReactNode;

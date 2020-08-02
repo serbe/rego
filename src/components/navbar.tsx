@@ -86,7 +86,7 @@ const NavBarStart = (value: Setter): JSX.Element => (
 );
 
 const NavbarEnd = (): JSX.Element => {
-  const { state } = useContext(AuthContext);
+  const { state, dispatch } = useContext(AuthContext);
   const { name } = state;
   return (
     <div className="navbar-end" key="navbar-end">
@@ -96,7 +96,14 @@ const NavbarEnd = (): JSX.Element => {
         </a>
         <div className="navbar-dropdown is-right">
           <div className="navbar-item">
-            <Button className="is-link">Выход</Button>
+            <Button
+              className="is-link"
+              onClick={() => {
+                dispatch({ type: 'ClearAuth' });
+              }}
+            >
+              Выход
+            </Button>
           </div>
         </div>
       </div>
