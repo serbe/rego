@@ -1,6 +1,7 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import { AuthContext } from '../helpers/auth';
 import { List } from '../helpers/fetcher';
 import { Button } from './button';
 import { Input } from './input';
@@ -161,12 +162,21 @@ export const Data = (properties: DataProperties): [() => List[], JSX.Element] =>
 };
 
 export const Bar = (properties: BarProperties): JSX.Element => {
+  const { state } = useContext(AuthContext);
   const history = useHistory();
-  return (
-    <div className="field is-grouped">
+
+  const CreateButton = () =>
+    state.role > 2 ? (
       <div className="control mb-4" key="TableNewItem">
         <Button onClick={() => history.push(`/${properties.name}/0`)}>Создать</Button>
       </div>
+    ) : (
+      <></>
+    );
+
+  return (
+    <div className="field is-grouped">
+      <CreateButton />
       <div className="control mb-4 is-expanded" key="TableSearch">
         <Input
           className="input is-expanded"

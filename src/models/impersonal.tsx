@@ -1,8 +1,10 @@
-import React, { ChangeEvent, SetStateAction } from 'react';
+import React, { ChangeEvent, SetStateAction, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { FormField } from '../components/formfield';
 import { Input, StringInputProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
+import { AuthContext } from '../helpers/auth';
 import { addEmptyString } from '../helpers/utils';
 
 export interface ParameterTypes {
@@ -128,3 +130,48 @@ export const ContactIDSelect = (properties: SelectValues): JSX.Element => (
     setter={properties.setter}
   />
 );
+
+interface FormButtonsValues {
+  send: () => void;
+  del: () => void;
+}
+
+export const ItemFormButtons = (properties: FormButtonsValues): JSX.Element => {
+  const history = useHistory();
+  const { state } = useContext(AuthContext);
+  const { send, del } = properties;
+
+  const SaveButton = () =>
+    state.role > 4 ? (
+      <div className="control">
+        <button className="button" onClick={() => send()}>
+          Сохранить
+        </button>
+      </div>
+    ) : (
+      <></>
+    );
+
+  const DeleteButton = () =>
+    state.role > 8 ? (
+      <div className="control">
+        <button className="button" onClick={() => del()}>
+          Удалить
+        </button>
+      </div>
+    ) : (
+      <></>
+    );
+
+  return (
+    <div className="field is-grouped">
+      <SaveButton />
+      <div className="control">
+        <button className="button" onClick={() => history.go(-1)}>
+          Закрыть
+        </button>
+      </div>
+      <DeleteButton />
+    </div>
+  );
+};
