@@ -1,11 +1,11 @@
 import React, { createContext, Dispatch, ReactNode, useMemo, useReducer } from 'react';
 
 export type State = {
-  name: string;
   role: number;
+  name: string;
   token: string;
-  checked: boolean;
   login: boolean;
+  checked: boolean;
 };
 
 interface CJson {
@@ -17,11 +17,11 @@ export interface DispatchProperties {
 }
 
 export const initialState: State = {
-  name: '',
   role: 0,
+  name: '',
   token: '',
-  checked: false,
   login: false,
+  checked: false,
 };
 
 type AuthContextType = {
@@ -59,11 +59,11 @@ export const reducer = (state: State, action: ReducerActions): State => {
       localStorage.setItem('r', action.data.role.toString());
       return {
         ...state,
-        name: action.data.name,
         role: action.data.role,
+        name: action.data.name,
         token: action.data.token,
-        checked: action.data.checked,
         login: action.data.login,
+        checked: action.data.checked,
       };
     }
     case 'ClearAuth': {
@@ -72,11 +72,11 @@ export const reducer = (state: State, action: ReducerActions): State => {
       localStorage.setItem('r', '0');
       return {
         ...state,
-        name: '',
         role: 0,
+        name: '',
         token: '',
-        checked: true,
         login: false,
+        checked: true,
       };
     }
     default:
@@ -107,38 +107,32 @@ const checkAuth = async (name: string, token: string, role: number): Promise<boo
 };
 
 const getStorage = (): {
+  role: number;
   name: string;
   token: string;
-  role: number;
 } => {
   return {
+    role: Number(localStorage.getItem('r')) || 0,
     name: localStorage.getItem('u') || '',
     token: localStorage.getItem('t') || '',
-    role: Number(localStorage.getItem('r')) || 0,
   };
 };
 
 export const CheckStorage = async (): Promise<State> => {
   const { name, token, role } = getStorage();
 
-  let state: State = {
-    checked: false,
-    name: '',
-    role: 0,
-    token: '',
-    login: false,
-  };
+  let state: State = initialState;
 
   const check = await checkAuth(name, token, role);
 
   const promise = new Promise<State>((resolve, reject) => {
     if (check) {
       state = {
-        checked: true,
-        name: name,
         role: role,
+        name: name,
         token: token,
         login: true,
+        checked: true,
       };
       resolve(state);
     } else {
