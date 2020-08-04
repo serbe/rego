@@ -2,20 +2,20 @@ import React, { ChangeEvent, MouseEvent } from 'react';
 
 import { Icon } from './icon';
 
-export type StringInputProperties = {
+export interface StringInputProperties {
   value?: string;
   setter: (value?: string) => void;
-};
+}
 
-export type NumberInputProperties = {
+export interface NumberInputProperties {
   value?: number;
   setter: (value?: number) => void;
-};
+}
 
-export type BooleanInputProperties = {
+export interface BooleanInputProperties {
   value: boolean;
   setter: (value: boolean) => void;
-};
+}
 
 interface InputProps {
   className?: string;

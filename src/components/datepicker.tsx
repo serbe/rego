@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-export type DatePickerValues = {
+export interface DatePickerValues {
   value?: string;
   setter: (value?: string) => void;
-};
+}
 
 interface DatePickerProps {
   label?: string;

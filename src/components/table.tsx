@@ -24,11 +24,11 @@ export type DataProperties = {
   search: string;
 };
 
-type BarProperties = {
+interface BarProperties {
   name: string;
   setter: (value: string) => void;
   value: string;
-};
+}
 
 type State = {
   currentPage: number;

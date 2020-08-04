@@ -24,10 +24,10 @@ export const initialState: State = {
   checked: false,
 };
 
-type AuthContextType = {
+interface AuthContextType {
   state: State;
   dispatch: Dispatch<ReducerActions>;
-};
+}
 
 const initialContextValues: AuthContextType = {
   state: initialState,
