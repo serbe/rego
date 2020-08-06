@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { AuthContext } from '../../helpers/auth';
-import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
-import { NoteInput, ParameterTypes } from '../../models/impersonal';
+import { AddEventMessageGet, AddEventOpenItem, SetItem, URL, DelItem } from '../../helpers/fetcher';
+import { NoteInput, ParameterTypes, ItemFormButtons } from '../../models/impersonal';
 import { Scope, ScopeGetItem, ScopeNameInput } from '../../models/scope';
 
 export const ScopeItem = (): JSX.Element => {
@@ -18,7 +18,7 @@ export const ScopeItem = (): JSX.Element => {
 
   const ws = useRef<WebSocket>();
 
-  const submit = (): void => {
+  const send = (): void => {
     const number_id = Number(id);
     const item: Scope = {
       id: number_id,
@@ -26,7 +26,12 @@ export const ScopeItem = (): JSX.Element => {
       note: note,
     };
 
-    SetItem(ws, number_id, 'Scope', item, setStatus);
+    SetItem(ws, number_id, 'Scope', item, setStatus, state.token);
+  };
+
+  const del = (): void => {
+    const number_id = Number(id);
+    DelItem(ws, number_id, 'Scope', setStatus, state.token);
   };
 
   useEffect(() => {
@@ -61,18 +66,7 @@ export const ScopeItem = (): JSX.Element => {
           <ScopeNameInput value={name} setter={setName} />
           <NoteInput value={note} setter={setNote} />
 
-          <div className="field is-grouped">
-            <div className="control">
-              <button className="button" onClick={() => submit()}>
-                Сохранить
-              </button>
-            </div>
-            <div className="control">
-              <button className="button" onClick={() => history.go(-1)}>
-                Закрыть
-              </button>
-            </div>
-          </div>
+          <ItemFormButtons send={send} del={del} />
         </>
       )}
     </div>

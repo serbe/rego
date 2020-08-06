@@ -2,9 +2,15 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { AuthContext } from '../../helpers/auth';
-import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
+import { AddEventMessageGet, AddEventOpenItem, SetItem, URL, DelItem } from '../../helpers/fetcher';
 import { CompanyIDSelect } from '../../models/company';
-import { AddressInput, ContactIDSelect, NoteInput, ParameterTypes } from '../../models/impersonal';
+import {
+  AddressInput,
+  ContactIDSelect,
+  NoteInput,
+  ParameterTypes,
+  ItemFormButtons,
+} from '../../models/impersonal';
 import {
   Siren,
   SirenDeskInput,
@@ -42,7 +48,7 @@ export const SirenItem = (): JSX.Element => {
 
   const ws = useRef<WebSocket>();
 
-  const submit = (): void => {
+  const send = (): void => {
     const number_id = Number(id);
     const item: Siren = {
       id: number_id,
@@ -61,7 +67,12 @@ export const SirenItem = (): JSX.Element => {
       note: note,
     };
 
-    SetItem(ws, number_id, 'Siren', item, setStatus);
+    SetItem(ws, number_id, 'Siren', item, setStatus, state.token);
+  };
+
+  const del = (): void => {
+    const number_id = Number(id);
+    DelItem(ws, number_id, 'Siren', setStatus, state.token);
   };
 
   useEffect(() => {
@@ -142,18 +153,7 @@ export const SirenItem = (): JSX.Element => {
           <SirenOwnInput value={own} setter={setOwn} />
           <NoteInput value={note} setter={setNote} />
 
-          <div className="field is-grouped">
-            <div className="control">
-              <button className="button" onClick={() => submit()}>
-                Сохранить
-              </button>
-            </div>
-            <div className="control">
-              <button className="button" onClick={() => history.go(-1)}>
-                Закрыть
-              </button>
-            </div>
-          </div>
+          <ItemFormButtons send={send} del={del} />
         </>
       )}
     </div>

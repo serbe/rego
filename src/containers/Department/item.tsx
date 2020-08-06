@@ -2,9 +2,9 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { AuthContext } from '../../helpers/auth';
-import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
+import { AddEventMessageGet, AddEventOpenItem, SetItem, URL, DelItem } from '../../helpers/fetcher';
 import { Department, DepartmentGetItem, DepartmentNameInput } from '../../models/department';
-import { NoteInput, ParameterTypes } from '../../models/impersonal';
+import { NoteInput, ParameterTypes, ItemFormButtons } from '../../models/impersonal';
 
 export const DepartmentItem = (): JSX.Element => {
   const { state } = useContext(AuthContext);
@@ -18,7 +18,7 @@ export const DepartmentItem = (): JSX.Element => {
 
   const ws = useRef<WebSocket>();
 
-  const submit = (): void => {
+  const send = (): void => {
     const number_id = Number(id);
     const item: Department = {
       id: number_id,
@@ -26,7 +26,12 @@ export const DepartmentItem = (): JSX.Element => {
       note: note,
     };
 
-    SetItem(ws, number_id, 'Department', item, setStatus);
+    SetItem(ws, number_id, 'Department', item, setStatus, state.token);
+  };
+
+  const del = (): void => {
+    const number_id = Number(id);
+    DelItem(ws, number_id, 'Department', setStatus, state.token);
   };
 
   useEffect(() => {
@@ -61,16 +66,7 @@ export const DepartmentItem = (): JSX.Element => {
           <DepartmentNameInput value={name} setter={setName} />
           <NoteInput value={note} setter={setNote} />
 
-          <div className="field is-grouped">
-            <button className="button" onClick={() => submit()}>
-              Сохранить
-            </button>
-            <div className="control">
-              <button className="button" onClick={() => history.go(-1)}>
-                Закрыть
-              </button>
-            </div>
-          </div>
+          <ItemFormButtons send={send} del={del} />
         </>
       )}
     </div>

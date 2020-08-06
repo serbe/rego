@@ -2,9 +2,9 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { AuthContext } from '../../helpers/auth';
-import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
+import { AddEventMessageGet, AddEventOpenItem, SetItem, URL, DelItem } from '../../helpers/fetcher';
 import { CompanyIDSelect } from '../../models/company';
-import { NoteInput, ParameterTypes } from '../../models/impersonal';
+import { NoteInput, ParameterTypes, ItemFormButtons } from '../../models/impersonal';
 import { KindIDSelect } from '../../models/kind';
 import {
   Practice,
@@ -28,7 +28,7 @@ export const PracticeItem = (): JSX.Element => {
 
   const ws = useRef<WebSocket>();
 
-  const submit = (): void => {
+  const send = (): void => {
     const number_id = Number(id);
     const item: Practice = {
       id: number_id,
@@ -39,7 +39,12 @@ export const PracticeItem = (): JSX.Element => {
       note: note,
     };
 
-    SetItem(ws, number_id, 'Practice', item, setStatus);
+    SetItem(ws, number_id, 'Practice', item, setStatus, state.token);
+  };
+
+  const del = (): void => {
+    const number_id = Number(id);
+    DelItem(ws, number_id, 'Practice', setStatus, state.token);
   };
 
   useEffect(() => {
@@ -80,18 +85,7 @@ export const PracticeItem = (): JSX.Element => {
           <PracticeDateInput value={date} setter={setDate} />
           <NoteInput value={note} setter={setNote} />
 
-          <div className="field is-grouped">
-            <div className="control">
-              <button className="button" onClick={() => submit()}>
-                Сохранить
-              </button>
-            </div>
-            <div className="control">
-              <button className="button" onClick={() => history.go(-1)}>
-                Закрыть
-              </button>
-            </div>
-          </div>
+          <ItemFormButtons send={send} del={del} />
         </>
       )}
     </div>

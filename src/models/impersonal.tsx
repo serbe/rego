@@ -132,8 +132,8 @@ export const ContactIDSelect = (properties: SelectValues): JSX.Element => (
 );
 
 interface FormButtonsValues {
-  send: () => void;
   del: () => void;
+  send: () => void;
 }
 
 export const ItemFormButtons = (properties: FormButtonsValues): JSX.Element => {

@@ -304,8 +304,8 @@ export const SetItem = (
   name: string,
   item: Item,
   status: Dispatch<SetStateAction<boolean>>,
+  token: string,
 ): void => {
-  const { state } = useContext(AuthContext);
   ws.current?.addEventListener('message', (message: MessageEvent) => {
     const text = message.data as string;
     const jsonData = JSON.parse(text) as JsonItemScheme;
@@ -319,6 +319,25 @@ export const SetItem = (
   ws.current?.send(
     `{"command":{"${id === 0 ? 'Insert' : 'Update'}":{"${name}":${JSON.stringify(
       item,
-    )}}},"addon":"${state.token}"}`,
+    )}}},"addon":"${token}"}`,
   );
+};
+
+export const DelItem = (
+  ws: MutableRefObject<WebSocket | undefined>,
+  id: number,
+  name: string,
+  status: Dispatch<SetStateAction<boolean>>,
+  token: string,
+): void => {
+  ws.current?.addEventListener('message', (message: MessageEvent) => {
+    const text = message.data as string;
+    const jsonData = JSON.parse(text) as JsonItemScheme;
+
+    if (jsonData?.command === 'Delete' && jsonData.name === name) {
+      status(true);
+    }
+  });
+
+  ws.current?.send(`{"command":{"Delete":{"name":"${name}","id":${id}}},"addon":"${token}"}`);
 };

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { AuthContext } from '../../helpers/auth';
-import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
+import { AddEventMessageGet, AddEventOpenItem, SetItem, URL, DelItem } from '../../helpers/fetcher';
 import {
   addEmptyString,
   filterArrayNumber,
@@ -18,6 +18,7 @@ import {
   NoteInput,
   ParameterTypes,
   PhoneInputs,
+  ItemFormButtons,
 } from '../../models/impersonal';
 import { PracticeList, PracticeListForm } from '../../models/practice';
 import { ScopeIDSelect } from '../../models/scope';
@@ -41,7 +42,7 @@ export const CompanyItem = (): JSX.Element => {
 
   const ws = useRef<WebSocket>();
 
-  const submit = (): void => {
+  const send = (): void => {
     const number_id = Number(id);
     const item: Company = {
       id: number_id,
@@ -54,7 +55,12 @@ export const CompanyItem = (): JSX.Element => {
       faxes: filterArrayNumber(faxes),
     };
 
-    SetItem(ws, number_id, 'Company', item, setStatus);
+    SetItem(ws, number_id, 'Company', item, setStatus, state.token);
+  };
+
+  const del = (): void => {
+    const number_id = Number(id);
+    DelItem(ws, number_id, 'Company', setStatus, state.token);
   };
 
   useEffect(() => {
@@ -110,23 +116,10 @@ export const CompanyItem = (): JSX.Element => {
           </div>
 
           <PracticeListForm practices={practices} />
-
           <ContactShortForm contacts={contacts} />
-
           <NoteInput value={note} setter={setNote} />
 
-          <div className="field is-grouped">
-            <div className="control">
-              <button className="button" onClick={() => submit()}>
-                Сохранить
-              </button>
-            </div>
-            <div className="control">
-              <button className="button" onClick={() => history.go(-1)}>
-                Закрыть
-              </button>
-            </div>
-          </div>
+          <ItemFormButtons send={send} del={del} />
         </>
       )}
     </div>

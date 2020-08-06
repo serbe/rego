@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { AuthContext } from '../../helpers/auth';
-import { AddEventMessageGet, AddEventOpenItem, SetItem, URL } from '../../helpers/fetcher';
-import { NoteInput, ParameterTypes } from '../../models/impersonal';
+import { AddEventMessageGet, AddEventOpenItem, SetItem, URL, DelItem } from '../../helpers/fetcher';
+import { NoteInput, ParameterTypes, ItemFormButtons } from '../../models/impersonal';
 import { Post, PostGetItem, PostGOSwitch, PostNameInput } from '../../models/post';
 
 export const PostItem = (): JSX.Element => {
@@ -19,7 +19,7 @@ export const PostItem = (): JSX.Element => {
 
   const ws = useRef<WebSocket>();
 
-  const submit = (): void => {
+  const send = (): void => {
     const number_id = Number(id);
     const item: Post = {
       id: number_id,
@@ -28,7 +28,12 @@ export const PostItem = (): JSX.Element => {
       note: note,
     };
 
-    SetItem(ws, number_id, 'Post', item, setStatus);
+    SetItem(ws, number_id, 'Post', item, setStatus, state.token);
+  };
+
+  const del = (): void => {
+    const number_id = Number(id);
+    DelItem(ws, number_id, 'Post', setStatus, state.token);
   };
 
   useEffect(() => {
@@ -65,18 +70,7 @@ export const PostItem = (): JSX.Element => {
           <PostGOSwitch value={go} setter={setGo} />
           <NoteInput value={note} setter={setNote} />
 
-          <div className="field is-grouped">
-            <div className="control">
-              <button className="button" onClick={() => submit()}>
-                Сохранить
-              </button>
-            </div>
-            <div className="control">
-              <button className="button" onClick={() => history.go(-1)}>
-                Закрыть
-              </button>
-            </div>
-          </div>
+          <ItemFormButtons send={send} del={del} />
         </>
       )}
     </div>
