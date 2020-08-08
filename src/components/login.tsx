@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, useContext } from 'react';
+import React, { ChangeEvent, useContext, useState } from 'react';
 
 import { AuthContext } from '../helpers/auth';
 import { FormField } from './formfield';
@@ -14,7 +14,7 @@ export const Login = (): JSX.Element => {
   const [pass, setPass] = useState('');
 
   const submit = (): void => {
-    fetch('http://127.0.0.1:9090/api/go/login', {
+    fetch('http://5.39.102.29:49394/api/go/login', {
       method: 'POST',
       mode: 'cors',
       headers: {

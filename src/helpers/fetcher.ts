@@ -14,7 +14,7 @@ import { Siren, SirenList } from '../models/siren';
 import { SirenType, SirenTypeList } from '../models/sirentype';
 import { AuthContext } from './auth';
 
-export const URL = 'ws://127.0.0.1:9090/api/go';
+export const URL = 'ws://5.39.102.29:49394/api/go';
 
 export type SelectItem = {
   id: number;
