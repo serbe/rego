@@ -152,10 +152,23 @@ export const ItemFormButtons = (properties: FormButtonsValues): JSX.Element => {
       <></>
     );
 
+  const BackButton = () => (
+    <div className="control">
+      <button className="button" onClick={() => history.go(-1)}>
+        Закрыть
+      </button>
+    </div>
+  );
+
   const DeleteButton = () =>
     state.role > 8 ? (
-      <div className="control">
-        <button className="button" onClick={() => del()}>
+      <div className="control mla is-danger">
+        <button
+          className="button"
+          onClick={() => {
+            window.confirm('Вы действительно хотите удалить запись?') && del();
+          }}
+        >
           Удалить
         </button>
       </div>
@@ -166,11 +179,7 @@ export const ItemFormButtons = (properties: FormButtonsValues): JSX.Element => {
   return (
     <div className="field is-grouped">
       <SaveButton />
-      <div className="control">
-        <button className="button" onClick={() => history.go(-1)}>
-          Закрыть
-        </button>
-      </div>
+      <BackButton />
       <DeleteButton />
     </div>
   );
