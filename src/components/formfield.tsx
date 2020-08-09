@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MouseEvent } from 'react';
+import React, { ChangeEvent, MouseEvent, KeyboardEvent } from 'react';
 
 import { Input } from './input';
 
@@ -11,6 +11,7 @@ interface FormFieldProps {
   name: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   onClick?: (event: MouseEvent<HTMLInputElement, globalThis.MouseEvent>) => void;
+  onKeyPress?: (event: KeyboardEvent<HTMLInputElement>) => void;
   placeholder?: string;
   readonly?: boolean;
   rounded?: boolean;
@@ -28,6 +29,7 @@ export const FormField = (properties: FormFieldProps): JSX.Element => {
     name,
     onChange,
     onClick,
+    onKeyPress,
     placeholder,
     readonly,
     type,
@@ -49,6 +51,7 @@ export const FormField = (properties: FormFieldProps): JSX.Element => {
         name={name}
         onChange={onChange}
         onClick={onClick}
+        onKeyPress={onKeyPress}
         placeholder={placeholder}
         readonly={readonly}
         type={type}

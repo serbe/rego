@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MouseEvent } from 'react';
+import React, { ChangeEvent, MouseEvent, KeyboardEvent } from 'react';
 
 import { Icon } from './icon';
 
@@ -27,6 +27,7 @@ interface InputProps {
   onBlur?: (event: ChangeEvent<HTMLInputElement>) => void;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   onClick?: (event: MouseEvent<HTMLInputElement, globalThis.MouseEvent>) => void;
+  onKeyPress?: (event: KeyboardEvent<HTMLInputElement>) => void;
   placeholder?: string;
   readonly?: boolean;
   type?: 'text' | 'password' | 'email' | 'tel';
@@ -44,6 +45,7 @@ export const Input = (properties: InputProps): JSX.Element => {
     onBlur,
     onChange,
     onClick,
+    onKeyPress,
     placeholder,
     readonly,
     type,
@@ -66,6 +68,7 @@ export const Input = (properties: InputProps): JSX.Element => {
         onBlur={onBlur}
         onChange={onChange}
         onClick={onClick}
+        onKeyPress={onKeyPress}
         placeholder={placeholder}
         readOnly={readonly}
         type={type}

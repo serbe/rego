@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useContext, useState } from 'react';
+import React, { ChangeEvent, useContext, useState, KeyboardEvent } from 'react';
 
 import { AuthContext } from '../helpers/auth';
 import { FormField } from './formfield';
@@ -60,6 +60,9 @@ export const Login = (): JSX.Element => {
         label="Пароль"
         onChange={(event: ChangeEvent<HTMLInputElement>): void => {
           setPass(event.target.value);
+        }}
+        onKeyPress={(event: KeyboardEvent<HTMLInputElement>): void => {
+          event.key === 'Enter' && submit();
         }}
       />
       <div className="field">
