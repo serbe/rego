@@ -144,7 +144,7 @@ export const ItemFormButtons = (properties: FormButtonsValues): JSX.Element => {
   const SaveButton = () =>
     state.role > 4 ? (
       <div className="control">
-        <button className="button" onClick={() => send()}>
+        <button className="button is-info" onClick={() => send()}>
           Сохранить
         </button>
       </div>

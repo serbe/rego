@@ -80,6 +80,7 @@ export const ContactShortForm = (properties: ContactShortValues): JSX.Element =>
         <Input
           className="link"
           classNameDiv="pb-1"
+          icon="user"
           key={`contact-${index}`}
           name={`contact-${index}`}
           onClick={(): void => history.push(`/contacts/${contact.id}`)}
