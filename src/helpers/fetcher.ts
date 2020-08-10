@@ -1,4 +1,4 @@
-import { Dispatch, MutableRefObject, SetStateAction, useContext, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 
 import { Certificate, CertificateList } from '../models/certificate';
 import { Company, CompanyList } from '../models/company';
@@ -142,34 +142,89 @@ type JsonItemScheme =
   | { command: 'Insert' | 'Update' | 'Delete'; name: 'Siren'; error: string }
   | { command: 'Insert' | 'Update' | 'Delete'; name: 'SirenType'; error: string };
 
-export const AddEventOpenItem = (
-  ws: MutableRefObject<WebSocket | undefined>,
+type JsonGetItemScheme =
+  | { command: 'Get'; name: 'Certificate'; object: { Certificate: Certificate }; error: string }
+  | { command: 'Get'; name: 'Company'; object: { Company: Company }; error: string }
+  | { command: 'Get'; name: 'Contact'; object: { Contact: Contact }; error: string }
+  | { command: 'Get'; name: 'Department'; object: { Department: Department }; error: string }
+  | { command: 'Get'; name: 'Education'; object: { Education: Education }; error: string }
+  | { command: 'Get'; name: 'Kind'; object: { Kind: Kind }; error: string }
+  | { command: 'Get'; name: 'Post'; object: { Post: Post }; error: string }
+  | { command: 'Get'; name: 'Practice'; object: { Practice: Practice }; error: string }
+  | { command: 'Get'; name: 'Rank'; object: { Rank: Rank }; error: string }
+  | { command: 'Get'; name: 'Scope'; object: { Scope: Scope }; error: string }
+  | { command: 'Get'; name: 'Siren'; object: { Siren: Siren }; error: string }
+  | { command: 'Get'; name: 'SirenType'; object: { SirenType: SirenType }; error: string };
+
+export const GetItem = (
   name: string,
   id: string,
+  setData: Dispatch<SetStateAction<Item>>,
   setLoaded: Dispatch<SetStateAction<boolean>>,
   token: string,
 ): void => {
   const number_id = Number(id);
   if (number_id !== 0) {
-    ws.current?.addEventListener('open', () => {
-      ws.current?.send(
-        `{"command":{"Get":{"Item":{"name":"${name}","id":${number_id}}}},"addon":"${token}"}`,
-      );
-    });
+    fetch('/api/go/json', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: `{"command":{"Get":{"Item":{"name":"${name}","id":${number_id}}}},"addon":"${token}"}`,
+    })
+      .then((response) => response.json())
+      .then((response) => response as JsonGetItemScheme)
+      .then((jsonData) => {
+        if (jsonData?.command === 'Get') {
+          switch (jsonData?.name) {
+            case 'Certificate':
+              return setData(jsonData.object.Certificate);
+            case 'Company':
+              return setData(jsonData.object.Company);
+            case 'Contact':
+              return setData(jsonData.object.Contact);
+            case 'Department':
+              return setData(jsonData.object.Department);
+            case 'Education':
+              return setData(jsonData.object.Education);
+            case 'Kind':
+              return setData(jsonData.object.Kind);
+            case 'Post':
+              return setData(jsonData.object.Post);
+            case 'Practice':
+              return setData(jsonData.object.Practice);
+            case 'Rank':
+              return setData(jsonData.object.Rank);
+            case 'Scope':
+              return setData(jsonData.object.Scope);
+            case 'Siren':
+              return setData(jsonData.object.Siren);
+            case 'SirenType':
+              return setData(jsonData.object.SirenType);
+            default:
+              throw new Error('unknown item');
+          }
+        }
+        throw new Error('unknown item');
+      })
+      .catch(() => {
+        return setLoaded(true);
+      });
   } else {
     setLoaded(true);
   }
 };
 
-export const AddEventMessageGet = (
-  ws: MutableRefObject<WebSocket | undefined>,
-  fn: (message: MessageEvent, setData: Dispatch<SetStateAction<Item>>) => void,
-  setData: Dispatch<SetStateAction<Item>>,
-): void => {
-  ws.current?.addEventListener('message', (event: MessageEvent) => {
-    fn(event, setData);
-  });
-};
+// export const AddEventMessageGet = (
+//   ws: MutableRefObject<WebSocket | undefined>,
+//   fn: (message: MessageEvent, setData: Dispatch<SetStateAction<Item>>) => void,
+//   setData: Dispatch<SetStateAction<Item>>,
+// ): void => {
+//   ws.current?.addEventListener('message', (event: MessageEvent) => {
+//     fn(event, setData);
+//   });
+// };
 
 export const GetList = (name: string): [List[], string] => {
   const { state } = useContext(AuthContext);
@@ -177,55 +232,56 @@ export const GetList = (name: string): [List[], string] => {
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    const ws = new WebSocket(URL);
-
-    ws.addEventListener('message', (message: MessageEvent) => {
-      const text = message.data as string;
-      const jsonData = JSON.parse(text) as JsonListScheme;
-
-      if (jsonData?.command === 'Get') {
-        switch (jsonData?.name) {
-          case 'CertificateList':
-            return setList(jsonData.object.CertificateList);
-          case 'CompanyList':
-            return setList(jsonData.object.CompanyList);
-          case 'ContactList':
-            return setList(jsonData.object.ContactList);
-          case 'DepartmentList':
-            return setList(jsonData.object.DepartmentList);
-          case 'EducationList':
-            return setList(jsonData.object.EducationList);
-          case 'EducationNear':
-            return setList(jsonData.object.EducationShort);
-          case 'KindList':
-            return setList(jsonData.object.KindList);
-          case 'PostList':
-            return setList(jsonData.object.PostList);
-          case 'PracticeList':
-            return setList(jsonData.object.PracticeList);
-          case 'PracticeNear':
-            return setList(jsonData.object.PracticeShort);
-          case 'RankList':
-            return setList(jsonData.object.RankList);
-          case 'ScopeList':
-            return setList(jsonData.object.ScopeList);
-          case 'SirenList':
-            return setList(jsonData.object.SirenList);
-          case 'SirenTypeList':
-            return setList(jsonData.object.SirenTypeList);
-          default:
-            return setError('unknown list');
+    fetch('/api/go/json', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: `{"command":{"Get":{"List":"${name}"}},"addon":"${state.token}"}`,
+    })
+      .then((response) => response.json())
+      .then((response) => response as JsonListScheme)
+      .then((jsonData) => {
+        if (jsonData?.command === 'Get') {
+          switch (jsonData?.name) {
+            case 'CertificateList':
+              return setList(jsonData.object.CertificateList);
+            case 'CompanyList':
+              return setList(jsonData.object.CompanyList);
+            case 'ContactList':
+              return setList(jsonData.object.ContactList);
+            case 'DepartmentList':
+              return setList(jsonData.object.DepartmentList);
+            case 'EducationList':
+              return setList(jsonData.object.EducationList);
+            case 'EducationNear':
+              return setList(jsonData.object.EducationShort);
+            case 'KindList':
+              return setList(jsonData.object.KindList);
+            case 'PostList':
+              return setList(jsonData.object.PostList);
+            case 'PracticeList':
+              return setList(jsonData.object.PracticeList);
+            case 'PracticeNear':
+              return setList(jsonData.object.PracticeShort);
+            case 'RankList':
+              return setList(jsonData.object.RankList);
+            case 'ScopeList':
+              return setList(jsonData.object.ScopeList);
+            case 'SirenList':
+              return setList(jsonData.object.SirenList);
+            case 'SirenTypeList':
+              return setList(jsonData.object.SirenTypeList);
+            default:
+              throw new Error('unknown list');
+          }
         }
-      }
-    });
-
-    ws.addEventListener('open', () => {
-      ws.send(`{"command":{"Get":{"List":"${name}"}},"addon":"${state.token}"}`);
-    });
-
-    return (): void => {
-      ws.close();
-    };
+        throw new Error('unknown list');
+      })
+      .catch(() => {
+        return setError('unknown list');
+      });
   }, [name, state.token]);
 
   return [list, error];
@@ -237,107 +293,123 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    const ws = new WebSocket(URL);
-
-    ws.addEventListener('message', (message: MessageEvent) => {
-      const text = message.data as string;
-      const jsonData = JSON.parse(text) as JsonListScheme;
-      if (jsonData?.command === 'Get') {
-        switch (jsonData?.name) {
-          case 'CompanySelect':
-            return jsonData.object.SelectItem.length > 0
-              ? setSelect(jsonData.object.SelectItem)
-              : setSelect([{ id: 0, name: '' }]);
-          case 'ContactSelect':
-            return jsonData.object.SelectItem.length > 0
-              ? setSelect(jsonData.object.SelectItem)
-              : setSelect([{ id: 0, name: '' }]);
-          case 'DepartmentSelect':
-            return jsonData.object.SelectItem.length > 0
-              ? setSelect(jsonData.object.SelectItem)
-              : setSelect([{ id: 0, name: '' }]);
-          case 'KindSelect':
-            return jsonData.object.SelectItem.length > 0
-              ? setSelect(jsonData.object.SelectItem)
-              : setSelect([{ id: 0, name: '' }]);
-          case 'PostSelect':
-            return jsonData.object.SelectItem.length > 0
-              ? setSelect(jsonData.object.SelectItem)
-              : setSelect([{ id: 0, name: '' }]);
-          case 'PostGoSelect':
-            return jsonData.object.SelectItem.length > 0
-              ? setSelect(jsonData.object.SelectItem)
-              : setSelect([{ id: 0, name: '' }]);
-          case 'RankSelect':
-            return jsonData.object.SelectItem.length > 0
-              ? setSelect(jsonData.object.SelectItem)
-              : setSelect([{ id: 0, name: '' }]);
-          case 'ScopeSelect':
-            return jsonData.object.SelectItem.length > 0
-              ? setSelect(jsonData.object.SelectItem)
-              : setSelect([{ id: 0, name: '' }]);
-          case 'SirenTypeSelect':
-            return jsonData.object.SelectItem.length > 0
-              ? setSelect(jsonData.object.SelectItem)
-              : setSelect([{ id: 0, name: '' }]);
-          default:
-            return setError('unknown list');
+    fetch('/api/go/json', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: `{"command":{"Get":{"List":"${name}"}},"addon":"${state.token}"}`,
+    })
+      .then((response) => response.json())
+      .then((response) => response as JsonListScheme)
+      .then((jsonData) => {
+        if (jsonData?.command === 'Get') {
+          switch (jsonData?.name) {
+            case 'CompanySelect':
+              return jsonData.object.SelectItem.length > 0
+                ? setSelect(jsonData.object.SelectItem)
+                : setSelect([{ id: 0, name: '' }]);
+            case 'ContactSelect':
+              return jsonData.object.SelectItem.length > 0
+                ? setSelect(jsonData.object.SelectItem)
+                : setSelect([{ id: 0, name: '' }]);
+            case 'DepartmentSelect':
+              return jsonData.object.SelectItem.length > 0
+                ? setSelect(jsonData.object.SelectItem)
+                : setSelect([{ id: 0, name: '' }]);
+            case 'KindSelect':
+              return jsonData.object.SelectItem.length > 0
+                ? setSelect(jsonData.object.SelectItem)
+                : setSelect([{ id: 0, name: '' }]);
+            case 'PostSelect':
+              return jsonData.object.SelectItem.length > 0
+                ? setSelect(jsonData.object.SelectItem)
+                : setSelect([{ id: 0, name: '' }]);
+            case 'PostGoSelect':
+              return jsonData.object.SelectItem.length > 0
+                ? setSelect(jsonData.object.SelectItem)
+                : setSelect([{ id: 0, name: '' }]);
+            case 'RankSelect':
+              return jsonData.object.SelectItem.length > 0
+                ? setSelect(jsonData.object.SelectItem)
+                : setSelect([{ id: 0, name: '' }]);
+            case 'ScopeSelect':
+              return jsonData.object.SelectItem.length > 0
+                ? setSelect(jsonData.object.SelectItem)
+                : setSelect([{ id: 0, name: '' }]);
+            case 'SirenTypeSelect':
+              return jsonData.object.SelectItem.length > 0
+                ? setSelect(jsonData.object.SelectItem)
+                : setSelect([{ id: 0, name: '' }]);
+            default:
+              throw new Error('unknown select');
+          }
         }
-      }
-    });
-
-    ws.addEventListener('open', () => {
-      ws.send(`{"command":{"Get":{"List":"${name}"}},"addon":"${state.token}"}`);
-    });
-
-    return (): void => {
-      ws.close();
-    };
+        throw new Error('unknown select');
+      })
+      .catch(() => {
+        return setError('unknown select');
+      });
   }, [name, state.token]);
 
   return [list, error];
 };
 
 export const SetItem = (
-  ws: MutableRefObject<WebSocket | undefined>,
   id: number,
   name: string,
   item: Item,
   status: Dispatch<SetStateAction<boolean>>,
   token: string,
 ): void => {
-  ws.current?.addEventListener('message', (message: MessageEvent) => {
-    const text = message.data as string;
-    const jsonData = JSON.parse(text) as JsonItemScheme;
-    const command = id === 0 ? 'Insert' : 'Update';
-
-    if (jsonData?.command === command && jsonData.name === name) {
-      status(true);
-    }
-  });
-
-  ws.current?.send(
-    `{"command":{"${id === 0 ? 'Insert' : 'Update'}":{"${name}":${JSON.stringify(
+  fetch('/api/go/json', {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: `{"command":{"${id === 0 ? 'Insert' : 'Update'}":{"${name}":${JSON.stringify(
       item,
     )}}},"addon":"${token}"}`,
-  );
+  })
+    .then((response) => response.json())
+    .then((response) => response as JsonItemScheme)
+    .then((jsonData) => {
+      const command = id === 0 ? 'Insert' : 'Update';
+      if (jsonData?.command === command && jsonData.name === name) {
+        status(true);
+      }
+      return status(false);
+    })
+    .catch(() => {
+      return status(false);
+    });
 };
 
 export const DelItem = (
-  ws: MutableRefObject<WebSocket | undefined>,
   id: number,
   name: string,
   status: Dispatch<SetStateAction<boolean>>,
   token: string,
 ): void => {
-  ws.current?.addEventListener('message', (message: MessageEvent) => {
-    const text = message.data as string;
-    const jsonData = JSON.parse(text) as JsonItemScheme;
-
-    if (jsonData?.command === 'Delete' && jsonData.name === name) {
-      status(true);
-    }
-  });
-
-  ws.current?.send(`{"command":{"Delete":{"name":"${name}","id":${id}}},"addon":"${token}"}`);
+  fetch('/api/go/json', {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: `{"command":{"Delete":{"name":"${name}","id":${id}}},"addon":"${token}"}`,
+  })
+    .then((response) => response.json())
+    .then((response) => response as JsonItemScheme)
+    .then((jsonData) => {
+      if (jsonData?.command === 'Delete' && jsonData.name === name) {
+        status(true);
+      }
+      return status(false);
+    })
+    .catch(() => {
+      return status(false);
+    });
 };

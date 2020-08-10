@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import React, { ChangeEvent } from 'react';
 
 import { FormField } from '../components/formfield';
 import { BooleanInputProperties, StringInputProperties } from '../components/input';
@@ -16,19 +16,6 @@ export type PostList = {
   name?: string;
   go?: boolean;
   note?: string;
-};
-
-type JsonItemScheme = { command: 'Get'; name: 'Post'; object: { Post: Post }; error: string };
-
-export const PostGetItem = (
-  message: MessageEvent,
-  setData: Dispatch<SetStateAction<Post | undefined>>,
-): void => {
-  const text = message.data as string;
-  const jsonData = JSON.parse(text) as JsonItemScheme;
-  if (jsonData?.object) {
-    setData(jsonData.object.Post);
-  }
 };
 
 export const PostIDSelect = (properties: SelectValues): JSX.Element => (

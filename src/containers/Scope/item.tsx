@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { AuthContext } from '../../helpers/auth';
-import { AddEventMessageGet, AddEventOpenItem, SetItem, URL, DelItem } from '../../helpers/fetcher';
-import { NoteInput, ParameterTypes, ItemFormButtons } from '../../models/impersonal';
-import { Scope, ScopeGetItem, ScopeNameInput } from '../../models/scope';
+import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
+import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
+import { Scope, ScopeNameInput } from '../../models/scope';
 
 export const ScopeItem = (): JSX.Element => {
   const { state } = useContext(AuthContext);
@@ -16,8 +16,6 @@ export const ScopeItem = (): JSX.Element => {
   const [status, setStatus] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
-  const ws = useRef<WebSocket>();
-
   const send = (): void => {
     const number_id = Number(id);
     const item: Scope = {
@@ -26,23 +24,16 @@ export const ScopeItem = (): JSX.Element => {
       note: note,
     };
 
-    SetItem(ws, number_id, 'Scope', item, setStatus, state.token);
+    SetItem(number_id, 'Scope', item, setStatus, state.token);
   };
 
   const del = (): void => {
     const number_id = Number(id);
-    DelItem(ws, number_id, 'Scope', setStatus, state.token);
+    DelItem(number_id, 'Scope', setStatus, state.token);
   };
 
   useEffect(() => {
-    ws.current = new WebSocket(URL);
-
-    AddEventOpenItem(ws, 'Scope', id, setLoaded, state.token);
-    AddEventMessageGet(ws, ScopeGetItem, setData);
-
-    return (): void => {
-      ws.current?.close();
-    };
+    GetItem('Scope', id, setData, setLoaded, state.token);
   }, [id, state.token]);
 
   useEffect(() => {

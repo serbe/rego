@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import React, { ChangeEvent } from 'react';
 
 import { DatePicker, DatePickerValues } from '../components/datepicker';
 import { FormField } from '../components/formfield';
@@ -22,24 +22,6 @@ export type CertificateList = {
   company_name?: string;
   cert_date?: string;
   note?: string;
-};
-
-type JsonItemScheme = {
-  command: 'Get';
-  name: 'Certificate';
-  object: { Certificate: Certificate };
-  error: string;
-};
-
-export const CertificateGetItem = (
-  message: MessageEvent,
-  setData: Dispatch<SetStateAction<Certificate | undefined>>,
-): void => {
-  const text = message.data as string;
-  const jsonData = JSON.parse(text) as JsonItemScheme;
-  if (jsonData?.object) {
-    setData(jsonData.object.Certificate);
-  }
 };
 
 export const CertificateNumberInput = (properties: StringInputProperties): JSX.Element => (

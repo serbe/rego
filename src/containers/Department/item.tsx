@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { AuthContext } from '../../helpers/auth';
-import { AddEventMessageGet, AddEventOpenItem, SetItem, URL, DelItem } from '../../helpers/fetcher';
-import { Department, DepartmentGetItem, DepartmentNameInput } from '../../models/department';
-import { NoteInput, ParameterTypes, ItemFormButtons } from '../../models/impersonal';
+import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
+import { Department, DepartmentNameInput } from '../../models/department';
+import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
 
 export const DepartmentItem = (): JSX.Element => {
   const { state } = useContext(AuthContext);
@@ -16,8 +16,6 @@ export const DepartmentItem = (): JSX.Element => {
   const [status, setStatus] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
-  const ws = useRef<WebSocket>();
-
   const send = (): void => {
     const number_id = Number(id);
     const item: Department = {
@@ -26,23 +24,16 @@ export const DepartmentItem = (): JSX.Element => {
       note: note,
     };
 
-    SetItem(ws, number_id, 'Department', item, setStatus, state.token);
+    SetItem(number_id, 'Department', item, setStatus, state.token);
   };
 
   const del = (): void => {
     const number_id = Number(id);
-    DelItem(ws, number_id, 'Department', setStatus, state.token);
+    DelItem(number_id, 'Department', setStatus, state.token);
   };
 
   useEffect(() => {
-    ws.current = new WebSocket(URL);
-
-    AddEventOpenItem(ws, 'Department', id, setLoaded, state.token);
-    AddEventMessageGet(ws, DepartmentGetItem, setData);
-
-    return (): void => {
-      ws.current?.close();
-    };
+    GetItem('Department', id, setData, setLoaded, state.token);
   }, [id, state.token]);
 
   useEffect(() => {

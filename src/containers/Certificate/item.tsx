@@ -1,17 +1,16 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { AuthContext } from '../../helpers/auth';
-import { AddEventMessageGet, AddEventOpenItem, SetItem, URL, DelItem } from '../../helpers/fetcher';
+import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
 import {
   Certificate,
   CertificateDateInput,
-  CertificateGetItem,
   CertificateNumberInput,
 } from '../../models/certificate';
 import { CompanyIDSelect } from '../../models/company';
 import { ContactIDSelect } from '../../models/contact';
-import { NoteInput, ParameterTypes, ItemFormButtons } from '../../models/impersonal';
+import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
 
 export const CertificateItem = (): JSX.Element => {
   const { state } = useContext(AuthContext);
@@ -26,8 +25,6 @@ export const CertificateItem = (): JSX.Element => {
   const [status, setStatus] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
-  const ws = useRef<WebSocket>();
-
   const send = (): void => {
     const number_id = Number(id);
     const item: Certificate = {
@@ -39,23 +36,16 @@ export const CertificateItem = (): JSX.Element => {
       note: note,
     };
 
-    SetItem(ws, number_id, 'Certificate', item, setStatus, state.token);
+    SetItem(number_id, 'Certificate', item, setStatus, state.token);
   };
 
   const del = (): void => {
     const number_id = Number(id);
-    DelItem(ws, number_id, 'Certificate', setStatus, state.token);
+    DelItem(number_id, 'Certificate', setStatus, state.token);
   };
 
   useEffect(() => {
-    ws.current = new WebSocket(URL);
-
-    AddEventOpenItem(ws, 'Certificate', id, setLoaded, state.token);
-    AddEventMessageGet(ws, CertificateGetItem, setData);
-
-    return (): void => {
-      ws.current?.close();
-    };
+    GetItem('Certificate', id, setData, setLoaded, state.token);
   }, [id, state.token]);
 
   useEffect(() => {

@@ -162,9 +162,9 @@ export const ItemFormButtons = (properties: FormButtonsValues): JSX.Element => {
 
   const DeleteButton = () =>
     state.role > 8 ? (
-      <div className="control mla is-danger">
+      <div className="control mla">
         <button
-          className="button"
+          className="button is-danger"
           onClick={() => {
             window.confirm('Вы действительно хотите удалить запись?') && del();
           }}

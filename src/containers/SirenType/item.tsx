@@ -1,15 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { AuthContext } from '../../helpers/auth';
-import { AddEventMessageGet, AddEventOpenItem, SetItem, URL, DelItem } from '../../helpers/fetcher';
-import { NoteInput, ParameterTypes, ItemFormButtons } from '../../models/impersonal';
-import {
-  SirenType,
-  SirenTypeGetItem,
-  SirenTypeNameInput,
-  SirenTypeRadiusInput,
-} from '../../models/sirentype';
+import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
+import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
+import { SirenType, SirenTypeNameInput, SirenTypeRadiusInput } from '../../models/sirentype';
 
 export const SirenTypeItem = (): JSX.Element => {
   const { state } = useContext(AuthContext);
@@ -22,8 +17,6 @@ export const SirenTypeItem = (): JSX.Element => {
   const [status, setStatus] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
-  const ws = useRef<WebSocket>();
-
   const send = (): void => {
     const number_id = Number(id);
     const item: SirenType = {
@@ -33,23 +26,16 @@ export const SirenTypeItem = (): JSX.Element => {
       note: note,
     };
 
-    SetItem(ws, number_id, 'SirenType', item, setStatus, state.token);
+    SetItem(number_id, 'SirenType', item, setStatus, state.token);
   };
 
   const del = (): void => {
     const number_id = Number(id);
-    DelItem(ws, number_id, 'SirenType', setStatus, state.token);
+    DelItem(number_id, 'SirenType', setStatus, state.token);
   };
 
   useEffect(() => {
-    ws.current = new WebSocket(URL);
-
-    AddEventOpenItem(ws, 'SirenType', id, setLoaded, state.token);
-    AddEventMessageGet(ws, SirenTypeGetItem, setData);
-
-    return (): void => {
-      ws.current?.close();
-    };
+    GetItem('SirenType', id, setData, setLoaded, state.token);
   }, [id, state.token]);
 
   useEffect(() => {

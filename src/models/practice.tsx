@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import React, { ChangeEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { DatePicker, DatePickerValues } from '../components/datepicker';
@@ -37,24 +37,6 @@ export type PracticeShort = {
   kind_id: number;
   kind_short_name: string;
   date_of_practice: string;
-};
-
-type JsonItemScheme = {
-  command: 'Get';
-  name: 'Practice';
-  object: { Practice: Practice };
-  error: string;
-};
-
-export const PracticeGetItem = (
-  message: MessageEvent,
-  setData: Dispatch<SetStateAction<Practice | undefined>>,
-): void => {
-  const text = message.data as string;
-  const jsonData = JSON.parse(text) as JsonItemScheme;
-  if (jsonData?.object) {
-    setData(jsonData.object.Practice);
-  }
 };
 
 export const PracticeListForm = (properties: PracticeValues): JSX.Element => {

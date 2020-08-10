@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import React, { ChangeEvent } from 'react';
 
 import { FormField } from '../components/formfield';
 import { StringInputProperties } from '../components/input';
@@ -16,19 +16,6 @@ export type KindList = {
   name?: string;
   short_name?: string;
   note?: string;
-};
-
-type JsonItemScheme = { command: 'Get'; name: 'Kind'; object: { Kind: Kind }; error: string };
-
-export const KindGetItem = (
-  message: MessageEvent,
-  setData: Dispatch<SetStateAction<Kind | undefined>>,
-): void => {
-  const text = message.data as string;
-  const jsonData = JSON.parse(text) as JsonItemScheme;
-  if (jsonData?.object) {
-    setData(jsonData.object.Kind);
-  }
 };
 
 export const KindNameInput = (properties: StringInputProperties): JSX.Element => (
