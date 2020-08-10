@@ -28,8 +28,8 @@ export const SirenTypes = (): JSX.Element => {
           role="gridcell"
           className="link"
         >
-          <td className="w250">{siren_type.name}</td>
-          <td className="w95">{siren_type.radius}</td>
+          <td>{siren_type.name}</td>
+          <td>{siren_type.radius}</td>
         </tr>
       ))}
     </>
@@ -41,8 +41,8 @@ export const SirenTypes = (): JSX.Element => {
       <table className="table is-narrow is-fullwidth">
         <tbody>
           <tr>
-            <th className="w250">Тип сирены</th>
-            <th className="w95">Радиус действия</th>
+            <th>Тип сирены</th>
+            <th>Радиус действия</th>
           </tr>
           <Body />
         </tbody>
