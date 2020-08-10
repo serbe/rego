@@ -13,9 +13,8 @@ export const KindItem = (): JSX.Element => {
   const [name, setName] = useState<string>();
   const [shortName, setShortName] = useState<string>();
   const [note, setNote] = useState<string>();
-  const [data, setData] = useState<Kind>();
+  const [item] = GetItem('Kind', id);
   const [status, setStatus] = useState(false);
-  const [loaded, setLoaded] = useState(false);
 
   const send = (): void => {
     const number_id = Number(id);
@@ -35,17 +34,13 @@ export const KindItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    GetItem('Kind', id, setData, setLoaded, state.token);
-  }, [id, state.token]);
-
-  useEffect(() => {
-    if (data) {
+    if (item) {
+      const data = item as Kind;
       setName(data.name);
       setShortName(data.short_name);
       setNote(data.note);
-      setLoaded(true);
     }
-  }, [data]);
+  }, [item]);
 
   useEffect(() => {
     if (status) {
@@ -55,7 +50,7 @@ export const KindItem = (): JSX.Element => {
 
   return (
     <div>
-      {loaded && (
+      {item && (
         <>
           <KindNameInput value={name} setter={setName} />
           <KindShortNameInput value={shortName} setter={setShortName} />

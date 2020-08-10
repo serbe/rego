@@ -44,9 +44,8 @@ export const ContactItem = (): JSX.Element => {
   const [phones, setPhones] = useState(['']);
   const [faxes, setFaxes] = useState(['']);
   const [educations, setEducations] = useState<string[]>([]);
-  const [data, setData] = useState<Contact>();
+  const [item] = GetItem('Contact', id);
   const [status, setStatus] = useState(false);
-  const [loaded, setLoaded] = useState(false);
 
   const send = (): void => {
     const number_id = Number(id);
@@ -74,11 +73,8 @@ export const ContactItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    GetItem('Contact', id, setData, setLoaded, state.token);
-  }, [id, state.token]);
-
-  useEffect(() => {
-    if (data) {
+    if (item) {
+      const data = item as Contact;
       setName(data.name);
       setCompanyID(data.company_id);
       setDepartmentID(data.department_id);
@@ -91,9 +87,8 @@ export const ContactItem = (): JSX.Element => {
       setPhones(addEmptyString(numberToString(data.phones)));
       setFaxes(addEmptyString(numberToString(data.faxes)));
       setEducations(data.educations || []);
-      setLoaded(true);
     }
-  }, [data]);
+  }, [item]);
 
   useEffect(() => {
     if (status) {
@@ -103,7 +98,7 @@ export const ContactItem = (): JSX.Element => {
 
   return (
     <div>
-      {loaded && (
+      {item && (
         <>
           <ContactNameInput value={name} setter={setName} />
           <CompanyIDSelect id={companyID} setter={setCompanyID} />

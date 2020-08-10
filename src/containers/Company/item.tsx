@@ -36,9 +36,8 @@ export const CompanyItem = (): JSX.Element => {
   const [faxes, setFaxes] = useState(['']);
   const [practices, setPractices] = useState<PracticeList[]>([]);
   const [contacts, setContacts] = useState<ContactShort[]>([]);
-  const [data, setData] = useState<Company>();
+  const [item] = GetItem('Company', id);
   const [status, setStatus] = useState(false);
-  const [loaded, setLoaded] = useState(false);
 
   const send = (): void => {
     const number_id = Number(id);
@@ -62,11 +61,8 @@ export const CompanyItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    GetItem('Company', id, setData, setLoaded, state.token);
-  }, [id, state.token]);
-
-  useEffect(() => {
-    if (data) {
+    if (item) {
+      const data = item as Company;
       setName(data.name);
       setAddress(data.address);
       setScopeID(data.scope_id);
@@ -76,9 +72,8 @@ export const CompanyItem = (): JSX.Element => {
       setFaxes(addEmptyString(numberToString(data.faxes)));
       setPractices(data.practices || []);
       setContacts(data.contacts || []);
-      setLoaded(true);
     }
-  }, [data]);
+  }, [item]);
 
   useEffect(() => {
     if (status) {
@@ -88,7 +83,7 @@ export const CompanyItem = (): JSX.Element => {
 
   return (
     <div>
-      {loaded && (
+      {item && (
         <>
           <CompanyNameInput value={name} setter={setName} />
           <ScopeIDSelect id={scopeID} setter={setScopeID} />

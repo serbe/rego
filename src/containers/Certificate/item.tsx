@@ -21,9 +21,8 @@ export const CertificateItem = (): JSX.Element => {
   const [companyID, setCompanyID] = useState<number>();
   const [certDate, setCertDate] = useState<string>();
   const [note, setNote] = useState<string>();
-  const [data, setData] = useState<Certificate>();
+  const [item] = GetItem('Certificate', id);
   const [status, setStatus] = useState(false);
-  const [loaded, setLoaded] = useState(false);
 
   const send = (): void => {
     const number_id = Number(id);
@@ -45,19 +44,15 @@ export const CertificateItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    GetItem('Certificate', id, setData, setLoaded, state.token);
-  }, [id, state.token]);
-
-  useEffect(() => {
-    if (data) {
+    if (item) {
+      const data = item as Certificate;
       setSNumber(data.num);
       setContactID(data.contact_id);
       setCompanyID(data.company_id);
       setCertDate(data.cert_date);
       setNote(data.note);
-      setLoaded(true);
     }
-  }, [data]);
+  }, [item]);
 
   useEffect(() => {
     if (status) {
@@ -67,7 +62,7 @@ export const CertificateItem = (): JSX.Element => {
 
   return (
     <div>
-      {loaded && (
+      {item && (
         <>
           <CertificateNumberInput value={sNumber} setter={setSNumber} />
           <ContactIDSelect id={contactID} setter={setContactID} />

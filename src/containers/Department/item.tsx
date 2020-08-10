@@ -12,9 +12,8 @@ export const DepartmentItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [name, setName] = useState<string>();
   const [note, setNote] = useState<string>();
-  const [data, setData] = useState<Department>();
+  const [item] = GetItem('Department', id);
   const [status, setStatus] = useState(false);
-  const [loaded, setLoaded] = useState(false);
 
   const send = (): void => {
     const number_id = Number(id);
@@ -33,16 +32,12 @@ export const DepartmentItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    GetItem('Department', id, setData, setLoaded, state.token);
-  }, [id, state.token]);
-
-  useEffect(() => {
-    if (data) {
+    if (item) {
+      const data = item as Department;
       setName(data.name);
       setNote(data.note);
-      setLoaded(true);
     }
-  }, [data]);
+  }, [item]);
 
   useEffect(() => {
     if (status) {
@@ -52,7 +47,7 @@ export const DepartmentItem = (): JSX.Element => {
 
   return (
     <div>
-      {loaded && (
+      {item && (
         <>
           <DepartmentNameInput value={name} setter={setName} />
           <NoteInput value={note} setter={setNote} />

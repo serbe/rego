@@ -12,9 +12,8 @@ export const RankItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [name, setName] = useState<string>();
   const [note, setNote] = useState<string>();
-  const [data, setData] = useState<Rank>();
+  const [item] = GetItem('Rank', id);
   const [status, setStatus] = useState(false);
-  const [loaded, setLoaded] = useState(false);
 
   const send = (): void => {
     const number_id = Number(id);
@@ -33,16 +32,12 @@ export const RankItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    GetItem('Rank', id, setData, setLoaded, state.token);
-  }, [id, state.token]);
-
-  useEffect(() => {
-    if (data) {
+    if (item) {
+      const data = item as Rank;
       setName(data.name);
       setNote(data.note);
-      setLoaded(true);
     }
-  }, [data]);
+  }, [item]);
 
   useEffect(() => {
     if (status) {
@@ -52,7 +47,7 @@ export const RankItem = (): JSX.Element => {
 
   return (
     <div>
-      {loaded && (
+      {item && (
         <>
           <RankNameInput value={name} setter={setName} />
           <NoteInput value={note} setter={setNote} />

@@ -13,9 +13,8 @@ export const PostItem = (): JSX.Element => {
   const [name, setName] = useState<string>();
   const [go, setGo] = useState(false);
   const [note, setNote] = useState<string>();
-  const [data, setData] = useState<Post>();
+  const [item] = GetItem('Post', id);
   const [status, setStatus] = useState(false);
-  const [loaded, setLoaded] = useState(false);
 
   const send = (): void => {
     const number_id = Number(id);
@@ -35,17 +34,13 @@ export const PostItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    GetItem('Post', id, setData, setLoaded, state.token);
-  }, [id, state.token]);
-
-  useEffect(() => {
-    if (data) {
+    if (item) {
+      const data = item as Post;
       setName(data.name);
       setGo(data.go || false);
       setNote(data.note);
-      setLoaded(true);
     }
-  }, [data]);
+  }, [item]);
 
   useEffect(() => {
     if (status) {
@@ -55,7 +50,7 @@ export const PostItem = (): JSX.Element => {
 
   return (
     <div>
-      {loaded && (
+      {item && (
         <>
           <PostNameInput value={name} setter={setName} />
           <PostGOSwitch value={go} setter={setGo} />

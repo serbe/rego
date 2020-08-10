@@ -41,9 +41,8 @@ export const SirenItem = (): JSX.Element => {
   const [stage, setStage] = useState<number>();
   const [own, setOwn] = useState<string>();
   const [note, setNote] = useState<string>();
-  const [data, setData] = useState<Siren>();
+  const [item] = GetItem('Siren', id);
   const [status, setStatus] = useState(false);
-  const [loaded, setLoaded] = useState(false);
 
   const send = (): void => {
     const number_id = Number(id);
@@ -73,36 +72,8 @@ export const SirenItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    GetItem('Siren', id, setData, setLoaded, state.token);
-  }, [id, state.token]);
-
-  useEffect(() => {
-    if (data) {
-      setNumberID(data.num_id);
-      setNumberPassport(data.num_pass);
-      setSirenTypeID(data.siren_type_id);
-      setAddress(data.address);
-      setRadio(data.radio);
-      setDesk(data.desk);
-      setContactID(data.contact_id);
-      setCompanyID(data.company_id);
-      setLatitude(data.latitude);
-      setLongitude(data.longitude);
-      setStage(data.stage);
-      setOwn(data.own);
-      setNote(data.note);
-      setLoaded(true);
-    }
-  }, [data]);
-
-  useEffect(() => {
-    if (status) {
-      history.go(-1);
-    }
-  }, [history, status]);
-
-  useEffect(() => {
-    if (data) {
+    if (item) {
+      const data = item as Siren;
       setNumberID(data.num_id);
       setNumberPassport(data.num_pass);
       setSirenTypeID(data.siren_type_id);
@@ -117,7 +88,7 @@ export const SirenItem = (): JSX.Element => {
       setOwn(data.own);
       setNote(data.note);
     }
-  }, [data]);
+  }, [item]);
 
   useEffect(() => {
     if (status) {
@@ -127,7 +98,7 @@ export const SirenItem = (): JSX.Element => {
 
   return (
     <div>
-      {loaded && (
+      {item && (
         <>
           <SirenNumberIDInput value={numberID} setter={setNumberID} />
           <SirenNumberPassportInput value={numberPassport} setter={setNumberPassport} />

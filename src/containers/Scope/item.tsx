@@ -12,9 +12,8 @@ export const ScopeItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [name, setName] = useState<string>();
   const [note, setNote] = useState<string>();
-  const [data, setData] = useState<Scope>();
+  const [item] = GetItem('Scope', id);
   const [status, setStatus] = useState(false);
-  const [loaded, setLoaded] = useState(false);
 
   const send = (): void => {
     const number_id = Number(id);
@@ -33,16 +32,12 @@ export const ScopeItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    GetItem('Scope', id, setData, setLoaded, state.token);
-  }, [id, state.token]);
-
-  useEffect(() => {
-    if (data) {
+    if (item) {
+      const data = item as Scope;
       setName(data.name);
       setNote(data.note);
-      setLoaded(true);
     }
-  }, [data]);
+  }, [item]);
 
   useEffect(() => {
     if (status) {
@@ -52,7 +47,7 @@ export const ScopeItem = (): JSX.Element => {
 
   return (
     <div>
-      {loaded && (
+      {item && (
         <>
           <ScopeNameInput value={name} setter={setName} />
           <NoteInput value={note} setter={setNote} />

@@ -154,131 +154,62 @@ type JsonGetItemScheme =
   | { command: 'Get'; name: 'Siren'; object: { Siren: Siren }; error: string }
   | { command: 'Get'; name: 'SirenType'; object: { SirenType: SirenType }; error: string };
 
-export const GetItem = (
-  name: string,
-  id: string,
-  setData: Dispatch<SetStateAction<Item>>,
-  setLoaded: Dispatch<SetStateAction<boolean>>,
-  token: string,
-): void => {
-  const number_id = Number(id);
-  if (number_id !== 0) {
-    fetch('/api/go/json', {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: `{"command":{"Get":{"Item":{"name":"${name}","id":${number_id}}}},"addon":"${token}"}`,
-    })
-      .then((response) => response.json())
-      .then((response) => response as JsonGetItemScheme)
-      .then((jsonData) => {
-        if (jsonData?.command === 'Get') {
-          switch (jsonData?.name) {
-            case 'Certificate':
-              return setData(jsonData.object.Certificate);
-            case 'Company':
-              return setData(jsonData.object.Company);
-            case 'Contact':
-              return setData(jsonData.object.Contact);
-            case 'Department':
-              return setData(jsonData.object.Department);
-            case 'Education':
-              return setData(jsonData.object.Education);
-            case 'Kind':
-              return setData(jsonData.object.Kind);
-            case 'Post':
-              return setData(jsonData.object.Post);
-            case 'Practice':
-              return setData(jsonData.object.Practice);
-            case 'Rank':
-              return setData(jsonData.object.Rank);
-            case 'Scope':
-              return setData(jsonData.object.Scope);
-            case 'Siren':
-              return setData(jsonData.object.Siren);
-            case 'SirenType':
-              return setData(jsonData.object.SirenType);
-            default:
-              throw new Error('unknown item');
-          }
-        }
-        throw new Error('unknown item');
-      })
-      .catch(() => {
-        return setLoaded(true);
-      });
-  } else {
-    setLoaded(true);
-  }
-};
-
-// export const AddEventMessageGet = (
-//   ws: MutableRefObject<WebSocket | undefined>,
-//   fn: (message: MessageEvent, setData: Dispatch<SetStateAction<Item>>) => void,
-//   setData: Dispatch<SetStateAction<Item>>,
-// ): void => {
-//   ws.current?.addEventListener('message', (event: MessageEvent) => {
-//     fn(event, setData);
-//   });
-// };
-
-export const NewGetItem = (name: string, id: string): [Item, string] => {
+export const GetItem = (name: string, id: string): [Item] => {
   const { state } = useContext(AuthContext);
   const [data, setData] = useState<Item>();
-  const [error, setError] = useState<string>('');
 
-  const number_id = Number(id);
-  if (number_id !== 0) {
-    fetch('/api/go/json', {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: `{"command":{"Get":{"Item":{"name":"${name}","id":${number_id}}}},"addon":"${state.token}"}`,
-    })
-      .then((response) => response.json())
-      .then((response) => response as JsonGetItemScheme)
-      .then((jsonData) => {
-        if (jsonData?.command === 'Get') {
-          switch (jsonData?.name) {
-            case 'Certificate':
-              return setData(jsonData.object.Certificate);
-            case 'Company':
-              return setData(jsonData.object.Company);
-            case 'Contact':
-              return setData(jsonData.object.Contact);
-            case 'Department':
-              return setData(jsonData.object.Department);
-            case 'Education':
-              return setData(jsonData.object.Education);
-            case 'Kind':
-              return setData(jsonData.object.Kind);
-            case 'Post':
-              return setData(jsonData.object.Post);
-            case 'Practice':
-              return setData(jsonData.object.Practice);
-            case 'Rank':
-              return setData(jsonData.object.Rank);
-            case 'Scope':
-              return setData(jsonData.object.Scope);
-            case 'Siren':
-              return setData(jsonData.object.Siren);
-            case 'SirenType':
-              return setData(jsonData.object.SirenType);
-            default:
-              throw new Error('unknown item');
-          }
-        }
-        throw new Error('unknown item');
+  useEffect(() => {
+    const number_id = Number(id);
+    if (number_id !== 0) {
+      fetch('/api/go/json', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: `{"command":{"Get":{"Item":{"name":"${name}","id":${number_id}}}},"addon":"${state.token}"}`,
       })
-      .catch((error) => {
-        return setError(error);
-      });
-  }
-  return [data, error];
+        .then((response) => response.json())
+        .then((response) => response as JsonGetItemScheme)
+        .then((jsonData) => {
+          if (jsonData?.command === 'Get') {
+            switch (jsonData?.name) {
+              case 'Certificate':
+                return setData(jsonData.object.Certificate);
+              case 'Company':
+                return setData(jsonData.object.Company);
+              case 'Contact':
+                return setData(jsonData.object.Contact);
+              case 'Department':
+                return setData(jsonData.object.Department);
+              case 'Education':
+                return setData(jsonData.object.Education);
+              case 'Kind':
+                return setData(jsonData.object.Kind);
+              case 'Post':
+                return setData(jsonData.object.Post);
+              case 'Practice':
+                return setData(jsonData.object.Practice);
+              case 'Rank':
+                return setData(jsonData.object.Rank);
+              case 'Scope':
+                return setData(jsonData.object.Scope);
+              case 'Siren':
+                return setData(jsonData.object.Siren);
+              case 'SirenType':
+                return setData(jsonData.object.SirenType);
+              default:
+                throw new Error('unknown item');
+            }
+          }
+          throw new Error('unknown item');
+        })
+        .catch(() => {
+          return;
+        });
+    }
+  }, [id, name, state.token]);
+  return [data];
 };
 
 export const GetList = (name: string): [List[], string] => {

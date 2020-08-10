@@ -17,9 +17,8 @@ export const PracticeItem = (): JSX.Element => {
   const [topic, setTopic] = useState<string>();
   const [date, setDate] = useState<string>();
   const [note, setNote] = useState<string>();
-  const [data, setData] = useState<Practice>();
+  const [item] = GetItem('Practice', id);
   const [status, setStatus] = useState(false);
-  const [loaded, setLoaded] = useState(false);
 
   const send = (): void => {
     const number_id = Number(id);
@@ -41,19 +40,15 @@ export const PracticeItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    GetItem('Practice', id, setData, setLoaded, state.token);
-  }, [id, state.token]);
-
-  useEffect(() => {
-    if (data) {
+    if (item) {
+      const data = item as Practice;
       setCompanyID(data.company_id);
       setKindID(data.kind_id);
       setTopic(data.topic);
       setDate(data.date_of_practice);
       setNote(data.note);
-      setLoaded(true);
     }
-  }, [data]);
+  }, [item]);
 
   useEffect(() => {
     if (status) {
@@ -63,7 +58,7 @@ export const PracticeItem = (): JSX.Element => {
 
   return (
     <div>
-      {loaded && (
+      {item && (
         <>
           <CompanyIDSelect id={companyID} setter={setCompanyID} />
           <KindIDSelect id={kindID} setter={setKindID} />

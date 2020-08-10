@@ -13,9 +13,8 @@ export const SirenTypeItem = (): JSX.Element => {
   const [name, setName] = useState<string>();
   const [radius, setRadius] = useState<number>();
   const [note, setNote] = useState<string>();
-  const [data, setData] = useState<SirenType>();
+  const [item] = GetItem('SirenType', id);
   const [status, setStatus] = useState(false);
-  const [loaded, setLoaded] = useState(false);
 
   const send = (): void => {
     const number_id = Number(id);
@@ -35,17 +34,13 @@ export const SirenTypeItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    GetItem('SirenType', id, setData, setLoaded, state.token);
-  }, [id, state.token]);
-
-  useEffect(() => {
-    if (data) {
+    if (item) {
+      const data = item as SirenType;
       setName(data.name);
       setRadius(data.radius);
       setNote(data.note);
-      setLoaded(true);
     }
-  }, [data, history, status]);
+  }, [item, history, status]);
 
   useEffect(() => {
     if (status) {
@@ -55,7 +50,7 @@ export const SirenTypeItem = (): JSX.Element => {
 
   return (
     <div>
-      {loaded && (
+      {item && (
         <>
           <SirenTypeNameInput value={name} setter={setName} />
           <SirenTypeRadiusInput value={radius} setter={setRadius} />

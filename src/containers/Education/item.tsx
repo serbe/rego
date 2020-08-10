@@ -21,9 +21,8 @@ export const EducationItem = (): JSX.Element => {
   const [endDate, setEndDate] = useState<string>();
   const [postID, setPostID] = useState<number>();
   const [note, setNote] = useState<string>();
-  const [data, setData] = useState<Education>();
+  const [item] = GetItem('Education', id);
   const [status, setStatus] = useState(false);
-  const [loaded, setLoaded] = useState(false);
 
   const send = (): void => {
     const number_id = Number(id);
@@ -45,19 +44,15 @@ export const EducationItem = (): JSX.Element => {
   };
 
   useEffect(() => {
-    GetItem('Education', id, setData, setLoaded, state.token);
-  }, [id, state.token]);
-
-  useEffect(() => {
-    if (data) {
+    if (item) {
+      const data = item as Education;
       setContactID(data.contact_id);
       setStartDate(data.start_date);
       setEndDate(data.end_date);
       setPostID(data.post_id);
       setNote(data.note);
-      setLoaded(true);
     }
-  }, [data]);
+  }, [item]);
 
   useEffect(() => {
     if (status) {
@@ -67,7 +62,7 @@ export const EducationItem = (): JSX.Element => {
 
   return (
     <div>
-      {loaded && (
+      {item && (
         <>
           <EducationNameSelect id={contactID} setter={setContactID} />
           <PostGoIDSelect id={postID} setter={setPostID} />
