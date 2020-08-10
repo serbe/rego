@@ -224,6 +224,63 @@ export const GetItem = (
 //   });
 // };
 
+export const NewGetItem = (name: string, id: string): [Item, string] => {
+  const { state } = useContext(AuthContext);
+  const [data, setData] = useState<Item>();
+  const [error, setError] = useState<string>('');
+
+  const number_id = Number(id);
+  if (number_id !== 0) {
+    fetch('/api/go/json', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: `{"command":{"Get":{"Item":{"name":"${name}","id":${number_id}}}},"addon":"${state.token}"}`,
+    })
+      .then((response) => response.json())
+      .then((response) => response as JsonGetItemScheme)
+      .then((jsonData) => {
+        if (jsonData?.command === 'Get') {
+          switch (jsonData?.name) {
+            case 'Certificate':
+              return setData(jsonData.object.Certificate);
+            case 'Company':
+              return setData(jsonData.object.Company);
+            case 'Contact':
+              return setData(jsonData.object.Contact);
+            case 'Department':
+              return setData(jsonData.object.Department);
+            case 'Education':
+              return setData(jsonData.object.Education);
+            case 'Kind':
+              return setData(jsonData.object.Kind);
+            case 'Post':
+              return setData(jsonData.object.Post);
+            case 'Practice':
+              return setData(jsonData.object.Practice);
+            case 'Rank':
+              return setData(jsonData.object.Rank);
+            case 'Scope':
+              return setData(jsonData.object.Scope);
+            case 'Siren':
+              return setData(jsonData.object.Siren);
+            case 'SirenType':
+              return setData(jsonData.object.SirenType);
+            default:
+              throw new Error('unknown item');
+          }
+        }
+        throw new Error('unknown item');
+      })
+      .catch((error) => {
+        return setError(error);
+      });
+  }
+  return [data, error];
+};
+
 export const GetList = (name: string): [List[], string] => {
   const { state } = useContext(AuthContext);
   const [list, setList] = useState<List[]>([]);
