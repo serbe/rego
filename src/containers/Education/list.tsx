@@ -7,7 +7,7 @@ import { EducationList } from '../../models/education';
 
 export const Educations = (): JSX.Element => {
   const history = useHistory();
-  const [data, error] = GetList('EducationList');
+  const data = GetList('EducationList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
@@ -37,9 +37,7 @@ export const Educations = (): JSX.Element => {
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
       <Bar value={search} setter={setSearch} name="educations" />
       <table className="table is-narrow is-fullwidth">

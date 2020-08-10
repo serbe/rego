@@ -8,7 +8,7 @@ import { ContactList } from '../../models/contact';
 
 export const Contacts = (): JSX.Element => {
   const history = useHistory();
-  const [data, error] = GetList('ContactList');
+  const data = GetList('ContactList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
@@ -46,9 +46,7 @@ export const Contacts = (): JSX.Element => {
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
       <Bar value={search} setter={setSearch} name="contacts" />
       <table className="table is-narrow is-fullwidth">

@@ -7,7 +7,7 @@ import { DepartmentList } from '../../models/department';
 
 export const Departments = (): JSX.Element => {
   const history = useHistory();
-  const [data, error] = GetList('DepartmentList');
+  const data = GetList('DepartmentList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
@@ -34,9 +34,7 @@ export const Departments = (): JSX.Element => {
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
       <Bar value={search} setter={setSearch} name="departments" />
       <table className="table is-narrow is-fullwidth">

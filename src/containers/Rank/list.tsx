@@ -7,7 +7,7 @@ import { RankList } from '../../models/rank';
 
 export const Ranks = (): JSX.Element => {
   const history = useHistory();
-  const [data, error] = GetList('RankList');
+  const data = GetList('RankList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
@@ -34,9 +34,7 @@ export const Ranks = (): JSX.Element => {
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
       <Bar value={search} setter={setSearch} name="ranks" />
       <table className="table is-narrow is-fullwidth">

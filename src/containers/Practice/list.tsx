@@ -7,7 +7,7 @@ import { PracticeList } from '../../models/practice';
 
 export const Practices = (): JSX.Element => {
   const history = useHistory();
-  const [data, error] = GetList('PracticeList');
+  const data = GetList('PracticeList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
@@ -36,9 +36,7 @@ export const Practices = (): JSX.Element => {
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
       <Bar value={search} setter={setSearch} name="practices" />
       <table className="table is-narrow is-fullwidth">

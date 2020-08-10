@@ -7,7 +7,7 @@ import { PostList } from '../../models/post';
 
 export const Posts = (): JSX.Element => {
   const history = useHistory();
-  const [data, error] = GetList('PostList');
+  const data = GetList('PostList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
@@ -37,9 +37,7 @@ export const Posts = (): JSX.Element => {
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
       <Bar value={search} setter={setSearch} name="posts" />
       <table className="table is-narrow is-fullwidth">

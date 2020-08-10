@@ -13,7 +13,7 @@ export const PostItem = (): JSX.Element => {
   const [name, setName] = useState<string>();
   const [go, setGo] = useState(false);
   const [note, setNote] = useState<string>();
-  const [item] = GetItem('Post', id);
+  const item = GetItem('Post', id);
   const [status, setStatus] = useState(false);
 
   const send = (): void => {

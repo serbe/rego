@@ -41,7 +41,7 @@ export const SirenItem = (): JSX.Element => {
   const [stage, setStage] = useState<number>();
   const [own, setOwn] = useState<string>();
   const [note, setNote] = useState<string>();
-  const [item] = GetItem('Siren', id);
+  const item = GetItem('Siren', id);
   const [status, setStatus] = useState(false);
 
   const send = (): void => {

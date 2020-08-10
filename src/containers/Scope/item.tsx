@@ -12,7 +12,7 @@ export const ScopeItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [name, setName] = useState<string>();
   const [note, setNote] = useState<string>();
-  const [item] = GetItem('Scope', id);
+  const item = GetItem('Scope', id);
   const [status, setStatus] = useState(false);
 
   const send = (): void => {

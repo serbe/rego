@@ -36,7 +36,7 @@ export const CompanyItem = (): JSX.Element => {
   const [faxes, setFaxes] = useState(['']);
   const [practices, setPractices] = useState<PracticeList[]>([]);
   const [contacts, setContacts] = useState<ContactShort[]>([]);
-  const [item] = GetItem('Company', id);
+  const item = GetItem('Company', id);
   const [status, setStatus] = useState(false);
 
   const send = (): void => {

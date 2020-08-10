@@ -91,12 +91,10 @@ const PracticeTable = (practices: PracticeShort[]): JSX.Element => {
 };
 
 export const Home = (): JSX.Element => {
-  const [educations, educationsError] = GetList('EducationNear');
-  const [practices, practicesError] = GetList('PracticeNear');
+  const educations = GetList('EducationNear');
+  const practices = GetList('PracticeNear');
 
-  return practicesError || educationsError ? (
-    <div>No data</div>
-  ) : (
+  return (
     <div className="columns is-mobile">
       <div className="column is-4">{EducationTable(educations as EducationShort[])}</div>
       <div className="column is-4 is-offset-4">{PracticeTable(practices as PracticeShort[])}</div>

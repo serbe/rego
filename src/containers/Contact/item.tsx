@@ -44,7 +44,7 @@ export const ContactItem = (): JSX.Element => {
   const [phones, setPhones] = useState(['']);
   const [faxes, setFaxes] = useState(['']);
   const [educations, setEducations] = useState<string[]>([]);
-  const [item] = GetItem('Contact', id);
+  const item = GetItem('Contact', id);
   const [status, setStatus] = useState(false);
 
   const send = (): void => {

@@ -12,7 +12,7 @@ export const DepartmentItem = (): JSX.Element => {
   const { id } = useParams<ParameterTypes>();
   const [name, setName] = useState<string>();
   const [note, setNote] = useState<string>();
-  const [item] = GetItem('Department', id);
+  const item = GetItem('Department', id);
   const [status, setStatus] = useState(false);
 
   const send = (): void => {

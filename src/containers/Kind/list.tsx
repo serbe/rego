@@ -7,7 +7,7 @@ import { KindList } from '../../models/kind';
 
 export const Kinds = (): JSX.Element => {
   const history = useHistory();
-  const [data, error] = GetList('KindList');
+  const data = GetList('KindList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
@@ -35,9 +35,7 @@ export const Kinds = (): JSX.Element => {
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
       <Bar value={search} setter={setSearch} name="kinds" />
       <table className="table is-narrow is-fullwidth">

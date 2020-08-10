@@ -154,7 +154,7 @@ type JsonGetItemScheme =
   | { command: 'Get'; name: 'Siren'; object: { Siren: Siren }; error: string }
   | { command: 'Get'; name: 'SirenType'; object: { SirenType: SirenType }; error: string };
 
-export const GetItem = (name: string, id: string): [Item] => {
+export const GetItem = (name: string, id: string): Item => {
   const { state } = useContext(AuthContext);
   const [data, setData] = useState<Item>();
 
@@ -209,13 +209,12 @@ export const GetItem = (name: string, id: string): [Item] => {
         });
     }
   }, [id, name, state.token]);
-  return [data];
+  return data;
 };
 
-export const GetList = (name: string): [List[], string] => {
+export const GetList = (name: string): List[] => {
   const { state } = useContext(AuthContext);
   const [list, setList] = useState<List[]>([]);
-  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     fetch('/api/go/json', {
@@ -266,11 +265,11 @@ export const GetList = (name: string): [List[], string] => {
         throw new Error('unknown list');
       })
       .catch(() => {
-        return setError('unknown list');
+        return;
       });
   }, [name, state.token]);
 
-  return [list, error];
+  return list;
 };
 
 export const GetSelect = (name: string): [SelectItem[], string] => {

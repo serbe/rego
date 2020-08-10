@@ -8,7 +8,7 @@ import { SirenList } from '../../models/siren';
 
 export const Sirens = (): JSX.Element => {
   const history = useHistory();
-  const [data, error] = GetList('SirenList');
+  const data = GetList('SirenList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
@@ -38,9 +38,7 @@ export const Sirens = (): JSX.Element => {
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
       <Bar value={search} setter={setSearch} name="sirens" />
       <table className="table is-narrow is-fullwidth">

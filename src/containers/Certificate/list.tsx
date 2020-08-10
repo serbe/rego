@@ -7,7 +7,7 @@ import { CertificateList } from '../../models/certificate';
 
 export const Certificates = (): JSX.Element => {
   const history = useHistory();
-  const [data, error] = GetList('CertificateList');
+  const data = GetList('CertificateList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
@@ -50,9 +50,7 @@ export const Certificates = (): JSX.Element => {
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
       <Bar value={search} setter={setSearch} name="certificates" />
       <table className="table is-narrow is-fullwidth">

@@ -7,7 +7,7 @@ import { ScopeList } from '../../models/scope';
 
 export const Scopes = (): JSX.Element => {
   const history = useHistory();
-  const [data, error] = GetList('ScopeList');
+  const data = GetList('ScopeList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
@@ -34,9 +34,7 @@ export const Scopes = (): JSX.Element => {
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
       <Bar value={search} setter={setSearch} name="scopes" />
       <table className="table is-narrow is-fullwidth">

@@ -8,7 +8,7 @@ import { CompanyList } from '../../models/company';
 
 export const Companies = (): JSX.Element => {
   const history = useHistory();
-  const [data, error] = GetList('CompanyList');
+  const data = GetList('CompanyList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
@@ -43,9 +43,7 @@ export const Companies = (): JSX.Element => {
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
       <Bar value={search} setter={setSearch} name="companies" />
       <table className="table is-narrow is-fullwidth">
