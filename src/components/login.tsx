@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useContext, useState, KeyboardEvent } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useContext, useState } from 'react';
 
 import { AuthContext } from '../helpers/auth';
 import { FormField } from './formfield';
@@ -14,7 +14,7 @@ export const Login = (): JSX.Element => {
   const [pass, setPass] = useState('');
 
   const submit = (): void => {
-    fetch('http://5.39.102.29:49394/api/go/login', {
+    fetch('/api/go/login', {
       method: 'POST',
       mode: 'cors',
       headers: {
@@ -44,32 +44,35 @@ export const Login = (): JSX.Element => {
 
   return (
     <div className="container w300">
-      <FormField
-        name="name"
-        type="text"
-        icon="user"
-        label="Имя пользователя"
-        onChange={(event: ChangeEvent<HTMLInputElement>): void => {
-          setName(event.target.value);
-        }}
-      />
-      <FormField
-        name="password"
-        type="password"
-        icon="key"
-        label="Пароль"
-        onChange={(event: ChangeEvent<HTMLInputElement>): void => {
-          setPass(event.target.value);
-        }}
-        onKeyPress={(event: KeyboardEvent<HTMLInputElement>): void => {
-          event.key === 'Enter' && submit();
-        }}
-      />
-      <div className="field">
-        <div className="control">
-          <button className="button" onClick={() => submit()}>
-            Отправить
-          </button>
+      <div className="box mt-4">
+        <h3 className="title is-3">Авторизация</h3>
+        <FormField
+          name="name"
+          type="text"
+          icon="user"
+          label="Имя пользователя"
+          onChange={(event: ChangeEvent<HTMLInputElement>): void => {
+            setName(event.target.value);
+          }}
+        />
+        <FormField
+          name="password"
+          type="password"
+          icon="key"
+          label="Пароль"
+          onChange={(event: ChangeEvent<HTMLInputElement>): void => {
+            setPass(event.target.value);
+          }}
+          onKeyPress={(event: KeyboardEvent<HTMLInputElement>): void => {
+            event.key === 'Enter' && submit();
+          }}
+        />
+        <div className="field">
+          <div className="control">
+            <button className="button" onClick={() => submit()}>
+              Отправить
+            </button>
+          </div>
         </div>
       </div>
     </div>

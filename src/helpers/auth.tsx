@@ -88,7 +88,7 @@ const checkAuth = async (name: string, token: string, role: number): Promise<boo
   if (name === '' || token === '' || role === 0) {
     return false;
   }
-  return fetch('http://5.39.102.29:49394/api/go/check', {
+  return fetch('/api/go/check', {
     method: 'POST',
     mode: 'cors',
     headers: {
