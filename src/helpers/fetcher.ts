@@ -14,8 +14,6 @@ import { Siren, SirenList } from '../models/siren';
 import { SirenType, SirenTypeList } from '../models/sirentype';
 import { AuthContext } from './auth';
 
-export const URL = 'ws://5.39.102.29:49394/api/go';
-
 export type SelectItem = {
   id: number;
   name: string;
@@ -52,10 +50,10 @@ export type List =
   | SirenList
   | SirenTypeList;
 
-type AuthJson = {
-  token?: string;
-  error?: string;
-};
+// type AuthJson = {
+//   token?: string;
+//   error?: string;
+// };
 
 type JsonListScheme =
   | undefined
