@@ -20,6 +20,10 @@ export type Siren = {
   note?: string;
 };
 
+export const SirenEmpty: Siren = {
+  id: 0,
+};
+
 export type SirenList = {
   id: number;
   siren_type_name?: string;

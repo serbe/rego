@@ -30,6 +30,10 @@ export type Contact = {
   educations?: string[];
 };
 
+export const ContactEmpty: Contact = {
+  id: 0,
+};
+
 export type ContactList = {
   id: number;
   name?: string;

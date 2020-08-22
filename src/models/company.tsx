@@ -19,6 +19,10 @@ export type Company = {
   contacts?: ContactShort[];
 };
 
+export const CompanyEmpty: Company = {
+  id: 0,
+};
+
 export type CompanyList = {
   id: number;
   name?: string;

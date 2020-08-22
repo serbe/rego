@@ -10,6 +10,10 @@ export type Scope = {
   note?: string;
 };
 
+export const ScopeEmpty: Scope = {
+  id: 0,
+};
+
 export type ScopeList = {
   id: number;
   name?: string;

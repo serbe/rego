@@ -1,17 +1,17 @@
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 
-import { Certificate, CertificateList } from '../models/certificate';
-import { Company, CompanyList } from '../models/company';
-import { Contact, ContactList } from '../models/contact';
-import { Department, DepartmentList } from '../models/department';
-import { Education, EducationList, EducationShort } from '../models/education';
-import { Kind, KindList } from '../models/kind';
-import { Post, PostList } from '../models/post';
-import { Practice, PracticeList, PracticeShort } from '../models/practice';
-import { Rank, RankList } from '../models/rank';
-import { Scope, ScopeList } from '../models/scope';
-import { Siren, SirenList } from '../models/siren';
-import { SirenType, SirenTypeList } from '../models/sirentype';
+import { Certificate, CertificateList, CertificateEmpty } from '../models/certificate';
+import { Company, CompanyList, CompanyEmpty } from '../models/company';
+import { Contact, ContactList, ContactEmpty } from '../models/contact';
+import { Department, DepartmentList, DepartmentEmpty } from '../models/department';
+import { Education, EducationList, EducationShort, EducationEmpty } from '../models/education';
+import { Kind, KindList, KindEmpty } from '../models/kind';
+import { Post, PostList, PostEmpty } from '../models/post';
+import { Practice, PracticeList, PracticeShort, PracticeEmpty } from '../models/practice';
+import { Rank, RankList, RankEmpty } from '../models/rank';
+import { Scope, ScopeList, ScopeEmpty } from '../models/scope';
+import { Siren, SirenList, SirenEmpty } from '../models/siren';
+import { SirenType, SirenTypeList, SirenTypeEmpty } from '../models/sirentype';
 import { AuthContext } from './auth';
 
 export type SelectItem = {
@@ -49,11 +49,6 @@ export type List =
   | ScopeList
   | SirenList
   | SirenTypeList;
-
-// type AuthJson = {
-//   token?: string;
-//   error?: string;
-// };
 
 type JsonListScheme =
   | undefined
@@ -207,6 +202,35 @@ export const GetItem = (name: string, id: string): Item => {
         .catch(() => {
           return;
         });
+    } else {
+      switch (name) {
+        case 'Certificate':
+          return setData(CertificateEmpty);
+        case 'Company':
+          return setData(CompanyEmpty);
+        case 'Contact':
+          return setData(ContactEmpty);
+        case 'Department':
+          return setData(DepartmentEmpty);
+        case 'Education':
+          return setData(EducationEmpty);
+        case 'Kind':
+          return setData(KindEmpty);
+        case 'Post':
+          return setData(PostEmpty);
+        case 'Practice':
+          return setData(PracticeEmpty);
+        case 'Rank':
+          return setData(RankEmpty);
+        case 'Scope':
+          return setData(ScopeEmpty);
+        case 'Siren':
+          return setData(SirenEmpty);
+        case 'SirenType':
+          return setData(SirenTypeEmpty);
+        default:
+          throw new Error('unknown item');
+      }
     }
   }, [id, name, state.token]);
   return data;

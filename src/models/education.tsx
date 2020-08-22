@@ -12,6 +12,10 @@ export type Education = {
   note?: string;
 };
 
+export const EducationEmpty: Education = {
+  id: 0,
+};
+
 export type EducationList = {
   id: number;
   contact_id?: number;

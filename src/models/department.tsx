@@ -10,6 +10,10 @@ export type Department = {
   note?: string;
 };
 
+export const DepartmentEmpty: Department = {
+  id: 0,
+};
+
 export type DepartmentList = {
   id: number;
   name?: string;

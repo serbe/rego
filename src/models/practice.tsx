@@ -18,6 +18,10 @@ export type Practice = {
   note?: string;
 };
 
+export const PracticeEmpty: Practice = {
+  id: 0,
+};
+
 export type PracticeList = {
   id: number;
   company_id?: number;

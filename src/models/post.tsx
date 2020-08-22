@@ -11,6 +11,10 @@ export type Post = {
   note?: string;
 };
 
+export const PostEmpty: Post = {
+  id: 0,
+};
+
 export type PostList = {
   id: number;
   name?: string;

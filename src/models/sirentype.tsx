@@ -11,6 +11,10 @@ export type SirenType = {
   note?: string;
 };
 
+export const SirenTypeEmpty: SirenType = {
+  id: 0,
+};
+
 export type SirenTypeList = {
   id: number;
   name?: string;

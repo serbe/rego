@@ -11,6 +11,10 @@ export type Kind = {
   note?: string;
 };
 
+export const KindEmpty: Kind = {
+  id: 0,
+};
+
 export type KindList = {
   id: number;
   name?: string;

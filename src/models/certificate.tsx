@@ -13,6 +13,10 @@ export type Certificate = {
   note?: string;
 };
 
+export const CertificateEmpty: Certificate = {
+  id: 0,
+};
+
 export type CertificateList = {
   id: number;
   num?: string;

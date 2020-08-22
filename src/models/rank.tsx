@@ -10,6 +10,10 @@ export type Rank = {
   note?: string;
 };
 
+export const RankEmpty: Rank = {
+  id: 0,
+};
+
 export type RankList = {
   id: number;
   name?: string;
