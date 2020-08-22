@@ -33,10 +33,12 @@ const dropdownItems = [
 
 const NavbarNotLogged = (): JSX.Element => (
   <nav className="navbar is-dark" role="navigation">
-    <div className="navbar-brand">
-      <NavLink className="navbar-item" key="NavbarNotLogged" to="/login">
-        Авторизация
-      </NavLink>
+    <div className="container px-4">
+      <div className="navbar-brand">
+        <NavLink className="navbar-item" key="NavbarNotLogged" to="/login">
+          Авторизация
+        </NavLink>
+      </div>
     </div>
   </nav>
 );
@@ -142,12 +144,14 @@ export const NavBar = (): JSX.Element => {
 
   return state.role > 0 ? (
     <nav className="navbar is-dark" role="navigation" aria-label="dropdown navigation">
-      <div className="navbar-brand">
-        <BrandBar open={open} setter={setOpen} />
-      </div>
-      <div id="navbarData" className={open ? 'navbar-menu is-active' : 'navbar-menu'}>
-        <NavBarStart setter={setOpen} />
-        <NavbarEnd />
+      <div className="container">
+        <div className="navbar-brand">
+          <BrandBar open={open} setter={setOpen} />
+        </div>
+        <div id="navbarData" className={open ? 'navbar-menu is-active' : 'navbar-menu'}>
+          <NavBarStart setter={setOpen} />
+          <NavbarEnd />
+        </div>
       </div>
     </nav>
   ) : (

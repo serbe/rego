@@ -1,10 +1,10 @@
 import './rugo.css';
 
-import React, { useReducer, useEffect } from 'react';
+import React, { useEffect, useReducer } from 'react';
 
 import { Login } from './components/login';
 import { NavBar } from './components/navbar';
-import { AuthContext, initialState, reducer, CheckStorage } from './helpers/auth';
+import { AuthContext, CheckStorage, initialState, reducer } from './helpers/auth';
 import { Router } from './helpers/router';
 
 const Rugo = (): JSX.Element => {
@@ -29,7 +29,7 @@ const Rugo = (): JSX.Element => {
     state.login ? (
       <>
         <NavBar />
-        <div className="container py-4 centered-content">
+        <div className="container px-4 py-4">
           <Router />
         </div>
       </>
