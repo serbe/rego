@@ -27,35 +27,39 @@ export const Select = (properties: SelectProps): JSX.Element => {
   const [itemID, setItemID] = useState(id || 0);
   const [list, error] = GetSelect(listName);
   const [value, setValue] = useState<string>();
+  const [currentValue, setCurrentValue] = useState('');
+
+  useEffect(() => {
+    setItemID(id || 0);
+  }, [id]);
 
   useEffect(() => {
     if (list[0].id !== 0) {
       list.unshift({ id: 0, name: '' });
     }
-    if (!id && id === 0) {
+    if (!id && itemID === 0) {
       setValue('');
     } else {
       const currentItem = list.find((item) => item.id === id);
       setValue(currentItem?.name || '');
     }
-  }, [list, id]);
+  }, [list, id, itemID]);
 
-  const currentValue = (): string => {
+  useEffect(() => {
     if (opened) {
-      return value || '';
+      setCurrentValue(value || '');
+    } else {
+      const currentItem = list.find((item) => item.id === itemID);
+      setCurrentValue(currentItem?.name || '');
     }
-    const currentItem = list.find((item) => item.id === itemID);
-    return currentItem?.name || '';
-  };
+  }, [itemID, list, opened, value]);
 
   const filteredList = (): SelectItem[] => {
-    const inputValue = currentValue();
-
-    if (inputValue.trim().length === 0) {
+    if (currentValue.trim().length === 0) {
       return list;
     }
 
-    const inputArray = inputValue.split(' ');
+    const inputArray = currentValue.split(' ');
 
     return list.filter(
       (listItem) =>
@@ -81,7 +85,7 @@ export const Select = (properties: SelectProps): JSX.Element => {
           className={`input ${color ? `is-${color}` : ''}`}
           name={name}
           type="text"
-          value={currentValue()}
+          value={currentValue}
           onChange={(event: ChangeEvent<HTMLInputElement>): void => {
             setValue(event.target.value);
           }}
