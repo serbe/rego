@@ -1,19 +1,19 @@
 import React from 'react';
 
-interface PaginationProps {
+interface PaginationProperties {
   currentPage: number;
   lastPage: number;
   setter: (value: number) => void;
 }
 
-interface ItemProps {
+interface ItemProperties {
   check: boolean;
   ellipsis?: boolean;
   index: number;
   link?: number;
 }
 
-export const Pagination = (properties: PaginationProps): JSX.Element => {
+export const Pagination = (properties: PaginationProperties): JSX.Element => {
   const { currentPage, lastPage, setter } = properties;
   const navClasses = `pagination is-rounded is-centered`;
 
@@ -49,7 +49,7 @@ export const Pagination = (properties: PaginationProps): JSX.Element => {
       </button>
     );
 
-  const Item = (properties: ItemProps): JSX.Element => {
+  const Item = (properties: ItemProperties): JSX.Element => {
     const { check, index, link, ellipsis } = properties;
 
     return check ? (

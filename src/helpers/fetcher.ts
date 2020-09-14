@@ -52,10 +52,10 @@ export type List =
   | SirenList
   | SirenTypeList;
 
-type AuthJson = {
-  token?: string;
-  error?: string;
-};
+// type AuthJson = {
+//   token?: string;
+//   error?: string;
+// };
 
 type JsonListScheme =
   | undefined

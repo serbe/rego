@@ -10,7 +10,7 @@ export interface SelectValues {
   setter: (event?: number) => void;
 }
 
-interface SelectProps {
+interface SelectProperties {
   color?: 'primary' | 'info' | 'success' | 'warning' | 'danger';
   icon?: string;
   id?: number;
@@ -20,7 +20,7 @@ interface SelectProps {
   setter: (event?: number) => void;
 }
 
-export const Select = (properties: SelectProps): JSX.Element => {
+export const Select = (properties: SelectProperties): JSX.Element => {
   const { name, id, label, icon, color, listName, setter } = properties;
 
   const [opened, setOpened] = useState(false);

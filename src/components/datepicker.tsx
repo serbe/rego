@@ -5,7 +5,7 @@ export interface DatePickerValues {
   setter: (value?: string) => void;
 }
 
-interface DatePickerProps {
+interface DatePickerProperties {
   label?: string;
   name: string;
   setter: (value?: string) => void;
@@ -38,7 +38,7 @@ const listYears = (): string[] => {
   return list;
 };
 
-export const DatePicker = (properties: DatePickerProps): JSX.Element => {
+export const DatePicker = (properties: DatePickerProperties): JSX.Element => {
   const { name, value, setter, label } = properties;
 
   const [year, setYear] = useState(' ');
