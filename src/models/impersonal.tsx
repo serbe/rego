@@ -1,10 +1,10 @@
-import React, { ChangeEvent, SetStateAction, useContext } from 'react';
+import React, { ChangeEvent, SetStateAction } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { FormField } from '../components/formfield';
 import { Input, StringInputProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
-import { AuthContext } from '../helpers/auth';
+import { useAuthState } from '../helpers/auth';
 import { addEmptyString } from '../helpers/utils';
 
 export interface ParameterTypes {
@@ -138,11 +138,11 @@ interface FormButtonsValues {
 
 export const ItemFormButtons = (properties: FormButtonsValues): JSX.Element => {
   const history = useHistory();
-  const { state } = useContext(AuthContext);
+  const { auth } = useAuthState();
   const { send, del } = properties;
 
   const SaveButton = () =>
-    state.role > 4 ? (
+    auth.role > 4 ? (
       <div className="control">
         <button className="button" onClick={() => send()}>
           Сохранить
@@ -161,7 +161,7 @@ export const ItemFormButtons = (properties: FormButtonsValues): JSX.Element => {
   );
 
   const DeleteButton = () =>
-    state.role > 8 ? (
+    auth.role > 8 ? (
       <div className="control mla is-danger">
         <button
           className="button"

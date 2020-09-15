@@ -1,30 +1,30 @@
 import React, {
   createContext,
+  Dispatch,
   ReactElement,
   ReactNode,
-  Dispatch,
   SetStateAction,
-  useState,
   useContext,
+  useState,
 } from 'react';
 
-const WebSocketContext = createContext<WebSocket | undefined>(undefined);
+import { URL } from './fetcher';
 
-const SetWebSocketContext = createContext<
-  undefined | Dispatch<SetStateAction<WebSocket | undefined>>
->(undefined);
+const WebSocketContext = createContext<WebSocket>(new WebSocket(URL));
+
+const SetWebSocketContext = createContext<Dispatch<SetStateAction<WebSocket>>>(() => {});
 
 interface WebSocketProviderProperties {
   children: ReactNode;
 }
 
 interface WebSocketContextProperties {
-  ws?: WebSocket;
-  setWs: Dispatch<SetStateAction<WebSocket | undefined>>;
+  ws: WebSocket;
+  setWs: Dispatch<SetStateAction<WebSocket>>;
 }
 
 export const WebSocketProvider = ({ children }: WebSocketProviderProperties): ReactElement => {
-  const [webSocket, setWebSocket] = useState<WebSocket | undefined>();
+  const [webSocket, setWebSocket] = useState<WebSocket>(new WebSocket(URL));
 
   return (
     <WebSocketContext.Provider value={webSocket}>
@@ -36,9 +36,9 @@ export const WebSocketProvider = ({ children }: WebSocketProviderProperties): Re
 export const useWebSocketState = (): WebSocketContextProperties => {
   const ws = useContext(WebSocketContext);
   const setWs = useContext(SetWebSocketContext);
-  if (ws === undefined) {
-    throw new Error('useWebSocketState: ws is undefined');
-  }
+  // if (ws === undefined) {
+  //   throw new Error('useWebSocketState: ws is undefined');
+  // }
   if (setWs === undefined) {
     throw new Error('useSetWebSocketState: setWs is undefined');
   }

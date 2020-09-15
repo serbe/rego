@@ -1,12 +1,12 @@
 import React, {
   createContext,
   Dispatch,
+  ReactElement,
   ReactNode,
-  useEffect,
   useContext,
+  useEffect,
   useReducer,
   useState,
-  ReactElement,
 } from 'react';
 
 import { useWebSocketState } from './websocket';
@@ -19,7 +19,7 @@ export type AuthState = {
   checked: boolean;
 };
 
-interface CJson {
+export interface CJson {
   r: boolean;
 }
 
@@ -61,9 +61,7 @@ export type ReducerActions =
 export const reducer = (authState: AuthState, action: ReducerActions): AuthState => {
   switch (action.type) {
     case 'SetAuth': {
-      localStorage.setItem('u', action.data.name);
-      localStorage.setItem('t', action.data.token);
-      localStorage.setItem('r', action.data.role.toString());
+      setStorage(action.data.role, action.data.name, action.data.token);
       return {
         ...authState,
         role: action.data.role,
@@ -74,9 +72,7 @@ export const reducer = (authState: AuthState, action: ReducerActions): AuthState
       };
     }
     case 'ClearAuth': {
-      localStorage.setItem('u', '');
-      localStorage.setItem('t', '');
-      localStorage.setItem('r', '0');
+      clearStorage();
       return {
         ...authState,
         role: 0,
@@ -113,7 +109,7 @@ export const reducer = (authState: AuthState, action: ReducerActions): AuthState
 //     });
 // };
 
-const getStorage = (): {
+export const getStorage = (): {
   role: number;
   name: string;
   token: string;
@@ -123,6 +119,18 @@ const getStorage = (): {
     name: localStorage.getItem('u') || '',
     token: localStorage.getItem('t') || '',
   };
+};
+
+const setStorage = (role: number, name: string, token: string): void => {
+  localStorage.setItem('r', String(role));
+  localStorage.setItem('u', name);
+  localStorage.setItem('t', token);
+};
+
+const clearStorage = (): void => {
+  localStorage.setItem('u', '');
+  localStorage.setItem('t', '');
+  localStorage.setItem('r', '0');
 };
 
 export const CheckStorage = (): void => {

@@ -24,12 +24,19 @@ export type CertificateList = {
   note?: string;
 };
 
-type JsonItemScheme = {
+interface JsonItemScheme {
   command: 'Get';
   name: 'Certificate';
   object: { Certificate: Certificate };
   error: string;
-};
+}
+
+interface JsonListScheme {
+  command: 'Get';
+  name: 'CertificateList';
+  object: { CertificateList: CertificateList[] };
+  error: string;
+}
 
 export const CertificateGetItem = (
   message: MessageEvent,
@@ -39,6 +46,17 @@ export const CertificateGetItem = (
   const jsonData = JSON.parse(text) as JsonItemScheme;
   if (jsonData?.object) {
     setData(jsonData.object.Certificate);
+  }
+};
+
+export const CertificateGetList = (
+  message: MessageEvent,
+  setData: Dispatch<SetStateAction<CertificateList[]>>,
+): void => {
+  const text = message.data as string;
+  const jsonData = JSON.parse(text) as JsonListScheme;
+  if (jsonData?.object) {
+    setData(jsonData.object.CertificateList);
   }
 };
 

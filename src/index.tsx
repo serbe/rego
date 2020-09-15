@@ -4,6 +4,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
+import { AuthProvider } from './helpers/auth';
+import { WebSocketProvider } from './helpers/websocket';
 import Rugo from './rugo';
 import * as serviceWorker from './serviceWorker';
 
@@ -12,7 +14,11 @@ import * as serviceWorker from './serviceWorker';
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Rugo />
+      <WebSocketProvider>
+        <AuthProvider>
+          <Rugo />
+        </AuthProvider>
+      </WebSocketProvider>
     </BrowserRouter>
   </React.StrictMode>,
   document.querySelector('#root'),

@@ -4,24 +4,46 @@ import React, { useEffect } from 'react';
 
 import { Login } from './components/login';
 import { NavBar } from './components/navbar';
-import { CheckStorage, useAuthState, AuthProvider } from './helpers/auth';
-import { URL } from './helpers/fetcher';
+import { CJson, getStorage, useAuthState } from './helpers/auth';
 import { Router } from './helpers/router';
-import { useWebSocketState, WebSocketProvider } from './helpers/websocket';
+import { useWebSocketState } from './helpers/websocket';
 
 const Rugo = (): JSX.Element => {
-  const { ws, setWs } = useWebSocketState();
-  const { auth } = useAuthState();
+  const { ws } = useWebSocketState();
+  const { auth, setAuth } = useAuthState();
+
+  const { name, token, role } = getStorage();
 
   useEffect(() => {
-    setWs(new WebSocket(URL));
-  }, [setWs]);
-
-  useEffect(() => {
-    if (ws) {
-      CheckStorage();
+    if (ws.CONNECTING && token && token !== '') {
+      ws.addEventListener('message', (message: MessageEvent) => {
+        const text = message.data as string;
+        const jsonData = JSON.parse(text) as CJson;
+        console.log('rugo', jsonData);
+        if (jsonData.r) {
+          setAuth({
+            type: 'SetAuth',
+            data: {
+              role: role,
+              name: name,
+              token: token,
+              login: true,
+              checked: true,
+            },
+          });
+        } else {
+          setAuth({
+            type: 'ClearAuth',
+          });
+        }
+      });
+      ws.send(`{ "t": "${token}", "r": "${role}" })`);
+    } else {
+      setAuth({
+        type: 'ClearAuth',
+      });
     }
-  }, [ws]);
+  }, [name, role, setAuth, token, ws]);
 
   // useEffect(() => {
   //   if (auth.checked && auth.login) {
@@ -50,11 +72,7 @@ const Rugo = (): JSX.Element => {
       <Login />
     );
 
-  return (
-    <WebSocketProvider>
-      <AuthProvider>{auth.checked ? <Content /> : <div>Loading...</div>}</AuthProvider>
-    </WebSocketProvider>
-  );
+  return auth.checked ? <Content /> : <div>Loading...</div>;
 };
 
 export default Rugo;

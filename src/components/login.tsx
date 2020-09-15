@@ -20,6 +20,7 @@ export const Login = (): JSX.Element => {
       ws.addEventListener('message', (message: MessageEvent) => {
         const text = message.data as string;
         const jsonData = JSON.parse(text) as TJson;
+        console.log(jsonData);
         setAuth({
           type: 'SetAuth',
           data: {
@@ -32,28 +33,28 @@ export const Login = (): JSX.Element => {
         });
       });
 
-      return (): void => {
-        ws.removeEventListener('message', (message: MessageEvent) => {
-          const text = message.data as string;
-          const jsonData = JSON.parse(text) as TJson;
-          setAuth({
-            type: 'SetAuth',
-            data: {
-              checked: true,
-              name: name,
-              role: jsonData.r,
-              token: jsonData.t,
-              login: true,
-            },
-          });
-        });
-      };
+      // return (): void => {
+      //   ws.removeEventListener('message', (message: MessageEvent) => {
+      //     const text = message.data as string;
+      //     const jsonData = JSON.parse(text) as TJson;
+      //     setAuth({
+      //       type: 'SetAuth',
+      //       data: {
+      //         checked: true,
+      //         name: name,
+      //         role: jsonData.r,
+      //         token: jsonData.t,
+      //         login: true,
+      //       },
+      //     });
+      //   });
+      // };
     }
   }, [name, setAuth, ws]);
 
   const submit = (): void => {
     if (ws) {
-      ws.send(`{ u: ${name}, p: ${btoa(pass)} }`);
+      ws.send(`{ "u": "${name}", "p": "${btoa(pass)}" }`);
     }
   };
 
