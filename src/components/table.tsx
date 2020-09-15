@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { AuthContext } from '../helpers/auth';
+import { useAuthState } from '../helpers/auth';
 import { List } from '../helpers/fetcher';
 import { Button } from './button';
 import { Input } from './input';
@@ -162,11 +162,11 @@ export const Data = (properties: DataProperties): [() => List[], JSX.Element] =>
 };
 
 export const Bar = (properties: BarProperties): JSX.Element => {
-  const { state } = useContext(AuthContext);
+  const { auth } = useAuthState();
   const history = useHistory();
 
   const CreateButton = () =>
-    state.role > 2 ? (
+    auth.role > 2 ? (
       <div className="control mb-4" key="TableNewItem">
         <Button onClick={() => history.push(`/${properties.name}/0`)}>Создать</Button>
       </div>

@@ -1,38 +1,46 @@
-import React, { createContext, ReactElement, ReactNode } from 'react';
+import React, {
+  createContext,
+  ReactElement,
+  ReactNode,
+  Dispatch,
+  SetStateAction,
+  useState,
+  useContext,
+} from 'react';
 
-const WebSocketContext = createContext<WebSocket | null>(null);
+const WebSocketContext = createContext<WebSocket | undefined>(undefined);
 
-const SetWebSocketContext = createContext<null | React.Dispatch<
-  React.SetStateAction<WebSocket | null>
->>(null);
+const SetWebSocketContext = createContext<
+  undefined | Dispatch<SetStateAction<WebSocket | undefined>>
+>(undefined);
 
-type WebSocketType = {
+interface WebSocketProviderProperties {
   children: ReactNode;
-};
+}
 
-type WebSocketContextType = {
-  ws: WebSocket | null;
-  setWs: React.Dispatch<React.SetStateAction<WebSocket | null>>;
-};
+interface WebSocketContextProperties {
+  ws?: WebSocket;
+  setWs: Dispatch<SetStateAction<WebSocket | undefined>>;
+}
 
-export const WebSocketProvider = ({ children }: WebSocketType): ReactElement => {
-  const [socket, setSocket] = React.useState<WebSocket | null>(null);
+export const WebSocketProvider = ({ children }: WebSocketProviderProperties): ReactElement => {
+  const [webSocket, setWebSocket] = useState<WebSocket | undefined>();
 
   return (
-    <WebSocketContext.Provider value={socket}>
-      <SetWebSocketContext.Provider value={setSocket}>{children}</SetWebSocketContext.Provider>
+    <WebSocketContext.Provider value={webSocket}>
+      <SetWebSocketContext.Provider value={setWebSocket}>{children}</SetWebSocketContext.Provider>
     </WebSocketContext.Provider>
   );
 };
 
-export const useWebSocketState = (): WebSocketContextType => {
-  const ws = React.useContext(WebSocketContext);
-  const setWs = React.useContext(SetWebSocketContext);
+export const useWebSocketState = (): WebSocketContextProperties => {
+  const ws = useContext(WebSocketContext);
+  const setWs = useContext(SetWebSocketContext);
   if (ws === undefined) {
-    throw new Error('useWebSocketState must be used within a CountProvider');
+    throw new Error('useWebSocketState: ws is undefined');
   }
-  if (setWs === null) {
-    throw new Error('useSetWebSocketState must be used within a CountProvider');
+  if (setWs === undefined) {
+    throw new Error('useSetWebSocketState: setWs is undefined');
   }
   return { ws, setWs };
 };

@@ -1,9 +1,9 @@
 import './index.css';
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { AuthContext } from '../../helpers/auth';
+import { useAuthState } from '../../helpers/auth';
 import { useWebSocketState } from '../../helpers/websocket';
 import { EducationGetShortList, EducationShort } from '../../models/education';
 import { PracticeGetShortList, PracticeShort } from '../../models/practice';
@@ -93,7 +93,7 @@ const PracticeTable = (practices: PracticeShort[]): JSX.Element => {
 
 export const Home = (): JSX.Element => {
   const { ws } = useWebSocketState();
-  const { state } = useContext(AuthContext);
+  const { auth } = useAuthState();
   const [educations, setEducations] = useState<EducationShort[]>([]);
   const [practices, setPractices] = useState<PracticeShort[]>([]);
 
@@ -107,8 +107,8 @@ export const Home = (): JSX.Element => {
         PracticeGetShortList(message, setPractices);
       });
 
-      ws.send(`{"command":{"Get":{"List":"EducationNear"}},"addon":"${state.token}"}`);
-      ws.send(`{"command":{"Get":{"List":"PracticeNear"}},"addon":"${state.token}"}`);
+      ws.send(`{"command":{"Get":{"List":"EducationNear"}},"addon":"${auth.token}"}`);
+      ws.send(`{"command":{"Get":{"List":"PracticeNear"}},"addon":"${auth.token}"}`);
 
       return (): void => {
         ws.removeEventListener('message', (message: MessageEvent) => {
@@ -120,7 +120,7 @@ export const Home = (): JSX.Element => {
         });
       };
     }
-  }, [ws]);
+  }, [auth.token, ws]);
 
   return (
     <div className="columns is-mobile">

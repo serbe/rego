@@ -1,46 +1,45 @@
 import './rugo.css';
 
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { Login } from './components/login';
 import { NavBar } from './components/navbar';
-import { AuthContext, CheckStorage, initialState, reducer } from './helpers/auth';
+import { CheckStorage, useAuthState, AuthProvider } from './helpers/auth';
 import { URL } from './helpers/fetcher';
 import { Router } from './helpers/router';
 import { useWebSocketState, WebSocketProvider } from './helpers/websocket';
 
 const Rugo = (): JSX.Element => {
-  const [state, dispatch] = useReducer(reducer, initialState);
   const { ws, setWs } = useWebSocketState();
-  const [authState, setAuthState] = useState(state);
+  const { auth } = useAuthState();
 
   useEffect(() => {
     setWs(new WebSocket(URL));
   }, [setWs]);
 
   useEffect(() => {
-    if (ws !== null) {
-      CheckStorage(ws, setAuthState);
+    if (ws) {
+      CheckStorage();
     }
-  }, [setAuthState, ws]);
+  }, [ws]);
 
-  useEffect(() => {
-    if (authState.checked && authState.login) {
-      dispatch({
-        type: 'SetAuth',
-        data: authState,
-      });
-    } else if (!authState.login) {
-      dispatch({
-        type: 'ClearAuth',
-      });
-    } else {
-      console.log(authState);
-    }
-  }, [authState]);
+  // useEffect(() => {
+  //   if (auth.checked && auth.login) {
+  //     setAuth({
+  //       type: 'SetAuth',
+  //       data: authState,
+  //     });
+  //   } else if (!authState.login) {
+  //     setAuth({
+  //       type: 'ClearAuth',
+  //     });
+  //   } else {
+  //     console.log(authState);
+  //   }
+  // }, [auth.checked, auth.login, authState, setAuth]);
 
   const Content = () =>
-    state.login ? (
+    auth.login ? (
       <>
         <NavBar />
         <div className="container py-4 centered-content">
@@ -53,9 +52,7 @@ const Rugo = (): JSX.Element => {
 
   return (
     <WebSocketProvider>
-      <AuthContext.Provider value={{ state, dispatch }}>
-        {state.checked ? <Content /> : <div>Loading...</div>}
-      </AuthContext.Provider>
+      <AuthProvider>{auth.checked ? <Content /> : <div>Loading...</div>}</AuthProvider>
     </WebSocketProvider>
   );
 };

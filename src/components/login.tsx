@@ -1,6 +1,6 @@
-import React, { ChangeEvent, KeyboardEvent, useContext, useEffect, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
 
-import { AuthContext } from '../helpers/auth';
+import { useAuthState } from '../helpers/auth';
 import { useWebSocketState } from '../helpers/websocket';
 import { FormField } from './formfield';
 
@@ -10,7 +10,7 @@ interface TJson {
 }
 
 export const Login = (): JSX.Element => {
-  const { dispatch } = useContext(AuthContext);
+  const { setAuth } = useAuthState();
   const { ws } = useWebSocketState();
   const [name, setName] = useState('');
   const [pass, setPass] = useState('');
@@ -20,7 +20,7 @@ export const Login = (): JSX.Element => {
       ws.addEventListener('message', (message: MessageEvent) => {
         const text = message.data as string;
         const jsonData = JSON.parse(text) as TJson;
-        dispatch({
+        setAuth({
           type: 'SetAuth',
           data: {
             checked: true,
@@ -36,7 +36,7 @@ export const Login = (): JSX.Element => {
         ws.removeEventListener('message', (message: MessageEvent) => {
           const text = message.data as string;
           const jsonData = JSON.parse(text) as TJson;
-          dispatch({
+          setAuth({
             type: 'SetAuth',
             data: {
               checked: true,
@@ -49,7 +49,7 @@ export const Login = (): JSX.Element => {
         });
       };
     }
-  }, [dispatch, name, ws]);
+  }, [name, setAuth, ws]);
 
   const submit = (): void => {
     if (ws) {

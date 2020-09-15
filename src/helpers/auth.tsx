@@ -2,14 +2,16 @@ import React, {
   createContext,
   Dispatch,
   ReactNode,
-  SetStateAction,
   useEffect,
-  useMemo,
+  useContext,
   useReducer,
   useState,
+  ReactElement,
 } from 'react';
 
-export type State = {
+import { useWebSocketState } from './websocket';
+
+export type AuthState = {
   role: number;
   name: string;
   token: string;
@@ -21,11 +23,7 @@ interface CJson {
   r: boolean;
 }
 
-export interface DispatchProperties {
-  dispatch: Dispatch<ReducerActions>;
-}
-
-export const initialState: State = {
+const initialAuthState: AuthState = {
   role: 0,
   name: '',
   token: '',
@@ -33,41 +31,41 @@ export const initialState: State = {
   checked: false,
 };
 
-interface AuthContextType {
-  state: State;
+interface SetAuthState {
   dispatch: Dispatch<ReducerActions>;
 }
 
-const initialContextValues: AuthContextType = {
-  state: initialState,
+const initialSetAuthState: SetAuthState = {
   dispatch: () => {
     return true;
   },
 };
 
-export const AuthContext = createContext<AuthContextType>(initialContextValues);
+export const AuthContext = createContext(initialAuthState);
 
-interface AuthProperties {
+export const SetAuthContext = createContext(initialSetAuthState);
+
+interface AuthProviderProperties {
   children: ReactNode;
 }
 
 export type ReducerActions =
   | {
       type: 'SetAuth';
-      data: State;
+      data: AuthState;
     }
   | {
       type: 'ClearAuth';
     };
 
-export const reducer = (state: State, action: ReducerActions): State => {
+export const reducer = (authState: AuthState, action: ReducerActions): AuthState => {
   switch (action.type) {
     case 'SetAuth': {
       localStorage.setItem('u', action.data.name);
       localStorage.setItem('t', action.data.token);
       localStorage.setItem('r', action.data.role.toString());
       return {
-        ...state,
+        ...authState,
         role: action.data.role,
         name: action.data.name,
         token: action.data.token,
@@ -80,7 +78,7 @@ export const reducer = (state: State, action: ReducerActions): State => {
       localStorage.setItem('t', '');
       localStorage.setItem('r', '0');
       return {
-        ...state,
+        ...authState,
         role: 0,
         name: '',
         token: '',
@@ -89,7 +87,7 @@ export const reducer = (state: State, action: ReducerActions): State => {
       };
     }
     default:
-      return state;
+      return authState;
   }
 };
 
@@ -127,15 +125,14 @@ const getStorage = (): {
   };
 };
 
-export const CheckStorage = (
-  ws: WebSocket | null,
-  setAuthState: Dispatch<SetStateAction<State>>,
-): void => {
+export const CheckStorage = (): void => {
   const { name, token, role } = getStorage();
   const [checked, setChecked] = useState(false);
+  const { setAuth } = useAuthState();
+  const { ws } = useWebSocketState();
 
   useEffect(() => {
-    if (ws !== null) {
+    if (ws) {
       ws.addEventListener('message', (message: MessageEvent) => {
         const text = message.data as string;
         const jsonData = JSON.parse(text) as CJson;
@@ -150,30 +147,52 @@ export const CheckStorage = (
 
   useEffect(() => {
     if (checked) {
-      setAuthState({
-        role: role,
-        name: name,
-        token: token,
-        login: true,
-        checked: true,
+      setAuth({
+        type: 'SetAuth',
+        data: {
+          role: role,
+          name: name,
+          token: token,
+          login: true,
+          checked: true,
+        },
       });
     } else {
-      setAuthState({ role: 0, name: '', token: '', login: false, checked: true });
+      setAuth({
+        type: 'ClearAuth',
+      });
     }
-  }, [checked, name, role, setAuthState, token]);
+  }, [checked, name, role, setAuth, token]);
 };
 
-export const Context = (properties: AuthProperties): JSX.Element => {
+export const AuthProvider = (properties: AuthProviderProperties): ReactElement => {
   const { children } = properties;
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialAuthState);
 
-  const contentValues = useMemo(
-    () => ({
-      state,
-      dispatch,
-    }),
-    [state, dispatch],
+  const setState: SetAuthState = { dispatch: dispatch };
+
+  // const contentValues = useMemo(
+  //   () => ({
+  //     state,
+  //     dispatch,
+  //   }),
+  //   [state, dispatch],
+  // );
+
+  return (
+    <AuthContext.Provider value={state}>
+      <SetAuthContext.Provider value={setState}>{children}</SetAuthContext.Provider>
+    </AuthContext.Provider>
   );
+};
 
-  return <AuthContext.Provider value={contentValues}>{children}</AuthContext.Provider>;
+interface AuthContextProperties {
+  auth: AuthState;
+  setAuth: Dispatch<ReducerActions>;
+}
+
+export const useAuthState = (): AuthContextProperties => {
+  const auth = useContext(AuthContext);
+  const setter = useContext(SetAuthContext);
+  return { auth, setAuth: setter.dispatch };
 };

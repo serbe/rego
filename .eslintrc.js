@@ -60,6 +60,12 @@ module.exports = {
     // 'react/prop-types': 'warn',
     // 'import/prefer-default-export': 'off',
     // 'react/no-array-index-key': 'warn',
+    'array-callback-return': [
+      'error',
+      {
+        allowImplicit: true,
+      },
+    ],
   },
   settings: {
     react: {

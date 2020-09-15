@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { AuthContext } from '../helpers/auth';
+import { useAuthState } from '../helpers/auth';
 import { Button } from './button';
 
 interface Setter {
@@ -86,20 +86,19 @@ const NavBarStart = (value: Setter): JSX.Element => (
 );
 
 const NavbarEnd = (): JSX.Element => {
-  const { state, dispatch } = useContext(AuthContext);
-  const { name } = state;
+  const { auth, setAuth } = useAuthState();
   return (
     <div className="navbar-end" key="navbar-end">
       <div className="navbar-item has-dropdown is-hoverable">
         <a href="#user" className="navbar-link">
-          {name}
+          {auth.name}
         </a>
         <div className="navbar-dropdown is-right">
           <div className="navbar-item">
             <Button
               className="is-link"
               onClick={() => {
-                dispatch({ type: 'ClearAuth' });
+                setAuth({ type: 'ClearAuth' });
               }}
             >
               Выход
@@ -137,10 +136,10 @@ const BrandBar = (properties: OpenState): JSX.Element => {
 
 export const NavBar = (): JSX.Element => {
   // const openClassName = (cn: string): string => (open ? `${cn} is-active` : cn);
-  const { state } = useContext(AuthContext);
+  const { auth } = useAuthState();
   const [open, setOpen] = useState(false);
 
-  return state.role > 0 ? (
+  return auth.role > 0 ? (
     <nav className="navbar is-dark" role="navigation" aria-label="dropdown navigation">
       <div className="navbar-brand">
         <BrandBar open={open} setter={setOpen} />
