@@ -1,8 +1,8 @@
 import React, { Dispatch, SetStateAction } from 'react';
 
 import { DatePicker, DatePickerValues } from '../components/datepicker';
-import { Select, SelectValues } from '../components/select';
 
+// import { Select, SelectValues } from '../components/_select';
 export type Education = {
   id: number;
   contact_id?: number;
@@ -32,7 +32,7 @@ export type EducationShort = {
   start_date: string;
 };
 
-type JsonItemScheme = {
+type JsonEducationItemScheme = {
   command: 'Get';
   name: 'Education';
   object: { Education: Education };
@@ -44,22 +44,40 @@ export const EducationGetItem = (
   setData: Dispatch<SetStateAction<Education | undefined>>,
 ): void => {
   const text = message.data as string;
-  const jsonData = JSON.parse(text) as JsonItemScheme;
+  const jsonData = JSON.parse(text) as JsonEducationItemScheme;
   if (jsonData?.object) {
     setData(jsonData.object.Education);
   }
 };
 
-export const EducationNameSelect = (properties: SelectValues): JSX.Element => (
-  <Select
-    name="education-contact-name"
-    label="Полное имя обучаемого"
-    listName="ContactSelect"
-    id={properties.id}
-    icon="user"
-    setter={properties.setter}
-  />
-);
+type JsonEducationShortListScheme = {
+  command: 'Get';
+  name: 'EducationNear';
+  object: { EducationShort: EducationShort[] };
+  error: string;
+};
+
+export const EducationGetShortList = (
+  message: MessageEvent,
+  setData: Dispatch<SetStateAction<EducationShort[]>>,
+): void => {
+  const text = message.data as string;
+  const jsonData = JSON.parse(text) as JsonEducationShortListScheme;
+  if (jsonData?.object) {
+    setData(jsonData.object.EducationShort);
+  }
+};
+
+// export const EducationNameSelect = (properties: SelectValues): JSX.Element => (
+//   <Select
+//     name="education-contact-name"
+//     label="Полное имя обучаемого"
+//     listName="ContactSelect"
+//     id={properties.id}
+//     icon="user"
+//     setter={properties.setter}
+//   />
+// );
 
 export const EducationStartDateInput = (properties: DatePickerValues): JSX.Element => (
   <DatePicker

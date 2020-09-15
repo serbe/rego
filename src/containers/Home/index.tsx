@@ -1,11 +1,12 @@
 import './index.css';
 
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { GetList } from '../../helpers/fetcher';
-import { EducationShort } from '../../models/education';
-import { PracticeShort } from '../../models/practice';
+import { AuthContext } from '../../helpers/auth';
+import { useWebSocketState } from '../../helpers/websocket';
+import { EducationGetShortList, EducationShort } from '../../models/education';
+import { PracticeGetShortList, PracticeShort } from '../../models/practice';
 
 const trClass = (date: string): string => {
   const m = new Date();
@@ -91,15 +92,40 @@ const PracticeTable = (practices: PracticeShort[]): JSX.Element => {
 };
 
 export const Home = (): JSX.Element => {
-  const [educations, educationsError] = GetList('EducationNear');
-  const [practices, practicesError] = GetList('PracticeNear');
+  const { ws } = useWebSocketState();
+  const { state } = useContext(AuthContext);
+  const [educations, setEducations] = useState<EducationShort[]>([]);
+  const [practices, setPractices] = useState<PracticeShort[]>([]);
 
-  return practicesError || educationsError ? (
-    <div>No data</div>
-  ) : (
+  useEffect(() => {
+    if (ws) {
+      ws.addEventListener('message', (message: MessageEvent) => {
+        EducationGetShortList(message, setEducations);
+      });
+
+      ws.addEventListener('message', (message: MessageEvent) => {
+        PracticeGetShortList(message, setPractices);
+      });
+
+      ws.send(`{"command":{"Get":{"List":"EducationNear"}},"addon":"${state.token}"}`);
+      ws.send(`{"command":{"Get":{"List":"PracticeNear"}},"addon":"${state.token}"}`);
+
+      return (): void => {
+        ws.removeEventListener('message', (message: MessageEvent) => {
+          EducationGetShortList(message, setEducations);
+        });
+
+        ws.removeEventListener('message', (message: MessageEvent) => {
+          PracticeGetShortList(message, setPractices);
+        });
+      };
+    }
+  }, [ws]);
+
+  return (
     <div className="columns is-mobile">
-      <div className="column is-4">{EducationTable(educations as EducationShort[])}</div>
-      <div className="column is-4 is-offset-4">{PracticeTable(practices as PracticeShort[])}</div>
+      <div className="column is-4">{EducationTable(educations)}</div>
+      <div className="column is-4 is-offset-4">{PracticeTable(practices)}</div>
     </div>
   );
 };

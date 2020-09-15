@@ -1,6 +1,7 @@
-import React, { ChangeEvent, KeyboardEvent, useContext, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useContext, useEffect, useState } from 'react';
 
 import { AuthContext } from '../helpers/auth';
+import { useWebSocketState } from '../helpers/websocket';
 import { FormField } from './formfield';
 
 interface TJson {
@@ -10,21 +11,15 @@ interface TJson {
 
 export const Login = (): JSX.Element => {
   const { dispatch } = useContext(AuthContext);
+  const { ws } = useWebSocketState();
   const [name, setName] = useState('');
   const [pass, setPass] = useState('');
 
-  const submit = (): void => {
-    fetch('/api/go/login', {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ u: name, p: btoa(pass) }),
-    })
-      .then((response) => response.json())
-      .then((response) => response as TJson)
-      .then((jsonData) => {
+  useEffect(() => {
+    if (ws) {
+      ws.addEventListener('message', (message: MessageEvent) => {
+        const text = message.data as string;
+        const jsonData = JSON.parse(text) as TJson;
         dispatch({
           type: 'SetAuth',
           data: {
@@ -35,11 +30,31 @@ export const Login = (): JSX.Element => {
             login: true,
           },
         });
-        return;
-      })
-      .catch(() => {
-        return;
       });
+
+      return (): void => {
+        ws.removeEventListener('message', (message: MessageEvent) => {
+          const text = message.data as string;
+          const jsonData = JSON.parse(text) as TJson;
+          dispatch({
+            type: 'SetAuth',
+            data: {
+              checked: true,
+              name: name,
+              role: jsonData.r,
+              token: jsonData.t,
+              login: true,
+            },
+          });
+        });
+      };
+    }
+  }, [dispatch, name, ws]);
+
+  const submit = (): void => {
+    if (ws) {
+      ws.send(`{ u: ${name}, p: ${btoa(pass)} }`);
+    }
   };
 
   return (

@@ -1,4 +1,13 @@
-import React, { createContext, Dispatch, ReactNode, useMemo, useReducer } from 'react';
+import React, {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+} from 'react';
 
 export type State = {
   role: number;
@@ -84,27 +93,27 @@ export const reducer = (state: State, action: ReducerActions): State => {
   }
 };
 
-const checkAuth = async (name: string, token: string, role: number): Promise<boolean> => {
-  if (name === '' || token === '' || role === 0) {
-    return false;
-  }
-  return fetch('/api/go/check', {
-    method: 'POST',
-    mode: 'cors',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ t: token, r: role }),
-  })
-    .then((response) => response.json())
-    .then((response) => response as CJson)
-    .then((jsonData) => {
-      return jsonData.r;
-    })
-    .catch(() => {
-      return false;
-    });
-};
+// const checkAuth = async (name: string, token: string, role: number): Promise<boolean> => {
+//   if (name === '' || token === '' || role === 0) {
+//     return false;
+//   }
+//   return fetch('/api/go/check', {
+//     method: 'POST',
+//     mode: 'cors',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify({ t: token, r: role }),
+//   })
+//     .then((response) => response.json())
+//     .then((response) => response as CJson)
+//     .then((jsonData) => {
+//       return jsonData.r;
+//     })
+//     .catch(() => {
+//       return false;
+//     });
+// };
 
 const getStorage = (): {
   role: number;
@@ -118,29 +127,40 @@ const getStorage = (): {
   };
 };
 
-export const CheckStorage = async (): Promise<State> => {
+export const CheckStorage = (
+  ws: WebSocket | null,
+  setAuthState: Dispatch<SetStateAction<State>>,
+): void => {
   const { name, token, role } = getStorage();
+  const [checked, setChecked] = useState(false);
 
-  let state: State = initialState;
+  useEffect(() => {
+    if (ws !== null) {
+      ws.addEventListener('message', (message: MessageEvent) => {
+        const text = message.data as string;
+        const jsonData = JSON.parse(text) as CJson;
+        setChecked(jsonData.r);
+      });
 
-  const check = await checkAuth(name, token, role);
+      ws.addEventListener('open', () => {
+        ws.send(`{ t: ${token}, r: ${role} })`);
+      });
+    }
+  }, [role, token, ws]);
 
-  const promise = new Promise<State>((resolve, reject) => {
-    if (check) {
-      state = {
+  useEffect(() => {
+    if (checked) {
+      setAuthState({
         role: role,
         name: name,
         token: token,
         login: true,
         checked: true,
-      };
-      resolve(state);
+      });
     } else {
-      reject(state);
+      setAuthState({ role: 0, name: '', token: '', login: false, checked: true });
     }
-    reject(state);
-  });
-  return promise;
+  }, [checked, name, role, setAuthState, token]);
 };
 
 export const Context = (properties: AuthProperties): JSX.Element => {

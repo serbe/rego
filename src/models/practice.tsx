@@ -57,6 +57,24 @@ export const PracticeGetItem = (
   }
 };
 
+type JsonPracticeShortListScheme = {
+  command: 'Get';
+  name: 'PracticeNear';
+  object: { PracticeShort: PracticeShort[] };
+  error: string;
+};
+
+export const PracticeGetShortList = (
+  message: MessageEvent,
+  setData: Dispatch<SetStateAction<PracticeShort[]>>,
+): void => {
+  const text = message.data as string;
+  const jsonData = JSON.parse(text) as JsonPracticeShortListScheme;
+  if (jsonData?.object) {
+    setData(jsonData.object.PracticeShort);
+  }
+};
+
 export const PracticeListForm = (properties: PracticeValues): JSX.Element => {
   const history = useHistory();
   return properties.practices.length > 0 ? (
