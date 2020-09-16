@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AuthContext } from '../../helpers/auth';
-import { AddEventMessageGet, AddEventOpenItem, SetItem, URL, DelItem } from '../../helpers/fetcher';
+import { useAuthState } from '../../helpers/auth';
+import { AddEventMessageGet, AddEventOpenItem, DelItem, SetItem, URL } from '../../helpers/fetcher';
 import { CompanyIDSelect } from '../../models/company';
-import { NoteInput, ParameterTypes, ItemFormButtons } from '../../models/impersonal';
+import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
 import { KindIDSelect } from '../../models/kind';
 import {
   Practice,
@@ -14,7 +14,7 @@ import {
 } from '../../models/practice';
 
 export const PracticeItem = (): JSX.Element => {
-  const { state } = useContext(AuthContext);
+  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [companyID, setCompanyID] = useState<number>();
@@ -39,24 +39,26 @@ export const PracticeItem = (): JSX.Element => {
       note: note,
     };
 
-    SetItem(ws, number_id, 'Practice', item, setStatus, state.token);
+    SetItem(ws.current, number_id, 'Practice', item, setStatus, auth.token);
   };
 
   const del = (): void => {
     const number_id = Number(id);
-    DelItem(ws, number_id, 'Practice', setStatus, state.token);
+    DelItem(ws.current, number_id, 'Practice', setStatus, auth.token);
   };
 
   useEffect(() => {
     ws.current = new WebSocket(URL);
 
-    AddEventOpenItem(ws, 'Practice', id, setLoaded, state.token);
-    AddEventMessageGet(ws, PracticeGetItem, setData);
+    AddEventOpenItem(ws.current, 'Practice', id, setLoaded, auth.token);
+    AddEventMessageGet(ws.current, PracticeGetItem, setData);
 
     return (): void => {
-      ws.current?.close();
+      if (ws.current) {
+        ws.current.close();
+      }
     };
-  }, [id, state.token]);
+  }, [id, auth.token]);
 
   useEffect(() => {
     if (data) {

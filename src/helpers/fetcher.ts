@@ -1,4 +1,4 @@
-import { Dispatch, MutableRefObject, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 
 import { Certificate, CertificateList } from '../models/certificate';
 import { Company, CompanyList } from '../models/company';
@@ -13,7 +13,6 @@ import { Scope, ScopeList } from '../models/scope';
 import { Siren, SirenList } from '../models/siren';
 import { SirenType, SirenTypeList } from '../models/sirentype';
 import { useAuthState } from './auth';
-import { useWebSocketState } from './websocket';
 
 export const URL = 'ws://127.0.0.1:9090';
 
@@ -52,11 +51,6 @@ export type List =
   | ScopeList
   | SirenList
   | SirenTypeList;
-
-// // type AuthJson = {
-// //   token?: string;
-// //   error?: string;
-// // };
 
 type JsonListScheme =
   | undefined
@@ -162,122 +156,96 @@ export const AddEventOpenItem = (
   }
 };
 
-// export const AddEventMessageGet = (
-//   ws: MutableRefObject<WebSocket | undefined>,
-//   fn: (message: MessageEvent, setData: Dispatch<SetStateAction<Item>>) => void,
-//   setData: Dispatch<SetStateAction<Item>>,
-// ): void => {
-//   ws.current?.addEventListener('message', (event: MessageEvent) => {
-//     fn(event, setData);
-//   });
-// };
+export const AddEventMessageGet = (
+  ws: WebSocket | undefined,
+  fn: (message: MessageEvent, setData: Dispatch<SetStateAction<Item>>) => void,
+  setData: Dispatch<SetStateAction<Item>>,
+): void => {
+  if (ws) {
+    ws.addEventListener('message', (event: MessageEvent) => {
+      fn(event, setData);
+    });
+  }
+};
 
-// const getListEventListener = () => {};
+export const GetList = (name: string): [List[], string] => {
+  const [list, setList] = useState<List[]>([]);
+  const [error, setError] = useState<string>('');
+  const { auth } = useAuthState();
+  const ws = useRef<WebSocket>();
 
-// export const GetList = (
-//   name: string,
-//   setList: Dispatch<SetStateAction<List[]>>,
-//   setError: Dispatch<SetStateAction<string | undefined>>,
-// ): void => {
-//   const { auth } = useAuthState();
-//   const { ws } = useWebSocketState();
+  useEffect(() => {
+    ws.current = new WebSocket(URL);
 
-//   useEffect(() => {
-//     ws?.addEventListener('message', (message: MessageEvent) => {
-//       const text = message.data as string;
-//       const jsonData = JSON.parse(text) as JsonListScheme;
+    if (ws.current) {
+      ws.current.addEventListener('message', (message: MessageEvent) => {
+        const text = message.data as string;
+        const jsonData = JSON.parse(text) as JsonListScheme;
 
-//       if (jsonData?.command === 'Get') {
-//         switch (jsonData?.name) {
-//           case 'CertificateList':
-//             return setList(jsonData.object.CertificateList);
-//           case 'CompanyList':
-//             return setList(jsonData.object.CompanyList);
-//           case 'ContactList':
-//             return setList(jsonData.object.ContactList);
-//           case 'DepartmentList':
-//             return setList(jsonData.object.DepartmentList);
-//           case 'EducationList':
-//             return setList(jsonData.object.EducationList);
-//           case 'EducationNear':
-//             return setList(jsonData.object.EducationShort);
-//           case 'KindList':
-//             return setList(jsonData.object.KindList);
-//           case 'PostList':
-//             return setList(jsonData.object.PostList);
-//           case 'PracticeList':
-//             return setList(jsonData.object.PracticeList);
-//           case 'PracticeNear':
-//             return setList(jsonData.object.PracticeShort);
-//           case 'RankList':
-//             return setList(jsonData.object.RankList);
-//           case 'ScopeList':
-//             return setList(jsonData.object.ScopeList);
-//           case 'SirenList':
-//             return setList(jsonData.object.SirenList);
-//           case 'SirenTypeList':
-//             return setList(jsonData.object.SirenTypeList);
-//           default:
-//             return setError('unknown list');
-//         }
-//       }
-//     });
+        if (jsonData?.command === 'Get') {
+          switch (jsonData?.name) {
+            case 'CertificateList':
+              return setList(jsonData.object.CertificateList);
+            case 'CompanyList':
+              return setList(jsonData.object.CompanyList);
+            case 'ContactList':
+              return setList(jsonData.object.ContactList);
+            case 'DepartmentList':
+              return setList(jsonData.object.DepartmentList);
+            case 'EducationList':
+              return setList(jsonData.object.EducationList);
+            case 'EducationNear':
+              return setList(jsonData.object.EducationShort);
+            case 'KindList':
+              return setList(jsonData.object.KindList);
+            case 'PostList':
+              return setList(jsonData.object.PostList);
+            case 'PracticeList':
+              return setList(jsonData.object.PracticeList);
+            case 'PracticeNear':
+              return setList(jsonData.object.PracticeShort);
+            case 'RankList':
+              return setList(jsonData.object.RankList);
+            case 'ScopeList':
+              return setList(jsonData.object.ScopeList);
+            case 'SirenList':
+              return setList(jsonData.object.SirenList);
+            case 'SirenTypeList':
+              return setList(jsonData.object.SirenTypeList);
+            default:
+              return setError('unknown list');
+          }
+        }
+      });
 
-//     ws?.send(`{"command":{"Get":{"List":"${name}"}},"addon":"${auth.token}"}`);
+      ws.current.addEventListener('open', () => {
+        if (ws.current) {
+          ws.current.send(`{"command":{"Get":{"List":"${name}"}},"addon":"${auth.token}"}`);
+        }
+      });
 
-//     return (): void => {
-//       ws?.removeEventListener('message', (message: MessageEvent) => {
-//         const text = message.data as string;
-//         const jsonData = JSON.parse(text) as JsonListScheme;
+      return () => {
+        if (ws.current) {
+          ws.current.close();
+        }
+      };
+    }
+  }, [auth.token, name, setError, setList, ws]);
 
-//         if (jsonData?.command === 'Get') {
-//           switch (jsonData?.name) {
-//             case 'CertificateList':
-//               return setList(jsonData.object.CertificateList);
-//             case 'CompanyList':
-//               return setList(jsonData.object.CompanyList);
-//             case 'ContactList':
-//               return setList(jsonData.object.ContactList);
-//             case 'DepartmentList':
-//               return setList(jsonData.object.DepartmentList);
-//             case 'EducationList':
-//               return setList(jsonData.object.EducationList);
-//             case 'EducationNear':
-//               return setList(jsonData.object.EducationShort);
-//             case 'KindList':
-//               return setList(jsonData.object.KindList);
-//             case 'PostList':
-//               return setList(jsonData.object.PostList);
-//             case 'PracticeList':
-//               return setList(jsonData.object.PracticeList);
-//             case 'PracticeNear':
-//               return setList(jsonData.object.PracticeShort);
-//             case 'RankList':
-//               return setList(jsonData.object.RankList);
-//             case 'ScopeList':
-//               return setList(jsonData.object.ScopeList);
-//             case 'SirenList':
-//               return setList(jsonData.object.SirenList);
-//             case 'SirenTypeList':
-//               return setList(jsonData.object.SirenTypeList);
-//             default:
-//               return setError('unknown list');
-//           }
-//         }
-//       });
-//     };
-//   }, [auth.token, name, setError, setList, ws]);
-// };
+  return [list, error];
+};
 
 export const GetSelect = (name: string): [SelectItem[], string] => {
   const { auth } = useAuthState();
-  const { ws } = useWebSocketState();
   const [list, setSelect] = useState<SelectItem[]>([{ id: 0, name: '' }]);
   const [error, setError] = useState<string>('');
 
+  const ws = useRef<WebSocket>();
+
   useEffect(() => {
-    if (ws) {
-      ws.addEventListener('message', (message: MessageEvent) => {
+    ws.current = new WebSocket(URL);
+    if (ws.current) {
+      ws.current.addEventListener('message', (message: MessageEvent) => {
         const text = message.data as string;
         const jsonData = JSON.parse(text) as JsonListScheme;
         if (jsonData?.command === 'Get') {
@@ -324,59 +292,67 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
         }
       });
 
-      ws.addEventListener('open', () => {
-        ws.send(`{"command":{"Get":{"List":"${name}"}},"addon":"${auth.token}"}`);
+      ws.current.addEventListener('open', () => {
+        if (ws.current) {
+          ws.current.send(`{"command":{"Get":{"List":"${name}"}},"addon":"${auth.token}"}`);
+        }
       });
 
-      // return (): void => {
-      //   ws.close();
-      // };
+      return (): void => {
+        if (ws.current) {
+          ws.current.close();
+        }
+      };
     }
   }, [name, auth.token, ws]);
 
   return [list, error];
 };
 
-// export const SetItem = (
-//   ws: WebSocket | undefined,
-//   id: number,
-//   name: string,
-//   item: Item,
-//   status: Dispatch<SetStateAction<boolean>>,
-//   token: string,
-// ): void => {
-//   ws?.addEventListener('message', (message: MessageEvent) => {
-//     const text = message.data as string;
-//     const jsonData = JSON.parse(text) as JsonItemScheme;
-//     const command = id === 0 ? 'Insert' : 'Update';
+export const SetItem = (
+  ws: WebSocket | undefined,
+  id: number,
+  name: string,
+  item: Item,
+  status: Dispatch<SetStateAction<boolean>>,
+  token: string,
+): void => {
+  if (ws) {
+    ws.addEventListener('message', (message: MessageEvent) => {
+      const text = message.data as string;
+      const jsonData = JSON.parse(text) as JsonItemScheme;
+      const command = id === 0 ? 'Insert' : 'Update';
 
-//     if (jsonData?.command === command && jsonData.name === name) {
-//       status(true);
-//     }
-//   });
+      if (jsonData?.command === command && jsonData.name === name) {
+        status(true);
+      }
+    });
 
-//   ws?.send(
-//     `{"command":{"${id === 0 ? 'Insert' : 'Update'}":{"${name}":${JSON.stringify(
-//       item,
-//     )}}},"addon":"${token}"}`,
-//   );
-// };
+    ws.send(
+      `{"command":{"${id === 0 ? 'Insert' : 'Update'}":{"${name}":${JSON.stringify(
+        item,
+      )}}},"addon":"${token}"}`,
+    );
+  }
+};
 
-// export const DelItem = (
-//   ws: WebSocket | undefined,
-//   id: number,
-//   name: string,
-//   status: Dispatch<SetStateAction<boolean>>,
-//   token: string,
-// ): void => {
-//   ws?.addEventListener('message', (message: MessageEvent) => {
-//     const text = message.data as string;
-//     const jsonData = JSON.parse(text) as JsonItemScheme;
+export const DelItem = (
+  ws: WebSocket | undefined,
+  id: number,
+  name: string,
+  status: Dispatch<SetStateAction<boolean>>,
+  token: string,
+): void => {
+  if (ws) {
+    ws.addEventListener('message', (message: MessageEvent) => {
+      const text = message.data as string;
+      const jsonData = JSON.parse(text) as JsonItemScheme;
 
-//     if (jsonData?.command === 'Delete' && jsonData.name === name) {
-//       status(true);
-//     }
-//   });
+      if (jsonData?.command === 'Delete' && jsonData.name === name) {
+        status(true);
+      }
+    });
 
-//   ws?.send(`{"command":{"Delete":{"name":"${name}","id":${id}}},"addon":"${token}"}`);
-// };
+    ws.send(`{"command":{"Delete":{"name":"${name}","id":${id}}},"addon":"${token}"}`);
+  }
+};

@@ -66,6 +66,13 @@ export const ContactGetItem = (
   }
 };
 
+export interface JsonContactListScheme {
+  command: 'Get';
+  name: 'ContactList';
+  object: { ContactList: ContactList[] };
+  error: string;
+}
+
 export const ContactNameInput = (properties: StringInputProperties): JSX.Element => (
   <FormField
     icon="user"

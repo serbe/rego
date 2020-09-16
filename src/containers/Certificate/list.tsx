@@ -7,13 +7,11 @@ import { CertificateList } from '../../models/certificate';
 
 export const Certificates = (): JSX.Element => {
   const history = useHistory();
-  const [certificateList, setCertificateList] = useState<CertificateList[]>([]);
-  const [error, setError] = useState<string>();
-  GetList('CertificateList', setCertificateList, setError);
+  const [data, error] = GetList('CertificateList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
-    data: certificateList,
+    data: data,
     search: search,
   });
 

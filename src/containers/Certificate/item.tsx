@@ -1,9 +1,8 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { useAuthState } from '../../helpers/auth';
-import { useWebSocketState } from '../../helpers/websocket';
-import { AddEventMessageGet, AddEventOpenItem, SetItem, URL, DelItem } from '../../helpers/fetcher';
+import { AddEventMessageGet, AddEventOpenItem, DelItem, SetItem, URL } from '../../helpers/fetcher';
 import {
   Certificate,
   CertificateDateInput,
@@ -12,11 +11,10 @@ import {
 } from '../../models/certificate';
 import { CompanyIDSelect } from '../../models/company';
 import { ContactIDSelect } from '../../models/contact';
-import { NoteInput, ParameterTypes, ItemFormButtons } from '../../models/impersonal';
+import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
 
 export const CertificateItem = (): JSX.Element => {
   const { auth } = useAuthState();
-  const { ws } = useWebSocketState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [sNumber, setSNumber] = useState<string>();
@@ -27,6 +25,8 @@ export const CertificateItem = (): JSX.Element => {
   const [data, setData] = useState<Certificate>();
   const [status, setStatus] = useState(false);
   const [loaded, setLoaded] = useState(false);
+
+  const ws = useRef<WebSocket>();
 
   const send = (): void => {
     const number_id = Number(id);
@@ -39,21 +39,25 @@ export const CertificateItem = (): JSX.Element => {
       note: note,
     };
 
-    SetItem(ws, number_id, 'Certificate', item, setStatus, auth.token);
+    SetItem(ws.current, number_id, 'Certificate', item, setStatus, auth.token);
   };
 
   const del = (): void => {
     const number_id = Number(id);
-    DelItem(ws, number_id, 'Certificate', setStatus, auth.token);
+    DelItem(ws.current, number_id, 'Certificate', setStatus, auth.token);
   };
 
   useEffect(() => {
-    AddEventOpenItem(ws, 'Certificate', id, setLoaded, auth.token);
-    AddEventMessageGet(ws, CertificateGetItem, setData);
+    ws.current = new WebSocket(URL);
 
-    // return (): void => {
-    //   ws?.close();
-    // };
+    AddEventOpenItem(ws.current, 'Certificate', id, setLoaded, auth.token);
+    AddEventMessageGet(ws.current, CertificateGetItem, setData);
+
+    return (): void => {
+      if (ws.current) {
+        ws.current.close();
+      }
+    };
   }, [id, auth.token]);
 
   useEffect(() => {

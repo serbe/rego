@@ -5,17 +5,17 @@ import React, { useEffect } from 'react';
 import { Login } from './components/login';
 import { NavBar } from './components/navbar';
 import { CJson, getStorage, useAuthState } from './helpers/auth';
+import { URL } from './helpers/fetcher';
 import { Router } from './helpers/router';
-import { useWebSocketState } from './helpers/websocket';
 
 const Rugo = (): JSX.Element => {
-  const { ws } = useWebSocketState();
   const { auth, setAuth } = useAuthState();
-
   const { name, token, role } = getStorage();
 
   useEffect(() => {
-    if (ws.CONNECTING && token && token !== '') {
+    if (token !== '') {
+      const ws = new WebSocket(URL);
+
       ws.addEventListener('message', (message: MessageEvent) => {
         const text = message.data as string;
         const jsonData = JSON.parse(text) as CJson;
@@ -37,28 +37,20 @@ const Rugo = (): JSX.Element => {
           });
         }
       });
-      ws.send(`{ "t": "${token}", "r": "${role}" })`);
+
+      ws.addEventListener('open', () => {
+        ws.send(`{"t":"${token}","r":${role}}`);
+      });
+
+      return (): void => {
+        ws.close();
+      };
     } else {
       setAuth({
         type: 'ClearAuth',
       });
     }
-  }, [name, role, setAuth, token, ws]);
-
-  // useEffect(() => {
-  //   if (auth.checked && auth.login) {
-  //     setAuth({
-  //       type: 'SetAuth',
-  //       data: authState,
-  //     });
-  //   } else if (!authState.login) {
-  //     setAuth({
-  //       type: 'ClearAuth',
-  //     });
-  //   } else {
-  //     console.log(authState);
-  //   }
-  // }, [auth.checked, auth.login, authState, setAuth]);
+  }, []);
 
   const Content = () =>
     auth.login ? (

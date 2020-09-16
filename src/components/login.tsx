@@ -1,7 +1,7 @@
-import React, { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 import { useAuthState } from '../helpers/auth';
-import { useWebSocketState } from '../helpers/websocket';
+import { URL } from '../helpers/fetcher';
 import { FormField } from './formfield';
 
 interface TJson {
@@ -11,50 +11,40 @@ interface TJson {
 
 export const Login = (): JSX.Element => {
   const { setAuth } = useAuthState();
-  const { ws } = useWebSocketState();
   const [name, setName] = useState('');
   const [pass, setPass] = useState('');
 
-  useEffect(() => {
-    if (ws) {
-      ws.addEventListener('message', (message: MessageEvent) => {
-        const text = message.data as string;
-        const jsonData = JSON.parse(text) as TJson;
-        console.log(jsonData);
-        setAuth({
-          type: 'SetAuth',
-          data: {
-            checked: true,
-            name: name,
-            role: jsonData.r,
-            token: jsonData.t,
-            login: true,
-          },
-        });
-      });
+  const ws = useRef<WebSocket>();
 
-      // return (): void => {
-      //   ws.removeEventListener('message', (message: MessageEvent) => {
-      //     const text = message.data as string;
-      //     const jsonData = JSON.parse(text) as TJson;
-      //     setAuth({
-      //       type: 'SetAuth',
-      //       data: {
-      //         checked: true,
-      //         name: name,
-      //         role: jsonData.r,
-      //         token: jsonData.t,
-      //         login: true,
-      //       },
-      //     });
-      //   });
-      // };
-    }
-  }, [name, setAuth, ws]);
+  useEffect(() => {
+    ws.current = new WebSocket(URL);
+
+    ws.current.addEventListener('message', (message: MessageEvent) => {
+      const text = message.data as string;
+      const jsonData = JSON.parse(text) as TJson;
+      console.log(jsonData);
+      setAuth({
+        type: 'SetAuth',
+        data: {
+          checked: true,
+          name: name,
+          role: jsonData.r,
+          token: jsonData.t,
+          login: true,
+        },
+      });
+    });
+
+    return (): void => {
+      if (ws.current) {
+        ws.current.close();
+      }
+    };
+  }, []);
 
   const submit = (): void => {
-    if (ws) {
-      ws.send(`{ "u": "${name}", "p": "${btoa(pass)}" }`);
+    if (ws.current) {
+      ws.current.send(`{ "u": "${name}", "p": "${btoa(pass)}" }`);
     }
   };
 

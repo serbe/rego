@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AuthContext } from '../../helpers/auth';
-import { AddEventMessageGet, AddEventOpenItem, SetItem, URL, DelItem } from '../../helpers/fetcher';
+import { useAuthState } from '../../helpers/auth';
+import { AddEventMessageGet, AddEventOpenItem, DelItem, SetItem, URL } from '../../helpers/fetcher';
 import {
   addEmptyString,
   filterArrayNumber,
@@ -21,16 +21,16 @@ import { DepartmentIDSelect } from '../../models/department';
 import {
   EmailInputs,
   FaxInputs,
+  ItemFormButtons,
   NoteInput,
   ParameterTypes,
   PhoneInputs,
-  ItemFormButtons,
 } from '../../models/impersonal';
 import { PostGoIDSelect, PostIDSelect } from '../../models/post';
 import { RankIDSelect } from '../../models/rank';
 
 export const ContactItem = (): JSX.Element => {
-  const { state } = useContext(AuthContext);
+  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [name, setName] = useState<string>();
@@ -68,24 +68,26 @@ export const ContactItem = (): JSX.Element => {
       faxes: filterArrayNumber(faxes),
     };
 
-    SetItem(ws, number_id, 'Contact', item, setStatus, state.token);
+    SetItem(ws.current, number_id, 'Contact', item, setStatus, auth.token);
   };
 
   const del = (): void => {
     const number_id = Number(id);
-    DelItem(ws, number_id, 'Contact', setStatus, state.token);
+    DelItem(ws.current, number_id, 'Contact', setStatus, auth.token);
   };
 
   useEffect(() => {
     ws.current = new WebSocket(URL);
 
-    AddEventOpenItem(ws, 'Contact', id, setLoaded, state.token);
-    AddEventMessageGet(ws, ContactGetItem, setData);
+    AddEventOpenItem(ws.current, 'Contact', id, setLoaded, auth.token);
+    AddEventMessageGet(ws.current, ContactGetItem, setData);
 
     return (): void => {
-      ws.current?.close();
+      if (ws.current) {
+        ws.current.close();
+      }
     };
-  }, [id, state.token]);
+  }, [id, auth.token]);
 
   useEffect(() => {
     if (data) {

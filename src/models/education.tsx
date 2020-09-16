@@ -1,8 +1,8 @@
 import React, { Dispatch, SetStateAction } from 'react';
 
 import { DatePicker, DatePickerValues } from '../components/datepicker';
+import { Select, SelectValues } from '../components/select';
 
-// import { Select, SelectValues } from '../components/_select';
 export type Education = {
   id: number;
   contact_id?: number;
@@ -68,16 +68,23 @@ export const EducationGetShortList = (
   }
 };
 
-// export const EducationNameSelect = (properties: SelectValues): JSX.Element => (
-//   <Select
-//     name="education-contact-name"
-//     label="Полное имя обучаемого"
-//     listName="ContactSelect"
-//     id={properties.id}
-//     icon="user"
-//     setter={properties.setter}
-//   />
-// );
+type JsonEducationListScheme = {
+  command: 'Get';
+  name: 'EducationList';
+  object: { EducationList: EducationList[] };
+  error: string;
+};
+
+export const EducationNameSelect = (properties: SelectValues): JSX.Element => (
+  <Select
+    name="education-contact-name"
+    label="Полное имя обучаемого"
+    listName="ContactSelect"
+    id={properties.id}
+    icon="user"
+    setter={properties.setter}
+  />
+);
 
 export const EducationStartDateInput = (properties: DatePickerValues): JSX.Element => (
   <DatePicker

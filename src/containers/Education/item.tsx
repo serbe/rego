@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AuthContext } from '../../helpers/auth';
-import { AddEventMessageGet, AddEventOpenItem, SetItem, URL, DelItem } from '../../helpers/fetcher';
+import { useAuthState } from '../../helpers/auth';
+import { AddEventMessageGet, AddEventOpenItem, DelItem, SetItem, URL } from '../../helpers/fetcher';
 import {
   Education,
   EducationEndDateInput,
@@ -10,11 +10,11 @@ import {
   EducationNameSelect,
   EducationStartDateInput,
 } from '../../models/education';
-import { NoteInput, ParameterTypes, ItemFormButtons } from '../../models/impersonal';
+import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
 import { PostGoIDSelect } from '../../models/post';
 
 export const EducationItem = (): JSX.Element => {
-  const { state } = useContext(AuthContext);
+  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [contactID, setContactID] = useState<number>();
@@ -39,24 +39,26 @@ export const EducationItem = (): JSX.Element => {
       note: note,
     };
 
-    SetItem(ws, number_id, 'Education', item, setStatus, state.token);
+    SetItem(ws.current, number_id, 'Education', item, setStatus, auth.token);
   };
 
   const del = (): void => {
     const number_id = Number(id);
-    DelItem(ws, number_id, 'Education', setStatus, state.token);
+    DelItem(ws.current, number_id, 'Education', setStatus, auth.token);
   };
 
   useEffect(() => {
     ws.current = new WebSocket(URL);
 
-    AddEventOpenItem(ws, 'Education', id, setLoaded, state.token);
-    AddEventMessageGet(ws, EducationGetItem, setData);
+    AddEventOpenItem(ws.current, 'Education', id, setLoaded, auth.token);
+    AddEventMessageGet(ws.current, EducationGetItem, setData);
 
     return (): void => {
-      ws.current?.close();
+      if (ws.current) {
+        ws.current.close();
+      }
     };
-  }, [id, state.token]);
+  }, [id, auth.token]);
 
   useEffect(() => {
     if (data) {

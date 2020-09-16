@@ -6,10 +6,11 @@ import React, {
   useContext,
   useEffect,
   useReducer,
+  useRef,
   useState,
 } from 'react';
 
-import { useWebSocketState } from './websocket';
+import { URL } from './fetcher';
 
 export type AuthState = {
   role: number;
@@ -137,21 +138,26 @@ export const CheckStorage = (): void => {
   const { name, token, role } = getStorage();
   const [checked, setChecked] = useState(false);
   const { setAuth } = useAuthState();
-  const { ws } = useWebSocketState();
+
+  const ws = useRef<WebSocket>();
 
   useEffect(() => {
-    if (ws) {
-      ws.addEventListener('message', (message: MessageEvent) => {
+    ws.current = new WebSocket(URL);
+
+    if (ws.current) {
+      ws.current.addEventListener('message', (message: MessageEvent) => {
         const text = message.data as string;
         const jsonData = JSON.parse(text) as CJson;
         setChecked(jsonData.r);
       });
 
-      ws.addEventListener('open', () => {
-        ws.send(`{ t: ${token}, r: ${role} })`);
+      ws.current.addEventListener('open', () => {
+        if (ws.current) {
+          ws.current.send(`{ "t": "${token}", "r": ${role} })`);
+        }
       });
     }
-  }, [role, token, ws]);
+  }, []);
 
   useEffect(() => {
     if (checked) {
@@ -170,7 +176,7 @@ export const CheckStorage = (): void => {
         type: 'ClearAuth',
       });
     }
-  }, [checked, name, role, setAuth, token]);
+  }, [checked]);
 };
 
 export const AuthProvider = (properties: AuthProviderProperties): ReactElement => {
