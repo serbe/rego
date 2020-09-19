@@ -8,18 +8,18 @@ import { CJson, getStorage, useAuthState } from './helpers/auth';
 import { URL } from './helpers/fetcher';
 import { Router } from './helpers/router';
 
-const Rugo = (): JSX.Element => {
+export const Rugo = (): JSX.Element => {
   const { auth, setAuth } = useAuthState();
   const { name, token, role } = getStorage();
 
   useEffect(() => {
-    console.log(auth);
+    console.log('rugo useeffect out ws', auth, name, role, setAuth, token);
     const ws = new WebSocket(URL);
 
     ws.addEventListener('message', (message: MessageEvent) => {
       const text = message.data as string;
       const jsonData = JSON.parse(text) as CJson;
-      console.log('rugo', jsonData);
+      console.log('rugo in ws', jsonData);
       if (jsonData.r) {
         setAuth({
           type: 'SetAuth',
@@ -45,7 +45,7 @@ const Rugo = (): JSX.Element => {
     return (): void => {
       ws.close();
     };
-  }, [auth, name, role, setAuth, token]);
+  }, [name, role, token, auth.checked]);
 
   const Content = () =>
     auth.login ? (
@@ -61,5 +61,3 @@ const Rugo = (): JSX.Element => {
 
   return auth.checked ? <Content /> : <div>Loading...</div>;
 };
-
-export default Rugo;

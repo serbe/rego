@@ -185,35 +185,49 @@ export const GetList = (name: string): [List[], string] => {
         if (jsonData?.command === 'Get') {
           switch (jsonData?.name) {
             case 'CertificateList':
-              return setList(jsonData.object.CertificateList);
+              setList(jsonData.object.CertificateList);
+              break;
             case 'CompanyList':
-              return setList(jsonData.object.CompanyList);
+              setList(jsonData.object.CompanyList);
+              break;
             case 'ContactList':
-              return setList(jsonData.object.ContactList);
+              setList(jsonData.object.ContactList);
+              break;
             case 'DepartmentList':
-              return setList(jsonData.object.DepartmentList);
+              setList(jsonData.object.DepartmentList);
+              break;
             case 'EducationList':
-              return setList(jsonData.object.EducationList);
+              setList(jsonData.object.EducationList);
+              break;
             case 'EducationNear':
-              return setList(jsonData.object.EducationShort);
+              setList(jsonData.object.EducationShort);
+              break;
             case 'KindList':
-              return setList(jsonData.object.KindList);
+              setList(jsonData.object.KindList);
+              break;
             case 'PostList':
-              return setList(jsonData.object.PostList);
+              setList(jsonData.object.PostList);
+              break;
             case 'PracticeList':
-              return setList(jsonData.object.PracticeList);
+              setList(jsonData.object.PracticeList);
+              break;
             case 'PracticeNear':
-              return setList(jsonData.object.PracticeShort);
+              setList(jsonData.object.PracticeShort);
+              break;
             case 'RankList':
-              return setList(jsonData.object.RankList);
+              setList(jsonData.object.RankList);
+              break;
             case 'ScopeList':
-              return setList(jsonData.object.ScopeList);
+              setList(jsonData.object.ScopeList);
+              break;
             case 'SirenList':
-              return setList(jsonData.object.SirenList);
+              setList(jsonData.object.SirenList);
+              break;
             case 'SirenTypeList':
-              return setList(jsonData.object.SirenTypeList);
+              setList(jsonData.object.SirenTypeList);
+              break;
             default:
-              return setError('unknown list');
+              setError('unknown list');
           }
         }
       });
@@ -223,13 +237,13 @@ export const GetList = (name: string): [List[], string] => {
           ws.current.send(`{"command":{"Get":{"List":"${name}"}},"addon":"${auth.token}"}`);
         }
       });
-
-      return () => {
-        if (ws.current) {
-          ws.current.close();
-        }
-      };
     }
+
+    return () => {
+      if (ws.current) {
+        ws.current.close();
+      }
+    };
   }, [auth.token, name, setError, setList, ws]);
 
   return [list, error];
@@ -251,43 +265,70 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
         if (jsonData?.command === 'Get') {
           switch (jsonData?.name) {
             case 'CompanySelect':
-              return jsonData.object.SelectItem.length > 0
-                ? setSelect(jsonData.object.SelectItem)
-                : setSelect([{ id: 0, name: '' }]);
+              if (jsonData.object.SelectItem.length > 0) {
+                setSelect(jsonData.object.SelectItem);
+              } else {
+                setSelect([{ id: 0, name: '' }]);
+              }
+              break;
             case 'ContactSelect':
-              return jsonData.object.SelectItem.length > 0
-                ? setSelect(jsonData.object.SelectItem)
-                : setSelect([{ id: 0, name: '' }]);
+              if (jsonData.object.SelectItem.length > 0) {
+                setSelect(jsonData.object.SelectItem);
+              } else {
+                setSelect([{ id: 0, name: '' }]);
+              }
+              break;
             case 'DepartmentSelect':
-              return jsonData.object.SelectItem.length > 0
-                ? setSelect(jsonData.object.SelectItem)
-                : setSelect([{ id: 0, name: '' }]);
+              if (jsonData.object.SelectItem.length > 0) {
+                setSelect(jsonData.object.SelectItem);
+              } else {
+                setSelect([{ id: 0, name: '' }]);
+              }
+              break;
             case 'KindSelect':
-              return jsonData.object.SelectItem.length > 0
-                ? setSelect(jsonData.object.SelectItem)
-                : setSelect([{ id: 0, name: '' }]);
+              if (jsonData.object.SelectItem.length > 0) {
+                setSelect(jsonData.object.SelectItem);
+              } else {
+                setSelect([{ id: 0, name: '' }]);
+              }
+              break;
             case 'PostSelect':
-              return jsonData.object.SelectItem.length > 0
-                ? setSelect(jsonData.object.SelectItem)
-                : setSelect([{ id: 0, name: '' }]);
+              if (jsonData.object.SelectItem.length > 0) {
+                setSelect(jsonData.object.SelectItem);
+              } else {
+                setSelect([{ id: 0, name: '' }]);
+              }
+              break;
             case 'PostGoSelect':
-              return jsonData.object.SelectItem.length > 0
-                ? setSelect(jsonData.object.SelectItem)
-                : setSelect([{ id: 0, name: '' }]);
+              if (jsonData.object.SelectItem.length > 0) {
+                setSelect(jsonData.object.SelectItem);
+              } else {
+                setSelect([{ id: 0, name: '' }]);
+              }
+              break;
             case 'RankSelect':
-              return jsonData.object.SelectItem.length > 0
-                ? setSelect(jsonData.object.SelectItem)
-                : setSelect([{ id: 0, name: '' }]);
+              if (jsonData.object.SelectItem.length > 0) {
+                setSelect(jsonData.object.SelectItem);
+              } else {
+                setSelect([{ id: 0, name: '' }]);
+              }
+              break;
             case 'ScopeSelect':
-              return jsonData.object.SelectItem.length > 0
-                ? setSelect(jsonData.object.SelectItem)
-                : setSelect([{ id: 0, name: '' }]);
+              if (jsonData.object.SelectItem.length > 0) {
+                setSelect(jsonData.object.SelectItem);
+              } else {
+                setSelect([{ id: 0, name: '' }]);
+              }
+              break;
             case 'SirenTypeSelect':
-              return jsonData.object.SelectItem.length > 0
-                ? setSelect(jsonData.object.SelectItem)
-                : setSelect([{ id: 0, name: '' }]);
+              if (jsonData.object.SelectItem.length > 0) {
+                setSelect(jsonData.object.SelectItem);
+              } else {
+                setSelect([{ id: 0, name: '' }]);
+              }
+              break;
             default:
-              return setError('unknown list');
+              setError('unknown list');
           }
         }
       });
@@ -297,13 +338,13 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
           ws.current.send(`{"command":{"Get":{"List":"${name}"}},"addon":"${auth.token}"}`);
         }
       });
-
-      return (): void => {
-        if (ws.current) {
-          ws.current.close();
-        }
-      };
     }
+
+    return (): void => {
+      if (ws.current) {
+        ws.current.close();
+      }
+    };
   }, [name, auth.token, ws]);
 
   return [list, error];

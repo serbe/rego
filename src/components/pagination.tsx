@@ -28,7 +28,7 @@ export const Pagination = (properties: PaginationProperties): JSX.Element => {
         Назад
       </a>
     ) : (
-      <button className="pagination-previous" disabled>
+      <button type="button" className="pagination-previous" disabled>
         Назад
       </button>
     );
@@ -44,13 +44,13 @@ export const Pagination = (properties: PaginationProperties): JSX.Element => {
         Далее
       </a>
     ) : (
-      <button className="pagination-next" disabled>
+      <button type="button" className="pagination-next" disabled>
         Далее
       </button>
     );
 
-  const Item = (properties: ItemProperties): JSX.Element => {
-    const { check, index, link, ellipsis } = properties;
+  const Item = (itemProperties: ItemProperties): JSX.Element => {
+    const { check, index, link, ellipsis } = itemProperties;
 
     return check ? (
       <li key={`li${index}`}>

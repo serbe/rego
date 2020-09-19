@@ -100,9 +100,25 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
+export const Paginate = (properties: PaginateProperties): JSX.Element => {
+  const { filteredDataLength, itemsPerPage, currentPage, setter } = properties;
+  const receiveChildValue = (value: number): void => {
+    setter(value - 1);
+  };
+  return filteredDataLength / itemsPerPage > 2 ? (
+    <Pagination
+      currentPage={currentPage + 1}
+      lastPage={Math.ceil(filteredDataLength / itemsPerPage)}
+      setter={receiveChildValue}
+    />
+  ) : (
+    <></>
+  );
+};
+
 export const Data = (properties: DataProperties): [() => List[], JSX.Element] => {
   const { data, search } = properties;
-  type td = typeof properties.data;
+  type TableData = typeof properties.data;
 
   const [{ filteredData, currentPage, filteredDataLength, itemsPerPage }, dispatch] = useReducer(
     reducer,
@@ -124,7 +140,8 @@ export const Data = (properties: DataProperties): [() => List[], JSX.Element] =>
           if (value && typeof value !== 'number') {
             if (typeof value === 'string') {
               return value;
-            } if (Array.isArray(value)) {
+            }
+            if (Array.isArray(value)) {
               return value.join('');
             }
           }
@@ -146,7 +163,7 @@ export const Data = (properties: DataProperties): [() => List[], JSX.Element] =>
     }
   }, [search, data]);
 
-  const paginationData = (): td => {
+  const paginationData = (): TableData => {
     return filteredData.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
   };
 
@@ -189,21 +206,5 @@ export const Bar = (properties: BarProperties): JSX.Element => {
         />
       </div>
     </div>
-  );
-};
-
-export const Paginate = (properties: PaginateProperties): JSX.Element => {
-  const { filteredDataLength, itemsPerPage, currentPage, setter } = properties;
-  const receiveChildValue = (value: number): void => {
-    setter(value - 1);
-  };
-  return filteredDataLength / itemsPerPage > 2 ? (
-    <Pagination
-      currentPage={currentPage + 1}
-      lastPage={Math.ceil(filteredDataLength / itemsPerPage)}
-      setter={receiveChildValue}
-    />
-  ) : (
-    <></>
   );
 };

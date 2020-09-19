@@ -22,7 +22,7 @@ export const Button = (properties: ButtonProperties): JSX.Element => {
       {children}
     </a>
   ) : (
-    <button disabled={disabled} onClick={onClick} className={classes}>
+    <button type="button" disabled={disabled} onClick={onClick} className={classes}>
       {children}
     </button>
   );

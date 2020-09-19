@@ -59,6 +59,30 @@ interface AuthProviderProperties {
   children: ReactNode;
 }
 
+export const getStorage = (): {
+  role: number;
+  name: string;
+  token: string;
+} => {
+  return {
+    role: Number(localStorage.getItem('r')) || 0,
+    name: localStorage.getItem('u') || '',
+    token: localStorage.getItem('t') || '',
+  };
+};
+
+const setStorage = (role: number, name: string, token: string): void => {
+  localStorage.setItem('r', String(role));
+  localStorage.setItem('u', name);
+  localStorage.setItem('t', token);
+};
+
+const clearStorage = (): void => {
+  localStorage.setItem('u', '');
+  localStorage.setItem('t', '');
+  localStorage.setItem('r', '0');
+};
+
 export const reducer = (authState: AuthState, action: ReducerActions): AuthState => {
   switch (action.type) {
     case 'SetAuth': {
@@ -88,50 +112,36 @@ export const reducer = (authState: AuthState, action: ReducerActions): AuthState
   }
 };
 
-// const checkAuth = async (name: string, token: string, role: number): Promise<boolean> => {
-//   if (name === '' || token === '' || role === 0) {
-//     return false;
-//   }
-//   return fetch('/api/go/check', {
-//     method: 'POST',
-//     mode: 'cors',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify({ t: token, r: role }),
-//   })
-//     .then((response) => response.json())
-//     .then((response) => response as CJson)
-//     .then((jsonData) => {
-//       return jsonData.r;
-//     })
-//     .catch(() => {
-//       return false;
-//     });
-// };
+export const AuthProvider = (properties: AuthProviderProperties): ReactElement => {
+  const { children } = properties;
+  const [state, dispatch] = useReducer(reducer, initialAuthState);
 
-export const getStorage = (): {
-  role: number;
-  name: string;
-  token: string;
-} => {
-  return {
-    role: Number(localStorage.getItem('r')) || 0,
-    name: localStorage.getItem('u') || '',
-    token: localStorage.getItem('t') || '',
-  };
+  const setState: SetAuthState = { dispatch };
+
+  // const contentValues = useMemo(
+  //   () => ({
+  //     state,
+  //     dispatch,
+  //   }),
+  //   [state, dispatch],
+  // );
+
+  return (
+    <AuthContext.Provider value={state}>
+      <SetAuthContext.Provider value={setState}>{children}</SetAuthContext.Provider>
+    </AuthContext.Provider>
+  );
 };
 
-const setStorage = (role: number, name: string, token: string): void => {
-  localStorage.setItem('r', String(role));
-  localStorage.setItem('u', name);
-  localStorage.setItem('t', token);
-};
+interface AuthContextProperties {
+  auth: AuthState;
+  setAuth: Dispatch<ReducerActions>;
+}
 
-const clearStorage = (): void => {
-  localStorage.setItem('u', '');
-  localStorage.setItem('t', '');
-  localStorage.setItem('r', '0');
+export const useAuthState = (): AuthContextProperties => {
+  const auth = useContext(AuthContext);
+  const setter = useContext(SetAuthContext);
+  return { auth, setAuth: setter.dispatch };
 };
 
 export const CheckStorage = (): void => {
@@ -177,36 +187,4 @@ export const CheckStorage = (): void => {
       });
     }
   }, [checked, name, role, setAuth, token]);
-};
-
-export const AuthProvider = (properties: AuthProviderProperties): ReactElement => {
-  const { children } = properties;
-  const [state, dispatch] = useReducer(reducer, initialAuthState);
-
-  const setState: SetAuthState = { dispatch };
-
-  // const contentValues = useMemo(
-  //   () => ({
-  //     state,
-  //     dispatch,
-  //   }),
-  //   [state, dispatch],
-  // );
-
-  return (
-    <AuthContext.Provider value={state}>
-      <SetAuthContext.Provider value={setState}>{children}</SetAuthContext.Provider>
-    </AuthContext.Provider>
-  );
-};
-
-interface AuthContextProperties {
-  auth: AuthState;
-  setAuth: Dispatch<ReducerActions>;
-}
-
-export const useAuthState = (): AuthContextProperties => {
-  const auth = useContext(AuthContext);
-  const setter = useContext(SetAuthContext);
-  return { auth, setAuth: setter.dispatch };
 };

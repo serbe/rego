@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface IconProperties {
+export interface IconProperties {
   children?: Element;
   className?: string;
   color?: 'info' | 'success' | 'warning' | 'danger';

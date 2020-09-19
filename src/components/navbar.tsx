@@ -43,12 +43,12 @@ const NavbarNotLogged = (): JSX.Element => (
 
 const MainItems = (value: Setter): JSX.Element => (
   <>
-    {mainItems.map((item, index) => (
+    {mainItems.map((item) => (
       <NavLink
         activeClassName="is-active"
         className="navbar-item"
         to={item.link}
-        key={`main-items-${index}`}
+        key={`main-items-${item.name}`}
         onClick={() => value.setter(false)}
       >
         {item.name}
@@ -59,12 +59,12 @@ const MainItems = (value: Setter): JSX.Element => (
 
 const NavbarDropdown = (value: Setter): JSX.Element => (
   <div className="navbar-dropdown" key="navbar-dropdown">
-    {dropdownItems.map((item, index) => (
+    {dropdownItems.map((item) => (
       <NavLink
         activeClassName="is-active"
         className="navbar-item"
         to={item.link}
-        key={`navbar-dropdown-${index}`}
+        key={`navbar-dropdown-${item.name}`}
         onClick={() => value.setter(false)}
       >
         {item.name}

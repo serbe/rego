@@ -2,7 +2,7 @@ import React, { ChangeEvent, KeyboardEvent, MouseEvent } from 'react';
 
 import { Input } from './input';
 
-interface FormFieldProperties {
+export interface FormFieldProperties {
   className?: string;
   disabled?: boolean;
   icon?: string;

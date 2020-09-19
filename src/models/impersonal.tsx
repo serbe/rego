@@ -144,7 +144,7 @@ export const ItemFormButtons = (properties: FormButtonsValues): JSX.Element => {
   const SaveButton = () =>
     auth.role > 4 ? (
       <div className="control">
-        <button className="button" onClick={() => send()}>
+        <button type="button" className="button" onClick={() => send()}>
           Сохранить
         </button>
       </div>
@@ -154,7 +154,7 @@ export const ItemFormButtons = (properties: FormButtonsValues): JSX.Element => {
 
   const BackButton = () => (
     <div className="control">
-      <button className="button" onClick={() => history.go(-1)}>
+      <button type="button" className="button" onClick={() => history.go(-1)}>
         Закрыть
       </button>
     </div>
@@ -164,9 +164,12 @@ export const ItemFormButtons = (properties: FormButtonsValues): JSX.Element => {
     auth.role > 8 ? (
       <div className="control mla is-danger">
         <button
+          type="button"
           className="button"
           onClick={() => {
-            window.confirm('Вы действительно хотите удалить запись?') && del();
+            if (window.confirm('Вы действительно хотите удалить запись?')) {
+              del();
+            }
           }}
         >
           Удалить

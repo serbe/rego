@@ -60,18 +60,21 @@ export const Select = (properties: SelectProperties): JSX.Element => {
     return list.filter(
       (listItem) =>
         listItem.name === '' ||
-        inputArray.every((value: string) => new RegExp(value, 'i').exec(listItem.name)),
+        inputArray.every((listItemValue: string) =>
+          new RegExp(listItemValue, 'i').exec(listItem.name),
+        ),
     );
   };
 
   return (
     <div className="field" key={name}>
       {label && (
-        <label className="label" key="SelectLabel">
+        <label className="label" key="SelectLabel" htmlFor={`select-${name}-id`}>
           {label}
         </label>
       )}
       <div
+        id={`select-${name}-id`}
         className={`control is-expanded select is-fullwidth ${icon ? 'has-icons-left' : ''}`}
         key={`${name}-control`}
       >
@@ -107,7 +110,7 @@ export const Select = (properties: SelectProperties): JSX.Element => {
           {filteredList().map((ListItem, index) => (
             <div
               className="select-item"
-              key={`${name}-${index}`}
+              key={`${name}-${ListItem.id}`}
               onMouseDown={(): void => {
                 setItemID(ListItem.id);
                 setValue(ListItem.name);

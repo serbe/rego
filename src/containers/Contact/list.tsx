@@ -22,8 +22,8 @@ export const Contacts = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((contact, index) => (
-        <tr key={`tr${contact.id}${index}`}>
+      {tableData().map((contact) => (
+        <tr key={`tr-${contact.id}`}>
           <td
             onClick={(): void => history.push(`/contacts/${contact.id}`)}
             role="gridcell"

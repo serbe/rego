@@ -22,9 +22,9 @@ export const Sirens = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((siren, index) => (
+      {tableData().map((siren) => (
         <tr
-          key={`tr${siren.id}${index}`}
+          key={`tr-${siren.id}`}
           onClick={(): void => history.push(`/sirens/${siren.id}`)}
           role="gridcell"
           className="link"

@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
 import { AuthProvider } from './helpers/auth';
-import Rugo from './rugo';
+import { Rugo } from './rugo';
 import * as serviceWorker from './serviceWorker';
 
 // import './index.css';

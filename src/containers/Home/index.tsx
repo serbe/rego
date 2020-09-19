@@ -32,21 +32,21 @@ const EducationTable = (educations: EducationShort[]): JSX.Element => {
   return (
     <table className="table is-narrow">
       <tbody>
-        {educations.map((row, index) => (
-          <tr key={index} className={trClass(row.start_date)}>
+        {educations.map((education) => (
+          <tr key={education.id} className={trClass(education.start_date)}>
             <td
               className="has-text-black"
-              onMouseDown={(): void => history.push(`/education/${row.id}`)}
+              onMouseDown={(): void => history.push(`/education/${education.id}`)}
               role="gridcell"
             >
-              {tinyDate(row.start_date)}
+              {tinyDate(education.start_date)}
             </td>
             <td
               className="has-text-black"
-              onMouseDown={(): void => history.push(`/contact/${row.contact_id}`)}
+              onMouseDown={(): void => history.push(`/contact/${education.contact_id}`)}
               role="gridcell"
             >
-              {row.contact_name}
+              {education.contact_name}
             </td>
           </tr>
         ))}
@@ -60,28 +60,28 @@ const PracticeTable = (practices: PracticeShort[]): JSX.Element => {
   return (
     <table className="table is-narrow">
       <tbody>
-        {practices.map((row, index) => (
-          <tr key={index} className={trClass(row.date_of_practice)}>
+        {practices.map((practice) => (
+          <tr key={practice.id} className={trClass(practice.date_of_practice)}>
             <td
               className="has-text-black"
-              onMouseDown={(): void => history.push(`/practice/${row.id}`)}
+              onMouseDown={(): void => history.push(`/practice/${practice.id}`)}
               role="gridcell"
             >
-              {tinyDate(row.date_of_practice)}
+              {tinyDate(practice.date_of_practice)}
             </td>
             <td
               className="has-text-black"
-              onMouseDown={(): void => history.push(`/kinds/${row.kind_id}`)}
+              onMouseDown={(): void => history.push(`/kinds/${practice.kind_id}`)}
               role="gridcell"
             >
-              {row.kind_short_name}
+              {practice.kind_short_name}
             </td>
             <td
               className="has-text-black"
-              onMouseDown={(): void => history.push(`/companies/${row.company_id}`)}
+              onMouseDown={(): void => history.push(`/companies/${practice.company_id}`)}
               role="gridcell"
             >
-              {row.company_name}
+              {practice.company_name}
             </td>
           </tr>
         ))}

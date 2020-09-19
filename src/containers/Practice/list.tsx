@@ -21,9 +21,9 @@ export const Practices = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((practice, index) => (
+      {tableData().map((practice) => (
         <tr
-          key={`tr${practice.id}${index}`}
+          key={`tr-${practice.id}`}
           onClick={(): void => history.push(`/practices/${practice.id}`)}
           role="gridcell"
           className="link"

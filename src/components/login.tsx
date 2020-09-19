@@ -22,7 +22,6 @@ export const Login = (): JSX.Element => {
     ws.current.addEventListener('message', (message: MessageEvent) => {
       const text = message.data as string;
       const jsonData = JSON.parse(text) as TJson;
-      console.log(jsonData);
       setAuth({
         type: 'SetAuth',
         data: {
@@ -40,7 +39,7 @@ export const Login = (): JSX.Element => {
         ws.current.close();
       }
     };
-  }, []);
+  }, [name, setAuth]);
 
   const submit = (): void => {
     if (ws.current) {
@@ -70,12 +69,14 @@ export const Login = (): JSX.Element => {
             setPass(event.target.value);
           }}
           onKeyPress={(event: KeyboardEvent<HTMLInputElement>): void => {
-            event.key === 'Enter' && submit();
+            if (event.key === 'Enter') {
+              submit();
+            }
           }}
         />
         <div className="field">
           <div className="control">
-            <button className="button" onClick={() => submit()}>
+            <button type="button" className="button" onClick={() => submit()}>
               Отправить
             </button>
           </div>

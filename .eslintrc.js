@@ -4,7 +4,9 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   extends: [
     'airbnb-typescript',
+    'airbnb/hooks',
     'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'prettier',
     'prettier/react',
     'prettier/@typescript-eslint',
@@ -21,6 +23,9 @@ module.exports = {
     'jsx-a11y/label-has-associated-control': 'warn',
     'import/prefer-default-export': 'warn',
     'react/no-array-index-key': 'warn',
+    'import/no-cycle': 'warn',
+    'import/prefer-default-export': 'off',
+    'react-hooks/exhaustive-deps': 'warn',
   },
   env: {
     node: true,

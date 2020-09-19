@@ -49,9 +49,9 @@ export const SirenItem = (): JSX.Element => {
   const ws = useRef<WebSocket>();
 
   const send = (): void => {
-    const numberID = Number(id);
+    const sendNumberID = Number(id);
     const item: Siren = {
-      id: numberID,
+      id: sendNumberID,
       num_id: numberID,
       num_pass: numberPassport,
       siren_type_id: sirenTypeID,
@@ -67,12 +67,12 @@ export const SirenItem = (): JSX.Element => {
       note,
     };
 
-    SetItem(ws.current, numberID, 'Siren', item, setStatus, auth.token);
+    SetItem(ws.current, sendNumberID, 'Siren', item, setStatus, auth.token);
   };
 
   const del = (): void => {
-    const numberID = Number(id);
-    DelItem(ws.current, numberID, 'Siren', setStatus, auth.token);
+    const delNumberID = Number(id);
+    DelItem(ws.current, delNumberID, 'Siren', setStatus, auth.token);
   };
 
   useEffect(() => {
