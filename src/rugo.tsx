@@ -13,44 +13,39 @@ const Rugo = (): JSX.Element => {
   const { name, token, role } = getStorage();
 
   useEffect(() => {
-    if (token !== '') {
-      const ws = new WebSocket(URL);
+    console.log(auth);
+    const ws = new WebSocket(URL);
 
-      ws.addEventListener('message', (message: MessageEvent) => {
-        const text = message.data as string;
-        const jsonData = JSON.parse(text) as CJson;
-        console.log('rugo', jsonData);
-        if (jsonData.r) {
-          setAuth({
-            type: 'SetAuth',
-            data: {
-              role: role,
-              name: name,
-              token: token,
-              login: true,
-              checked: true,
-            },
-          });
-        } else {
-          setAuth({
-            type: 'ClearAuth',
-          });
-        }
-      });
+    ws.addEventListener('message', (message: MessageEvent) => {
+      const text = message.data as string;
+      const jsonData = JSON.parse(text) as CJson;
+      console.log('rugo', jsonData);
+      if (jsonData.r) {
+        setAuth({
+          type: 'SetAuth',
+          data: {
+            role: role,
+            name: name,
+            token: token,
+            login: true,
+            checked: true,
+          },
+        });
+      } else {
+        setAuth({
+          type: 'ClearAuth',
+        });
+      }
+    });
 
-      ws.addEventListener('open', () => {
-        ws.send(`{"t":"${token}","r":${role}}`);
-      });
+    ws.addEventListener('open', () => {
+      ws.send(`{"t":"${token}","r":${role}}`);
+    });
 
-      return (): void => {
-        ws.close();
-      };
-    } else {
-      setAuth({
-        type: 'ClearAuth',
-      });
-    }
-  }, []);
+    return (): void => {
+      ws.close();
+    };
+  }, [auth, name, role, setAuth, token]);
 
   const Content = () =>
     auth.login ? (

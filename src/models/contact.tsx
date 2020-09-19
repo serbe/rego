@@ -1,14 +1,11 @@
-import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import React from 'react';
+import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { DatePicker, DatePickerValues } from '../components/datepicker';
 import { FormField } from '../components/formfield';
 import { Input, StringInputProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
-
-export interface ContactShortValues {
-  contacts: ContactShort[];
-}
 
 export interface ContactEducationsValues {
   educations: string[];
@@ -47,6 +44,10 @@ export type ContactShort = {
   post_name?: string;
   post_go_name?: string;
 };
+
+export interface ContactShortValues {
+  contacts: ContactShort[];
+}
 
 type JsonItemScheme = {
   command: 'Get';

@@ -1,6 +1,6 @@
 /.git
 /docs/.next
-/coverage
+coverage
 /docs/export
 /tmp
 build
@@ -9,3 +9,4 @@ node_modules
 /src/setupTests.ts
 /src/react-app-env.d.ts
 babel.config.js
+dist

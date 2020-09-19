@@ -68,12 +68,12 @@ export const EducationGetShortList = (
   }
 };
 
-type JsonEducationListScheme = {
-  command: 'Get';
-  name: 'EducationList';
-  object: { EducationList: EducationList[] };
-  error: string;
-};
+// type JsonEducationListScheme = {
+//   command: 'Get';
+//   name: 'EducationList';
+//   object: { EducationList: EducationList[] };
+//   error: string;
+// };
 
 export const EducationNameSelect = (properties: SelectValues): JSX.Element => (
   <Select

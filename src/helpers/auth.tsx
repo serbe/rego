@@ -32,6 +32,15 @@ const initialAuthState: AuthState = {
   checked: false,
 };
 
+export type ReducerActions =
+  | {
+      type: 'SetAuth';
+      data: AuthState;
+    }
+  | {
+      type: 'ClearAuth';
+    };
+
 interface SetAuthState {
   dispatch: Dispatch<ReducerActions>;
 }
@@ -49,15 +58,6 @@ export const SetAuthContext = createContext(initialSetAuthState);
 interface AuthProviderProperties {
   children: ReactNode;
 }
-
-export type ReducerActions =
-  | {
-      type: 'SetAuth';
-      data: AuthState;
-    }
-  | {
-      type: 'ClearAuth';
-    };
 
 export const reducer = (authState: AuthState, action: ReducerActions): AuthState => {
   switch (action.type) {
@@ -157,7 +157,7 @@ export const CheckStorage = (): void => {
         }
       });
     }
-  }, []);
+  }, [role, token]);
 
   useEffect(() => {
     if (checked) {
@@ -176,7 +176,7 @@ export const CheckStorage = (): void => {
         type: 'ClearAuth',
       });
     }
-  }, [checked]);
+  }, [checked, name, role, setAuth, token]);
 };
 
 export const AuthProvider = (properties: AuthProviderProperties): ReactElement => {
