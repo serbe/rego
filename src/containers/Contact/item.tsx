@@ -52,28 +52,28 @@ export const ContactItem = (): JSX.Element => {
   const ws = useRef<WebSocket>();
 
   const send = (): void => {
-    const number_id = Number(id);
+    const numberID = Number(id);
     const item: Contact = {
-      id: number_id,
-      name: name,
+      id: numberID,
+      name,
       company_id: companyID,
       department_id: departmentID,
       post_id: postID,
       post_go_id: postGoID,
       rank_id: rankID,
-      birthday: birthday,
-      note: note,
+      birthday,
+      note,
       emails: filterArrayString(emails),
       phones: filterArrayNumber(phones),
       faxes: filterArrayNumber(faxes),
     };
 
-    SetItem(ws.current, number_id, 'Contact', item, setStatus, auth.token);
+    SetItem(ws.current, numberID, 'Contact', item, setStatus, auth.token);
   };
 
   const del = (): void => {
-    const number_id = Number(id);
-    DelItem(ws.current, number_id, 'Contact', setStatus, auth.token);
+    const numberID = Number(id);
+    DelItem(ws.current, numberID, 'Contact', setStatus, auth.token);
   };
 
   useEffect(() => {

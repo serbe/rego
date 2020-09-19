@@ -11,8 +11,8 @@ export const Practices = (): JSX.Element => {
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
-    data: data,
-    search: search,
+    data,
+    search,
   });
 
   const tableData = (): PracticeList[] => {

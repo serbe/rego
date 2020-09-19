@@ -25,20 +25,20 @@ export const SirenTypeItem = (): JSX.Element => {
   const ws = useRef<WebSocket>();
 
   const send = (): void => {
-    const number_id = Number(id);
+    const numberID = Number(id);
     const item: SirenType = {
-      id: number_id,
-      name: name,
-      radius: radius,
-      note: note,
+      id: numberID,
+      name,
+      radius,
+      note,
     };
 
-    SetItem(ws.current, number_id, 'SirenType', item, setStatus, auth.token);
+    SetItem(ws.current, numberID, 'SirenType', item, setStatus, auth.token);
   };
 
   const del = (): void => {
-    const number_id = Number(id);
-    DelItem(ws.current, number_id, 'SirenType', setStatus, auth.token);
+    const numberID = Number(id);
+    DelItem(ws.current, numberID, 'SirenType', setStatus, auth.token);
   };
 
   useEffect(() => {

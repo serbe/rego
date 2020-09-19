@@ -43,24 +43,24 @@ export const CompanyItem = (): JSX.Element => {
   const ws = useRef<WebSocket>();
 
   const send = (): void => {
-    const number_id = Number(id);
+    const numberID = Number(id);
     const item: Company = {
-      id: number_id,
-      name: name,
-      address: address,
+      id: numberID,
+      name,
+      address,
       scope_id: scopeID,
-      note: note,
+      note,
       emails: filterArrayString(emails),
       phones: filterArrayNumber(phones),
       faxes: filterArrayNumber(faxes),
     };
 
-    SetItem(ws.current, number_id, 'Company', item, setStatus, auth.token);
+    SetItem(ws.current, numberID, 'Company', item, setStatus, auth.token);
   };
 
   const del = (): void => {
-    const number_id = Number(id);
-    DelItem(ws.current, number_id, 'Company', setStatus, auth.token);
+    const numberID = Number(id);
+    DelItem(ws.current, numberID, 'Company', setStatus, auth.token);
   };
 
   useEffect(() => {

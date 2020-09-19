@@ -19,19 +19,19 @@ export const RankItem = (): JSX.Element => {
   const ws = useRef<WebSocket>();
 
   const send = (): void => {
-    const number_id = Number(id);
+    const numberID = Number(id);
     const item: Rank = {
-      id: number_id,
-      name: name,
-      note: note,
+      id: numberID,
+      name,
+      note,
     };
 
-    SetItem(ws.current, number_id, 'Rank', item, setStatus, auth.token);
+    SetItem(ws.current, numberID, 'Rank', item, setStatus, auth.token);
   };
 
   const del = (): void => {
-    const number_id = Number(id);
-    DelItem(ws.current, number_id, 'Rank', setStatus, auth.token);
+    const numberID = Number(id);
+    DelItem(ws.current, numberID, 'Rank', setStatus, auth.token);
   };
 
   useEffect(() => {

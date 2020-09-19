@@ -6,7 +6,7 @@ import { AddEventMessageGet, AddEventOpenItem, DelItem, SetItem, URL } from '../
 import { Department, DepartmentGetItem, DepartmentNameInput } from '../../models/department';
 import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
 
-export const DepartmentItem = (): JSX.Element => {
+const DepartmentItem = (): JSX.Element => {
   const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
@@ -19,19 +19,19 @@ export const DepartmentItem = (): JSX.Element => {
   const ws = useRef<WebSocket>();
 
   const send = (): void => {
-    const number_id = Number(id);
+    const numberID = Number(id);
     const item: Department = {
-      id: number_id,
-      name: name,
-      note: note,
+      id: numberID,
+      name,
+      note,
     };
 
-    SetItem(ws.current, number_id, 'Department', item, setStatus, auth.token);
+    SetItem(ws.current, numberID, 'Department', item, setStatus, auth.token);
   };
 
   const del = (): void => {
-    const number_id = Number(id);
-    DelItem(ws.current, number_id, 'Department', setStatus, auth.token);
+    const numberID = Number(id);
+    DelItem(ws.current, numberID, 'Department', setStatus, auth.token);
   };
 
   useEffect(() => {
@@ -74,3 +74,5 @@ export const DepartmentItem = (): JSX.Element => {
     </div>
   );
 };
+
+export { DepartmentItem };

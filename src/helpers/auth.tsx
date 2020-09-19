@@ -164,9 +164,9 @@ export const CheckStorage = (): void => {
       setAuth({
         type: 'SetAuth',
         data: {
-          role: role,
-          name: name,
-          token: token,
+          role,
+          name,
+          token,
           login: true,
           checked: true,
         },
@@ -183,7 +183,7 @@ export const AuthProvider = (properties: AuthProviderProperties): ReactElement =
   const { children } = properties;
   const [state, dispatch] = useReducer(reducer, initialAuthState);
 
-  const setState: SetAuthState = { dispatch: dispatch };
+  const setState: SetAuthState = { dispatch };
 
   // const contentValues = useMemo(
   //   () => ({

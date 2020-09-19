@@ -124,7 +124,7 @@ export const Data = (properties: DataProperties): [() => List[], JSX.Element] =>
           if (value && typeof value !== 'number') {
             if (typeof value === 'string') {
               return value;
-            } else if (Array.isArray(value)) {
+            } if (Array.isArray(value)) {
               return value.join('');
             }
           }
@@ -142,7 +142,7 @@ export const Data = (properties: DataProperties): [() => List[], JSX.Element] =>
     if (search.length < 2) {
       dispatch({ type: 'searchLessThanTwo', value: data, valueLength: data.length });
     } else {
-      dispatch({ type: 'changeSearch', value: data, search: search });
+      dispatch({ type: 'changeSearch', value: data, search });
     }
   }, [search, data]);
 
@@ -153,9 +153,9 @@ export const Data = (properties: DataProperties): [() => List[], JSX.Element] =>
   return [
     paginationData,
     Paginate({
-      currentPage: currentPage,
-      filteredDataLength: filteredDataLength,
-      itemsPerPage: itemsPerPage,
+      currentPage,
+      filteredDataLength,
+      itemsPerPage,
       setter: setCurrentPage,
     }),
   ];

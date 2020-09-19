@@ -20,20 +20,20 @@ export const PostItem = (): JSX.Element => {
   const ws = useRef<WebSocket>();
 
   const send = (): void => {
-    const number_id = Number(id);
+    const numberID = Number(id);
     const item: Post = {
-      id: number_id,
-      name: name,
-      go: go,
-      note: note,
+      id: numberID,
+      name,
+      go,
+      note,
     };
 
-    SetItem(ws.current, number_id, 'Post', item, setStatus, auth.token);
+    SetItem(ws.current, numberID, 'Post', item, setStatus, auth.token);
   };
 
   const del = (): void => {
-    const number_id = Number(id);
-    DelItem(ws.current, number_id, 'Post', setStatus, auth.token);
+    const numberID = Number(id);
+    DelItem(ws.current, numberID, 'Post', setStatus, auth.token);
   };
 
   useEffect(() => {

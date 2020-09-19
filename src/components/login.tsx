@@ -27,7 +27,7 @@ export const Login = (): JSX.Element => {
         type: 'SetAuth',
         data: {
           checked: true,
-          name: name,
+          name,
           role: jsonData.r,
           token: jsonData.t,
           login: true,

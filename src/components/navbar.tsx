@@ -114,7 +114,7 @@ const BrandBar = (properties: OpenState): JSX.Element => {
   const { open, setter } = properties;
   return (
     <>
-      <NavLink activeClassName="is-active" className="navbar-item" exact={true} to="/">
+      <NavLink activeClassName="is-active" className="navbar-item" exact to="/">
         ЕДДС
       </NavLink>
       <a

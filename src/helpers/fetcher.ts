@@ -144,11 +144,11 @@ export const AddEventOpenItem = (
   setLoaded: Dispatch<SetStateAction<boolean>>,
   token: string,
 ): void => {
-  const number_id = Number(id);
-  if (number_id !== 0 && ws) {
+  const numberID = Number(id);
+  if (numberID !== 0 && ws) {
     ws.addEventListener('open', () => {
       ws.send(
-        `{"command":{"Get":{"Item":{"name":"${name}","id":${number_id}}}},"addon":"${token}"}`,
+        `{"command":{"Get":{"Item":{"name":"${name}","id":${numberID}}}},"addon":"${token}"}`,
       );
     });
   } else {

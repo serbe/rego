@@ -29,22 +29,22 @@ export const PracticeItem = (): JSX.Element => {
   const ws = useRef<WebSocket>();
 
   const send = (): void => {
-    const number_id = Number(id);
+    const numberID = Number(id);
     const item: Practice = {
-      id: number_id,
+      id: numberID,
       company_id: companyID,
       kind_id: kindID,
-      topic: topic,
+      topic,
       date_of_practice: date,
-      note: note,
+      note,
     };
 
-    SetItem(ws.current, number_id, 'Practice', item, setStatus, auth.token);
+    SetItem(ws.current, numberID, 'Practice', item, setStatus, auth.token);
   };
 
   const del = (): void => {
-    const number_id = Number(id);
-    DelItem(ws.current, number_id, 'Practice', setStatus, auth.token);
+    const numberID = Number(id);
+    DelItem(ws.current, numberID, 'Practice', setStatus, auth.token);
   };
 
   useEffect(() => {

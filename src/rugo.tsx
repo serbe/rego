@@ -24,9 +24,9 @@ const Rugo = (): JSX.Element => {
         setAuth({
           type: 'SetAuth',
           data: {
-            role: role,
-            name: name,
-            token: token,
+            role,
+            name,
+            token,
             login: true,
             checked: true,
           },

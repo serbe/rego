@@ -43,7 +43,7 @@ export const SirenGetItem = (
 
 export const SirenNumberIDInput = (properties: NumberInputProperties): JSX.Element => (
   <FormField
-    name="siren_number_id"
+    name="siren_numberID"
     value={properties.value}
     onChange={(event: ChangeEvent<HTMLInputElement>): void =>
       properties.setter(Number(event.target.value))

@@ -29,22 +29,22 @@ export const CertificateItem = (): JSX.Element => {
   const ws = useRef<WebSocket>();
 
   const send = (): void => {
-    const number_id = Number(id);
+    const numberID = Number(id);
     const item: Certificate = {
-      id: number_id,
+      id: numberID,
       num: sNumber,
       contact_id: contactID,
       company_id: companyID,
       cert_date: certDate,
-      note: note,
+      note,
     };
 
-    SetItem(ws.current, number_id, 'Certificate', item, setStatus, auth.token);
+    SetItem(ws.current, numberID, 'Certificate', item, setStatus, auth.token);
   };
 
   const del = (): void => {
-    const number_id = Number(id);
-    DelItem(ws.current, number_id, 'Certificate', setStatus, auth.token);
+    const numberID = Number(id);
+    DelItem(ws.current, numberID, 'Certificate', setStatus, auth.token);
   };
 
   useEffect(() => {

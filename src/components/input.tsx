@@ -73,8 +73,8 @@ export const Input = (properties: InputProperties): JSX.Element => {
         readOnly={readonly}
         type={type}
       />
-      {icon && <Icon position={'left'} icon={icon} />}
-      {iconRight && <Icon position={'right'} icon={iconRight} />}
+      {icon && <Icon position="left" icon={icon} />}
+      {iconRight && <Icon position="right" icon={iconRight} />}
     </div>
   );
 };
