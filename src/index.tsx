@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
 import { AuthProvider } from './helpers/auth';
-import { Rugo } from './rugo';
+import { Rego } from './rego';
 import * as serviceWorker from './serviceWorker';
 
 // import './index.css';
@@ -14,7 +14,7 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <Rugo />
+        <Rego />
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>,
