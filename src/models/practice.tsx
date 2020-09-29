@@ -79,12 +79,12 @@ export const PracticeListForm = (properties: PracticeValues): JSX.Element => {
   const history = useHistory();
   return properties.practices.length > 0 ? (
     <div className="field" key="practices">
-      <label className="label" htmlFor="practice-1">
+      <label className="label" htmlFor="practice-1-input">
         Тренировки
       </label>
       {properties.practices.map((practice, index) => (
         <Input
-          name={`practice-${index}`}
+          name={`practice-${index}-input`}
           key={`practice-${index}`}
           onClick={(): void => history.push(`/practice/${practice.id}`)}
           value={`${practice.date_str || ''} - ${practice.kind_name || ''} - ${

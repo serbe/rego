@@ -98,7 +98,7 @@ export const ContactShortForm = (properties: ContactShortValues): JSX.Element =>
   const history = useHistory();
   return (
     <div className="field" key="contacts">
-      <label className="label" htmlFor="contact-1">
+      <label className="label" htmlFor="contact-1-input">
         Сотрудники
       </label>
       {properties.contacts.map((contact, index) => (
@@ -106,7 +106,7 @@ export const ContactShortForm = (properties: ContactShortValues): JSX.Element =>
           className="link"
           classNameDiv="pb-1"
           key={`contact-${index}`}
-          name={`contact-${index}`}
+          name={`contact-${index}-input`}
           onClick={(): void => history.push(`/contacts/${contact.id}`)}
           readonly
           value={`${contact.name || ''} - ${contact.post_name || ''}`}
