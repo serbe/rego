@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MouseEvent, KeyboardEvent } from 'react';
+import React, { ChangeEvent, KeyboardEvent, MouseEvent } from 'react';
 
 import { Icon } from './icon';
 
@@ -17,7 +17,7 @@ export interface BooleanInputProperties {
   setter: (value: boolean) => void;
 }
 
-interface InputProps {
+interface InputProperties {
   className?: string;
   classNameDiv?: string;
   disabled?: boolean;
@@ -34,7 +34,7 @@ interface InputProps {
   value?: number | string;
 }
 
-export const Input = (properties: InputProps): JSX.Element => {
+export const Input = (properties: InputProperties): JSX.Element => {
   const {
     className,
     classNameDiv,
@@ -73,8 +73,8 @@ export const Input = (properties: InputProps): JSX.Element => {
         readOnly={readonly}
         type={type}
       />
-      {icon && <Icon position={'left'} icon={icon} />}
-      {iconRight && <Icon position={'right'} icon={iconRight} />}
+      {icon && <Icon position="left" icon={icon} />}
+      {iconRight && <Icon position="right" icon={iconRight} />}
     </div>
   );
 };

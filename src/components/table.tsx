@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { AuthContext } from '../helpers/auth';
+import { useAuthState } from '../helpers/auth';
 import { List } from '../helpers/fetcher';
 import { Button } from './button';
 import { Input } from './input';
@@ -100,9 +100,25 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
+export const Paginate = (properties: PaginateProperties): JSX.Element => {
+  const { filteredDataLength, itemsPerPage, currentPage, setter } = properties;
+  const receiveChildValue = (value: number): void => {
+    setter(value - 1);
+  };
+  return filteredDataLength / itemsPerPage > 2 ? (
+    <Pagination
+      currentPage={currentPage + 1}
+      lastPage={Math.ceil(filteredDataLength / itemsPerPage)}
+      setter={receiveChildValue}
+    />
+  ) : (
+    <></>
+  );
+};
+
 export const Data = (properties: DataProperties): [() => List[], JSX.Element] => {
   const { data, search } = properties;
-  type td = typeof properties.data;
+  type TableData = typeof properties.data;
 
   const [{ filteredData, currentPage, filteredDataLength, itemsPerPage }, dispatch] = useReducer(
     reducer,
@@ -124,7 +140,8 @@ export const Data = (properties: DataProperties): [() => List[], JSX.Element] =>
           if (value && typeof value !== 'number') {
             if (typeof value === 'string') {
               return value;
-            } else if (Array.isArray(value)) {
+            }
+            if (Array.isArray(value)) {
               return value.join('');
             }
           }
@@ -142,31 +159,31 @@ export const Data = (properties: DataProperties): [() => List[], JSX.Element] =>
     if (search.length < 2) {
       dispatch({ type: 'searchLessThanTwo', value: data, valueLength: data.length });
     } else {
-      dispatch({ type: 'changeSearch', value: data, search: search });
+      dispatch({ type: 'changeSearch', value: data, search });
     }
   }, [search, data]);
 
-  const paginationData = (): td => {
+  const paginationData = (): TableData => {
     return filteredData.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
   };
 
   return [
     paginationData,
     Paginate({
-      currentPage: currentPage,
-      filteredDataLength: filteredDataLength,
-      itemsPerPage: itemsPerPage,
+      currentPage,
+      filteredDataLength,
+      itemsPerPage,
       setter: setCurrentPage,
     }),
   ];
 };
 
 export const Bar = (properties: BarProperties): JSX.Element => {
-  const { state } = useContext(AuthContext);
+  const { auth } = useAuthState();
   const history = useHistory();
 
   const CreateButton = () =>
-    state.role > 2 ? (
+    auth.role > 2 ? (
       <div className="control mb-4" key="TableNewItem">
         <Button onClick={() => history.push(`/${properties.name}/0`)}>Создать</Button>
       </div>
@@ -189,21 +206,5 @@ export const Bar = (properties: BarProperties): JSX.Element => {
         />
       </div>
     </div>
-  );
-};
-
-export const Paginate = (properties: PaginateProperties): JSX.Element => {
-  const { filteredDataLength, itemsPerPage, currentPage, setter } = properties;
-  const receiveChildValue = (value: number): void => {
-    setter(value - 1);
-  };
-  return filteredDataLength / itemsPerPage > 2 ? (
-    <Pagination
-      currentPage={currentPage + 1}
-      lastPage={Math.ceil(filteredDataLength / itemsPerPage)}
-      setter={receiveChildValue}
-    />
-  ) : (
-    <></>
   );
 };

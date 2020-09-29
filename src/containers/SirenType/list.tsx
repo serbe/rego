@@ -11,8 +11,8 @@ export const SirenTypes = (): JSX.Element => {
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
-    data: data,
-    search: search,
+    data,
+    search,
   });
 
   const tableData = (): SirenTypeList[] => {
@@ -21,9 +21,9 @@ export const SirenTypes = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((siren_type, index) => (
+      {tableData().map((siren_type) => (
         <tr
-          key={`tr${siren_type.id}${index}`}
+          key={`tr${siren_type.id}`}
           onClick={(): void => history.push(`/sirentypes/${siren_type.id}`)}
           role="gridcell"
           className="link"

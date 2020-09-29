@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AuthContext } from '../../helpers/auth';
+import { useAuthState } from '../../helpers/auth';
 import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
 import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
 import { Post, PostGOSwitch, PostNameInput } from '../../models/post';
 
 export const PostItem = (): JSX.Element => {
-  const { state } = useContext(AuthContext);
+  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [name, setName] = useState<string>();
@@ -17,20 +17,20 @@ export const PostItem = (): JSX.Element => {
   const [status, setStatus] = useState(false);
 
   const send = (): void => {
-    const number_id = Number(id);
-    const item: Post = {
-      id: number_id,
-      name: name,
-      go: go,
-      note: note,
+    const NumberID = Number(id);
+    const post: Post = {
+      id: NumberID,
+      name,
+      go,
+      note,
     };
 
-    SetItem(number_id, 'Post', item, setStatus, state.token);
+    SetItem(NumberID, 'Post', post, setStatus, auth.token);
   };
 
   const del = (): void => {
-    const number_id = Number(id);
-    DelItem(number_id, 'Post', setStatus, state.token);
+    const NumberID = Number(id);
+    DelItem(NumberID, 'Post', setStatus, auth.token);
   };
 
   useEffect(() => {

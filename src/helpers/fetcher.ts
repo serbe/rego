@@ -1,18 +1,18 @@
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
-import { Certificate, CertificateList, CertificateEmpty } from '../models/certificate';
-import { Company, CompanyList, CompanyEmpty } from '../models/company';
-import { Contact, ContactList, ContactEmpty } from '../models/contact';
-import { Department, DepartmentList, DepartmentEmpty } from '../models/department';
-import { Education, EducationList, EducationShort, EducationEmpty } from '../models/education';
-import { Kind, KindList, KindEmpty } from '../models/kind';
-import { Post, PostList, PostEmpty } from '../models/post';
-import { Practice, PracticeList, PracticeShort, PracticeEmpty } from '../models/practice';
-import { Rank, RankList, RankEmpty } from '../models/rank';
-import { Scope, ScopeList, ScopeEmpty } from '../models/scope';
-import { Siren, SirenList, SirenEmpty } from '../models/siren';
-import { SirenType, SirenTypeList, SirenTypeEmpty } from '../models/sirentype';
-import { AuthContext } from './auth';
+import { Certificate, CertificateEmpty, CertificateList } from '../models/certificate';
+import { Company, CompanyEmpty, CompanyList } from '../models/company';
+import { Contact, ContactEmpty, ContactList } from '../models/contact';
+import { Department, DepartmentEmpty, DepartmentList } from '../models/department';
+import { Education, EducationEmpty, EducationList, EducationShort } from '../models/education';
+import { Kind, KindEmpty, KindList } from '../models/kind';
+import { Post, PostEmpty, PostList } from '../models/post';
+import { Practice, PracticeEmpty, PracticeList, PracticeShort } from '../models/practice';
+import { Rank, RankEmpty, RankList } from '../models/rank';
+import { Scope, ScopeEmpty, ScopeList } from '../models/scope';
+import { Siren, SirenEmpty, SirenList } from '../models/siren';
+import { SirenType, SirenTypeEmpty, SirenTypeList } from '../models/sirentype';
+import { useAuthState } from './auth';
 
 export type SelectItem = {
   id: number;
@@ -150,19 +150,19 @@ type JsonGetItemScheme =
   | { command: 'Get'; name: 'SirenType'; object: { SirenType: SirenType }; error: string };
 
 export const GetItem = (name: string, id: string): Item => {
-  const { state } = useContext(AuthContext);
+  const { auth } = useAuthState();
   const [data, setData] = useState<Item>();
 
   useEffect(() => {
-    const number_id = Number(id);
-    if (number_id !== 0) {
+    const NumberID = Number(id);
+    if (NumberID !== 0) {
       fetch('/api/go/json', {
         method: 'POST',
         mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: `{"command":{"Get":{"Item":{"name":"${name}","id":${number_id}}}},"addon":"${state.token}"}`,
+        body: `{"command":{"Get":{"Item":{"name":"${name}","id":${NumberID}}}},"addon":"${auth.token}"}`,
       })
         .then((response) => response.json())
         .then((response) => response as JsonGetItemScheme)
@@ -170,74 +170,96 @@ export const GetItem = (name: string, id: string): Item => {
           if (jsonData?.command === 'Get') {
             switch (jsonData?.name) {
               case 'Certificate':
-                return setData(jsonData.object.Certificate);
+                setData(jsonData.object.Certificate);
+                break;
               case 'Company':
-                return setData(jsonData.object.Company);
+                setData(jsonData.object.Company);
+                break;
               case 'Contact':
-                return setData(jsonData.object.Contact);
+                setData(jsonData.object.Contact);
+                break;
               case 'Department':
-                return setData(jsonData.object.Department);
+                setData(jsonData.object.Department);
+                break;
               case 'Education':
-                return setData(jsonData.object.Education);
+                setData(jsonData.object.Education);
+                break;
               case 'Kind':
-                return setData(jsonData.object.Kind);
+                setData(jsonData.object.Kind);
+                break;
               case 'Post':
-                return setData(jsonData.object.Post);
+                setData(jsonData.object.Post);
+                break;
               case 'Practice':
-                return setData(jsonData.object.Practice);
+                setData(jsonData.object.Practice);
+                break;
               case 'Rank':
-                return setData(jsonData.object.Rank);
+                setData(jsonData.object.Rank);
+                break;
               case 'Scope':
-                return setData(jsonData.object.Scope);
+                setData(jsonData.object.Scope);
+                break;
               case 'Siren':
-                return setData(jsonData.object.Siren);
+                setData(jsonData.object.Siren);
+                break;
               case 'SirenType':
-                return setData(jsonData.object.SirenType);
+                setData(jsonData.object.SirenType);
+                break;
               default:
                 throw new Error('unknown item');
             }
           }
           throw new Error('unknown item');
         })
-        .catch(() => {
-          return;
-        });
+        .catch(() => {});
     } else {
       switch (name) {
         case 'Certificate':
-          return setData(CertificateEmpty);
+          setData(CertificateEmpty);
+          break;
         case 'Company':
-          return setData(CompanyEmpty);
+          setData(CompanyEmpty);
+          break;
         case 'Contact':
-          return setData(ContactEmpty);
+          setData(ContactEmpty);
+          break;
         case 'Department':
-          return setData(DepartmentEmpty);
+          setData(DepartmentEmpty);
+          break;
         case 'Education':
-          return setData(EducationEmpty);
+          setData(EducationEmpty);
+          break;
         case 'Kind':
-          return setData(KindEmpty);
+          setData(KindEmpty);
+          break;
         case 'Post':
-          return setData(PostEmpty);
+          setData(PostEmpty);
+          break;
         case 'Practice':
-          return setData(PracticeEmpty);
+          setData(PracticeEmpty);
+          break;
         case 'Rank':
-          return setData(RankEmpty);
+          setData(RankEmpty);
+          break;
         case 'Scope':
-          return setData(ScopeEmpty);
+          setData(ScopeEmpty);
+          break;
         case 'Siren':
-          return setData(SirenEmpty);
+          setData(SirenEmpty);
+          break;
         case 'SirenType':
-          return setData(SirenTypeEmpty);
+          setData(SirenTypeEmpty);
+          break;
         default:
           throw new Error('unknown item');
       }
     }
-  }, [id, name, state.token]);
+  }, [id, name, auth.token]);
   return data;
 };
 
 export const GetList = (name: string): List[] => {
-  const { state } = useContext(AuthContext);
+  const { auth } = useAuthState();
   const [list, setList] = useState<List[]>([]);
 
   useEffect(() => {
@@ -247,7 +269,7 @@ export const GetList = (name: string): List[] => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: `{"command":{"Get":{"List":"${name}"}},"addon":"${state.token}"}`,
+      body: `{"command":{"Get":{"List":"${name}"}},"addon":"${auth.token}"}`,
     })
       .then((response) => response.json())
       .then((response) => response as JsonListScheme)
@@ -255,49 +277,61 @@ export const GetList = (name: string): List[] => {
         if (jsonData?.command === 'Get') {
           switch (jsonData?.name) {
             case 'CertificateList':
-              return setList(jsonData.object.CertificateList);
+              setList(jsonData.object.CertificateList);
+              break;
             case 'CompanyList':
-              return setList(jsonData.object.CompanyList);
+              setList(jsonData.object.CompanyList);
+              break;
             case 'ContactList':
-              return setList(jsonData.object.ContactList);
+              setList(jsonData.object.ContactList);
+              break;
             case 'DepartmentList':
-              return setList(jsonData.object.DepartmentList);
+              setList(jsonData.object.DepartmentList);
+              break;
             case 'EducationList':
-              return setList(jsonData.object.EducationList);
+              setList(jsonData.object.EducationList);
+              break;
             case 'EducationNear':
-              return setList(jsonData.object.EducationShort);
+              setList(jsonData.object.EducationShort);
+              break;
             case 'KindList':
-              return setList(jsonData.object.KindList);
+              setList(jsonData.object.KindList);
+              break;
             case 'PostList':
-              return setList(jsonData.object.PostList);
+              setList(jsonData.object.PostList);
+              break;
             case 'PracticeList':
-              return setList(jsonData.object.PracticeList);
+              setList(jsonData.object.PracticeList);
+              break;
             case 'PracticeNear':
-              return setList(jsonData.object.PracticeShort);
+              setList(jsonData.object.PracticeShort);
+              break;
             case 'RankList':
-              return setList(jsonData.object.RankList);
+              setList(jsonData.object.RankList);
+              break;
             case 'ScopeList':
-              return setList(jsonData.object.ScopeList);
+              setList(jsonData.object.ScopeList);
+              break;
             case 'SirenList':
-              return setList(jsonData.object.SirenList);
+              setList(jsonData.object.SirenList);
+              break;
             case 'SirenTypeList':
-              return setList(jsonData.object.SirenTypeList);
+              setList(jsonData.object.SirenTypeList);
+              break;
             default:
               throw new Error('unknown list');
           }
         }
         throw new Error('unknown list');
       })
-      .catch(() => {
-        return;
-      });
-  }, [name, state.token]);
+      .catch(() => {});
+  }, [name, auth.token]);
 
   return list;
 };
 
 export const GetSelect = (name: string): [SelectItem[], string] => {
-  const { state } = useContext(AuthContext);
+  const { auth } = useAuthState();
   const [list, setSelect] = useState<SelectItem[]>([{ id: 0, name: '' }]);
   const [error, setError] = useState<string>('');
 
@@ -308,7 +342,7 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: `{"command":{"Get":{"List":"${name}"}},"addon":"${state.token}"}`,
+      body: `{"command":{"Get":{"List":"${name}"}},"addon":"${auth.token}"}`,
     })
       .then((response) => response.json())
       .then((response) => response as JsonListScheme)
@@ -360,7 +394,7 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
       .catch(() => {
         return setError('unknown select');
       });
-  }, [name, state.token]);
+  }, [name, auth.token]);
 
   return [list, error];
 };

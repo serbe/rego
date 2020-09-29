@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AuthContext } from '../../helpers/auth';
+import { useAuthState } from '../../helpers/auth';
 import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
 import {
   addEmptyString,
@@ -24,7 +24,7 @@ import { PracticeList, PracticeListForm } from '../../models/practice';
 import { ScopeIDSelect } from '../../models/scope';
 
 export const CompanyItem = (): JSX.Element => {
-  const { state } = useContext(AuthContext);
+  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [name, setName] = useState<string>();
@@ -40,24 +40,24 @@ export const CompanyItem = (): JSX.Element => {
   const [status, setStatus] = useState(false);
 
   const send = (): void => {
-    const number_id = Number(id);
-    const item: Company = {
-      id: number_id,
-      name: name,
-      address: address,
+    const NumberID = Number(id);
+    const company: Company = {
+      id: NumberID,
+      name,
+      address,
       scope_id: scopeID,
-      note: note,
+      note,
       emails: filterArrayString(emails),
       phones: filterArrayNumber(phones),
       faxes: filterArrayNumber(faxes),
     };
 
-    SetItem(number_id, 'Company', item, setStatus, state.token);
+    SetItem(NumberID, 'Company', company, setStatus, auth.token);
   };
 
   const del = (): void => {
-    const number_id = Number(id);
-    DelItem(number_id, 'Company', setStatus, state.token);
+    const NumberID = Number(id);
+    DelItem(NumberID, 'Company', setStatus, auth.token);
   };
 
   useEffect(() => {

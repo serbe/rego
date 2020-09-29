@@ -11,8 +11,8 @@ export const Scopes = (): JSX.Element => {
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
-    data: data,
-    search: search,
+    data,
+    search,
   });
 
   const tableData = (): ScopeList[] => {
@@ -21,9 +21,9 @@ export const Scopes = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((scope, index) => (
+      {tableData().map((scope) => (
         <tr
-          key={`tr${scope.id}${index}`}
+          key={`tr${scope.id}`}
           onClick={(): void => history.push(`/scopes/${scope.id}`)}
           role="gridcell"
           className="link"

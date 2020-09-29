@@ -11,8 +11,8 @@ export const Posts = (): JSX.Element => {
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
-    data: data,
-    search: search,
+    data,
+    search,
   });
 
   const tableData = (): PostList[] => {
@@ -21,9 +21,9 @@ export const Posts = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((post, index) => (
+      {tableData().map((post) => (
         <tr
-          key={`tr${post.id}${index}`}
+          key={`tr${post.id}`}
           onClick={(): void => history.push(`/posts/${post.id}`)}
           role="gridcell"
           className="link"

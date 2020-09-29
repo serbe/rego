@@ -12,8 +12,8 @@ export const Companies = (): JSX.Element => {
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
-    data: data,
-    search: search,
+    data,
+    search,
   });
 
   const tableData = (): CompanyList[] => {
@@ -22,8 +22,8 @@ export const Companies = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((company, index) => (
-        <tr key={`tr${company.id}${index}`}>
+      {tableData().map((company) => (
+        <tr key={`tr${company.id}`}>
           <td
             onClick={(): void => history.push(`/companies/${company.id}`)}
             role="gridcell"

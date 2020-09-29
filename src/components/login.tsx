@@ -1,6 +1,6 @@
-import React, { ChangeEvent, KeyboardEvent, useContext, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
 
-import { AuthContext } from '../helpers/auth';
+import { useAuthState } from '../helpers/auth';
 import { FormField } from './formfield';
 
 interface TJson {
@@ -9,7 +9,7 @@ interface TJson {
 }
 
 export const Login = (): JSX.Element => {
-  const { dispatch } = useContext(AuthContext);
+  const { setAuth } = useAuthState();
   const [name, setName] = useState('');
   const [pass, setPass] = useState('');
 
@@ -25,21 +25,18 @@ export const Login = (): JSX.Element => {
       .then((response) => response.json())
       .then((response) => response as TJson)
       .then((jsonData) => {
-        dispatch({
+        setAuth({
           type: 'SetAuth',
           data: {
             checked: true,
-            name: name,
+            name,
             role: jsonData.r,
             token: jsonData.t,
             login: true,
           },
         });
-        return;
       })
-      .catch(() => {
-        return;
-      });
+      .catch(() => {});
   };
 
   return (
@@ -64,12 +61,14 @@ export const Login = (): JSX.Element => {
             setPass(event.target.value);
           }}
           onKeyPress={(event: KeyboardEvent<HTMLInputElement>): void => {
-            event.key === 'Enter' && submit();
+            if (event.key === 'Enter') {
+              submit();
+            }
           }}
         />
         <div className="field">
           <div className="control">
-            <button className="button" onClick={() => submit()}>
+            <button type="button" className="button" onClick={() => submit()}>
               Отправить
             </button>
           </div>

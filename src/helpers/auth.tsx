@@ -1,6 +1,15 @@
-import React, { createContext, Dispatch, ReactNode, useMemo, useReducer } from 'react';
+import React, {
+  createContext,
+  Dispatch,
+  ReactElement,
+  ReactNode,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react';
 
-export type State = {
+export type AuthState = {
   role: number;
   name: string;
   token: string;
@@ -8,15 +17,11 @@ export type State = {
   checked: boolean;
 };
 
-interface CJson {
+export interface CJson {
   r: boolean;
 }
 
-export interface DispatchProperties {
-  dispatch: Dispatch<ReducerActions>;
-}
-
-export const initialState: State = {
+const initialAuthState: AuthState = {
   role: 0,
   name: '',
   token: '',
@@ -24,89 +29,34 @@ export const initialState: State = {
   checked: false,
 };
 
-interface AuthContextType {
-  state: State;
-  dispatch: Dispatch<ReducerActions>;
-}
-
-const initialContextValues: AuthContextType = {
-  state: initialState,
-  dispatch: () => {
-    return true;
-  },
-};
-
-export const AuthContext = createContext<AuthContextType>(initialContextValues);
-
-interface AuthProperties {
-  children: ReactNode;
-}
-
 export type ReducerActions =
   | {
       type: 'SetAuth';
-      data: State;
+      data: AuthState;
     }
   | {
       type: 'ClearAuth';
     };
 
-export const reducer = (state: State, action: ReducerActions): State => {
-  switch (action.type) {
-    case 'SetAuth': {
-      localStorage.setItem('u', action.data.name);
-      localStorage.setItem('t', action.data.token);
-      localStorage.setItem('r', action.data.role.toString());
-      return {
-        ...state,
-        role: action.data.role,
-        name: action.data.name,
-        token: action.data.token,
-        login: action.data.login,
-        checked: action.data.checked,
-      };
-    }
-    case 'ClearAuth': {
-      localStorage.setItem('u', '');
-      localStorage.setItem('t', '');
-      localStorage.setItem('r', '0');
-      return {
-        ...state,
-        role: 0,
-        name: '',
-        token: '',
-        login: false,
-        checked: true,
-      };
-    }
-    default:
-      return state;
-  }
+interface SetAuthState {
+  dispatch: Dispatch<ReducerActions>;
+}
+
+const initialSetAuthState: SetAuthState = {
+  dispatch: () => {
+    return true;
+  },
 };
 
-const checkAuth = async (name: string, token: string, role: number): Promise<boolean> => {
-  if (name === '' || token === '' || role === 0) {
-    return false;
-  }
-  return fetch('/api/go/check', {
-    method: 'POST',
-    mode: 'cors',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ t: token, r: role }),
-  })
-    .then((response) => response.json())
-    .then((response) => response as CJson)
-    .then((jsonData) => {
-      return jsonData.r;
-    })
-    .catch(() => {
-      return false;
-    });
-};
+export const AuthContext = createContext(initialAuthState);
 
-const getStorage = (): {
+export const SetAuthContext = createContext(initialSetAuthState);
+
+interface AuthProviderProperties {
+  children: ReactNode;
+}
+
+export const getStorage = (): {
   role: number;
   name: string;
   token: string;
@@ -118,42 +68,119 @@ const getStorage = (): {
   };
 };
 
-export const CheckStorage = async (): Promise<State> => {
-  const { name, token, role } = getStorage();
-
-  let state: State = initialState;
-
-  const check = await checkAuth(name, token, role);
-
-  const promise = new Promise<State>((resolve, reject) => {
-    if (check) {
-      state = {
-        role: role,
-        name: name,
-        token: token,
-        login: true,
-        checked: true,
-      };
-      resolve(state);
-    } else {
-      reject(state);
-    }
-    reject(state);
-  });
-  return promise;
+const setStorage = (role: number, name: string, token: string): void => {
+  localStorage.setItem('r', String(role));
+  localStorage.setItem('u', name);
+  localStorage.setItem('t', token);
 };
 
-export const Context = (properties: AuthProperties): JSX.Element => {
+const clearStorage = (): void => {
+  localStorage.setItem('u', '');
+  localStorage.setItem('t', '');
+  localStorage.setItem('r', '0');
+};
+
+export const reducer = (authState: AuthState, action: ReducerActions): AuthState => {
+  switch (action.type) {
+    case 'SetAuth': {
+      setStorage(action.data.role, action.data.name, action.data.token);
+      return {
+        ...authState,
+        role: action.data.role,
+        name: action.data.name,
+        token: action.data.token,
+        login: action.data.login,
+        checked: action.data.checked,
+      };
+    }
+    case 'ClearAuth': {
+      clearStorage();
+      return {
+        ...authState,
+        role: 0,
+        name: '',
+        token: '',
+        login: false,
+        checked: true,
+      };
+    }
+    default:
+      return authState;
+  }
+};
+
+export const AuthProvider = (properties: AuthProviderProperties): ReactElement => {
   const { children } = properties;
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialAuthState);
 
-  const contentValues = useMemo(
-    () => ({
-      state,
-      dispatch,
-    }),
-    [state, dispatch],
+  const setState: SetAuthState = { dispatch };
+
+  // const contentValues = useMemo(
+  //   () => ({
+  //     state,
+  //     dispatch,
+  //   }),
+  //   [state, dispatch],
+  // );
+
+  return (
+    <AuthContext.Provider value={state}>
+      <SetAuthContext.Provider value={setState}>{children}</SetAuthContext.Provider>
+    </AuthContext.Provider>
   );
+};
 
-  return <AuthContext.Provider value={contentValues}>{children}</AuthContext.Provider>;
+interface AuthContextProperties {
+  auth: AuthState;
+  setAuth: Dispatch<ReducerActions>;
+}
+
+export const useAuthState = (): AuthContextProperties => {
+  const auth = useContext(AuthContext);
+  const setter = useContext(SetAuthContext);
+  return { auth, setAuth: setter.dispatch };
+};
+
+export const CheckStorage = (): void => {
+  const { name, token, role } = getStorage();
+  const [checked, setChecked] = useState(false);
+  const { setAuth } = useAuthState();
+
+  useEffect(() => {
+    fetch('/api/go/check', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: `{ "t": "${token}", "r": ${role} })`,
+    })
+      .then((response) => response.json())
+      .then((response) => response as CJson)
+      .then((jsonData) => {
+        setChecked(jsonData.r);
+      })
+      .catch(() => {
+        setChecked(false);
+      });
+  }, [role, token]);
+
+  useEffect(() => {
+    if (checked) {
+      setAuth({
+        type: 'SetAuth',
+        data: {
+          role,
+          name,
+          token,
+          login: true,
+          checked: true,
+        },
+      });
+    } else {
+      setAuth({
+        type: 'ClearAuth',
+      });
+    }
+  }, [checked, name, role, setAuth, token]);
 };

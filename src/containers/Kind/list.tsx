@@ -11,8 +11,8 @@ export const Kinds = (): JSX.Element => {
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
-    data: data,
-    search: search,
+    data,
+    search,
   });
 
   const tableData = (): KindList[] => {
@@ -21,9 +21,9 @@ export const Kinds = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((kind, index) => (
+      {tableData().map((kind) => (
         <tr
-          key={`tr${kind.id}${index}`}
+          key={`tr${kind.id}`}
           onClick={(): void => history.push(`/kinds/${kind.id}`)}
           role="gridcell"
           className="link"

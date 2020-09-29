@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AuthContext } from '../../helpers/auth';
+import { useAuthState } from '../../helpers/auth';
 import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
 import {
   addEmptyString,
@@ -29,7 +29,7 @@ import { PostGoIDSelect, PostIDSelect } from '../../models/post';
 import { RankIDSelect } from '../../models/rank';
 
 export const ContactItem = (): JSX.Element => {
-  const { state } = useContext(AuthContext);
+  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [name, setName] = useState<string>();
@@ -48,28 +48,28 @@ export const ContactItem = (): JSX.Element => {
   const [status, setStatus] = useState(false);
 
   const send = (): void => {
-    const number_id = Number(id);
-    const item: Contact = {
-      id: number_id,
-      name: name,
+    const NumberID = Number(id);
+    const contact: Contact = {
+      id: NumberID,
+      name,
       company_id: companyID,
       department_id: departmentID,
       post_id: postID,
       post_go_id: postGoID,
       rank_id: rankID,
-      birthday: birthday,
-      note: note,
+      birthday,
+      note,
       emails: filterArrayString(emails),
       phones: filterArrayNumber(phones),
       faxes: filterArrayNumber(faxes),
     };
 
-    SetItem(number_id, 'Contact', item, setStatus, state.token);
+    SetItem(NumberID, 'Contact', contact, setStatus, auth.token);
   };
 
   const del = (): void => {
-    const number_id = Number(id);
-    DelItem(number_id, 'Contact', setStatus, state.token);
+    const NumberID = Number(id);
+    DelItem(NumberID, 'Contact', setStatus, auth.token);
   };
 
   useEffect(() => {

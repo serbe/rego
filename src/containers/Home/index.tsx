@@ -32,8 +32,8 @@ const EducationTable = (educations: EducationShort[]): JSX.Element => {
   return (
     <table className="table is-narrow">
       <tbody>
-        {educations.map((row, index) => (
-          <tr key={index} className={trClass(row.start_date)}>
+        {educations.map((row) => (
+          <tr key={row.id} className={trClass(row.start_date)}>
             <td
               className="has-text-black"
               onMouseDown={(): void => history.push(`/education/${row.id}`)}
@@ -60,8 +60,8 @@ const PracticeTable = (practices: PracticeShort[]): JSX.Element => {
   return (
     <table className="table is-narrow">
       <tbody>
-        {practices.map((row, index) => (
-          <tr key={index} className={trClass(row.date_of_practice)}>
+        {practices.map((row) => (
+          <tr key={row.id} className={trClass(row.date_of_practice)}>
             <td
               className="has-text-black"
               onMouseDown={(): void => history.push(`/practice/${row.id}`)}

@@ -1,8 +1,8 @@
-import React, { ChangeEvent, MouseEvent, KeyboardEvent } from 'react';
+import React, { ChangeEvent, KeyboardEvent, MouseEvent } from 'react';
 
 import { Input } from './input';
 
-interface FormFieldProps {
+export interface FormFieldProperties {
   className?: string;
   disabled?: boolean;
   icon?: string;
@@ -19,7 +19,7 @@ interface FormFieldProps {
   value?: number | string;
 }
 
-export const FormField = (properties: FormFieldProps): JSX.Element => {
+export const FormField = (properties: FormFieldProperties): JSX.Element => {
   const {
     className,
     disabled,

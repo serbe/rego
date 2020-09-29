@@ -11,8 +11,8 @@ export const Educations = (): JSX.Element => {
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
-    data: data,
-    search: search,
+    data,
+    search,
   });
 
   const tableData = (): EducationList[] => {
@@ -21,9 +21,9 @@ export const Educations = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((education, index) => (
+      {tableData().map((education) => (
         <tr
-          key={`tr${education.id}${index}`}
+          key={`tr${education.id}`}
           onClick={(): void => history.push(`/educations/${education.id}`)}
           role="gridcell"
           className="link"

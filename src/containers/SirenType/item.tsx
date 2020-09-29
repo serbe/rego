@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AuthContext } from '../../helpers/auth';
+import { useAuthState } from '../../helpers/auth';
 import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
 import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
 import { SirenType, SirenTypeNameInput, SirenTypeRadiusInput } from '../../models/sirentype';
 
 export const SirenTypeItem = (): JSX.Element => {
-  const { state } = useContext(AuthContext);
+  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [name, setName] = useState<string>();
@@ -17,20 +17,20 @@ export const SirenTypeItem = (): JSX.Element => {
   const [status, setStatus] = useState(false);
 
   const send = (): void => {
-    const number_id = Number(id);
-    const item: SirenType = {
-      id: number_id,
-      name: name,
-      radius: radius,
-      note: note,
+    const NumberID = Number(id);
+    const sirenType: SirenType = {
+      id: NumberID,
+      name,
+      radius,
+      note,
     };
 
-    SetItem(number_id, 'SirenType', item, setStatus, state.token);
+    SetItem(NumberID, 'SirenType', sirenType, setStatus, auth.token);
   };
 
   const del = (): void => {
-    const number_id = Number(id);
-    DelItem(number_id, 'SirenType', setStatus, state.token);
+    const NumberID = Number(id);
+    DelItem(NumberID, 'SirenType', setStatus, auth.token);
   };
 
   useEffect(() => {

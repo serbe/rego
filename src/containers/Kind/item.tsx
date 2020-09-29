@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AuthContext } from '../../helpers/auth';
+import { useAuthState } from '../../helpers/auth';
 import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
 import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
 import { Kind, KindNameInput, KindShortNameInput } from '../../models/kind';
 
 export const KindItem = (): JSX.Element => {
-  const { state } = useContext(AuthContext);
+  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [name, setName] = useState<string>();
@@ -17,20 +17,20 @@ export const KindItem = (): JSX.Element => {
   const [status, setStatus] = useState(false);
 
   const send = (): void => {
-    const number_id = Number(id);
-    const item: Kind = {
-      id: number_id,
-      name: name,
+    const NumberID = Number(id);
+    const kind: Kind = {
+      id: NumberID,
+      name,
       short_name: shortName,
-      note: note,
+      note,
     };
 
-    SetItem(number_id, 'Kind', item, setStatus, state.token);
+    SetItem(NumberID, 'Kind', kind, setStatus, auth.token);
   };
 
   const del = (): void => {
-    const number_id = Number(id);
-    DelItem(number_id, 'Kind', setStatus, state.token);
+    const NumberID = Number(id);
+    DelItem(NumberID, 'Kind', setStatus, auth.token);
   };
 
   useEffect(() => {

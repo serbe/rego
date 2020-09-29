@@ -1,19 +1,19 @@
 import React from 'react';
 
-interface PaginationProps {
+interface PaginationProperties {
   currentPage: number;
   lastPage: number;
   setter: (value: number) => void;
 }
 
-interface ItemProps {
+interface ItemProperties {
   check: boolean;
   ellipsis?: boolean;
   index: number;
   link?: number;
 }
 
-export const Pagination = (properties: PaginationProps): JSX.Element => {
+export const Pagination = (properties: PaginationProperties): JSX.Element => {
   const { currentPage, lastPage, setter } = properties;
   const navClasses = `pagination is-rounded is-centered`;
 
@@ -28,7 +28,7 @@ export const Pagination = (properties: PaginationProps): JSX.Element => {
         Назад
       </a>
     ) : (
-      <button className="pagination-previous" disabled>
+      <button type="button" className="pagination-previous" disabled>
         Назад
       </button>
     );
@@ -44,13 +44,13 @@ export const Pagination = (properties: PaginationProps): JSX.Element => {
         Далее
       </a>
     ) : (
-      <button className="pagination-next" disabled>
+      <button type="button" className="pagination-next" disabled>
         Далее
       </button>
     );
 
-  const Item = (properties: ItemProps): JSX.Element => {
-    const { check, index, link, ellipsis } = properties;
+  const Item = (itemProperties: ItemProperties): JSX.Element => {
+    const { check, index, link, ellipsis } = itemProperties;
 
     return check ? (
       <li key={`li${index}`}>

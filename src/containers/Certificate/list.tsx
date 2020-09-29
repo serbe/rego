@@ -11,8 +11,8 @@ export const Certificates = (): JSX.Element => {
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
-    data: data,
-    search: search,
+    data,
+    search,
   });
 
   const tableData = (): CertificateList[] => {
@@ -21,8 +21,8 @@ export const Certificates = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((certificate, index) => (
-        <tr key={`tr${certificate.id}${index}`}>
+      {tableData().map((certificate) => (
+        <tr key={`tr${certificate.id}`}>
           <td
             onClick={(): void => history.push(`/certificates/${certificate.id}`)}
             role="gridcell"

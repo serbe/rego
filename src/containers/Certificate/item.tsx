@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AuthContext } from '../../helpers/auth';
+import { useAuthState } from '../../helpers/auth';
 import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
 import {
   Certificate,
@@ -13,7 +13,7 @@ import { ContactIDSelect } from '../../models/contact';
 import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
 
 export const CertificateItem = (): JSX.Element => {
-  const { state } = useContext(AuthContext);
+  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [sNumber, setSNumber] = useState<string>();
@@ -25,22 +25,22 @@ export const CertificateItem = (): JSX.Element => {
   const [status, setStatus] = useState(false);
 
   const send = (): void => {
-    const number_id = Number(id);
-    const item: Certificate = {
-      id: number_id,
+    const NumberID = Number(id);
+    const certificate: Certificate = {
+      id: NumberID,
       num: sNumber,
       contact_id: contactID,
       company_id: companyID,
       cert_date: certDate,
-      note: note,
+      note,
     };
 
-    SetItem(number_id, 'Certificate', item, setStatus, state.token);
+    SetItem(NumberID, 'Certificate', certificate, setStatus, auth.token);
   };
 
   const del = (): void => {
-    const number_id = Number(id);
-    DelItem(number_id, 'Certificate', setStatus, state.token);
+    const NumberID = Number(id);
+    DelItem(NumberID, 'Certificate', setStatus, auth.token);
   };
 
   useEffect(() => {

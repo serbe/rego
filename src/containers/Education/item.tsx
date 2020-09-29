@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AuthContext } from '../../helpers/auth';
+import { useAuthState } from '../../helpers/auth';
 import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
 import {
   Education,
@@ -13,7 +13,7 @@ import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/imperso
 import { PostGoIDSelect } from '../../models/post';
 
 export const EducationItem = (): JSX.Element => {
-  const { state } = useContext(AuthContext);
+  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [contactID, setContactID] = useState<number>();
@@ -25,22 +25,22 @@ export const EducationItem = (): JSX.Element => {
   const [status, setStatus] = useState(false);
 
   const send = (): void => {
-    const number_id = Number(id);
-    const item: Education = {
-      id: number_id,
+    const NumberID = Number(id);
+    const education: Education = {
+      id: NumberID,
       contact_id: contactID,
       start_date: startDate,
       end_date: endDate,
       post_id: postID,
-      note: note,
+      note,
     };
 
-    SetItem(number_id, 'Education', item, setStatus, state.token);
+    SetItem(NumberID, 'Education', education, setStatus, auth.token);
   };
 
   const del = (): void => {
-    const number_id = Number(id);
-    DelItem(number_id, 'Education', setStatus, state.token);
+    const NumberID = Number(id);
+    DelItem(NumberID, 'Education', setStatus, auth.token);
   };
 
   useEffect(() => {

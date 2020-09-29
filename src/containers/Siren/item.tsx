@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { AuthContext } from '../../helpers/auth';
+import { useAuthState } from '../../helpers/auth';
 import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
 import { CompanyIDSelect } from '../../models/company';
 import {
@@ -25,7 +25,7 @@ import {
 import { SirenTypeIDSelect } from '../../models/sirentype';
 
 export const SirenItem = (): JSX.Element => {
-  const { state } = useContext(AuthContext);
+  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
   const [numberID, setNumberID] = useState<number>();
@@ -45,30 +45,30 @@ export const SirenItem = (): JSX.Element => {
   const [status, setStatus] = useState(false);
 
   const send = (): void => {
-    const number_id = Number(id);
-    const item: Siren = {
-      id: number_id,
+    const NumberID = Number(id);
+    const siren: Siren = {
+      id: NumberID,
       num_id: numberID,
       num_pass: numberPassport,
       siren_type_id: sirenTypeID,
-      address: address,
-      radio: radio,
-      desk: desk,
+      address,
+      radio,
+      desk,
       contact_id: contactID,
       company_id: companyID,
-      latitude: latitude,
-      longitude: longitude,
-      stage: stage,
-      own: own,
-      note: note,
+      latitude,
+      longitude,
+      stage,
+      own,
+      note,
     };
 
-    SetItem(number_id, 'Siren', item, setStatus, state.token);
+    SetItem(NumberID, 'Siren', siren, setStatus, auth.token);
   };
 
   const del = (): void => {
-    const number_id = Number(id);
-    DelItem(number_id, 'Siren', setStatus, state.token);
+    const NumberID = Number(id);
+    DelItem(NumberID, 'Siren', setStatus, auth.token);
   };
 
   useEffect(() => {

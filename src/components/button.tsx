@@ -1,6 +1,6 @@
 import React, { MouseEvent } from 'react';
 
-interface ButtonProps {
+interface ButtonProperties {
   children?: string;
   className?: string;
   disabled?: boolean;
@@ -13,7 +13,7 @@ interface ButtonProps {
   ) => void;
 }
 
-export const Button = (properties: ButtonProps): JSX.Element => {
+export const Button = (properties: ButtonProperties): JSX.Element => {
   const { children, className, disabled, href, onClick } = properties;
   const classes = `button ${className || ''}`;
 
@@ -22,7 +22,7 @@ export const Button = (properties: ButtonProps): JSX.Element => {
       {children}
     </a>
   ) : (
-    <button disabled={disabled} onClick={onClick} className={classes}>
+    <button type="button" disabled={disabled} onClick={onClick} className={classes}>
       {children}
     </button>
   );
