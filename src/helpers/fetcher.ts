@@ -14,7 +14,7 @@ import { Siren, SirenList } from '../models/siren';
 import { SirenType, SirenTypeList } from '../models/sirentype';
 import { useAuthState } from './auth';
 
-export const URL = 'ws://127.0.0.1:9090';
+export const URL = 'ws://127.0.0.1:9090/ws';
 
 export type SelectItem = {
   id: number;
