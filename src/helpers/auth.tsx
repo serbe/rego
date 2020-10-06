@@ -3,14 +3,10 @@ import React, {
   Dispatch,
   ReactElement,
   ReactNode,
+  SetStateAction,
   useContext,
-  useEffect,
   useReducer,
-  useRef,
-  useState,
 } from 'react';
-
-import { URL } from './fetcher';
 
 export type AuthState = {
   role: number;
@@ -20,8 +16,13 @@ export type AuthState = {
   checked: boolean;
 };
 
-export interface CJson {
+interface CJson {
   r: boolean;
+}
+
+interface TJson {
+  t: string;
+  r: number;
 }
 
 const initialAuthState: AuthState = {
@@ -39,6 +40,10 @@ export type ReducerActions =
     }
   | {
       type: 'ClearAuth';
+    }
+  | {
+      type: 'SetLogin';
+      data: boolean;
     };
 
 interface SetAuthState {
@@ -88,7 +93,6 @@ export const reducer = (authState: AuthState, action: ReducerActions): AuthState
     case 'SetAuth': {
       setStorage(action.data.role, action.data.name, action.data.token);
       return {
-        ...authState,
         role: action.data.role,
         name: action.data.name,
         token: action.data.token,
@@ -99,11 +103,17 @@ export const reducer = (authState: AuthState, action: ReducerActions): AuthState
     case 'ClearAuth': {
       clearStorage();
       return {
-        ...authState,
         role: 0,
         name: '',
         token: '',
         login: false,
+        checked: true,
+      };
+    }
+    case 'SetLogin': {
+      return {
+        ...authState,
+        login: action.data,
         checked: true,
       };
     }
@@ -114,7 +124,17 @@ export const reducer = (authState: AuthState, action: ReducerActions): AuthState
 
 export const AuthProvider = (properties: AuthProviderProperties): ReactElement => {
   const { children } = properties;
-  const [state, dispatch] = useReducer(reducer, initialAuthState);
+
+  const { role, name, token } = getStorage();
+  const initialState: AuthState = {
+    role,
+    name,
+    token,
+    login: false,
+    checked: false,
+  };
+
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const setState: SetAuthState = { dispatch };
 
@@ -144,47 +164,49 @@ export const useAuthState = (): AuthContextProperties => {
   return { auth, setAuth: setter.dispatch };
 };
 
-export const CheckStorage = (): void => {
-  const { name, token, role } = getStorage();
-  const [checked, setChecked] = useState(false);
-  const { setAuth } = useAuthState();
+// interface CheckAuthProperties {
+//   ws: WebSocket;
+//   auth: AuthState;
+//   setAuth: Dispatch<ReducerActions>;
+//   checked: boolean;
+//   setChecked: Dispatch<SetStateAction<boolean>>;
+// }
 
-  const ws = useRef<WebSocket>();
+export const checkAuthWSListener = (
+  message: MessageEvent,
+  setAuth: Dispatch<ReducerActions>,
+  setChecked: Dispatch<SetStateAction<boolean>>,
+): void => {
+  const text = message.data as string;
+  const jsonData = JSON.parse(text) as CJson;
+  if (jsonData.r) {
+    setAuth({
+      type: 'SetLogin',
+      data: true,
+    });
+  } else {
+    setAuth({
+      type: 'ClearAuth',
+    });
+  }
+  setChecked(true);
+};
 
-  useEffect(() => {
-    ws.current = new WebSocket(URL);
-
-    if (ws.current) {
-      ws.current.addEventListener('message', (message: MessageEvent) => {
-        const text = message.data as string;
-        const jsonData = JSON.parse(text) as CJson;
-        setChecked(jsonData.r);
-      });
-
-      ws.current.addEventListener('open', () => {
-        if (ws.current) {
-          ws.current.send(`{ "t": "${token}", "r": ${role} })`);
-        }
-      });
-    }
-  }, [role, token]);
-
-  useEffect(() => {
-    if (checked) {
-      setAuth({
-        type: 'SetAuth',
-        data: {
-          role,
-          name,
-          token,
-          login: true,
-          checked: true,
-        },
-      });
-    } else {
-      setAuth({
-        type: 'ClearAuth',
-      });
-    }
-  }, [checked, name, role, setAuth, token]);
+export const loginAuthWSListener = (
+  message: MessageEvent,
+  name: string,
+  setAuth: Dispatch<ReducerActions>,
+): void => {
+  const text = message.data as string;
+  const jsonData = JSON.parse(text) as TJson;
+  setAuth({
+    type: 'SetAuth',
+    data: {
+      checked: true,
+      name,
+      role: jsonData.r,
+      token: jsonData.t,
+      login: true,
+    },
+  });
 };

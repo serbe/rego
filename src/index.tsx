@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
 import { AuthProvider } from './helpers/auth';
+import { WebSocketProvider } from './helpers/websocket';
 import { Rego } from './rego';
 import * as serviceWorker from './serviceWorker';
 
@@ -14,7 +15,9 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <Rego />
+        <WebSocketProvider>
+          <Rego />
+        </WebSocketProvider>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>,

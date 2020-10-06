@@ -8,17 +8,17 @@ import React, {
   useState,
 } from 'react';
 
-import { URL } from './fetcher';
+export const URL = 'ws://127.0.0.1:9090/ws';
 
-const WebSocketContext = createContext<WebSocket>(new WebSocket(URL));
+export const WebSocketContext = createContext<WebSocket>({} as WebSocket);
 
-const SetWebSocketContext = createContext<Dispatch<SetStateAction<WebSocket>>>(() => {});
+export const SetWebSocketContext = createContext<Dispatch<SetStateAction<WebSocket>>>(() => {});
 
 interface WebSocketProviderProperties {
   children: ReactNode;
 }
 
-interface WebSocketContextProperties {
+export interface WebSocketProperties {
   ws: WebSocket;
   setWs: Dispatch<SetStateAction<WebSocket>>;
 }
@@ -33,14 +33,14 @@ export const WebSocketProvider = ({ children }: WebSocketProviderProperties): Re
   );
 };
 
-export const useWebSocketState = (): WebSocketContextProperties => {
+export const useWebSocketState = (): WebSocketProperties => {
   const ws = useContext(WebSocketContext);
   const setWs = useContext(SetWebSocketContext);
-  // if (ws === undefined) {
-  //   throw new Error('useWebSocketState: ws is undefined');
-  // }
+  if (ws === undefined) {
+    throw new Error('useWebSocketState: ws is undefined');
+  }
   if (setWs === undefined) {
-    throw new Error('useSetWebSocketState: setWs is undefined');
+    throw new Error('useWebSocketState: setWs is undefined');
   }
   return { ws, setWs };
 };

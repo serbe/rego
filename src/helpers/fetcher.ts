@@ -13,6 +13,7 @@ import { Scope, ScopeList } from '../models/scope';
 import { Siren, SirenList } from '../models/siren';
 import { SirenType, SirenTypeList } from '../models/sirentype';
 import { useAuthState } from './auth';
+import { useWebSocketState } from './websocket';
 
 export const URL = 'ws://127.0.0.1:9090/ws';
 
@@ -168,83 +169,85 @@ export const AddEventMessageGet = (
   }
 };
 
+const getListListener = (
+  message: MessageEvent,
+  setList: Dispatch<SetStateAction<List[]>>,
+  setError: Dispatch<SetStateAction<string>>,
+) => {
+  const text = message.data as string;
+  const jsonData = JSON.parse(text) as JsonListScheme;
+
+  if (jsonData?.command === 'Get') {
+    switch (jsonData?.name) {
+      case 'CertificateList':
+        setList(jsonData.object.CertificateList);
+        break;
+      case 'CompanyList':
+        setList(jsonData.object.CompanyList);
+        break;
+      case 'ContactList':
+        setList(jsonData.object.ContactList);
+        break;
+      case 'DepartmentList':
+        setList(jsonData.object.DepartmentList);
+        break;
+      case 'EducationList':
+        setList(jsonData.object.EducationList);
+        break;
+      case 'EducationNear':
+        setList(jsonData.object.EducationShort);
+        break;
+      case 'KindList':
+        setList(jsonData.object.KindList);
+        break;
+      case 'PostList':
+        setList(jsonData.object.PostList);
+        break;
+      case 'PracticeList':
+        setList(jsonData.object.PracticeList);
+        break;
+      case 'PracticeNear':
+        setList(jsonData.object.PracticeShort);
+        break;
+      case 'RankList':
+        setList(jsonData.object.RankList);
+        break;
+      case 'ScopeList':
+        setList(jsonData.object.ScopeList);
+        break;
+      case 'SirenList':
+        setList(jsonData.object.SirenList);
+        break;
+      case 'SirenTypeList':
+        setList(jsonData.object.SirenTypeList);
+        break;
+      default:
+        setError('unknown list');
+    }
+  }
+};
+
 export const GetList = (name: string): [List[], string] => {
   const [list, setList] = useState<List[]>([]);
   const [error, setError] = useState<string>('');
   const { auth } = useAuthState();
-  const ws = useRef<WebSocket>();
+  const { ws } = useWebSocketState();
 
   useEffect(() => {
-    ws.current = new WebSocket(URL);
-
-    if (ws.current) {
-      ws.current.addEventListener('message', (message: MessageEvent) => {
-        const text = message.data as string;
-        const jsonData = JSON.parse(text) as JsonListScheme;
-
-        if (jsonData?.command === 'Get') {
-          switch (jsonData?.name) {
-            case 'CertificateList':
-              setList(jsonData.object.CertificateList);
-              break;
-            case 'CompanyList':
-              setList(jsonData.object.CompanyList);
-              break;
-            case 'ContactList':
-              setList(jsonData.object.ContactList);
-              break;
-            case 'DepartmentList':
-              setList(jsonData.object.DepartmentList);
-              break;
-            case 'EducationList':
-              setList(jsonData.object.EducationList);
-              break;
-            case 'EducationNear':
-              setList(jsonData.object.EducationShort);
-              break;
-            case 'KindList':
-              setList(jsonData.object.KindList);
-              break;
-            case 'PostList':
-              setList(jsonData.object.PostList);
-              break;
-            case 'PracticeList':
-              setList(jsonData.object.PracticeList);
-              break;
-            case 'PracticeNear':
-              setList(jsonData.object.PracticeShort);
-              break;
-            case 'RankList':
-              setList(jsonData.object.RankList);
-              break;
-            case 'ScopeList':
-              setList(jsonData.object.ScopeList);
-              break;
-            case 'SirenList':
-              setList(jsonData.object.SirenList);
-              break;
-            case 'SirenTypeList':
-              setList(jsonData.object.SirenTypeList);
-              break;
-            default:
-              setError('unknown list');
-          }
-        }
-      });
-
-      ws.current.addEventListener('open', () => {
-        if (ws.current) {
-          ws.current.send(`{"command":{"Get":{"List":"${name}"}},"addon":"${auth.token}"}`);
-        }
-      });
+    if (ws.readyState === 1) {
+      ws.send(`{"command":{"Get":{"List":"${name}"}},"addon":"${auth.token}"}`);
     }
 
+    ws.addEventListener('message', (message: MessageEvent) => {
+      getListListener(message, setList, setError);
+    });
+
     return () => {
-      if (ws.current) {
-        ws.current.close();
-      }
+      ws.removeEventListener('message', (message: MessageEvent) => {
+        getListListener(message, setList, setError);
+      });
     };
-  }, [auth.token, name, setError, setList, ws]);
+  }, [auth.token, name, ws.readyState]);
 
   return [list, error];
 };

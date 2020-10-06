@@ -1,50 +1,39 @@
 import React, { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 
-import { useAuthState } from '../helpers/auth';
-import { URL } from '../helpers/fetcher';
-import { FormField } from './formfield';
-
-interface TJson {
-  t: string;
-  r: number;
-}
+import { FormField } from '../../components/formfield';
+import { loginAuthWSListener, useAuthState } from '../../helpers/auth';
+import { useWebSocketState } from '../../helpers/websocket';
 
 export const Login = (): JSX.Element => {
   const { setAuth } = useAuthState();
+  const { ws } = useWebSocketState();
   const [name, setName] = useState('');
   const [pass, setPass] = useState('');
 
-  const ws = useRef<WebSocket>();
+  const mounted = useRef(false);
 
   useEffect(() => {
-    ws.current = new WebSocket(URL);
+    mounted.current = true;
 
-    ws.current.addEventListener('message', (message: MessageEvent) => {
-      const text = message.data as string;
-      const jsonData = JSON.parse(text) as TJson;
-      setAuth({
-        type: 'SetAuth',
-        data: {
-          checked: true,
-          name,
-          role: jsonData.r,
-          token: jsonData.t,
-          login: true,
-        },
+    if (mounted.current) {
+      ws.addEventListener('message', (message: MessageEvent) => {
+        loginAuthWSListener(message, name, setAuth);
       });
-    });
+    }
 
     return (): void => {
-      if (ws.current) {
-        ws.current.close();
-      }
+      ws.removeEventListener('message', (message: MessageEvent) => {
+        loginAuthWSListener(message, name, setAuth);
+      });
     };
-  }, [name, setAuth]);
+  }, [name]);
+
+  useEffect(() => {
+    console.log('login mounted', mounted.current);
+  }, [mounted.current]);
 
   const submit = (): void => {
-    if (ws.current) {
-      ws.current.send(`{ "u": "${name}", "p": "${btoa(pass)}" }`);
-    }
+    ws.send(`{ "u": "${name}", "p": "${btoa(pass)}" }`);
   };
 
   return (
