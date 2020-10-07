@@ -2,7 +2,6 @@ import './index.scss';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
 
 import { AuthProvider } from './helpers/auth';
 import { WebSocketProvider } from './helpers/websocket';
@@ -13,13 +12,11 @@ import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <WebSocketProvider>
-          <Rego />
-        </WebSocketProvider>
-      </AuthProvider>
-    </BrowserRouter>
+    <AuthProvider>
+      <WebSocketProvider>
+        <Rego />
+      </WebSocketProvider>
+    </AuthProvider>
   </React.StrictMode>,
   document.querySelector('#root'),
 );

@@ -1,8 +1,9 @@
-import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React, { ReactElement } from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
-import { Home } from '../containers/Home';
-import { useWebSocketState } from './websocket';
+import { Home } from './containers/Home';
+import { Login } from './containers/Login';
+import { useWebSocketState } from './helpers/websocket';
 
 // import { CertificateItem, Certificates } from '../containers/Certificate';
 // import { Companies, CompanyItem } from '../containers/Company';
@@ -16,12 +17,46 @@ import { useWebSocketState } from './websocket';
 // import { ScopeItem, Scopes } from '../containers/Scope';
 // import { SirenItem, Sirens } from '../containers/Siren';
 // import { SirenTypeItem, SirenTypes } from '../containers/SirenType';
+
+// interface prProperties {
+//   children: ReactElement;
+// }
+
+// { children: ReactElement, ...rest }
+
+const PrivateRoute = ({ children, ...rest }): JSX.Element => {
+  // const { children } = props;
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        fakeAuth.isAuthenticated ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: '/login',
+              state: { from: location },
+            }}
+          />
+        )
+      }
+    />
+  );
+};
+
 export const Router = (): JSX.Element => {
   const { ws } = useWebSocketState();
-  return ws.readyState === 1 ? (
-    <Switch>
-      <Route exact path="/" component={Home} />
-      {/* <Route exact path="/certificates" component={Certificates} />
+  return (
+    <div className="container py-4 centered-content">
+      <Switch>
+        <Route path="/login">
+          <Login />
+        </Route>
+        <Route exact path="/">
+          <Home />
+        </Route>
+        {/* <Route exact path="/certificates" component={Certificates} />
       <Route exact path="/certificates/:id" component={CertificateItem} />
       <Route exact path="/companies" component={Companies} />
       <Route exact path="/companies/:id" component={CompanyItem} />
@@ -45,8 +80,7 @@ export const Router = (): JSX.Element => {
       <Route exact path="/sirens/:id" component={SirenItem} />
       <Route exact path="/sirentypes" component={SirenTypes} />
       <Route exact path="/sirentypes/:id" component={SirenTypeItem} /> */}
-    </Switch>
-  ) : (
-    <>oops</>
+      </Switch>
+    </div>
   );
 };

@@ -1,11 +1,12 @@
 import './rego.css';
 
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 
 import { NavBar } from './components/navbar';
 import { AuthState, checkAuthWSListener, ReducerActions, useAuthState } from './helpers/auth';
-import { Router } from './helpers/router';
 import { URL, useWebSocketState } from './helpers/websocket';
+import { Router } from './router';
 
 // import { Login } from './components/login';
 const MAX_RETRY = 5;
@@ -66,25 +67,6 @@ export const Rego = (): JSX.Element => {
     }
   }, [error && open]);
 
-  useEffect(() => {
-    console.log('ws.readyState', ws.readyState);
-    // if (ws.readyState === 1) {
-    //   console.log('set checkAuthWSListener');
-    //   ws.addEventListener('message', (message: MessageEvent) =>
-    //     checkAuthWSListener(message, setAuth, setChecked),
-    //   );
-    //   setWs(ws);
-    //   // ws.send(`{ "t": "${auth.token}", "r": ${auth.role} })`);
-    // }
-    // return () => {
-    //   if (ws.url === URL) {
-    //     ws.removeEventListener('message', (message: MessageEvent) =>
-    //       checkAuthWSListener(message, setAuth, setChecked),
-    //     );
-    //   }
-    // };
-  }, [ws.readyState]);
-
   // useEffect(() => {
   //   console.log('rego checked', checked);
   // }, [checked]);
@@ -122,18 +104,10 @@ export const Rego = (): JSX.Element => {
   //   };
   // }, [ws, auth.checked, auth, setAuth, retry]);
 
-  const AppData = () => (
-    // auth.login && !error && auth.role > 0 ? (
-    <>
+  return (
+    <BrowserRouter>
       <NavBar />
-      <div className="container py-4 centered-content">
-        <Router />
-      </div>
-    </>
+      <Router />
+    </BrowserRouter>
   );
-  // ) : (
-  //   <Login />
-  // );
-
-  return <AppData />;
 };
