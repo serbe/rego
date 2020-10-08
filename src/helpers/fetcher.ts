@@ -54,73 +54,65 @@ export type List =
   | SirenTypeList;
 
 type JsonListScheme =
-  | undefined
   | {
-      command: 'Get';
-      name: 'CertificateList';
-      object: { CertificateList: CertificateList[] };
+      command: 'CertificateList';
+      data: { DBData: { CertificateList: CertificateList[] } };
       error: string;
     }
-  | { command: 'Get'; name: 'CompanyList'; object: { CompanyList: CompanyList[] }; error: string }
-  | { command: 'Get'; name: 'CompanySelect'; object: { SelectItem: SelectItem[] }; error: string }
-  | { command: 'Get'; name: 'ContactList'; object: { ContactList: ContactList[] }; error: string }
-  | { command: 'Get'; name: 'ContactSelect'; object: { SelectItem: SelectItem[] }; error: string }
+  | { command: 'CompanyList'; data: { DBData: { CompanyList: CompanyList[] } }; error: string }
+  | { command: 'ContactList'; data: { DBData: { ContactList: ContactList[] } }; error: string }
   | {
-      command: 'Get';
-      name: 'DepartmentList';
-      object: { DepartmentList: DepartmentList[] };
+      command: 'DepartmentList';
+      data: { DBData: { DepartmentList: DepartmentList[] } };
       error: string;
     }
   | {
-      command: 'Get';
-      name: 'DepartmentSelect';
-      object: { SelectItem: SelectItem[] };
+      command: 'EducationList';
+      data: { DBData: { EducationList: EducationList[] } };
       error: string;
     }
   | {
-      command: 'Get';
-      name: 'EducationList';
-      object: { EducationList: EducationList[] };
+      command: 'EducationNear';
+      data: { DBData: { EducationShort: EducationShort[] } };
+      error: string;
+    }
+  | { command: 'KindList'; data: { DBData: { KindList: KindList[] } }; error: string }
+  | { command: 'PostList'; data: { DBData: { PostList: PostList[] } }; error: string }
+  | {
+      command: 'PracticeList';
+      data: { DBData: { PracticeList: PracticeList[] } };
       error: string;
     }
   | {
-      command: 'Get';
-      name: 'EducationNear';
-      object: { EducationShort: EducationShort[] };
+      command: 'PracticeNear';
+      data: { DBData: { PracticeShort: PracticeShort[] } };
       error: string;
     }
-  | { command: 'Get'; name: 'KindList'; object: { KindList: KindList[] }; error: string }
-  | { command: 'Get'; name: 'KindSelect'; object: { SelectItem: SelectItem[] }; error: string }
-  | { command: 'Get'; name: 'PostGoSelect'; object: { SelectItem: SelectItem[] }; error: string }
-  | { command: 'Get'; name: 'PostList'; object: { PostList: PostList[] }; error: string }
-  | { command: 'Get'; name: 'PostSelect'; object: { SelectItem: SelectItem[] }; error: string }
+  | { command: 'RankList'; data: { DBData: { RankList: RankList[] } }; error: string }
+  | { command: 'ScopeList'; data: { DBData: { ScopeList: ScopeList[] } }; error: string }
+  | { command: 'SirenList'; data: { DBData: { SirenList: SirenList[] } }; error: string }
   | {
-      command: 'Get';
-      name: 'PracticeList';
-      object: { PracticeList: PracticeList[] };
+      command: 'SirenTypeList';
+      data: { DBData: { SirenTypeList: SirenTypeList[] } };
+      error: string;
+    };
+
+type JsonSelectScheme =
+  | { command: 'CompanySelect'; data: { DBData: { SelectItem: SelectItem[] } }; error: string }
+  | { command: 'ContactSelect'; data: { DBData: { SelectItem: SelectItem[] } }; error: string }
+  | {
+      command: 'DepartmentSelect';
+      data: { DBData: { SelectItem: SelectItem[] } };
       error: string;
     }
+  | { command: 'KindSelect'; data: { DBData: { SelectItem: SelectItem[] } }; error: string }
+  | { command: 'PostGoSelect'; data: { DBData: { SelectItem: SelectItem[] } }; error: string }
+  | { command: 'PostSelect'; data: { DBData: { SelectItem: SelectItem[] } }; error: string }
+  | { command: 'RankSelect'; data: { DBData: { SelectItem: SelectItem[] } }; error: string }
+  | { command: 'ScopeSelect'; data: { DBData: { SelectItem: SelectItem[] } }; error: string }
   | {
-      command: 'Get';
-      name: 'PracticeNear';
-      object: { PracticeShort: PracticeShort[] };
-      error: string;
-    }
-  | { command: 'Get'; name: 'RankList'; object: { RankList: RankList[] }; error: string }
-  | { command: 'Get'; name: 'RankSelect'; object: { SelectItem: SelectItem[] }; error: string }
-  | { command: 'Get'; name: 'ScopeList'; object: { ScopeList: ScopeList[] }; error: string }
-  | { command: 'Get'; name: 'ScopeSelect'; object: { SelectItem: SelectItem[] }; error: string }
-  | { command: 'Get'; name: 'SirenList'; object: { SirenList: SirenList[] }; error: string }
-  | {
-      command: 'Get';
-      name: 'SirenTypeList';
-      object: { SirenTypeList: SirenTypeList[] };
-      error: string;
-    }
-  | {
-      command: 'Get';
-      name: 'SirenTypeSelect';
-      object: { SelectItem: SelectItem[] };
+      command: 'SirenTypeSelect';
+      data: { DBData: { SelectItem: SelectItem[] } };
       error: string;
     };
 
@@ -177,52 +169,56 @@ const getListListener = (
   const text = message.data as string;
   const jsonData = JSON.parse(text) as JsonListScheme;
 
-  if (jsonData?.command === 'Get') {
-    switch (jsonData?.name) {
-      case 'CertificateList':
-        setList(jsonData.object.CertificateList);
-        break;
-      case 'CompanyList':
-        setList(jsonData.object.CompanyList);
-        break;
-      case 'ContactList':
-        setList(jsonData.object.ContactList);
-        break;
-      case 'DepartmentList':
-        setList(jsonData.object.DepartmentList);
-        break;
-      case 'EducationList':
-        setList(jsonData.object.EducationList);
-        break;
-      case 'EducationNear':
-        setList(jsonData.object.EducationShort);
-        break;
-      case 'KindList':
-        setList(jsonData.object.KindList);
-        break;
-      case 'PostList':
-        setList(jsonData.object.PostList);
-        break;
-      case 'PracticeList':
-        setList(jsonData.object.PracticeList);
-        break;
-      case 'PracticeNear':
-        setList(jsonData.object.PracticeShort);
-        break;
-      case 'RankList':
-        setList(jsonData.object.RankList);
-        break;
-      case 'ScopeList':
-        setList(jsonData.object.ScopeList);
-        break;
-      case 'SirenList':
-        setList(jsonData.object.SirenList);
-        break;
-      case 'SirenTypeList':
-        setList(jsonData.object.SirenTypeList);
-        break;
-      default:
-        setError('unknown list');
+  if (jsonData.command && jsonData.data.DBData) {
+    if (jsonData.error === '') {
+      switch (jsonData.command) {
+        case 'CertificateList':
+          setList(jsonData.data.DBData.CertificateList);
+          break;
+        case 'CompanyList':
+          setList(jsonData.data.DBData.CompanyList);
+          break;
+        case 'ContactList':
+          setList(jsonData.data.DBData.ContactList);
+          break;
+        case 'DepartmentList':
+          setList(jsonData.data.DBData.DepartmentList);
+          break;
+        case 'EducationList':
+          setList(jsonData.data.DBData.EducationList);
+          break;
+        case 'EducationNear':
+          setList(jsonData.data.DBData.EducationShort);
+          break;
+        case 'KindList':
+          setList(jsonData.data.DBData.KindList);
+          break;
+        case 'PostList':
+          setList(jsonData.data.DBData.PostList);
+          break;
+        case 'PracticeList':
+          setList(jsonData.data.DBData.PracticeList);
+          break;
+        case 'PracticeNear':
+          setList(jsonData.data.DBData.PracticeShort);
+          break;
+        case 'RankList':
+          setList(jsonData.data.DBData.RankList);
+          break;
+        case 'ScopeList':
+          setList(jsonData.data.DBData.ScopeList);
+          break;
+        case 'SirenList':
+          setList(jsonData.data.DBData.SirenList);
+          break;
+        case 'SirenTypeList':
+          setList(jsonData.data.DBData.SirenTypeList);
+          break;
+        default:
+          setError('unknown list');
+      }
+    } else {
+      setError(jsonData.error);
     }
   }
 };
@@ -234,7 +230,7 @@ export const GetList = (name: string): [List[], string] => {
   const { ws } = useWebSocketState();
 
   useEffect(() => {
-    if (ws.readyState === 1) {
+    if (ws.readyState === 1 && auth.token !== '') {
       ws.send(`{"command":{"Get":{"List":"${name}"}},"addon":"${auth.token}"}`);
     }
 
@@ -264,74 +260,16 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
     if (ws.current) {
       ws.current.addEventListener('message', (message: MessageEvent) => {
         const text = message.data as string;
-        const jsonData = JSON.parse(text) as JsonListScheme;
-        if (jsonData?.command === 'Get') {
-          switch (jsonData?.name) {
-            case 'CompanySelect':
-              if (jsonData.object.SelectItem.length > 0) {
-                setSelect(jsonData.object.SelectItem);
-              } else {
-                setSelect([{ id: 0, name: '' }]);
-              }
-              break;
-            case 'ContactSelect':
-              if (jsonData.object.SelectItem.length > 0) {
-                setSelect(jsonData.object.SelectItem);
-              } else {
-                setSelect([{ id: 0, name: '' }]);
-              }
-              break;
-            case 'DepartmentSelect':
-              if (jsonData.object.SelectItem.length > 0) {
-                setSelect(jsonData.object.SelectItem);
-              } else {
-                setSelect([{ id: 0, name: '' }]);
-              }
-              break;
-            case 'KindSelect':
-              if (jsonData.object.SelectItem.length > 0) {
-                setSelect(jsonData.object.SelectItem);
-              } else {
-                setSelect([{ id: 0, name: '' }]);
-              }
-              break;
-            case 'PostSelect':
-              if (jsonData.object.SelectItem.length > 0) {
-                setSelect(jsonData.object.SelectItem);
-              } else {
-                setSelect([{ id: 0, name: '' }]);
-              }
-              break;
-            case 'PostGoSelect':
-              if (jsonData.object.SelectItem.length > 0) {
-                setSelect(jsonData.object.SelectItem);
-              } else {
-                setSelect([{ id: 0, name: '' }]);
-              }
-              break;
-            case 'RankSelect':
-              if (jsonData.object.SelectItem.length > 0) {
-                setSelect(jsonData.object.SelectItem);
-              } else {
-                setSelect([{ id: 0, name: '' }]);
-              }
-              break;
-            case 'ScopeSelect':
-              if (jsonData.object.SelectItem.length > 0) {
-                setSelect(jsonData.object.SelectItem);
-              } else {
-                setSelect([{ id: 0, name: '' }]);
-              }
-              break;
-            case 'SirenTypeSelect':
-              if (jsonData.object.SelectItem.length > 0) {
-                setSelect(jsonData.object.SelectItem);
-              } else {
-                setSelect([{ id: 0, name: '' }]);
-              }
-              break;
-            default:
-              setError('unknown list');
+        const jsonData = JSON.parse(text) as JsonSelectScheme;
+        if (jsonData.command && jsonData.data.DBData.SelectItem) {
+          if (jsonData.error === '') {
+            if (jsonData.data.DBData.SelectItem.length === 0) {
+              setSelect([{ id: 0, name: '' }]);
+            } else {
+              setSelect(jsonData.data.DBData.SelectItem);
+            }
+          } else {
+            setError(jsonData.error);
           }
         }
       });

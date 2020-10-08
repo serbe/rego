@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 
 import { Home } from './containers/Home';
 import { Login } from './containers/Login';
-import { useWebSocketState } from './helpers/websocket';
+import { useAuthState } from './helpers/auth';
 
 // import { CertificateItem, Certificates } from '../containers/Certificate';
 // import { Companies, CompanyItem } from '../containers/Company';
@@ -18,19 +18,28 @@ import { useWebSocketState } from './helpers/websocket';
 // import { SirenItem, Sirens } from '../containers/Siren';
 // import { SirenTypeItem, SirenTypes } from '../containers/SirenType';
 
-// interface prProperties {
-//   children: ReactElement;
-// }
+interface LocationState {
+  from: {
+    pathname: string;
+  };
+}
+
+interface RouteProperties {
+  children: ReactElement;
+  path: string;
+  logged: boolean;
+  exact?: boolean;
+}
 
 // { children: ReactElement, ...rest }
 
-const PrivateRoute = ({ children, ...rest }): JSX.Element => {
-  // const { children } = props;
+const PrivateRoute = (properties: RouteProperties): JSX.Element => {
+  const { children, path, logged } = properties;
   return (
     <Route
-      {...rest}
+      path={path}
       render={({ location }) =>
-        fakeAuth.isAuthenticated ? (
+        logged ? (
           children
         ) : (
           <Redirect
@@ -46,16 +55,17 @@ const PrivateRoute = ({ children, ...rest }): JSX.Element => {
 };
 
 export const Router = (): JSX.Element => {
-  const { ws } = useWebSocketState();
+  // const { ws } = useWebSocketState();
+  const { auth } = useAuthState();
   return (
     <div className="container py-4 centered-content">
       <Switch>
         <Route path="/login">
           <Login />
         </Route>
-        <Route exact path="/">
+        <PrivateRoute exact path="/" logged={auth.login}>
           <Home />
-        </Route>
+        </PrivateRoute>
         {/* <Route exact path="/certificates" component={Certificates} />
       <Route exact path="/certificates/:id" component={CertificateItem} />
       <Route exact path="/companies" component={Companies} />

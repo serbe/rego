@@ -1,9 +1,36 @@
-import React, { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, Dispatch, KeyboardEvent, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import { FormField } from '../../components/formfield';
-import { loginAuthWSListener, useAuthState } from '../../helpers/auth';
+import { ReducerActions, ServerToken, useAuthState } from '../../helpers/auth';
 import { useWebSocketState } from '../../helpers/websocket';
+
+const loginAuthWSListener = (
+  message: MessageEvent,
+  name: string,
+  setAuth: Dispatch<ReducerActions>,
+): void => {
+  const text = message.data as string;
+  const jsonData = JSON.parse(text) as ServerToken;
+  if (jsonData.data.Token) {
+    if (jsonData.data.Token.r > 0) {
+      setAuth({
+        type: 'SetAuth',
+        data: {
+          checked: true,
+          name,
+          role: jsonData.data.Token.r,
+          token: jsonData.data.Token.t,
+          login: true,
+        },
+      });
+    } else {
+      setAuth({
+        type: 'ClearAuth',
+      });
+    }
+  }
+};
 
 interface LocationState {
   from: {
@@ -12,24 +39,24 @@ interface LocationState {
 }
 
 export const Login = (): JSX.Element => {
-  const { auth, setAuth } = useAuthState();
-  const { ws } = useWebSocketState();
-  const [name, setName] = useState('');
-  const [pass, setPass] = useState('');
   const history = useHistory();
   const location = useLocation<LocationState>();
+  const [name, setName] = useState('');
+  const [pass, setPass] = useState('');
+  const { auth, setAuth } = useAuthState();
   const { from } = location.state || { from: { pathname: '/' } };
+  const { ws } = useWebSocketState();
 
-  const mounted = useRef(false);
+  // const mounted = useRef(false);
 
   useEffect(() => {
-    mounted.current = true;
+    // mounted.current = true;
 
-    if (mounted.current) {
-      ws.addEventListener('message', (message: MessageEvent) => {
-        loginAuthWSListener(message, name, setAuth);
-      });
-    }
+    // if (mounted.current) {
+    ws.addEventListener('message', (message: MessageEvent) => {
+      loginAuthWSListener(message, name, setAuth);
+    });
+    // }
 
     return (): void => {
       ws.removeEventListener('message', (message: MessageEvent) => {
@@ -37,10 +64,6 @@ export const Login = (): JSX.Element => {
       });
     };
   }, [name]);
-
-  useEffect(() => {
-    console.log('login mounted', mounted.current);
-  }, [mounted]);
 
   useEffect(() => {
     if (auth.login && auth.checked) {

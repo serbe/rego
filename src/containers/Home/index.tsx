@@ -32,24 +32,25 @@ const EducationTable = (educations: EducationShort[]): JSX.Element => {
   return (
     <table className="table is-narrow">
       <tbody>
-        {educations.map((education) => (
-          <tr key={education.id} className={trClass(education.start_date)}>
-            <td
-              className="has-text-black"
-              onMouseDown={(): void => history.push(`/education/${education.id}`)}
-              role="gridcell"
-            >
-              {tinyDate(education.start_date)}
-            </td>
-            <td
-              className="has-text-black"
-              onMouseDown={(): void => history.push(`/contact/${education.contact_id}`)}
-              role="gridcell"
-            >
-              {education.contact_name}
-            </td>
-          </tr>
-        ))}
+        {educations.length > 0 &&
+          educations.map((education) => (
+            <tr key={education.id} className={trClass(education.start_date)}>
+              <td
+                className="has-text-black"
+                onMouseDown={(): void => history.push(`/education/${education.id}`)}
+                role="gridcell"
+              >
+                {tinyDate(education.start_date)}
+              </td>
+              <td
+                className="has-text-black"
+                onMouseDown={(): void => history.push(`/contact/${education.contact_id}`)}
+                role="gridcell"
+              >
+                {education.contact_name}
+              </td>
+            </tr>
+          ))}
       </tbody>
     </table>
   );

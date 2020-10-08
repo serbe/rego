@@ -16,14 +16,35 @@ export type AuthState = {
   checked: boolean;
 };
 
-interface CJson {
-  r: boolean;
+interface Token {
+  Token: {
+    t: string;
+    r: number;
+  };
 }
 
-interface TJson {
-  t: string;
-  r: number;
+interface Check {
+  Check: {
+    r: boolean;
+  };
 }
+
+export type ServerToken = {
+  command: 'Token';
+  data: Token;
+  error: string;
+};
+
+export interface ServerCheck {
+  command: 'Check';
+  data: Check;
+  error: string;
+}
+
+// interface TJson {
+//   t: string;
+//   r: number;
+// }
 
 const initialAuthState: AuthState = {
   role: 0,
@@ -178,35 +199,19 @@ export const checkAuthWSListener = (
   setChecked: Dispatch<SetStateAction<boolean>>,
 ): void => {
   const text = message.data as string;
-  const jsonData = JSON.parse(text) as CJson;
-  if (jsonData.r) {
-    setAuth({
-      type: 'SetLogin',
-      data: true,
-    });
-  } else {
-    setAuth({
-      type: 'ClearAuth',
-    });
+  const jsonData = JSON.parse(text) as ServerCheck;
+  if (jsonData.data.Check) {
+    if (jsonData.data.Check.r) {
+      console.log('checkAuthWSListener', jsonData);
+      setAuth({
+        type: 'SetLogin',
+        data: true,
+      });
+    } else {
+      setAuth({
+        type: 'ClearAuth',
+      });
+    }
+    setChecked(true);
   }
-  setChecked(true);
-};
-
-export const loginAuthWSListener = (
-  message: MessageEvent,
-  name: string,
-  setAuth: Dispatch<ReducerActions>,
-): void => {
-  const text = message.data as string;
-  const jsonData = JSON.parse(text) as TJson;
-  setAuth({
-    type: 'SetAuth',
-    data: {
-      checked: true,
-      name,
-      role: jsonData.r,
-      token: jsonData.t,
-      login: true,
-    },
-  });
 };
