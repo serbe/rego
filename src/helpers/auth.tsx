@@ -30,12 +30,14 @@ interface Check {
 }
 
 export type ServerToken = {
+  id: number;
   command: 'Token';
   data: Token;
   error: string;
 };
 
 export interface ServerCheck {
+  id: number;
   command: 'Check';
   data: Check;
   error: string;
@@ -195,12 +197,12 @@ export const useAuthState = (): AuthContextProperties => {
 
 export const checkAuthWSListener = (
   message: MessageEvent,
+  id: number,
   setAuth: Dispatch<ReducerActions>,
-  setChecked: Dispatch<SetStateAction<boolean>>,
 ): void => {
   const text = message.data as string;
   const jsonData = JSON.parse(text) as ServerCheck;
-  if (jsonData.data.Check) {
+  if (jsonData.id === id && jsonData.data.Check) {
     if (jsonData.data.Check.r) {
       console.log('checkAuthWSListener', jsonData);
       setAuth({
@@ -212,6 +214,5 @@ export const checkAuthWSListener = (
         type: 'ClearAuth',
       });
     }
-    setChecked(true);
   }
 };

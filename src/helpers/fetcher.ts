@@ -55,62 +55,126 @@ export type List =
 
 type JsonListScheme =
   | {
+      id: number;
       command: 'CertificateList';
       data: { DBData: { CertificateList: CertificateList[] } };
       error: string;
     }
-  | { command: 'CompanyList'; data: { DBData: { CompanyList: CompanyList[] } }; error: string }
-  | { command: 'ContactList'; data: { DBData: { ContactList: ContactList[] } }; error: string }
   | {
+      id: number;
+      command: 'CompanyList';
+      data: { DBData: { CompanyList: CompanyList[] } };
+      error: string;
+    }
+  | {
+      id: number;
+      command: 'ContactList';
+      data: { DBData: { ContactList: ContactList[] } };
+      error: string;
+    }
+  | {
+      id: number;
       command: 'DepartmentList';
       data: { DBData: { DepartmentList: DepartmentList[] } };
       error: string;
     }
   | {
+      id: number;
       command: 'EducationList';
       data: { DBData: { EducationList: EducationList[] } };
       error: string;
     }
   | {
+      id: number;
       command: 'EducationNear';
       data: { DBData: { EducationShort: EducationShort[] } };
       error: string;
     }
-  | { command: 'KindList'; data: { DBData: { KindList: KindList[] } }; error: string }
-  | { command: 'PostList'; data: { DBData: { PostList: PostList[] } }; error: string }
+  | { id: number; command: 'KindList'; data: { DBData: { KindList: KindList[] } }; error: string }
+  | { id: number; command: 'PostList'; data: { DBData: { PostList: PostList[] } }; error: string }
   | {
+      id: number;
       command: 'PracticeList';
       data: { DBData: { PracticeList: PracticeList[] } };
       error: string;
     }
   | {
+      id: number;
       command: 'PracticeNear';
       data: { DBData: { PracticeShort: PracticeShort[] } };
       error: string;
     }
-  | { command: 'RankList'; data: { DBData: { RankList: RankList[] } }; error: string }
-  | { command: 'ScopeList'; data: { DBData: { ScopeList: ScopeList[] } }; error: string }
-  | { command: 'SirenList'; data: { DBData: { SirenList: SirenList[] } }; error: string }
+  | { id: number; command: 'RankList'; data: { DBData: { RankList: RankList[] } }; error: string }
   | {
+      id: number;
+      command: 'ScopeList';
+      data: { DBData: { ScopeList: ScopeList[] } };
+      error: string;
+    }
+  | {
+      id: number;
+      command: 'SirenList';
+      data: { DBData: { SirenList: SirenList[] } };
+      error: string;
+    }
+  | {
+      id: number;
       command: 'SirenTypeList';
       data: { DBData: { SirenTypeList: SirenTypeList[] } };
       error: string;
     };
 
 type JsonSelectScheme =
-  | { command: 'CompanySelect'; data: { DBData: { SelectItem: SelectItem[] } }; error: string }
-  | { command: 'ContactSelect'; data: { DBData: { SelectItem: SelectItem[] } }; error: string }
   | {
+      id: number;
+      command: 'CompanySelect';
+      data: { DBData: { SelectItem: SelectItem[] } };
+      error: string;
+    }
+  | {
+      id: number;
+      command: 'ContactSelect';
+      data: { DBData: { SelectItem: SelectItem[] } };
+      error: string;
+    }
+  | {
+      id: number;
       command: 'DepartmentSelect';
       data: { DBData: { SelectItem: SelectItem[] } };
       error: string;
     }
-  | { command: 'KindSelect'; data: { DBData: { SelectItem: SelectItem[] } }; error: string }
-  | { command: 'PostGoSelect'; data: { DBData: { SelectItem: SelectItem[] } }; error: string }
-  | { command: 'PostSelect'; data: { DBData: { SelectItem: SelectItem[] } }; error: string }
-  | { command: 'RankSelect'; data: { DBData: { SelectItem: SelectItem[] } }; error: string }
-  | { command: 'ScopeSelect'; data: { DBData: { SelectItem: SelectItem[] } }; error: string }
   | {
+      id: number;
+      command: 'KindSelect';
+      data: { DBData: { SelectItem: SelectItem[] } };
+      error: string;
+    }
+  | {
+      id: number;
+      command: 'PostGoSelect';
+      data: { DBData: { SelectItem: SelectItem[] } };
+      error: string;
+    }
+  | {
+      id: number;
+      command: 'PostSelect';
+      data: { DBData: { SelectItem: SelectItem[] } };
+      error: string;
+    }
+  | {
+      id: number;
+      command: 'RankSelect';
+      data: { DBData: { SelectItem: SelectItem[] } };
+      error: string;
+    }
+  | {
+      id: number;
+      command: 'ScopeSelect';
+      data: { DBData: { SelectItem: SelectItem[] } };
+      error: string;
+    }
+  | {
+      id: number;
       command: 'SirenTypeSelect';
       data: { DBData: { SelectItem: SelectItem[] } };
       error: string;
@@ -141,7 +205,7 @@ export const AddEventOpenItem = (
   if (numberID !== 0 && ws) {
     ws.addEventListener('open', () => {
       ws.send(
-        `{"command":{"Get":{"Item":{"name":"${name}","id":${numberID}}}},"addon":"${token}"}`,
+        `{"id":${id},"command":{"Get":{"Item":{"name":"${name}","id":${numberID}}}},"addon":"${token}"}`,
       );
     });
   } else {

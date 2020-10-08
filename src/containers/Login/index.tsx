@@ -7,13 +7,14 @@ import { useWebSocketState } from '../../helpers/websocket';
 
 const loginAuthWSListener = (
   message: MessageEvent,
+  id: number,
   name: string,
   setAuth: Dispatch<ReducerActions>,
 ): void => {
   const text = message.data as string;
   const jsonData = JSON.parse(text) as ServerToken;
   if (jsonData.data.Token) {
-    if (jsonData.data.Token.r > 0) {
+    if (jsonData.id === id && jsonData.data.Token.r > 0) {
       setAuth({
         type: 'SetAuth',
         data: {
@@ -46,6 +47,7 @@ export const Login = (): JSX.Element => {
   const { auth, setAuth } = useAuthState();
   const { from } = location.state || { from: { pathname: '/' } };
   const { ws } = useWebSocketState();
+  const id = Math.floor(Math.random() * Math.floor(9223372036854775807));
 
   // const mounted = useRef(false);
 
@@ -54,13 +56,13 @@ export const Login = (): JSX.Element => {
 
     // if (mounted.current) {
     ws.addEventListener('message', (message: MessageEvent) => {
-      loginAuthWSListener(message, name, setAuth);
+      loginAuthWSListener(message, id, name, setAuth);
     });
     // }
 
     return (): void => {
       ws.removeEventListener('message', (message: MessageEvent) => {
-        loginAuthWSListener(message, name, setAuth);
+        loginAuthWSListener(message, id, name, setAuth);
       });
     };
   }, [name]);
@@ -72,7 +74,7 @@ export const Login = (): JSX.Element => {
   }, [auth.checked, auth.login]);
 
   const submit = (): void => {
-    ws.send(`{ "u": "${name}", "p": "${btoa(pass)}" }`);
+    ws.send(`{ "id": ${id}, "u": "${name}", "p": "${btoa(pass)}" }`);
   };
 
   return (

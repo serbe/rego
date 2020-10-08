@@ -21,10 +21,11 @@ const startWS = (
 ) => {
   const webs = new WebSocket(URL);
   setError(false);
+  const id = Math.floor(Math.random() * Math.floor(9223372036854775807));
   webs.addEventListener('open', () => {
     console.log('ws open');
     setOpen(true);
-    webs.send(`{ "t": "${auth.token}", "r": ${auth.role} }`);
+    webs.send(`{ "i": ${id}, "t": "${auth.token}", "r": ${auth.role} }`);
   });
   webs.addEventListener('error', (event: Event) => {
     console.log('ws error', event);
@@ -37,7 +38,7 @@ const startWS = (
     setError(true);
   });
   webs.addEventListener('message', (message: MessageEvent) =>
-    checkAuthWSListener(message, setAuth, setChecked),
+    checkAuthWSListener(message, id, setAuth),
   );
   setWs(webs);
 };
@@ -45,13 +46,13 @@ const startWS = (
 export const Rego = (): JSX.Element => {
   const { auth, setAuth } = useAuthState();
   const [retry, setRetry] = useState(0);
-  const [checked, setChecked] = useState(false);
+  // const [checked, setChecked] = useState(false);
   const { ws, setWs } = useWebSocketState();
   const [error, setError] = useState(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    startWS(auth, setWs, setAuth, setError, setChecked, setOpen);
+    startWS(auth, setWs, setAuth, setError, setOpen);
     setRetry(retry + 1);
 
     return () => {
@@ -62,7 +63,7 @@ export const Rego = (): JSX.Element => {
 
   useEffect(() => {
     if (error && !open && retry < MAX_RETRY) {
-      startWS(auth, setWs, setAuth, setError, setChecked, setOpen);
+      startWS(auth, setWs, setAuth, setError, setOpen);
       setRetry(retry + 1);
     }
   }, [error && open]);
