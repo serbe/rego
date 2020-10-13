@@ -53,7 +53,7 @@ export type List =
   | SirenList
   | SirenTypeList;
 
-type JsonListScheme =
+export type JsonListScheme =
   | {
       id: number;
       command: 'CertificateList';
@@ -124,7 +124,7 @@ type JsonListScheme =
       error: string;
     };
 
-type JsonSelectScheme =
+export type JsonSelectScheme =
   | {
       id: number;
       command: 'CompanySelect';
