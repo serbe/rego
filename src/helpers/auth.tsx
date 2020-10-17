@@ -4,9 +4,7 @@ import React, {
   ReactElement,
   ReactNode,
   useContext,
-  useEffect,
   useReducer,
-  useState,
 } from 'react';
 
 export type AuthState = {
@@ -36,6 +34,10 @@ export type ReducerActions =
     }
   | {
       type: 'ClearAuth';
+    }
+  | {
+      type: 'SetLogin';
+      data: boolean;
     };
 
 interface SetAuthState {
@@ -85,7 +87,6 @@ export const reducer = (authState: AuthState, action: ReducerActions): AuthState
     case 'SetAuth': {
       setStorage(action.data.role, action.data.name, action.data.token);
       return {
-        ...authState,
         role: action.data.role,
         name: action.data.name,
         token: action.data.token,
@@ -96,11 +97,17 @@ export const reducer = (authState: AuthState, action: ReducerActions): AuthState
     case 'ClearAuth': {
       clearStorage();
       return {
-        ...authState,
         role: 0,
         name: '',
         token: '',
         login: false,
+        checked: true,
+      };
+    }
+    case 'SetLogin': {
+      return {
+        ...authState,
+        login: action.data,
         checked: true,
       };
     }
@@ -141,46 +148,41 @@ export const useAuthState = (): AuthContextProperties => {
   return { auth, setAuth: setter.dispatch };
 };
 
-export const CheckStorage = (): void => {
-  const { name, token, role } = getStorage();
-  const [checked, setChecked] = useState(false);
-  const { setAuth } = useAuthState();
+// export const CheckStorage = (): void => {
+//   const { name, token, role } = getStorage();
+//   const { setAuth } = useAuthState();
 
-  useEffect(() => {
-    fetch('/api/go/check', {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: `{ "t": "${token}", "r": ${role} })`,
-    })
-      .then((response) => response.json())
-      .then((response) => response as CJson)
-      .then((jsonData) => {
-        setChecked(jsonData.r);
-      })
-      .catch(() => {
-        setChecked(false);
-      });
-  }, [role, token]);
-
-  useEffect(() => {
-    if (checked) {
-      setAuth({
-        type: 'SetAuth',
-        data: {
-          role,
-          name,
-          token,
-          login: true,
-          checked: true,
-        },
-      });
-    } else {
-      setAuth({
-        type: 'ClearAuth',
-      });
-    }
-  }, [checked, name, role, setAuth, token]);
-};
+//   useEffect(() => {
+//     fetch('/api/go/check', {
+//       method: 'POST',
+//       mode: 'cors',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: `{ "t": "${token}", "r": ${role} })`,
+//     })
+//       .then((response) => response.json())
+//       .then((response) => response as CJson)
+//       .then((jsonData) => {
+//         if (jsonData.r) {
+//           setAuth({
+//             type: 'SetAuth',
+//             data: {
+//               role,
+//               name,
+//               token,
+//               login: true,
+//               checked: true,
+//             },
+//           });
+//         } else {
+//           setAuth({
+//             type: 'ClearAuth',
+//           });
+//         }
+//       })
+//       .catch((err) => {
+//         console.log('error', err);
+//       });
+//   }, [role, token]);
+// };
