@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { useAuthState } from '../../helpers/auth';
-import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
+import { GetItem, SetItem } from '../../helpers/fetcher';
 import {
   Certificate,
   CertificateDateInput,
@@ -10,59 +9,50 @@ import {
 } from '../../models/certificate';
 import { CompanyIDSelect } from '../../models/company';
 import { ContactIDSelect } from '../../models/contact';
-import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
+import { NoteInput, ParameterTypes } from '../../models/impersonal';
 
 export const CertificateItem = (): JSX.Element => {
-  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
+  const [loaded, setLoaded] = useState(id === '0' || false);
+  const [data, error] = GetItem('Certificate', id);
   const [sNumber, setSNumber] = useState<string>();
   const [contactID, setContactID] = useState<number>();
   const [companyID, setCompanyID] = useState<number>();
   const [certDate, setCertDate] = useState<string>();
   const [note, setNote] = useState<string>();
-  const item = GetItem('Certificate', id);
-  const [status, setStatus] = useState(false);
 
-  const send = (): void => {
-    const NumberID = Number(id);
-    const certificate: Certificate = {
-      id: NumberID,
+  const submit = (): void => {
+    const number_id = Number(id);
+    const item: Certificate = {
+      id: number_id,
       num: sNumber,
       contact_id: contactID,
       company_id: companyID,
       cert_date: certDate,
-      note,
+      note: note,
     };
 
-    SetItem(NumberID, 'Certificate', certificate, setStatus, auth.token);
-  };
-
-  const del = (): void => {
-    const NumberID = Number(id);
-    DelItem(NumberID, 'Certificate', setStatus, auth.token);
+    SetItem(number_id, 'Certificate', JSON.stringify(item));
+    history.go(-1);
+    return;
   };
 
   useEffect(() => {
-    if (item) {
-      const data = item as Certificate;
-      setSNumber(data.num);
-      setContactID(data.contact_id);
-      setCompanyID(data.company_id);
-      setCertDate(data.cert_date);
-      setNote(data.note);
+    if (data?.id) {
+      const c = data as Certificate;
+      setSNumber(c.num);
+      setContactID(c.contact_id);
+      setCompanyID(c.company_id);
+      setCertDate(c.cert_date);
+      setNote(c.note);
+      setLoaded(true);
     }
-  }, [item]);
-
-  useEffect(() => {
-    if (status) {
-      history.go(-1);
-    }
-  }, [history, status]);
+  }, [data]);
 
   return (
     <div>
-      {item && (
+      {loaded && !error && (
         <>
           <CertificateNumberInput value={sNumber} setter={setSNumber} />
           <ContactIDSelect id={contactID} setter={setContactID} />
@@ -70,7 +60,18 @@ export const CertificateItem = (): JSX.Element => {
           <CertificateDateInput value={certDate} setter={setCertDate} />
           <NoteInput value={note} setter={setNote} />
 
-          <ItemFormButtons send={send} del={del} />
+          <div className="field is-grouped">
+            <div className="control">
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
+            </div>
+            <div className="control">
+              <button className="button" onClick={() => history.go(-1)}>
+                Закрыть
+              </button>
+            </div>
+          </div>
         </>
       )}
     </div>

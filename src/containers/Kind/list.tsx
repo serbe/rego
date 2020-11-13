@@ -7,12 +7,12 @@ import { KindList } from '../../models/kind';
 
 export const Kinds = (): JSX.Element => {
   const history = useHistory();
-  const data = GetList('KindList');
+  const [data, error] = GetList('KindList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
-    data,
-    search,
+    data: data,
+    search: search,
   });
 
   const tableData = (): KindList[] => {
@@ -21,21 +21,24 @@ export const Kinds = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((kind) => (
+      {tableData().map((kind, index) => (
         <tr
-          key={`tr${kind.id}`}
+          key={`tr${kind.id}${index}`}
           onClick={(): void => history.push(`/kinds/${kind.id}`)}
           role="gridcell"
           className="link"
         >
           <td className="w250">{kind.name}</td>
           <td className="w250">{kind.short_name}</td>
+          <td className="is-hidden-mobile">{kind.note}</td>
         </tr>
       ))}
     </>
   );
 
-  return (
+  return error ? (
+    <></>
+  ) : (
     <>
       <Bar value={search} setter={setSearch} name="kinds" />
       <table className="table is-narrow is-fullwidth">
@@ -43,6 +46,7 @@ export const Kinds = (): JSX.Element => {
           <tr>
             <th>Тип тренировки</th>
             <th>Сокращенное наименование</th>
+            <th className="is-hidden-mobile">Заметка</th>
           </tr>
           <Body />
         </tbody>

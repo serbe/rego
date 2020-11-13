@@ -7,12 +7,12 @@ import { PracticeList } from '../../models/practice';
 
 export const Practices = (): JSX.Element => {
   const history = useHistory();
-  const data = GetList('PracticeList');
+  const [data, error] = GetList('PracticeList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
-    data,
-    search,
+    data: data,
+    search: search,
   });
 
   const tableData = (): PracticeList[] => {
@@ -21,9 +21,9 @@ export const Practices = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((practice) => (
+      {tableData().map((practice, index) => (
         <tr
-          key={`tr${practice.id}`}
+          key={`tr${practice.id}${index}`}
           onClick={(): void => history.push(`/practices/${practice.id}`)}
           role="gridcell"
           className="link"
@@ -36,7 +36,9 @@ export const Practices = (): JSX.Element => {
     </>
   );
 
-  return (
+  return error ? (
+    <></>
+  ) : (
     <>
       <Bar value={search} setter={setSearch} name="practices" />
       <table className="table is-narrow is-fullwidth">

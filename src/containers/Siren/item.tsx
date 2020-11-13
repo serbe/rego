@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { useAuthState } from '../../helpers/auth';
-import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
+import { GetItem, SetItem } from '../../helpers/fetcher';
 import { CompanyIDSelect } from '../../models/company';
-import {
-  AddressInput,
-  ContactIDSelect,
-  ItemFormButtons,
-  NoteInput,
-  ParameterTypes,
-} from '../../models/impersonal';
+import { AddressInput, ContactIDSelect, NoteInput, ParameterTypes } from '../../models/impersonal';
 import {
   Siren,
   SirenDeskInput,
@@ -25,9 +18,10 @@ import {
 import { SirenTypeIDSelect } from '../../models/sirentype';
 
 export const SirenItem = (): JSX.Element => {
-  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
+  const [loaded, setLoaded] = useState(id === '0' || false);
+  const [data, error] = GetItem('Siren', id);
   const [numberID, setNumberID] = useState<number>();
   const [numberPassport, setNumberPassport] = useState<string>();
   const [sirenTypeID, setSirenTypeID] = useState<number>();
@@ -41,64 +35,54 @@ export const SirenItem = (): JSX.Element => {
   const [stage, setStage] = useState<number>();
   const [own, setOwn] = useState<string>();
   const [note, setNote] = useState<string>();
-  const item = GetItem('Siren', id);
-  const [status, setStatus] = useState(false);
 
-  const send = (): void => {
-    const NumberID = Number(id);
-    const siren: Siren = {
-      id: NumberID,
+  const submit = (): void => {
+    const number_id = Number(id);
+    const item: Siren = {
+      id: number_id,
       num_id: numberID,
       num_pass: numberPassport,
       siren_type_id: sirenTypeID,
-      address,
-      radio,
-      desk,
+      address: address,
+      radio: radio,
+      desk: desk,
       contact_id: contactID,
       company_id: companyID,
-      latitude,
-      longitude,
-      stage,
-      own,
-      note,
+      latitude: latitude,
+      longitude: longitude,
+      stage: stage,
+      own: own,
+      note: note,
     };
 
-    SetItem(NumberID, 'Siren', siren, setStatus, auth.token);
-  };
-
-  const del = (): void => {
-    const NumberID = Number(id);
-    DelItem(NumberID, 'Siren', setStatus, auth.token);
+    SetItem(number_id, 'Siren', JSON.stringify(item));
+    history.go(-1);
+    return;
   };
 
   useEffect(() => {
-    if (item) {
-      const data = item as Siren;
-      setNumberID(data.num_id);
-      setNumberPassport(data.num_pass);
-      setSirenTypeID(data.siren_type_id);
-      setAddress(data.address);
-      setRadio(data.radio);
-      setDesk(data.desk);
-      setContactID(data.contact_id);
-      setCompanyID(data.company_id);
-      setLatitude(data.latitude);
-      setLongitude(data.longitude);
-      setStage(data.stage);
-      setOwn(data.own);
-      setNote(data.note);
+    if (data?.id) {
+      const c = data as Siren;
+      setNumberID(c.num_id);
+      setNumberPassport(c.num_pass);
+      setSirenTypeID(c.siren_type_id);
+      setAddress(c.address);
+      setRadio(c.radio);
+      setDesk(c.desk);
+      setContactID(c.contact_id);
+      setCompanyID(c.company_id);
+      setLatitude(c.latitude);
+      setLongitude(c.longitude);
+      setStage(c.stage);
+      setOwn(c.own);
+      setNote(c.note);
+      setLoaded(true);
     }
-  }, [item]);
-
-  useEffect(() => {
-    if (status) {
-      history.go(-1);
-    }
-  }, [history, status]);
+  }, [data]);
 
   return (
     <div>
-      {item && (
+      {loaded && !error && (
         <>
           <SirenNumberIDInput value={numberID} setter={setNumberID} />
           <SirenNumberPassportInput value={numberPassport} setter={setNumberPassport} />
@@ -114,7 +98,18 @@ export const SirenItem = (): JSX.Element => {
           <SirenOwnInput value={own} setter={setOwn} />
           <NoteInput value={note} setter={setNote} />
 
-          <ItemFormButtons send={send} del={del} />
+          <div className="field is-grouped">
+            <div className="control">
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
+            </div>
+            <div className="control">
+              <button className="button" onClick={() => history.go(-1)}>
+                Закрыть
+              </button>
+            </div>
+          </div>
         </>
       )}
     </div>

@@ -32,8 +32,8 @@ const EducationTable = (educations: EducationShort[]): JSX.Element => {
   return (
     <table className="table is-narrow">
       <tbody>
-        {educations.map((row) => (
-          <tr key={row.id} className={trClass(row.start_date)}>
+        {educations.map((row, index) => (
+          <tr key={index} className={trClass(row.start_date)}>
             <td
               className="has-text-black"
               onMouseDown={(): void => history.push(`/education/${row.id}`)}
@@ -60,8 +60,8 @@ const PracticeTable = (practices: PracticeShort[]): JSX.Element => {
   return (
     <table className="table is-narrow">
       <tbody>
-        {practices.map((row) => (
-          <tr key={row.id} className={trClass(row.date_of_practice)}>
+        {practices.map((row, index) => (
+          <tr key={index} className={trClass(row.date_of_practice)}>
             <td
               className="has-text-black"
               onMouseDown={(): void => history.push(`/practice/${row.id}`)}
@@ -71,14 +71,14 @@ const PracticeTable = (practices: PracticeShort[]): JSX.Element => {
             </td>
             <td
               className="has-text-black"
-              onMouseDown={(): void => history.push(`/kinds/${row.kind_id}`)}
+              onMouseDown={(): void => history.push(`/kind/${row.kind_id}`)}
               role="gridcell"
             >
               {row.kind_short_name}
             </td>
             <td
               className="has-text-black"
-              onMouseDown={(): void => history.push(`/companies/${row.company_id}`)}
+              onMouseDown={(): void => history.push(`/company/${row.company_id}`)}
               role="gridcell"
             >
               {row.company_name}
@@ -91,10 +91,12 @@ const PracticeTable = (practices: PracticeShort[]): JSX.Element => {
 };
 
 export const Home = (): JSX.Element => {
-  const educations = GetList('EducationNear');
-  const practices = GetList('PracticeNear');
+  const [educations, educationsError] = GetList('EducationNear');
+  const [practices, practicesError] = GetList('PracticeNear');
 
-  return (
+  return practicesError || educationsError ? (
+    <div>No data</div>
+  ) : (
     <div className="columns is-mobile">
       <div className="column is-4">{EducationTable(educations as EducationShort[])}</div>
       <div className="column is-4 is-offset-4">{PracticeTable(practices as PracticeShort[])}</div>

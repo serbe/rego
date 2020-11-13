@@ -7,12 +7,12 @@ import { PostList } from '../../models/post';
 
 export const Posts = (): JSX.Element => {
   const history = useHistory();
-  const data = GetList('PostList');
+  const [data, error] = GetList('PostList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
-    data,
-    search,
+    data: data,
+    search: search,
   });
 
   const tableData = (): PostList[] => {
@@ -21,9 +21,9 @@ export const Posts = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((post) => (
+      {tableData().map((post, index) => (
         <tr
-          key={`tr${post.id}`}
+          key={`tr${post.id}${index}`}
           onClick={(): void => history.push(`/posts/${post.id}`)}
           role="gridcell"
           className="link"
@@ -32,12 +32,15 @@ export const Posts = (): JSX.Element => {
           <td className="w9">
             <input type="checkbox" checked={post.go} />
           </td>
+          <td className="is-hidden-mobile">{post.note}</td>
         </tr>
       ))}
     </>
   );
 
-  return (
+  return error ? (
+    <></>
+  ) : (
     <>
       <Bar value={search} setter={setSearch} name="posts" />
       <table className="table is-narrow is-fullwidth">
@@ -45,6 +48,7 @@ export const Posts = (): JSX.Element => {
           <tr>
             <th>Наименование должности</th>
             <th className="w9">ГО</th>
+            <th className="is-hidden-mobile">Заметка</th>
           </tr>
           <Body />
         </tbody>

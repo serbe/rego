@@ -1,64 +1,54 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { useAuthState } from '../../helpers/auth';
-import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
+import { GetItem, SetItem } from '../../helpers/fetcher';
 import { CompanyIDSelect } from '../../models/company';
-import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
+import { NoteInput, ParameterTypes } from '../../models/impersonal';
 import { KindIDSelect } from '../../models/kind';
 import { Practice, PracticeDateInput, PracticeTopicInput } from '../../models/practice';
 
 export const PracticeItem = (): JSX.Element => {
-  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
+  const [loaded, setLoaded] = useState(id === '0' || false);
+  const [data, error] = GetItem('Practice', id);
   const [companyID, setCompanyID] = useState<number>();
   const [kindID, setKindID] = useState<number>();
   const [topic, setTopic] = useState<string>();
   const [date, setDate] = useState<string>();
   const [note, setNote] = useState<string>();
-  const item = GetItem('Practice', id);
-  const [status, setStatus] = useState(false);
 
-  const send = (): void => {
-    const NumberID = Number(id);
-    const practice: Practice = {
-      id: NumberID,
+  const submit = (): void => {
+    const number_id = Number(id);
+    const item: Practice = {
+      id: number_id,
       company_id: companyID,
       kind_id: kindID,
-      topic,
+      topic: topic,
       date_of_practice: date,
-      note,
+      note: note,
     };
 
-    SetItem(NumberID, 'Practice', practice, setStatus, auth.token);
-  };
-
-  const del = (): void => {
-    const NumberID = Number(id);
-    DelItem(NumberID, 'Practice', setStatus, auth.token);
+    SetItem(number_id, 'Practice', JSON.stringify(item));
+    history.go(-1);
+    return;
   };
 
   useEffect(() => {
-    if (item) {
-      const data = item as Practice;
-      setCompanyID(data.company_id);
-      setKindID(data.kind_id);
-      setTopic(data.topic);
-      setDate(data.date_of_practice);
-      setNote(data.note);
+    if (data?.id) {
+      const c = data as Practice;
+      setCompanyID(c.company_id);
+      setKindID(c.kind_id);
+      setTopic(c.topic);
+      setDate(c.date_of_practice);
+      setNote(c.note);
+      setLoaded(true);
     }
-  }, [item]);
-
-  useEffect(() => {
-    if (status) {
-      history.go(-1);
-    }
-  }, [history, status]);
+  }, [data]);
 
   return (
     <div>
-      {item && (
+      {loaded && !error && (
         <>
           <CompanyIDSelect id={companyID} setter={setCompanyID} />
           <KindIDSelect id={kindID} setter={setKindID} />
@@ -66,7 +56,18 @@ export const PracticeItem = (): JSX.Element => {
           <PracticeDateInput value={date} setter={setDate} />
           <NoteInput value={note} setter={setNote} />
 
-          <ItemFormButtons send={send} del={del} />
+          <div className="field is-grouped">
+            <div className="control">
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
+            </div>
+            <div className="control">
+              <button className="button" onClick={() => history.go(-1)}>
+                Закрыть
+              </button>
+            </div>
+          </div>
         </>
       )}
     </div>

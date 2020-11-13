@@ -7,12 +7,12 @@ import { CertificateList } from '../../models/certificate';
 
 export const Certificates = (): JSX.Element => {
   const history = useHistory();
-  const data = GetList('CertificateList');
+  const [data, error] = GetList('CertificateList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
-    data,
-    search,
+    data: data,
+    search: search,
   });
 
   const tableData = (): CertificateList[] => {
@@ -21,8 +21,8 @@ export const Certificates = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((certificate) => (
-        <tr key={`tr${certificate.id}`}>
+      {tableData().map((certificate, index) => (
+        <tr key={`tr${certificate.id}${index}`}>
           <td
             onClick={(): void => history.push(`/certificates/${certificate.id}`)}
             role="gridcell"
@@ -45,12 +45,15 @@ export const Certificates = (): JSX.Element => {
             {certificate.company_name}
           </td>
           <td className="nowrap">{certificate.cert_date}</td>
+          <td className="is-hidden-mobile">{certificate.note}</td>
         </tr>
       ))}
     </>
   );
 
-  return (
+  return error ? (
+    <></>
+  ) : (
     <>
       <Bar value={search} setter={setSearch} name="certificates" />
       <table className="table is-narrow is-fullwidth">
@@ -60,6 +63,7 @@ export const Certificates = (): JSX.Element => {
             <th>Фамилия Имя Отчество</th>
             <th className="is-hidden-mobile">Учебно-методический центр</th>
             <th>Дата</th>
+            <th className="is-hidden-mobile">Заметка</th>
           </tr>
           <Body />
         </tbody>

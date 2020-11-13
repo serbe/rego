@@ -8,12 +8,12 @@ import { CompanyList } from '../../models/company';
 
 export const Companies = (): JSX.Element => {
   const history = useHistory();
-  const data = GetList('CompanyList');
+  const [data, error] = GetList('CompanyList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
-    data,
-    search,
+    data: data,
+    search: search,
   });
 
   const tableData = (): CompanyList[] => {
@@ -22,8 +22,8 @@ export const Companies = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((company) => (
-        <tr key={`tr${company.id}`}>
+      {tableData().map((company, index) => (
+        <tr key={`tr${company.id}${index}`}>
           <td
             onClick={(): void => history.push(`/companies/${company.id}`)}
             role="gridcell"
@@ -43,7 +43,9 @@ export const Companies = (): JSX.Element => {
     </>
   );
 
-  return (
+  return error ? (
+    <></>
+  ) : (
     <>
       <Bar value={search} setter={setSearch} name="companies" />
       <table className="table is-narrow is-fullwidth">

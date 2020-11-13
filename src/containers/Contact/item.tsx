@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { useAuthState } from '../../helpers/auth';
-import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
+import { GetItem, SetItem } from '../../helpers/fetcher';
 import {
   addEmptyString,
   filterArrayNumber,
@@ -20,7 +19,6 @@ import { DepartmentIDSelect } from '../../models/department';
 import {
   EmailInputs,
   FaxInputs,
-  ItemFormButtons,
   NoteInput,
   ParameterTypes,
   PhoneInputs,
@@ -29,9 +27,10 @@ import { PostGoIDSelect, PostIDSelect } from '../../models/post';
 import { RankIDSelect } from '../../models/rank';
 
 export const ContactItem = (): JSX.Element => {
-  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
+  const [loaded, setLoaded] = useState(id === '0' || false);
+  const [data, error] = GetItem('Contact', id);
   const [name, setName] = useState<string>();
   const [companyID, setCompanyID] = useState<number>();
   const [departmentID, setDepartmentID] = useState<number>();
@@ -44,61 +43,51 @@ export const ContactItem = (): JSX.Element => {
   const [phones, setPhones] = useState(['']);
   const [faxes, setFaxes] = useState(['']);
   const [educations, setEducations] = useState<string[]>([]);
-  const item = GetItem('Contact', id);
-  const [status, setStatus] = useState(false);
 
-  const send = (): void => {
-    const NumberID = Number(id);
-    const contact: Contact = {
-      id: NumberID,
-      name,
+  const submit = (): void => {
+    const number_id = Number(id);
+    const item: Contact = {
+      id: number_id,
+      name: name,
       company_id: companyID,
       department_id: departmentID,
       post_id: postID,
       post_go_id: postGoID,
       rank_id: rankID,
-      birthday,
-      note,
+      birthday: birthday,
+      note: note,
       emails: filterArrayString(emails),
       phones: filterArrayNumber(phones),
       faxes: filterArrayNumber(faxes),
     };
 
-    SetItem(NumberID, 'Contact', contact, setStatus, auth.token);
-  };
-
-  const del = (): void => {
-    const NumberID = Number(id);
-    DelItem(NumberID, 'Contact', setStatus, auth.token);
+    SetItem(number_id, 'Contact', JSON.stringify(item));
+    history.go(-1);
+    return;
   };
 
   useEffect(() => {
-    if (item) {
-      const data = item as Contact;
-      setName(data.name);
-      setCompanyID(data.company_id);
-      setDepartmentID(data.department_id);
-      setPostID(data.post_id);
-      setPostGoID(data.post_go_id);
-      setRankID(data.rank_id);
-      setBirthday(data.birthday);
-      setNote(data.note);
-      setEmails(addEmptyString(data.emails));
-      setPhones(addEmptyString(numberToString(data.phones)));
-      setFaxes(addEmptyString(numberToString(data.faxes)));
-      setEducations(data.educations || []);
+    if (data?.id) {
+      const c = data as Contact;
+      setName(c.name);
+      setCompanyID(c.company_id);
+      setDepartmentID(c.department_id);
+      setPostID(c.post_id);
+      setPostGoID(c.post_go_id);
+      setRankID(c.rank_id);
+      setBirthday(c.birthday);
+      setNote(c.note);
+      setEmails(addEmptyString(c.emails));
+      setPhones(addEmptyString(numberToString(c.phones)));
+      setFaxes(addEmptyString(numberToString(c.faxes)));
+      setEducations(c.educations || []);
+      setLoaded(true);
     }
-  }, [item]);
-
-  useEffect(() => {
-    if (status) {
-      history.go(-1);
-    }
-  }, [history, status]);
+  }, [data]);
 
   return (
     <div>
-      {item && (
+      {loaded && !error && (
         <>
           <ContactNameInput value={name} setter={setName} />
           <CompanyIDSelect id={companyID} setter={setCompanyID} />
@@ -139,9 +128,21 @@ export const ContactItem = (): JSX.Element => {
           </div>
 
           <ContactEducations educations={educations} />
+
           <NoteInput value={note} setter={setNote} />
 
-          <ItemFormButtons send={send} del={del} />
+          <div className="field is-grouped">
+            <div className="control">
+              <button className="button" onClick={() => submit()}>
+                Сохранить
+              </button>
+            </div>
+            <div className="control">
+              <button className="button" onClick={() => history.go(-1)}>
+                Закрыть
+              </button>
+            </div>
+          </div>
         </>
       )}
     </div>

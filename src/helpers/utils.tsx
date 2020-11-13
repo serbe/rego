@@ -8,13 +8,13 @@ export const filterArrayNumber = (values: string[]): number[] => {
   return values.map((value: string) => Number(value)).filter((value: number) => value !== 0);
 };
 
-// export const stringNoNull = (value?: string): string => {
-//   return value || '';
-// };
+export const stringNoNull = (value?: string): string => {
+  return value || '';
+};
 
-// export const numberNoNull = (value?: number): number => {
-//   return value || 0;
-// };
+export const numberNoNull = (value?: number): number => {
+  return value || 0;
+};
 
 export const addEmptyString = (values?: string[]): string[] => {
   let list: string[] = [];
