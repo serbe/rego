@@ -8,13 +8,15 @@ interface TJson {
   r: number;
 }
 
+const URL = '/api/go/login';
+
 export const Login = (): JSX.Element => {
   const { setAuth } = useAuthState();
   const [name, setName] = useState('');
   const [pass, setPass] = useState('');
 
   const submit = (): void => {
-    fetch('/api/go/login', {
+    fetch(URL, {
       method: 'POST',
       mode: 'cors',
       headers: {

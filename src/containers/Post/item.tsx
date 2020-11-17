@@ -1,63 +1,62 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem, SetItem } from '../../helpers/fetcher';
-import { NoteInput, ParameterTypes } from '../../models/impersonal';
+import { useAuthState } from '../../helpers/auth';
+import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
+import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
 import { Post, PostGOSwitch, PostNameInput } from '../../models/post';
 
 export const PostItem = (): JSX.Element => {
+  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(id === '0' || false);
-  const [data, error] = GetItem('Post', id);
   const [name, setName] = useState<string>();
   const [go, setGo] = useState(false);
   const [note, setNote] = useState<string>();
+  const item = GetItem('Post', id);
+  const [status, setStatus] = useState(false);
 
-  const submit = (): void => {
-    const number_id = Number(id);
-    const item: Post = {
-      id: number_id,
-      name: name,
-      go: go,
-      note: note,
+  const send = (): void => {
+    const NumberID = Number(id);
+    const post: Post = {
+      id: NumberID,
+      name,
+      go,
+      note,
     };
 
-    SetItem(number_id, 'Post', JSON.stringify(item));
-    history.go(-1);
-    return;
+    SetItem(NumberID, 'Post', post, setStatus, auth.token);
+  };
+
+  const del = (): void => {
+    const NumberID = Number(id);
+    DelItem(NumberID, 'Post', setStatus, auth.token);
   };
 
   useEffect(() => {
-    if (data?.id) {
-      const c = data as Post;
-      setName(c.name);
-      setGo(c.go || false);
-      setNote(c.note);
-      setLoaded(true);
+    if (item) {
+      const data = item as Post;
+      setName(data.name);
+      setGo(data.go || false);
+      setNote(data.note);
     }
-  }, [data]);
+  }, [item]);
+
+  useEffect(() => {
+    if (status) {
+      history.go(-1);
+    }
+  }, [history, status]);
 
   return (
     <div>
-      {loaded && !error && (
+      {item && (
         <>
           <PostNameInput value={name} setter={setName} />
           <PostGOSwitch value={go} setter={setGo} />
           <NoteInput value={note} setter={setNote} />
 
-          <div className="field is-grouped">
-            <div className="control">
-              <button className="button" onClick={() => submit()}>
-                Сохранить
-              </button>
-            </div>
-            <div className="control">
-              <button className="button" onClick={() => history.go(-1)}>
-                Закрыть
-              </button>
-            </div>
-          </div>
+          <ItemFormButtons send={send} del={del} />
         </>
       )}
     </div>

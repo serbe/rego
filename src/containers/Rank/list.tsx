@@ -7,12 +7,12 @@ import { RankList } from '../../models/rank';
 
 export const Ranks = (): JSX.Element => {
   const history = useHistory();
-  const [data, error] = GetList('RankList');
+  const data = GetList('RankList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
-    data: data,
-    search: search,
+    data,
+    search,
   });
 
   const tableData = (): RankList[] => {
@@ -21,30 +21,26 @@ export const Ranks = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((rank, index) => (
+      {tableData().map((rank) => (
         <tr
-          key={`tr${rank.id}${index}`}
+          key={`tr${rank.id}`}
           onClick={(): void => history.push(`/ranks/${rank.id}`)}
           role="gridcell"
           className="link"
         >
           <td className="w250">{rank.name}</td>
-          <td className="w250">{rank.note}</td>
         </tr>
       ))}
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
       <Bar value={search} setter={setSearch} name="ranks" />
       <table className="table is-narrow is-fullwidth">
         <tbody>
           <tr>
             <th className="w250">Наименование чина</th>
-            <th className="w250">Заметка</th>
           </tr>
           <Body />
         </tbody>

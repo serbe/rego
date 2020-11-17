@@ -1,59 +1,58 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem, SetItem } from '../../helpers/fetcher';
-import { NoteInput, ParameterTypes } from '../../models/impersonal';
+import { useAuthState } from '../../helpers/auth';
+import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
+import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
 import { Rank, RankNameInput } from '../../models/rank';
 
 export const RankItem = (): JSX.Element => {
+  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(id === '0' || false);
-  const [data, error] = GetItem('Rank', id);
   const [name, setName] = useState<string>();
   const [note, setNote] = useState<string>();
+  const item = GetItem('Rank', id);
+  const [status, setStatus] = useState(false);
 
-  const submit = (): void => {
-    const number_id = Number(id);
-    const item: Rank = {
-      id: number_id,
-      name: name,
-      note: note,
+  const send = (): void => {
+    const NumberID = Number(id);
+    const rank: Rank = {
+      id: NumberID,
+      name,
+      note,
     };
 
-    SetItem(number_id, 'Rank', JSON.stringify(item));
-    history.go(-1);
-    return;
+    SetItem(NumberID, 'Rank', rank, setStatus, auth.token);
+  };
+
+  const del = (): void => {
+    const NumberID = Number(id);
+    DelItem(NumberID, 'Rank', setStatus, auth.token);
   };
 
   useEffect(() => {
-    if (data?.id) {
-      const c = data as Rank;
-      setName(c.name);
-      setNote(c.note);
-      setLoaded(true);
+    if (item) {
+      const data = item as Rank;
+      setName(data.name);
+      setNote(data.note);
     }
-  }, [data]);
+  }, [item]);
+
+  useEffect(() => {
+    if (status) {
+      history.go(-1);
+    }
+  }, [history, status]);
 
   return (
     <div>
-      {loaded && !error && (
+      {item && (
         <>
           <RankNameInput value={name} setter={setName} />
           <NoteInput value={note} setter={setNote} />
 
-          <div className="field is-grouped">
-            <div className="control">
-              <button className="button" onClick={() => submit()}>
-                Сохранить
-              </button>
-            </div>
-            <div className="control">
-              <button className="button" onClick={() => history.go(-1)}>
-                Закрыть
-              </button>
-            </div>
-          </div>
+          <ItemFormButtons send={send} del={del} />
         </>
       )}
     </div>

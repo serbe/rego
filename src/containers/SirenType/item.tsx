@@ -1,63 +1,62 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem, SetItem } from '../../helpers/fetcher';
-import { NoteInput, ParameterTypes } from '../../models/impersonal';
+import { useAuthState } from '../../helpers/auth';
+import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
+import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
 import { SirenType, SirenTypeNameInput, SirenTypeRadiusInput } from '../../models/sirentype';
 
 export const SirenTypeItem = (): JSX.Element => {
+  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(id === '0' || false);
-  const [data, error] = GetItem('SirenType', id);
   const [name, setName] = useState<string>();
   const [radius, setRadius] = useState<number>();
   const [note, setNote] = useState<string>();
+  const item = GetItem('SirenType', id);
+  const [status, setStatus] = useState(false);
 
-  const submit = (): void => {
-    const number_id = Number(id);
-    const item: SirenType = {
-      id: number_id,
-      name: name,
-      radius: radius,
-      note: note,
+  const send = (): void => {
+    const NumberID = Number(id);
+    const sirenType: SirenType = {
+      id: NumberID,
+      name,
+      radius,
+      note,
     };
 
-    SetItem(number_id, 'SirenType', JSON.stringify(item));
-    history.go(-1);
-    return;
+    SetItem(NumberID, 'SirenType', sirenType, setStatus, auth.token);
+  };
+
+  const del = (): void => {
+    const NumberID = Number(id);
+    DelItem(NumberID, 'SirenType', setStatus, auth.token);
   };
 
   useEffect(() => {
-    if (data?.id) {
-      const c = data as SirenType;
-      setName(c.name);
-      setRadius(c.radius);
-      setNote(c.note);
-      setLoaded(true);
+    if (item) {
+      const data = item as SirenType;
+      setName(data.name);
+      setRadius(data.radius);
+      setNote(data.note);
     }
-  }, [data]);
+  }, [item, history, status]);
+
+  useEffect(() => {
+    if (status) {
+      history.go(-1);
+    }
+  }, [history, status]);
 
   return (
     <div>
-      {loaded && !error && (
+      {item && (
         <>
           <SirenTypeNameInput value={name} setter={setName} />
           <SirenTypeRadiusInput value={radius} setter={setRadius} />
           <NoteInput value={note} setter={setNote} />
 
-          <div className="field is-grouped">
-            <div className="control">
-              <button className="button" onClick={() => submit()}>
-                Сохранить
-              </button>
-            </div>
-            <div className="control">
-              <button className="button" onClick={() => history.go(-1)}>
-                Закрыть
-              </button>
-            </div>
-          </div>
+          <ItemFormButtons send={send} del={del} />
         </>
       )}
     </div>

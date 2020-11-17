@@ -1,58 +1,68 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem, SetItem } from '../../helpers/fetcher';
+import { useAuthState } from '../../helpers/auth';
+import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
 import {
   Education,
   EducationEndDateInput,
   EducationNameSelect,
   EducationStartDateInput,
 } from '../../models/education';
-import { NoteInput, ParameterTypes } from '../../models/impersonal';
+import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
 import { PostGoIDSelect } from '../../models/post';
 
 export const EducationItem = (): JSX.Element => {
+  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(id === '0' || false);
-  const [data, error] = GetItem('Education', id);
   const [contactID, setContactID] = useState<number>();
   const [startDate, setStartDate] = useState<string>();
   const [endDate, setEndDate] = useState<string>();
   const [postID, setPostID] = useState<number>();
   const [note, setNote] = useState<string>();
+  const item = GetItem('Education', id);
+  const [status, setStatus] = useState(false);
 
-  const submit = (): void => {
-    const number_id = Number(id);
-    const item: Education = {
-      id: number_id,
+  const send = (): void => {
+    const NumberID = Number(id);
+    const education: Education = {
+      id: NumberID,
       contact_id: contactID,
       start_date: startDate,
       end_date: endDate,
       post_id: postID,
-      note: note,
+      note,
     };
 
-    SetItem(number_id, 'Education', JSON.stringify(item));
-    history.go(-1);
-    return;
+    SetItem(NumberID, 'Education', education, setStatus, auth.token);
+  };
+
+  const del = (): void => {
+    const NumberID = Number(id);
+    DelItem(NumberID, 'Education', setStatus, auth.token);
   };
 
   useEffect(() => {
-    if (data?.id) {
-      const c = data as Education;
-      setContactID(c.contact_id);
-      setStartDate(c.start_date);
-      setEndDate(c.end_date);
-      setPostID(c.post_id);
-      setNote(c.note);
-      setLoaded(true);
+    if (item) {
+      const data = item as Education;
+      setContactID(data.contact_id);
+      setStartDate(data.start_date);
+      setEndDate(data.end_date);
+      setPostID(data.post_id);
+      setNote(data.note);
     }
-  }, [data]);
+  }, [item]);
+
+  useEffect(() => {
+    if (status) {
+      history.go(-1);
+    }
+  }, [history, status]);
 
   return (
     <div>
-      {loaded && !error && (
+      {item && (
         <>
           <EducationNameSelect id={contactID} setter={setContactID} />
           <PostGoIDSelect id={postID} setter={setPostID} />
@@ -68,18 +78,7 @@ export const EducationItem = (): JSX.Element => {
 
           <NoteInput value={note} setter={setNote} />
 
-          <div className="field is-grouped">
-            <div className="control">
-              <button className="button" onClick={() => submit()}>
-                Сохранить
-              </button>
-            </div>
-            <div className="control">
-              <button className="button" onClick={() => history.go(-1)}>
-                Закрыть
-              </button>
-            </div>
-          </div>
+          <ItemFormButtons send={send} del={del} />
         </>
       )}
     </div>

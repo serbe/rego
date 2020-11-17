@@ -8,12 +8,12 @@ import { ContactList } from '../../models/contact';
 
 export const Contacts = (): JSX.Element => {
   const history = useHistory();
-  const [data, error] = GetList('ContactList');
+  const data = GetList('ContactList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
-    data: data,
-    search: search,
+    data,
+    search,
   });
 
   const tableData = (): ContactList[] => {
@@ -22,8 +22,8 @@ export const Contacts = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((contact, index) => (
-        <tr key={`tr${contact.id}${index}`}>
+      {tableData().map((contact) => (
+        <tr key={`tr${contact.id}`}>
           <td
             onClick={(): void => history.push(`/contacts/${contact.id}`)}
             role="gridcell"
@@ -46,9 +46,7 @@ export const Contacts = (): JSX.Element => {
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
       <Bar value={search} setter={setSearch} name="contacts" />
       <table className="table is-narrow is-fullwidth">

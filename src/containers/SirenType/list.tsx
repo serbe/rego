@@ -7,12 +7,12 @@ import { SirenTypeList } from '../../models/sirentype';
 
 export const SirenTypes = (): JSX.Element => {
   const history = useHistory();
-  const [data, error] = GetList('SirenTypeList');
+  const data = GetList('SirenTypeList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
-    data: data,
-    search: search,
+    data,
+    search,
   });
 
   const tableData = (): SirenTypeList[] => {
@@ -21,32 +21,28 @@ export const SirenTypes = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((siren_type, index) => (
+      {tableData().map((siren_type) => (
         <tr
-          key={`tr${siren_type.id}${index}`}
+          key={`tr${siren_type.id}`}
           onClick={(): void => history.push(`/sirentypes/${siren_type.id}`)}
           role="gridcell"
           className="link"
         >
-          <td className="w250">{siren_type.name}</td>
-          <td className="w95">{siren_type.radius}</td>
-          <td className="w250">{siren_type.note}</td>
+          <td>{siren_type.name}</td>
+          <td>{siren_type.radius}</td>
         </tr>
       ))}
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
       <Bar value={search} setter={setSearch} name="sirentypes" />
       <table className="table is-narrow is-fullwidth">
         <tbody>
           <tr>
-            <th className="w250">Тип сирены</th>
-            <th className="w95">Радиус действия</th>
-            <th className="w250">Заметка</th>
+            <th>Тип сирены</th>
+            <th>Радиус действия</th>
           </tr>
           <Body />
         </tbody>

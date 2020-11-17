@@ -8,12 +8,12 @@ import { SirenList } from '../../models/siren';
 
 export const Sirens = (): JSX.Element => {
   const history = useHistory();
-  const [data, error] = GetList('SirenList');
+  const data = GetList('SirenList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
-    data: data,
-    search: search,
+    data,
+    search,
   });
 
   const tableData = (): SirenList[] => {
@@ -22,9 +22,9 @@ export const Sirens = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((siren, index) => (
+      {tableData().map((siren) => (
         <tr
-          key={`tr${siren.id}${index}`}
+          key={`tr${siren.id}`}
           onClick={(): void => history.push(`/sirens/${siren.id}`)}
           role="gridcell"
           className="link"
@@ -38,9 +38,7 @@ export const Sirens = (): JSX.Element => {
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
       <Bar value={search} setter={setSearch} name="sirens" />
       <table className="table is-narrow is-fullwidth">

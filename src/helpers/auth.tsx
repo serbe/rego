@@ -118,7 +118,17 @@ export const reducer = (authState: AuthState, action: ReducerActions): AuthState
 
 export const AuthProvider = (properties: AuthProviderProperties): ReactElement => {
   const { children } = properties;
-  const [state, dispatch] = useReducer(reducer, initialAuthState);
+
+  const storage = getStorage();
+  const initState: AuthState = {
+    role: storage.role,
+    name: storage.name,
+    token: storage.token,
+    login: false,
+    checked: false,
+  };
+
+  const [state, dispatch] = useReducer(reducer, initState);
 
   const setState: SetAuthState = { dispatch };
 

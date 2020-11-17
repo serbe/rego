@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { GetItem, SetItem } from '../../helpers/fetcher';
+import { useAuthState } from '../../helpers/auth';
+import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
 import {
   addEmptyString,
   filterArrayNumber,
@@ -14,6 +15,7 @@ import {
   AddressInput,
   EmailInputs,
   FaxInputs,
+  ItemFormButtons,
   NoteInput,
   ParameterTypes,
   PhoneInputs,
@@ -22,10 +24,9 @@ import { PracticeList, PracticeListForm } from '../../models/practice';
 import { ScopeIDSelect } from '../../models/scope';
 
 export const CompanyItem = (): JSX.Element => {
+  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(id === '0' || false);
-  const [data, error] = GetItem('Company', id);
   const [name, setName] = useState<string>();
   const [address, setAddress] = useState<string>();
   const [scopeID, setScopeID] = useState<number>();
@@ -35,44 +36,54 @@ export const CompanyItem = (): JSX.Element => {
   const [faxes, setFaxes] = useState(['']);
   const [practices, setPractices] = useState<PracticeList[]>([]);
   const [contacts, setContacts] = useState<ContactShort[]>([]);
+  const item = GetItem('Company', id);
+  const [status, setStatus] = useState(false);
 
-  const submit = (): void => {
-    const number_id = Number(id);
-    const item: Company = {
-      id: number_id,
-      name: name,
-      address: address,
+  const send = (): void => {
+    const NumberID = Number(id);
+    const company: Company = {
+      id: NumberID,
+      name,
+      address,
       scope_id: scopeID,
-      note: note,
+      note,
       emails: filterArrayString(emails),
       phones: filterArrayNumber(phones),
       faxes: filterArrayNumber(faxes),
     };
 
-    SetItem(number_id, 'Company', JSON.stringify(item));
-    history.go(-1);
-    return;
+    SetItem(NumberID, 'Company', company, setStatus, auth.token);
+  };
+
+  const del = (): void => {
+    const NumberID = Number(id);
+    DelItem(NumberID, 'Company', setStatus, auth.token);
   };
 
   useEffect(() => {
-    if (data?.id) {
-      const c = data as Company;
-      setName(c.name);
-      setAddress(c.address);
-      setScopeID(c.scope_id);
-      setNote(c.note);
-      setEmails(addEmptyString(c.emails));
-      setPhones(addEmptyString(numberToString(c.phones)));
-      setFaxes(addEmptyString(numberToString(c.faxes)));
-      setPractices(c.practices || []);
-      setContacts(c.contacts || []);
-      setLoaded(true);
+    if (item) {
+      const data = item as Company;
+      setName(data.name);
+      setAddress(data.address);
+      setScopeID(data.scope_id);
+      setNote(data.note);
+      setEmails(addEmptyString(data.emails));
+      setPhones(addEmptyString(numberToString(data.phones)));
+      setFaxes(addEmptyString(numberToString(data.faxes)));
+      setPractices(data.practices || []);
+      setContacts(data.contacts || []);
     }
-  }, [data]);
+  }, [item]);
+
+  useEffect(() => {
+    if (status) {
+      history.go(-1);
+    }
+  }, [history, status]);
 
   return (
     <div>
-      {loaded && !error && (
+      {item && (
         <>
           <CompanyNameInput value={name} setter={setName} />
           <ScopeIDSelect id={scopeID} setter={setScopeID} />
@@ -91,23 +102,10 @@ export const CompanyItem = (): JSX.Element => {
           </div>
 
           <PracticeListForm practices={practices} />
-
           <ContactShortForm contacts={contacts} />
-
           <NoteInput value={note} setter={setNote} />
 
-          <div className="field is-grouped">
-            <div className="control">
-              <button className="button" onClick={() => submit()}>
-                Сохранить
-              </button>
-            </div>
-            <div className="control">
-              <button className="button" onClick={() => history.go(-1)}>
-                Закрыть
-              </button>
-            </div>
-          </div>
+          <ItemFormButtons send={send} del={del} />
         </>
       )}
     </div>

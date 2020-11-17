@@ -7,12 +7,12 @@ import { DepartmentList } from '../../models/department';
 
 export const Departments = (): JSX.Element => {
   const history = useHistory();
-  const [data, error] = GetList('DepartmentList');
+  const data = GetList('DepartmentList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
-    data: data,
-    search: search,
+    data,
+    search,
   });
 
   const tableData = (): DepartmentList[] => {
@@ -21,30 +21,26 @@ export const Departments = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((department, index) => (
+      {tableData().map((department) => (
         <tr
-          key={`tr${department.id}${index}`}
+          key={`tr${department.id}`}
           onClick={(): void => history.push(`/departments/${department.id}`)}
           role="gridcell"
           className="link"
         >
           <td className="w250">{department.name}</td>
-          <td className="w250">{department.note}</td>
         </tr>
       ))}
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
       <Bar value={search} setter={setSearch} name="departments" />
       <table className="table is-narrow is-fullwidth">
         <tbody>
           <tr>
             <th className="w250">Наименование отдела</th>
-            <th className="w250">Заметка</th>
           </tr>
           <Body />
         </tbody>

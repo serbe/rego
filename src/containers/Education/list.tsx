@@ -7,12 +7,12 @@ import { EducationList } from '../../models/education';
 
 export const Educations = (): JSX.Element => {
   const history = useHistory();
-  const [data, error] = GetList('EducationList');
+  const data = GetList('EducationList');
   const [search, setSearch] = useState('');
 
   const [paginationData, Paginate] = Data({
-    data: data,
-    search: search,
+    data,
+    search,
   });
 
   const tableData = (): EducationList[] => {
@@ -21,9 +21,9 @@ export const Educations = (): JSX.Element => {
 
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((education, index) => (
+      {tableData().map((education) => (
         <tr
-          key={`tr${education.id}${index}`}
+          key={`tr${education.id}`}
           onClick={(): void => history.push(`/educations/${education.id}`)}
           role="gridcell"
           className="link"
@@ -37,9 +37,7 @@ export const Educations = (): JSX.Element => {
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
       <Bar value={search} setter={setSearch} name="educations" />
       <table className="table is-narrow is-fullwidth">
