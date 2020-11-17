@@ -4,8 +4,8 @@ import { useHistory } from 'react-router-dom';
 import { FormField } from '../components/formfield';
 import { Input, StringInputProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
-import { useAuthState } from '../helpers/auth';
-import { addEmptyString } from '../helpers/utils';
+import { useAuthState } from '../services/auth';
+import { addEmptyString } from '../services/utils';
 
 export interface ParameterTypes {
   id: string;

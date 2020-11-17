@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Bar, Data } from '../../components/table';
-import { GetList } from '../../helpers/fetcher';
 import { PracticeList } from '../../models/practice';
+import { GetList } from '../../services/fetcher';
 
 export const Practices = (): JSX.Element => {
   const history = useHistory();

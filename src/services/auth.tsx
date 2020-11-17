@@ -7,6 +7,12 @@ import React, {
   useReducer,
 } from 'react';
 
+export type User = {
+  role: number;
+  name: string;
+  token: string;
+};
+
 export type AuthState = {
   role: number;
   name: string;

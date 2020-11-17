@@ -1,6 +1,6 @@
 import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
 
-import { useAuthState } from '../helpers/auth';
+import { useAuthState } from '../services/auth';
 import { FormField } from './formfield';
 
 interface TJson {

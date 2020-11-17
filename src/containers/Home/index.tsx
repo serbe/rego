@@ -3,9 +3,9 @@ import './index.css';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { GetList } from '../../helpers/fetcher';
 import { EducationShort } from '../../models/education';
 import { PracticeShort } from '../../models/practice';
+import { GetList } from '../../services/fetcher';
 
 const trClass = (date: string): string => {
   const m = new Date();

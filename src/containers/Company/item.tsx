@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { useAuthState } from '../../helpers/auth';
-import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
-import {
-  addEmptyString,
-  filterArrayNumber,
-  filterArrayString,
-  numberToString,
-} from '../../helpers/utils';
 import { Company, CompanyNameInput } from '../../models/company';
 import { ContactShort, ContactShortForm } from '../../models/contact';
 import {
@@ -22,6 +14,14 @@ import {
 } from '../../models/impersonal';
 import { PracticeList, PracticeListForm } from '../../models/practice';
 import { ScopeIDSelect } from '../../models/scope';
+import { useAuthState } from '../../services/auth';
+import { DelItem, GetItem, SetItem } from '../../services/fetcher';
+import {
+  addEmptyString,
+  filterArrayNumber,
+  filterArrayString,
+  numberToString,
+} from '../../services/utils';
 
 export const CompanyItem = (): JSX.Element => {
   const { auth } = useAuthState();

@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Bar, Data } from '../../components/table';
-import { GetList } from '../../helpers/fetcher';
-import { splitNumbers, splitStrings } from '../../helpers/utils';
 import { CompanyList } from '../../models/company';
+import { GetList } from '../../services/fetcher';
+import { splitNumbers, splitStrings } from '../../services/utils';
 
 export const Companies = (): JSX.Element => {
   const history = useHistory();

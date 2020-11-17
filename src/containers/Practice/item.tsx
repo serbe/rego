@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { useAuthState } from '../../helpers/auth';
-import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
 import { CompanyIDSelect } from '../../models/company';
 import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
 import { KindIDSelect } from '../../models/kind';
 import { Practice, PracticeDateInput, PracticeTopicInput } from '../../models/practice';
+import { useAuthState } from '../../services/auth';
+import { DelItem, GetItem, SetItem } from '../../services/fetcher';
 
 export const PracticeItem = (): JSX.Element => {
   const { auth } = useAuthState();

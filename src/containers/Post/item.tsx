@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { useAuthState } from '../../helpers/auth';
-import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
 import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
 import { Post, PostGOSwitch, PostNameInput } from '../../models/post';
+import { useAuthState } from '../../services/auth';
+import { DelItem, GetItem, SetItem } from '../../services/fetcher';
 
 export const PostItem = (): JSX.Element => {
   const { auth } = useAuthState();

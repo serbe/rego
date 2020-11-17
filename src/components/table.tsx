@@ -1,8 +1,8 @@
 import React, { useEffect, useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { useAuthState } from '../helpers/auth';
-import { List } from '../helpers/fetcher';
+import { useAuthState } from '../services/auth';
+import { List } from '../services/fetcher';
 import { Button } from './button';
 import { Input } from './input';
 import { Pagination } from './pagination';

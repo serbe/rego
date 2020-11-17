@@ -3,7 +3,7 @@ import './rego.css';
 import React from 'react';
 
 import { NavBar } from './components/navbar';
-import { Router } from './helpers/router';
+import { Router } from './services/router';
 
 const Rego = (): JSX.Element => {
   return (

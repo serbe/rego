@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { useAuthState } from '../../helpers/auth';
-import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
-import {
-  addEmptyString,
-  filterArrayNumber,
-  filterArrayString,
-  numberToString,
-} from '../../helpers/utils';
 import { CompanyIDSelect } from '../../models/company';
 import {
   Contact,
@@ -27,6 +19,14 @@ import {
 } from '../../models/impersonal';
 import { PostGoIDSelect, PostIDSelect } from '../../models/post';
 import { RankIDSelect } from '../../models/rank';
+import { useAuthState } from '../../services/auth';
+import { DelItem, GetItem, SetItem } from '../../services/fetcher';
+import {
+  addEmptyString,
+  filterArrayNumber,
+  filterArrayString,
+  numberToString,
+} from '../../services/utils';
 
 export const ContactItem = (): JSX.Element => {
   const { auth } = useAuthState();

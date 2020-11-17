@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Bar, Data } from '../../components/table';
-import { GetList } from '../../helpers/fetcher';
-import { splitNumbers } from '../../helpers/utils';
 import { SirenList } from '../../models/siren';
+import { GetList } from '../../services/fetcher';
+import { splitNumbers } from '../../services/utils';
 
 export const Sirens = (): JSX.Element => {
   const history = useHistory();

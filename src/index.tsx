@@ -4,19 +4,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
-import { AuthProvider } from './helpers/auth';
 import Rego from './rego';
 import reportWebVitals from './reportWebVitals';
 
+// import { AuthProvider } from './helpers/auth';
 // import './index.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <AuthProvider>
-      <BrowserRouter>
-        <Rego />
-      </BrowserRouter>
-    </AuthProvider>
+    <BrowserRouter>
+      <Rego />
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root'),
 );

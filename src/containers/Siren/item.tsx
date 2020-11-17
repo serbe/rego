@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { useAuthState } from '../../helpers/auth';
-import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
 import { CompanyIDSelect } from '../../models/company';
 import {
   AddressInput,
@@ -23,6 +21,8 @@ import {
   SirenStageInput,
 } from '../../models/siren';
 import { SirenTypeIDSelect } from '../../models/sirentype';
+import { useAuthState } from '../../services/auth';
+import { DelItem, GetItem, SetItem } from '../../services/fetcher';
 
 export const SirenItem = (): JSX.Element => {
   const { auth } = useAuthState();

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { useAuthState } from '../../helpers/auth';
-import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
 import { Department, DepartmentNameInput } from '../../models/department';
 import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
+import { useAuthState } from '../../services/auth';
+import { DelItem, GetItem, SetItem } from '../../services/fetcher';
 
 export const DepartmentItem = (): JSX.Element => {
   const { auth } = useAuthState();

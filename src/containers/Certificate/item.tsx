@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { useAuthState } from '../../helpers/auth';
-import { DelItem, GetItem, SetItem } from '../../helpers/fetcher';
 import {
   Certificate,
   CertificateDateInput,
@@ -11,6 +9,8 @@ import {
 import { CompanyIDSelect } from '../../models/company';
 import { ContactIDSelect } from '../../models/contact';
 import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
+import { useAuthState } from '../../services/auth';
+import { DelItem, GetItem, SetItem } from '../../services/fetcher';
 
 export const CertificateItem = (): JSX.Element => {
   const { auth } = useAuthState();

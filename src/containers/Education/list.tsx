@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Bar, Data } from '../../components/table';
-import { GetList } from '../../helpers/fetcher';
 import { EducationList } from '../../models/education';
+import { GetList } from '../../services/fetcher';
 
 export const Educations = (): JSX.Element => {
   const history = useHistory();
