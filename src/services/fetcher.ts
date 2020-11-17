@@ -213,7 +213,9 @@ export const GetItem = (name: string, id: string): Item => {
           }
           throw new Error('unknown item');
         })
-        .catch(() => {});
+        .catch(() => {
+          console.log('err');
+        });
     } else {
       switch (name) {
         case 'Certificate':
@@ -326,7 +328,9 @@ export const GetList = (name: string): List[] => {
         }
         throw new Error('unknown list');
       })
-      .catch(() => {});
+      .catch(() => {
+        console.log('err');
+      });
   }, [name, auth.token]);
 
   return list;
@@ -352,46 +356,56 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
         if (jsonData?.command === 'Get') {
           switch (jsonData?.name) {
             case 'CompanySelect':
-              return jsonData.object.SelectItem.length > 0
+              jsonData.object.SelectItem.length > 0
                 ? setSelect(jsonData.object.SelectItem)
                 : setSelect([{ id: 0, name: '' }]);
+              break;
             case 'ContactSelect':
-              return jsonData.object.SelectItem.length > 0
+              jsonData.object.SelectItem.length > 0
                 ? setSelect(jsonData.object.SelectItem)
                 : setSelect([{ id: 0, name: '' }]);
+              break;
             case 'DepartmentSelect':
-              return jsonData.object.SelectItem.length > 0
+              jsonData.object.SelectItem.length > 0
                 ? setSelect(jsonData.object.SelectItem)
                 : setSelect([{ id: 0, name: '' }]);
+              break;
             case 'KindSelect':
-              return jsonData.object.SelectItem.length > 0
+              jsonData.object.SelectItem.length > 0
                 ? setSelect(jsonData.object.SelectItem)
                 : setSelect([{ id: 0, name: '' }]);
+              break;
             case 'PostSelect':
-              return jsonData.object.SelectItem.length > 0
+              jsonData.object.SelectItem.length > 0
                 ? setSelect(jsonData.object.SelectItem)
                 : setSelect([{ id: 0, name: '' }]);
+              break;
             case 'PostGoSelect':
-              return jsonData.object.SelectItem.length > 0
+              jsonData.object.SelectItem.length > 0
                 ? setSelect(jsonData.object.SelectItem)
                 : setSelect([{ id: 0, name: '' }]);
+              break;
             case 'RankSelect':
-              return jsonData.object.SelectItem.length > 0
+              jsonData.object.SelectItem.length > 0
                 ? setSelect(jsonData.object.SelectItem)
                 : setSelect([{ id: 0, name: '' }]);
+              break;
             case 'ScopeSelect':
-              return jsonData.object.SelectItem.length > 0
+              jsonData.object.SelectItem.length > 0
                 ? setSelect(jsonData.object.SelectItem)
                 : setSelect([{ id: 0, name: '' }]);
+              break;
             case 'SirenTypeSelect':
-              return jsonData.object.SelectItem.length > 0
+              jsonData.object.SelectItem.length > 0
                 ? setSelect(jsonData.object.SelectItem)
                 : setSelect([{ id: 0, name: '' }]);
+              break;
             default:
               throw new Error('unknown select');
           }
+        } else {
+          throw new Error('unknown select');
         }
-        throw new Error('unknown select');
       })
       .catch(() => {
         return setError('unknown select');

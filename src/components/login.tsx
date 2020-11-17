@@ -38,7 +38,7 @@ export const Login = (): JSX.Element => {
           },
         });
       })
-      .catch(() => {});
+      .catch(() => console.log('err'));
   };
 
   return (
