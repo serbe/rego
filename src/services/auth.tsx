@@ -7,6 +7,8 @@ import React, {
   useReducer,
 } from 'react';
 
+const URL = 'http://127.0.0.1:9090/api/go/login';
+
 export type User = {
   role: number;
   name: string;
@@ -50,10 +52,36 @@ interface SetAuthState {
   dispatch: Dispatch<ReducerActions>;
 }
 
+interface TJson {
+  t: string;
+  r: number;
+}
+
 const initialSetAuthState: SetAuthState = {
   dispatch: () => {
     return true;
   },
+};
+
+export const login = (name: string, pass: string): void => {
+  fetch(URL, {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ u: name, p: btoa(pass) }),
+  })
+    .then((response) => response.json())
+    .then((response) => response as TJson)
+    .then((jsonData) => {
+      setStorage({ role: jsonData.r, name, token: jsonData.t });
+    })
+    .catch(() => console.log('err'));
+};
+
+export const logout = (): void => {
+  clearStorage();
 };
 
 export const AuthContext = createContext(initialAuthState);
@@ -64,34 +92,32 @@ interface AuthProviderProperties {
   children: ReactNode;
 }
 
-export const getStorage = (): {
-  role: number;
-  name: string;
-  token: string;
-} => {
-  return {
-    role: Number(localStorage.getItem('r')) || 0,
-    name: localStorage.getItem('u') || '',
-    token: localStorage.getItem('t') || '',
-  };
+export const getStorage = (): User => {
+  const userStorage: string | null = localStorage.getItem('user');
+  const user: User = { role: 0, name: '', token: '' };
+  if (userStorage) {
+    const u: User | undefined = JSON.parse(userStorage);
+    if (u) {
+      user.name = u.name;
+      user.role = u.role;
+      user.token = u.token;
+    }
+  }
+  return user;
 };
 
-const setStorage = (role: number, name: string, token: string): void => {
-  localStorage.setItem('r', String(role));
-  localStorage.setItem('u', name);
-  localStorage.setItem('t', token);
+const setStorage = (user: User): void => {
+  localStorage.setItem('user', JSON.stringify(user));
 };
 
 const clearStorage = (): void => {
-  localStorage.setItem('u', '');
-  localStorage.setItem('t', '');
-  localStorage.setItem('r', '0');
+  localStorage.removeItem('user');
 };
 
 export const reducer = (authState: AuthState, action: ReducerActions): AuthState => {
   switch (action.type) {
     case 'SetAuth': {
-      setStorage(action.data.role, action.data.name, action.data.token);
+      setStorage({ role: action.data.role, name: action.data.name, token: action.data.token });
       return {
         role: action.data.role,
         name: action.data.name,
@@ -125,11 +151,11 @@ export const reducer = (authState: AuthState, action: ReducerActions): AuthState
 export const AuthProvider = (properties: AuthProviderProperties): ReactElement => {
   const { children } = properties;
 
-  const storage = getStorage();
+  const user = getStorage();
   const initState: AuthState = {
-    role: storage.role,
-    name: storage.name,
-    token: storage.token,
+    role: user.role,
+    name: user.name,
+    token: user.token,
     login: false,
     checked: false,
   };
