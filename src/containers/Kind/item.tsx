@@ -25,12 +25,12 @@ export const KindItem = (): JSX.Element => {
       note,
     };
 
-    SetItem(NumberID, 'Kind', kind, setStatus, auth.token);
+    SetItem(NumberID, 'Kind', kind, setStatus, auth.user.token);
   };
 
   const del = (): void => {
     const NumberID = Number(id);
-    DelItem(NumberID, 'Kind', setStatus, auth.token);
+    DelItem(NumberID, 'Kind', setStatus, auth.user.token);
   };
 
   useEffect(() => {

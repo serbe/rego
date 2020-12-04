@@ -25,12 +25,12 @@ export const SirenTypeItem = (): JSX.Element => {
       note,
     };
 
-    SetItem(NumberID, 'SirenType', sirenType, setStatus, auth.token);
+    SetItem(NumberID, 'SirenType', sirenType, setStatus, auth.user.token);
   };
 
   const del = (): void => {
     const NumberID = Number(id);
-    DelItem(NumberID, 'SirenType', setStatus, auth.token);
+    DelItem(NumberID, 'SirenType', setStatus, auth.user.token);
   };
 
   useEffect(() => {

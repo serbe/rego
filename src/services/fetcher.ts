@@ -14,7 +14,7 @@ import { Siren, SirenEmpty, SirenList } from '../models/siren';
 import { SirenType, SirenTypeEmpty, SirenTypeList } from '../models/sirentype';
 import { useAuthState } from './auth';
 
-const URL = 'http://127.0.0.1:9090/api/go/json';
+const URL = 'http://127.0.0.1:9090/go/json';
 
 export type SelectItem = {
   id: number;
@@ -164,7 +164,7 @@ export const GetItem = (name: string, id: string): Item => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: `{"command":{"Get":{"Item":{"name":"${name}","id":${NumberID}}}},"addon":"${auth.token}"}`,
+        body: `{"command":{"Get":{"Item":{"name":"${name}","id":${NumberID}}}},"addon":"${auth.user.token}"}`,
       })
         .then((response) => response.json())
         .then((response) => response as JsonGetItemScheme)
@@ -258,7 +258,7 @@ export const GetItem = (name: string, id: string): Item => {
           throw new Error('unknown item');
       }
     }
-  }, [id, name, auth.token]);
+  }, [id, name, auth.user.token]);
   return data;
 };
 
@@ -273,7 +273,7 @@ export const GetList = (name: string): List[] => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: `{"command":{"Get":{"List":"${name}"}},"addon":"${auth.token}"}`,
+      body: `{"command":{"Get":{"List":"${name}"}},"addon":"${auth.user.token}"}`,
     })
       .then((response) => response.json())
       .then((response) => response as JsonListScheme)
@@ -331,7 +331,7 @@ export const GetList = (name: string): List[] => {
       .catch(() => {
         console.log('err');
       });
-  }, [name, auth.token]);
+  }, [name, auth.user.token]);
 
   return list;
 };
@@ -348,7 +348,7 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: `{"command":{"Get":{"List":"${name}"}},"addon":"${auth.token}"}`,
+      body: `{"command":{"Get":{"List":"${name}"}},"addon":"${auth.user.token}"}`,
     })
       .then((response) => response.json())
       .then((response) => response as JsonListScheme)
@@ -410,7 +410,7 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
       .catch(() => {
         return setError('unknown select');
       });
-  }, [name, auth.token]);
+  }, [name, auth.user.token]);
 
   return [list, error];
 };

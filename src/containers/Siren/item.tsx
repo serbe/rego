@@ -63,12 +63,12 @@ export const SirenItem = (): JSX.Element => {
       note,
     };
 
-    SetItem(NumberID, 'Siren', siren, setStatus, auth.token);
+    SetItem(NumberID, 'Siren', siren, setStatus, auth.user.token);
   };
 
   const del = (): void => {
     const NumberID = Number(id);
-    DelItem(NumberID, 'Siren', setStatus, auth.token);
+    DelItem(NumberID, 'Siren', setStatus, auth.user.token);
   };
 
   useEffect(() => {

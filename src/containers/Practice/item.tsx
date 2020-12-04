@@ -31,12 +31,12 @@ export const PracticeItem = (): JSX.Element => {
       note,
     };
 
-    SetItem(NumberID, 'Practice', practice, setStatus, auth.token);
+    SetItem(NumberID, 'Practice', practice, setStatus, auth.user.token);
   };
 
   const del = (): void => {
     const NumberID = Number(id);
-    DelItem(NumberID, 'Practice', setStatus, auth.token);
+    DelItem(NumberID, 'Practice', setStatus, auth.user.token);
   };
 
   useEffect(() => {

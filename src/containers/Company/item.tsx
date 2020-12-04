@@ -52,12 +52,12 @@ export const CompanyItem = (): JSX.Element => {
       faxes: filterArrayNumber(faxes),
     };
 
-    SetItem(NumberID, 'Company', company, setStatus, auth.token);
+    SetItem(NumberID, 'Company', company, setStatus, auth.user.token);
   };
 
   const del = (): void => {
     const NumberID = Number(id);
-    DelItem(NumberID, 'Company', setStatus, auth.token);
+    DelItem(NumberID, 'Company', setStatus, auth.user.token);
   };
 
   useEffect(() => {

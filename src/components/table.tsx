@@ -183,7 +183,7 @@ export const Bar = (properties: BarProperties): JSX.Element => {
   const history = useHistory();
 
   const CreateButton = () =>
-    auth.role > 2 ? (
+    auth.user.role > 2 ? (
       <div className="control mb-4" key="TableNewItem">
         <Button onClick={() => history.push(`/${properties.name}/0`)}>Создать</Button>
       </div>

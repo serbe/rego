@@ -25,12 +25,12 @@ export const PostItem = (): JSX.Element => {
       note,
     };
 
-    SetItem(NumberID, 'Post', post, setStatus, auth.token);
+    SetItem(NumberID, 'Post', post, setStatus, auth.user.token);
   };
 
   const del = (): void => {
     const NumberID = Number(id);
-    DelItem(NumberID, 'Post', setStatus, auth.token);
+    DelItem(NumberID, 'Post', setStatus, auth.user.token);
   };
 
   useEffect(() => {

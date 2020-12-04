@@ -91,7 +91,7 @@ const NavbarEnd = (): JSX.Element => {
     <div className="navbar-end" key="navbar-end">
       <div className="navbar-item has-dropdown is-hoverable">
         <a href="#user" className="navbar-link">
-          {auth.name}
+          {auth.user.name}
         </a>
         <div className="navbar-dropdown is-right">
           <div className="navbar-item">
@@ -139,7 +139,7 @@ export const NavBar = (): JSX.Element => {
   const { auth } = useAuthState();
   const [open, setOpen] = useState(false);
 
-  return auth.role > 0 ? (
+  return auth.user.role > 0 ? (
     <nav className="navbar is-dark" role="navigation" aria-label="dropdown navigation">
       <div className="navbar-brand">
         <BrandBar open={open} setter={setOpen} />

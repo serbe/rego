@@ -35,12 +35,12 @@ export const CertificateItem = (): JSX.Element => {
       note,
     };
 
-    SetItem(NumberID, 'Certificate', certificate, setStatus, auth.token);
+    SetItem(NumberID, 'Certificate', certificate, setStatus, auth.user.token);
   };
 
   const del = (): void => {
     const NumberID = Number(id);
-    DelItem(NumberID, 'Certificate', setStatus, auth.token);
+    DelItem(NumberID, 'Certificate', setStatus, auth.user.token);
   };
 
   useEffect(() => {

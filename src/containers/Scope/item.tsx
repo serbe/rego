@@ -23,12 +23,12 @@ export const ScopeItem = (): JSX.Element => {
       note,
     };
 
-    SetItem(NumberID, 'Scope', scope, setStatus, auth.token);
+    SetItem(NumberID, 'Scope', scope, setStatus, auth.user.token);
   };
 
   const del = (): void => {
     const NumberID = Number(id);
-    DelItem(NumberID, 'Scope', setStatus, auth.token);
+    DelItem(NumberID, 'Scope', setStatus, auth.user.token);
   };
 
   useEffect(() => {

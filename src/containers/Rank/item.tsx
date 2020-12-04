@@ -23,12 +23,12 @@ export const RankItem = (): JSX.Element => {
       note,
     };
 
-    SetItem(NumberID, 'Rank', rank, setStatus, auth.token);
+    SetItem(NumberID, 'Rank', rank, setStatus, auth.user.token);
   };
 
   const del = (): void => {
     const NumberID = Number(id);
-    DelItem(NumberID, 'Rank', setStatus, auth.token);
+    DelItem(NumberID, 'Rank', setStatus, auth.user.token);
   };
 
   useEffect(() => {

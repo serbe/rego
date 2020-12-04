@@ -23,12 +23,12 @@ export const DepartmentItem = (): JSX.Element => {
       note,
     };
 
-    SetItem(NumberID, 'Department', department, setStatus, auth.token);
+    SetItem(NumberID, 'Department', department, setStatus, auth.user.token);
   };
 
   const del = (): void => {
     const NumberID = Number(id);
-    DelItem(NumberID, 'Department', setStatus, auth.token);
+    DelItem(NumberID, 'Department', setStatus, auth.user.token);
   };
 
   useEffect(() => {

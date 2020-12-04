@@ -30,10 +30,12 @@ export const Login = (): JSX.Element => {
         setAuth({
           type: 'SetAuth',
           data: {
+            user: {
+              role: jsonData.r,
+              name,
+              token: jsonData.t,
+            },
             checked: true,
-            name,
-            role: jsonData.r,
-            token: jsonData.t,
             login: true,
           },
         });

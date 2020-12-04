@@ -7,7 +7,8 @@ import React, {
   useReducer,
 } from 'react';
 
-const URL = 'http://127.0.0.1:9090/api/go/login';
+const loginURL = 'http://127.0.0.1:9090/go/login';
+const checkURL = 'http://127.0.0.1:9090/go/login';
 
 export type User = {
   role: number;
@@ -16,9 +17,7 @@ export type User = {
 };
 
 export type AuthState = {
-  role: number;
-  name: string;
-  token: string;
+  user: User;
   login: boolean;
   checked: boolean;
 };
@@ -28,9 +27,7 @@ export interface CJson {
 }
 
 const initialAuthState: AuthState = {
-  role: 0,
-  name: '',
-  token: '',
+  user: { role: 0, name: '', token: '' },
   login: false,
   checked: false,
 };
@@ -64,7 +61,7 @@ const initialSetAuthState: SetAuthState = {
 };
 
 export const login = (name: string, pass: string): void => {
-  fetch(URL, {
+  fetch(loginURL, {
     method: 'POST',
     mode: 'cors',
     headers: {
@@ -76,6 +73,24 @@ export const login = (name: string, pass: string): void => {
     .then((response) => response as TJson)
     .then((jsonData) => {
       setStorage({ role: jsonData.r, name, token: jsonData.t });
+    })
+    .catch(() => console.log('err'));
+};
+
+export const check = (token: string, role: string): void => {
+  fetch(checkURL, {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ t: token, r: role }),
+  })
+    .then((response) => response.json())
+    .then((response) => response as CJson)
+    .then((jsonData) => {
+      console.log(jsonData);
+      // setStorage({ role: jsonData.r, name, token: jsonData.t });
     })
     .catch(() => console.log('err'));
 };
@@ -117,11 +132,9 @@ const clearStorage = (): void => {
 export const reducer = (authState: AuthState, action: ReducerActions): AuthState => {
   switch (action.type) {
     case 'SetAuth': {
-      setStorage({ role: action.data.role, name: action.data.name, token: action.data.token });
+      setStorage(action.data.user);
       return {
-        role: action.data.role,
-        name: action.data.name,
-        token: action.data.token,
+        user: action.data.user,
         login: action.data.login,
         checked: action.data.checked,
       };
@@ -129,9 +142,7 @@ export const reducer = (authState: AuthState, action: ReducerActions): AuthState
     case 'ClearAuth': {
       clearStorage();
       return {
-        role: 0,
-        name: '',
-        token: '',
+        user: { role: 0, name: '', token: '' },
         login: false,
         checked: true,
       };
@@ -153,9 +164,7 @@ export const AuthProvider = (properties: AuthProviderProperties): ReactElement =
 
   const user = getStorage();
   const initState: AuthState = {
-    role: user.role,
-    name: user.name,
-    token: user.token,
+    user,
     login: false,
     checked: false,
   };

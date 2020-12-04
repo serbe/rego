@@ -35,12 +35,12 @@ export const EducationItem = (): JSX.Element => {
       note,
     };
 
-    SetItem(NumberID, 'Education', education, setStatus, auth.token);
+    SetItem(NumberID, 'Education', education, setStatus, auth.user.token);
   };
 
   const del = (): void => {
     const NumberID = Number(id);
-    DelItem(NumberID, 'Education', setStatus, auth.token);
+    DelItem(NumberID, 'Education', setStatus, auth.user.token);
   };
 
   useEffect(() => {

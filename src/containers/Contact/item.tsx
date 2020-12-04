@@ -64,12 +64,12 @@ export const ContactItem = (): JSX.Element => {
       faxes: filterArrayNumber(faxes),
     };
 
-    SetItem(NumberID, 'Contact', contact, setStatus, auth.token);
+    SetItem(NumberID, 'Contact', contact, setStatus, auth.user.token);
   };
 
   const del = (): void => {
     const NumberID = Number(id);
-    DelItem(NumberID, 'Contact', setStatus, auth.token);
+    DelItem(NumberID, 'Contact', setStatus, auth.user.token);
   };
 
   useEffect(() => {

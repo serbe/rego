@@ -142,7 +142,7 @@ export const ItemFormButtons = (properties: FormButtonsValues): JSX.Element => {
   const { send, del } = properties;
 
   const SaveButton = () =>
-    auth.role > 4 ? (
+    auth.user.role > 4 ? (
       <div className="control">
         <button type="button" className="button is-info" onClick={() => send()}>
           Сохранить
@@ -161,7 +161,7 @@ export const ItemFormButtons = (properties: FormButtonsValues): JSX.Element => {
   );
 
   const DeleteButton = () =>
-    auth.role > 8 ? (
+    auth.user.role > 8 ? (
       <div className="control mla">
         <button
           type="button"
