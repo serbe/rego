@@ -2,7 +2,6 @@ import './index.scss';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
 
 import Rego from './rego';
 import reportWebVitals from './reportWebVitals';
@@ -14,11 +13,9 @@ const rootNode = document.getElementById('root');
 
 const App = () => (
   <React.StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <Rego />
-      </AuthProvider>
-    </BrowserRouter>
+    <AuthProvider>
+      <Rego />
+    </AuthProvider>
   </React.StrictMode>
 );
 

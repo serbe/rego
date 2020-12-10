@@ -3,6 +3,7 @@ import React, {
   Dispatch,
   ReactElement,
   ReactNode,
+  SetStateAction,
   useContext,
   useReducer,
 } from 'react';
@@ -43,6 +44,12 @@ export type ReducerActions =
   | {
       type: 'SetLogin';
       data: boolean;
+    }
+  | {
+      type: 'Checked';
+    }
+  | {
+      type: 'Unchecked';
     };
 
 interface SetAuthState {
@@ -89,8 +96,7 @@ export const check = (token: string, role: string): void => {
     .then((response) => response.json())
     .then((response) => response as CJson)
     .then((jsonData) => {
-      console.log(jsonData);
-      // setStorage({ role: jsonData.r, name, token: jsonData.t });
+      return jsonData.r;
     })
     .catch(() => console.log('err'));
 };
@@ -154,6 +160,18 @@ export const reducer = (authState: AuthState, action: ReducerActions): AuthState
         checked: true,
       };
     }
+    case 'Checked': {
+      return {
+        ...authState,
+        checked: true,
+      };
+    }
+    case 'Unchecked': {
+      return {
+        ...authState,
+        checked: false,
+      };
+    }
     default:
       return authState;
   }
@@ -199,41 +217,32 @@ export const useAuthState = (): AuthContextProperties => {
   return { auth, setAuth: setter.dispatch };
 };
 
-// export const CheckStorage = (): void => {
-//   const { name, token, role } = getStorage();
-//   const { setAuth } = useAuthState();
+export const checkStorage = (
+  setChecker: Dispatch<SetStateAction<boolean>>,
+  setLogin: Dispatch<SetStateAction<boolean>>,
+): void => {
+  const user = getStorage();
 
-//   useEffect(() => {
-//     fetch('/api/go/check', {
-//       method: 'POST',
-//       mode: 'cors',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: `{ "t": "${token}", "r": ${role} })`,
-//     })
-//       .then((response) => response.json())
-//       .then((response) => response as CJson)
-//       .then((jsonData) => {
-//         if (jsonData.r) {
-//           setAuth({
-//             type: 'SetAuth',
-//             data: {
-//               role,
-//               name,
-//               token,
-//               login: true,
-//               checked: true,
-//             },
-//           });
-//         } else {
-//           setAuth({
-//             type: 'ClearAuth',
-//           });
-//         }
-//       })
-//       .catch((err) => {
-//         console.log('error', err);
-//       });
-//   }, [role, token]);
-// };
+  fetch('/api/go/check', {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: `{ "t": "${user.token}", "r": ${user.role} })`,
+  })
+    .then((response) => response.json())
+    .then((response) => response as CJson)
+    .then((jsonData) => {
+      if (jsonData.r) {
+        setLogin(true);
+        setChecker(true);
+      } else {
+        setLogin(false);
+        setChecker(true);
+      }
+    })
+    .catch((err) => {
+      console.log('error', err);
+    });
+};

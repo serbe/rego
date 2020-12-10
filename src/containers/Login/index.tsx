@@ -1,14 +1,14 @@
 import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
 
-import { useAuthState } from '../services/auth';
-import { FormField } from './formfield';
+import { FormField } from '../../components/formfield';
+import { useAuthState } from '../../services/auth';
 
 interface TJson {
   t: string;
   r: number;
 }
 
-const URL = '/api/go/login';
+const URL = 'http://127.0.0.1:9090/go/login';
 
 export const Login = (): JSX.Element => {
   const { setAuth } = useAuthState();
