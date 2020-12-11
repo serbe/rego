@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 
 const loginURL = 'http://127.0.0.1:9090/go/login';
-const checkURL = 'http://127.0.0.1:9090/go/login';
+const checkURL = 'http://127.0.0.1:9090/go/check';
 
 export type User = {
   role: number;
@@ -223,13 +223,13 @@ export const checkStorage = (
 ): void => {
   const user = getStorage();
 
-  fetch('/api/go/check', {
+  fetch(checkURL, {
     method: 'POST',
     mode: 'cors',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: `{ "t": "${user.token}", "r": ${user.role} })`,
+    body: `{ "t": "${user.token}", "r": ${user.role} }`,
   })
     .then((response) => response.json())
     .then((response) => response as CJson)

@@ -95,7 +95,7 @@ export const Home = (): JSX.Element => {
   const practices = GetList('PracticeNear');
 
   return (
-    <div className="columns is-mobile">
+    <div className="columns">
       <div className="column is-4">{EducationTable(educations as EducationShort[])}</div>
       <div className="column is-4 is-offset-4">{PracticeTable(practices as PracticeShort[])}</div>
     </div>
