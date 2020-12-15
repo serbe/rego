@@ -20,7 +20,7 @@ export type User = {
 export type AuthState = {
   user: User;
   login: boolean;
-  checked: boolean;
+  check: boolean;
 };
 
 export interface CJson {
@@ -30,7 +30,7 @@ export interface CJson {
 const initialAuthState: AuthState = {
   user: { role: 0, name: '', token: '' },
   login: false,
-  checked: false,
+  check: false,
 };
 
 export type ReducerActions =
@@ -80,8 +80,7 @@ export const login = (name: string, pass: string): void => {
     .then((response) => response as TJson)
     .then((jsonData) => {
       setStorage({ role: jsonData.r, name, token: jsonData.t });
-    })
-    .catch(() => console.log('err'));
+    });
 };
 
 export const check = (token: string, role: string): void => {
@@ -97,8 +96,7 @@ export const check = (token: string, role: string): void => {
     .then((response) => response as CJson)
     .then((jsonData) => {
       return jsonData.r;
-    })
-    .catch(() => console.log('err'));
+    });
 };
 
 export const logout = (): void => {
@@ -142,7 +140,7 @@ export const reducer = (authState: AuthState, action: ReducerActions): AuthState
       return {
         user: action.data.user,
         login: action.data.login,
-        checked: action.data.checked,
+        check: action.data.check,
       };
     }
     case 'ClearAuth': {
@@ -150,26 +148,26 @@ export const reducer = (authState: AuthState, action: ReducerActions): AuthState
       return {
         user: { role: 0, name: '', token: '' },
         login: false,
-        checked: true,
+        check: true,
       };
     }
     case 'SetLogin': {
       return {
         ...authState,
         login: action.data,
-        checked: true,
+        check: true,
       };
     }
     case 'Checked': {
       return {
         ...authState,
-        checked: true,
+        check: true,
       };
     }
     case 'Unchecked': {
       return {
         ...authState,
-        checked: false,
+        check: false,
       };
     }
     default:
@@ -184,7 +182,7 @@ export const AuthProvider = (properties: AuthProviderProperties): ReactElement =
   const initState: AuthState = {
     user,
     login: false,
-    checked: false,
+    check: false,
   };
 
   const [state, dispatch] = useReducer(reducer, initState);
@@ -241,8 +239,5 @@ export const checkStorage = (
         setLogin(false);
         setChecker(true);
       }
-    })
-    .catch((err) => {
-      console.log('error', err);
     });
 };

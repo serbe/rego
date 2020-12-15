@@ -30,7 +30,7 @@ export const Posts = (): JSX.Element => {
         >
           <td>{post.name}</td>
           <td className="w9">
-            <input type="checkbox" checked={post.go} />
+            <input type="checkbox" checked={post.go} readOnly />
           </td>
         </tr>
       ))}

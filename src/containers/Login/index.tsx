@@ -35,12 +35,11 @@ export const Login = (): JSX.Element => {
               name,
               token: jsonData.t,
             },
-            checked: true,
+            check: true,
             login: true,
           },
         });
-      })
-      .catch(() => console.log('err'));
+      });
   };
 
   return (

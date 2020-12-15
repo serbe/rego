@@ -212,9 +212,6 @@ export const GetItem = (name: string, id: string): Item => {
             }
           }
           throw new Error('unknown item');
-        })
-        .catch(() => {
-          console.log('err');
         });
     } else {
       switch (name) {
@@ -322,14 +319,8 @@ export const GetList = (name: string): List[] => {
             case 'SirenTypeList':
               setList(jsonData.object.SirenTypeList);
               break;
-            default:
-              throw new Error('unknown list');
           }
         }
-        throw new Error('unknown list');
-      })
-      .catch(() => {
-        console.log('err');
       });
   }, [name, auth.user.token]);
 
