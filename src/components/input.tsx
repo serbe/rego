@@ -18,6 +18,7 @@ export interface BooleanInputProperties {
 }
 
 interface InputProperties {
+  autocomplete?: string;
   className?: string;
   classNameDiv?: string;
   disabled?: boolean;
@@ -36,6 +37,7 @@ interface InputProperties {
 
 export const Input = (properties: InputProperties): JSX.Element => {
   const {
+    autocomplete,
     className,
     classNameDiv,
     disabled,
@@ -59,6 +61,7 @@ export const Input = (properties: InputProperties): JSX.Element => {
   return (
     <div className={divClasses}>
       <input
+        autoComplete={autocomplete}
         className={`${className || ''} input`}
         defaultValue={value}
         disabled={disabled}

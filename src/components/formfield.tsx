@@ -3,6 +3,7 @@ import React, { ChangeEvent, KeyboardEvent, MouseEvent } from 'react';
 import { Input } from './input';
 
 export interface FormFieldProperties {
+  autocomplete?: string;
   className?: string;
   disabled?: boolean;
   icon?: string;
@@ -21,6 +22,7 @@ export interface FormFieldProperties {
 
 export const FormField = (properties: FormFieldProperties): JSX.Element => {
   const {
+    autocomplete,
     className,
     disabled,
     icon,
@@ -44,6 +46,7 @@ export const FormField = (properties: FormFieldProperties): JSX.Element => {
         </label>
       )}
       <Input
+        autocomplete={autocomplete}
         className={className}
         disabled={disabled}
         icon={icon}
