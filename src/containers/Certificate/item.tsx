@@ -1,59 +1,68 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { URL } from '../../helpers/utils';
+
 import {
+  Certificate,
   CertificateDateInput,
-  CertificateJsonScheme,
   CertificateNumberInput,
 } from '../../models/certificate';
 import { CompanyIDSelect } from '../../models/company';
 import { ContactIDSelect } from '../../models/contact';
-import { NoteInput, ParameterTypes } from '../../models/impersonal';
+import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
+import { useAuthState } from '../../services/auth';
+import { DelItem, GetItem, SetItem } from '../../services/fetcher';
 
 export const CertificateItem = (): JSX.Element => {
+  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState('');
-  const [sNumber, setSNumber] = useState('');
-  const [contactID, setContactID] = useState(0);
-  const [companyID, setCompanyID] = useState(0);
-  const [certDate, setCertDate] = useState('');
-  const [note, setNote] = useState('');
+  const [sNumber, setSNumber] = useState<string>();
+  const [contactID, setContactID] = useState<number>();
+  const [companyID, setCompanyID] = useState<number>();
+  const [certDate, setCertDate] = useState<string>();
+  const [note, setNote] = useState<string>();
+  const item = GetItem('Certificate', id);
+  const [status, setStatus] = useState(false);
+
+  const send = (): void => {
+    const NumberID = Number(id);
+    const certificate: Certificate = {
+      id: NumberID,
+      num: sNumber,
+      contact_id: contactID,
+      company_id: companyID,
+      cert_date: certDate,
+      note,
+    };
+
+    SetItem(NumberID, 'Certificate', certificate, setStatus, auth.user.token);
+  };
+
+  const del = (): void => {
+    const NumberID = Number(id);
+    DelItem(NumberID, 'Certificate', setStatus, auth.user.token);
+  };
 
   useEffect(() => {
-    if (id !== '0') {
-      const ws = new WebSocket(URL);
-
-      ws.addEventListener('message', (message: MessageEvent) => {
-        const data = JSON.parse(message.data) as CertificateJsonScheme;
-        if (data?.name === 'Certificate' && data.object.Certificate) {
-          const c = data.object.Certificate;
-          setSNumber(c.num || '');
-          setContactID(c.contact_id || 0);
-          setCompanyID(c.company_id || 0);
-          setCertDate(c.cert_date || '');
-          setNote(c.note || '');
-          setLoaded(true);
-        }
-        if (data.error) {
-          setError(data.error);
-        }
-      });
-
-      ws.addEventListener('open', () => {
-        ws.send(`{"Get":{"Item":{"id": ${id}, "name": "Certificate"}}}`);
-      });
-
-      return (): void => {
-        ws.close();
-      };
+    if (item) {
+      const data = item as Certificate;
+      setSNumber(data.num);
+      setContactID(data.contact_id);
+      setCompanyID(data.company_id);
+      setCertDate(data.cert_date);
+      setNote(data.note);
     }
-  }, [id]);
+  }, [item]);
+
+  useEffect(() => {
+    if (status) {
+      history.go(-1);
+    }
+  }, [history, status]);
 
   return (
     <div>
-      {loaded && !error && (
+      {item && (
         <>
           <CertificateNumberInput value={sNumber} setter={setSNumber} />
           <ContactIDSelect id={contactID} setter={setContactID} />
@@ -61,16 +70,7 @@ export const CertificateItem = (): JSX.Element => {
           <CertificateDateInput value={certDate} setter={setCertDate} />
           <NoteInput value={note} setter={setNote} />
 
-          <div className="field is-grouped">
-            <div className="control">
-              <button className="button">Сохранить</button>
-            </div>
-            <div className="control">
-              <button className="button" onClick={() => history.go(-1)}>
-                Закрыть
-              </button>
-            </div>
-          </div>
+          <ItemFormButtons send={send} del={del} />
         </>
       )}
     </div>

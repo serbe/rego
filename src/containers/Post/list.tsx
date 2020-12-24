@@ -1,76 +1,50 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { List, Search } from '../../components/table';
-import { URL } from '../../helpers/utils';
-import { PostList, PostListJsonScheme } from '../../models/post';
+
+import { Bar, Data } from '../../components/table';
+import { PostList } from '../../models/post';
+import { GetList } from '../../services/fetcher';
 
 export const Posts = (): JSX.Element => {
   const history = useHistory();
-  const [data, setData] = useState<PostList[]>([]);
+  const data = GetList('PostList');
   const [search, setSearch] = useState('');
-  const [error, setError] = useState<string>();
 
-  const [paginationData, Paginate] = List({
-    data: data,
-    search: search,
+  const [paginationData, Paginate] = Data({
+    data,
+    search,
   });
 
   const tableData = (): PostList[] => {
     return paginationData();
   };
 
-  useEffect(() => {
-    const ws = new WebSocket(URL);
-
-    ws.addEventListener('message', (message: MessageEvent) => {
-      const data = JSON.parse(message.data) as PostListJsonScheme;
-      if (data.name && data.name === 'PostList' && data.object.PostList) {
-        setData(data.object.PostList);
-      }
-      if (data.error) {
-        setError(data.error);
-      }
-    });
-
-    ws.addEventListener('open', () => {
-      ws.send('{"Get":{"List":"PostList"}}');
-    });
-
-    return (): void => {
-      ws.close();
-    };
-  }, []);
-
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((post, index) => (
+      {tableData().map((post) => (
         <tr
-          key={`tr${post.id}${index}`}
+          key={`tr${post.id}`}
           onClick={(): void => history.push(`/posts/${post.id}`)}
           role="gridcell"
           className="link"
         >
           <td>{post.name}</td>
           <td className="w9">
-            <input type="checkbox" checked={post.go} />
+            <input type="checkbox" checked={post.go} readOnly />
           </td>
-          <td className="is-hidden-mobile">{post.note}</td>
         </tr>
       ))}
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
-      <Search value={search} setter={setSearch} />
-      <table className="table is-narrow">
+      <Bar value={search} setter={setSearch} name="posts" />
+      <table className="table is-narrow is-fullwidth">
         <tbody>
           <tr>
             <th>Наименование должности</th>
             <th className="w9">ГО</th>
-            <th className="is-hidden-mobile">Заметка</th>
           </tr>
           <Body />
         </tbody>

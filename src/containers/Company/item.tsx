@@ -1,71 +1,89 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { addEmptyString, numberToString, URL } from '../../helpers/utils';
-import { CompanyJsonScheme, CompanyNameInput } from '../../models/company';
+
+import { Company, CompanyNameInput } from '../../models/company';
 import { ContactShort, ContactShortForm } from '../../models/contact';
 import {
   AddressInput,
   EmailInputs,
   FaxInputs,
+  ItemFormButtons,
   NoteInput,
   ParameterTypes,
   PhoneInputs,
 } from '../../models/impersonal';
 import { PracticeList, PracticeListForm } from '../../models/practice';
 import { ScopeIDSelect } from '../../models/scope';
+import { useAuthState } from '../../services/auth';
+import { DelItem, GetItem, SetItem } from '../../services/fetcher';
+import {
+  addEmptyString,
+  filterArrayNumber,
+  filterArrayString,
+  numberToString,
+} from '../../services/utils';
 
 export const CompanyItem = (): JSX.Element => {
+  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState('');
-  const [name, setName] = useState('');
-  const [scopeID, setScopeID] = useState(0);
-  const [address, setAddress] = useState('');
+  const [name, setName] = useState<string>();
+  const [address, setAddress] = useState<string>();
+  const [scopeID, setScopeID] = useState<number>();
+  const [note, setNote] = useState<string>();
   const [emails, setEmails] = useState(['']);
   const [phones, setPhones] = useState(['']);
   const [faxes, setFaxes] = useState(['']);
   const [practices, setPractices] = useState<PracticeList[]>([]);
   const [contacts, setContacts] = useState<ContactShort[]>([]);
-  const [note, setNote] = useState('');
+  const item = GetItem('Company', id);
+  const [status, setStatus] = useState(false);
+
+  const send = (): void => {
+    const NumberID = Number(id);
+    const company: Company = {
+      id: NumberID,
+      name,
+      address,
+      scope_id: scopeID,
+      note,
+      emails: filterArrayString(emails),
+      phones: filterArrayNumber(phones),
+      faxes: filterArrayNumber(faxes),
+    };
+
+    SetItem(NumberID, 'Company', company, setStatus, auth.user.token);
+  };
+
+  const del = (): void => {
+    const NumberID = Number(id);
+    DelItem(NumberID, 'Company', setStatus, auth.user.token);
+  };
 
   useEffect(() => {
-    if (id !== '0') {
-      const ws = new WebSocket(URL);
-
-      ws.addEventListener('message', (message: MessageEvent) => {
-        const data = JSON.parse(message.data) as CompanyJsonScheme;
-        if (data?.name === 'Company' && data.object.Company) {
-          const c = data.object.Company;
-          setName(c.name || '');
-          setScopeID(c.scope_id || 0);
-          setAddress(c.address || '');
-          setEmails(addEmptyString(c.emails));
-          setPhones(addEmptyString(numberToString(c.phones)));
-          setFaxes(addEmptyString(numberToString(c.faxes)));
-          setPractices(c.practices || []);
-          setContacts(c.contacts || []);
-          setNote(c.note || '');
-          setLoaded(true);
-        }
-        if (data.error) {
-          setError(data.error);
-        }
-      });
-
-      ws.addEventListener('open', () => {
-        ws.send(`{"Get":{"Item":{"id": ${id}, "name": "Company"}}}`);
-      });
-
-      return (): void => {
-        ws.close();
-      };
+    if (item) {
+      const data = item as Company;
+      setName(data.name);
+      setAddress(data.address);
+      setScopeID(data.scope_id);
+      setNote(data.note);
+      setEmails(addEmptyString(data.emails));
+      setPhones(addEmptyString(numberToString(data.phones)));
+      setFaxes(addEmptyString(numberToString(data.faxes)));
+      setPractices(data.practices || []);
+      setContacts(data.contacts || []);
     }
-  }, [id]);
+  }, [item]);
+
+  useEffect(() => {
+    if (status) {
+      history.go(-1);
+    }
+  }, [history, status]);
 
   return (
     <div>
-      {loaded && !error && (
+      {item && (
         <>
           <CompanyNameInput value={name} setter={setName} />
           <ScopeIDSelect id={scopeID} setter={setScopeID} />
@@ -84,21 +102,10 @@ export const CompanyItem = (): JSX.Element => {
           </div>
 
           <PracticeListForm practices={practices} />
-
           <ContactShortForm contacts={contacts} />
-
           <NoteInput value={note} setter={setNote} />
 
-          <div className="field is-grouped">
-            <div className="control">
-              <button className="button">Сохранить</button>
-            </div>
-            <div className="control">
-              <button className="button" onClick={() => history.go(-1)}>
-                Закрыть
-              </button>
-            </div>
-          </div>
+          <ItemFormButtons send={send} del={del} />
         </>
       )}
     </div>

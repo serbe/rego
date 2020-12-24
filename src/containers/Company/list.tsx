@@ -1,49 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { List, Search } from '../../components/table';
-import { splitNumbers, splitStrings, URL } from '../../helpers/utils';
-import { CompanyList, CompanyListJsonScheme } from '../../models/company';
+
+import { Bar, Data } from '../../components/table';
+import { CompanyList } from '../../models/company';
+import { GetList } from '../../services/fetcher';
+import { splitNumbers, splitStrings } from '../../services/utils';
+
 export const Companies = (): JSX.Element => {
   const history = useHistory();
-  const [data, setData] = useState<CompanyList[]>([]);
+  const data = GetList('CompanyList');
   const [search, setSearch] = useState('');
-  const [error, setError] = useState<string>();
 
-  const [paginationData, Paginate] = List({
-    data: data,
-    search: search,
+  const [paginationData, Paginate] = Data({
+    data,
+    search,
   });
 
   const tableData = (): CompanyList[] => {
     return paginationData();
   };
 
-  useEffect(() => {
-    const ws = new WebSocket(URL);
-
-    ws.addEventListener('message', (message: MessageEvent) => {
-      const data = JSON.parse(message.data) as CompanyListJsonScheme;
-      if (data.name && data.name === 'CompanyList' && data.object.CompanyList) {
-        setData(data.object.CompanyList);
-      }
-      if (data.error) {
-        setError(data.error);
-      }
-    });
-
-    ws.addEventListener('open', () => {
-      ws.send('{"Get":{"List":"CompanyList"}}');
-    });
-
-    return (): void => {
-      ws.close();
-    };
-  }, []);
-
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((company, index) => (
-        <tr key={`tr${company.id}${index}`}>
+      {tableData().map((company) => (
+        <tr key={`tr${company.id}`}>
           <td
             onClick={(): void => history.push(`/companies/${company.id}`)}
             role="gridcell"
@@ -63,12 +43,10 @@ export const Companies = (): JSX.Element => {
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
-      <Search value={search} setter={setSearch} />
-      <table className="table is-narrow">
+      <Bar value={search} setter={setSearch} name="companies" />
+      <table className="table is-narrow is-fullwidth">
         <tbody>
           <tr>
             <th className="w250">Наименование</th>

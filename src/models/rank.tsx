@@ -1,28 +1,17 @@
 import React, { ChangeEvent } from 'react';
+
 import { FormField } from '../components/formfield';
 import { StringInputProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
-
-export type RankJsonScheme = {
-  name: string;
-  object: {
-    Rank?: Rank;
-  };
-  error?: string;
-};
-
-export type RankListJsonScheme = {
-  name: string;
-  object: {
-    RankList?: RankList[];
-  };
-  error?: string;
-};
 
 export type Rank = {
   id: number;
   name?: string;
   note?: string;
+};
+
+export const RankEmpty: Rank = {
+  id: 0,
 };
 
 export type RankList = {
@@ -33,21 +22,23 @@ export type RankList = {
 
 export const RankIDSelect = (properties: SelectValues): JSX.Element => (
   <Select
-    name="rank"
-    label="Звание"
-    listName="RankSelect"
-    id={properties.id}
     icon="tag"
+    id={properties.id}
+    label="Чин"
+    listName="RankSelect"
+    name="rank"
     setter={properties.setter}
   />
 );
 
 export const RankNameInput = (properties: StringInputProperties): JSX.Element => (
   <FormField
-    name="name"
-    value={properties.value}
-    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
-    label="Наименование чина"
     icon="tag"
+    label="Наименование чина"
+    name="name"
+    onChange={(event: ChangeEvent<HTMLInputElement>): void =>
+      properties.setter(event.target.value === '' ? undefined : event.target.value)
+    }
+    value={properties.value}
   />
 );

@@ -1,25 +1,10 @@
 import React, { ChangeEvent } from 'react';
+
 import { FormField } from '../components/formfield';
 import { StringInputProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
 import { ContactShort } from './contact';
 import { PracticeList } from './practice';
-
-export type CompanyJsonScheme = {
-  name: string;
-  object: {
-    Company?: Company;
-  };
-  error?: string;
-};
-
-export type CompanyListJsonScheme = {
-  name: string;
-  object: {
-    CompanyList?: CompanyList[];
-  };
-  error?: string;
-};
 
 export type Company = {
   id: number;
@@ -32,6 +17,10 @@ export type Company = {
   faxes?: number[];
   practices?: PracticeList[];
   contacts?: ContactShort[];
+};
+
+export const CompanyEmpty: Company = {
+  id: 0,
 };
 
 export type CompanyList = {
@@ -60,7 +49,9 @@ export const CompanyNameInput = (properties: StringInputProperties): JSX.Element
   <FormField
     name="company-name"
     value={properties.value}
-    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void =>
+      properties.setter(event.target.value === '' ? undefined : event.target.value)
+    }
     label="Наименование организации"
     icon="building"
   />

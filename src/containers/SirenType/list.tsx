@@ -1,74 +1,48 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { List, Search } from '../../components/table';
-import { URL } from '../../helpers/utils';
-import { SirenTypeList, SirenTypeListJsonScheme } from '../../models/sirentype';
+
+import { Bar, Data } from '../../components/table';
+import { SirenTypeList } from '../../models/sirentype';
+import { GetList } from '../../services/fetcher';
 
 export const SirenTypes = (): JSX.Element => {
   const history = useHistory();
-  const [data, setData] = useState<SirenTypeList[]>([]);
+  const data = GetList('SirenTypeList');
   const [search, setSearch] = useState('');
-  const [error, setError] = useState<string>();
 
-  const [paginationData, Paginate] = List({
-    data: data,
-    search: search,
+  const [paginationData, Paginate] = Data({
+    data,
+    search,
   });
 
   const tableData = (): SirenTypeList[] => {
     return paginationData();
   };
 
-  useEffect(() => {
-    const ws = new WebSocket(URL);
-
-    ws.addEventListener('message', (message: MessageEvent) => {
-      const data = JSON.parse(message.data) as SirenTypeListJsonScheme;
-      if (data.name && data.name === 'SirenTypeList' && data.object.SirenTypeList) {
-        setData(data.object.SirenTypeList);
-      }
-      if (data.error) {
-        setError(data.error);
-      }
-    });
-
-    ws.addEventListener('open', () => {
-      ws.send('{"Get":{"List":"SirenTypeList"}}');
-    });
-
-    return (): void => {
-      ws.close();
-    };
-  }, []);
-
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((siren_type, index) => (
+      {tableData().map((siren_type) => (
         <tr
-          key={`tr${siren_type.id}${index}`}
+          key={`tr${siren_type.id}`}
           onClick={(): void => history.push(`/sirentypes/${siren_type.id}`)}
           role="gridcell"
           className="link"
         >
-          <td className="w250">{siren_type.name}</td>
-          <td className="w95">{siren_type.radius}</td>
-          <td className="w250">{siren_type.note}</td>
+          <td>{siren_type.name}</td>
+          <td>{siren_type.radius}</td>
         </tr>
       ))}
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
-      <Search value={search} setter={setSearch} />
-      <table className="table is-narrow">
+      <Bar value={search} setter={setSearch} name="sirentypes" />
+      <table className="table is-narrow is-fullwidth">
         <tbody>
           <tr>
-            <th className="w250">Тип сирены</th>
-            <th className="w95">Радиус действия</th>
-            <th className="w250">Заметка</th>
+            <th>Тип сирены</th>
+            <th>Радиус действия</th>
           </tr>
           <Body />
         </tbody>

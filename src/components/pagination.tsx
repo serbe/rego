@@ -1,19 +1,19 @@
 import React from 'react';
 
-interface PaginationProps {
+interface PaginationProperties {
   currentPage: number;
   lastPage: number;
   setter: (value: number) => void;
 }
 
-interface ItemProps {
+interface ItemProperties {
   check: boolean;
+  ellipsis?: boolean;
   index: number;
   link?: number;
-  ellipsis?: boolean;
 }
 
-export const Pagination = (properties: PaginationProps): JSX.Element => {
+export const Pagination = (properties: PaginationProperties): JSX.Element => {
   const { currentPage, lastPage, setter } = properties;
   const navClasses = `pagination is-rounded is-centered`;
 
@@ -21,14 +21,14 @@ export const Pagination = (properties: PaginationProps): JSX.Element => {
     currentPage > 1 ? (
       <a
         className="pagination-previous"
-        onClick={(): void => setter(currentPage - 1)}
-        key="PaginationPrev"
         href="#prev"
+        key="PaginationPrev"
+        onClick={(): void => setter(currentPage - 1)}
       >
         Назад
       </a>
     ) : (
-      <button className="pagination-previous" disabled>
+      <button type="button" className="pagination-previous" disabled>
         Назад
       </button>
     );
@@ -37,20 +37,20 @@ export const Pagination = (properties: PaginationProps): JSX.Element => {
     currentPage < lastPage ? (
       <a
         className="pagination-next"
-        onClick={(): void => setter(currentPage + 1)}
-        key="PaginationNext"
         href="#next"
+        key="PaginationNext"
+        onClick={(): void => setter(currentPage + 1)}
       >
         Далее
       </a>
     ) : (
-      <button className="pagination-next" disabled>
+      <button type="button" className="pagination-next" disabled>
         Далее
       </button>
     );
 
-  const Item = (properties: ItemProps): JSX.Element => {
-    const { check, index, link, ellipsis } = properties;
+  const Item = (itemProperties: ItemProperties): JSX.Element => {
+    const { check, index, link, ellipsis } = itemProperties;
 
     return check ? (
       <li key={`li${index}`}>
@@ -59,8 +59,8 @@ export const Pagination = (properties: PaginationProps): JSX.Element => {
         ) : (
           <a
             className={link === currentPage ? 'pagination-link is-current' : 'pagination-link'}
-            onClick={link === currentPage || !link ? undefined : (): void => setter(link)}
             href="#item"
+            onClick={link === currentPage || !link ? undefined : (): void => setter(link)}
           >
             {link}
           </a>

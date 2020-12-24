@@ -1,51 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { List, Search } from '../../components/table';
-import { URL } from '../../helpers/utils';
-import { PracticeList, PracticeListJsonScheme } from '../../models/practice';
+
+import { Bar, Data } from '../../components/table';
+import { PracticeList } from '../../models/practice';
+import { GetList } from '../../services/fetcher';
 
 export const Practices = (): JSX.Element => {
   const history = useHistory();
-  const [data, setData] = useState<PracticeList[]>([]);
+  const data = GetList('PracticeList');
   const [search, setSearch] = useState('');
-  const [error, setError] = useState<string>();
 
-  const [paginationData, Paginate] = List({
-    data: data,
-    search: search,
+  const [paginationData, Paginate] = Data({
+    data,
+    search,
   });
 
   const tableData = (): PracticeList[] => {
     return paginationData();
   };
 
-  useEffect(() => {
-    const ws = new WebSocket(URL);
-
-    ws.addEventListener('message', (message: MessageEvent) => {
-      const data = JSON.parse(message.data) as PracticeListJsonScheme;
-      if (data.name && data.name === 'PracticeList' && data.object.PracticeList) {
-        setData(data.object.PracticeList);
-      }
-      if (data.error) {
-        setError(data.error);
-      }
-    });
-
-    ws.addEventListener('open', () => {
-      ws.send('{"Get":{"List":"PracticeList"}}');
-    });
-
-    return (): void => {
-      ws.close();
-    };
-  }, []);
-
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((practice, index) => (
+      {tableData().map((practice) => (
         <tr
-          key={`tr${practice.id}${index}`}
+          key={`tr${practice.id}`}
           onClick={(): void => history.push(`/practices/${practice.id}`)}
           role="gridcell"
           className="link"
@@ -58,12 +36,10 @@ export const Practices = (): JSX.Element => {
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
-      <Search value={search} setter={setSearch} />
-      <table className="table is-narrow">
+      <Bar value={search} setter={setSearch} name="practices" />
+      <table className="table is-narrow is-fullwidth">
         <tbody>
           <tr>
             <th className="nowrap">Дата тренировки</th>

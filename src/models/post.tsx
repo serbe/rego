@@ -1,29 +1,18 @@
 import React, { ChangeEvent } from 'react';
+
 import { FormField } from '../components/formfield';
 import { BooleanInputProperties, StringInputProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
-
-export type PostJsonScheme = {
-  name: string;
-  object: {
-    Post?: Post;
-  };
-  error?: string;
-};
-
-export type PostListJsonScheme = {
-  name: string;
-  object: {
-    PostList?: PostList[];
-  };
-  error?: string;
-};
 
 export type Post = {
   id: number;
   name?: string;
   go?: boolean;
   note?: string;
+};
+
+export const PostEmpty: Post = {
+  id: 0,
 };
 
 export type PostList = {
@@ -59,7 +48,9 @@ export const PostNameInput = (properties: StringInputProperties): JSX.Element =>
   <FormField
     name="post-name"
     value={properties.value}
-    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void =>
+      properties.setter(event.target.value === '' ? undefined : event.target.value)
+    }
     label="Наименование должности"
     icon="tag"
   />

@@ -1,72 +1,46 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { List, Search } from '../../components/table';
-import { URL } from '../../helpers/utils';
-import { ScopeList, ScopeListJsonScheme } from '../../models/scope';
+
+import { Bar, Data } from '../../components/table';
+import { ScopeList } from '../../models/scope';
+import { GetList } from '../../services/fetcher';
 
 export const Scopes = (): JSX.Element => {
   const history = useHistory();
-  const [data, setData] = useState<ScopeList[]>([]);
+  const data = GetList('ScopeList');
   const [search, setSearch] = useState('');
-  const [error, setError] = useState<string>();
 
-  const [paginationData, Paginate] = List({
-    data: data,
-    search: search,
+  const [paginationData, Paginate] = Data({
+    data,
+    search,
   });
 
   const tableData = (): ScopeList[] => {
     return paginationData();
   };
 
-  useEffect(() => {
-    const ws = new WebSocket(URL);
-
-    ws.addEventListener('message', (message: MessageEvent) => {
-      const data = JSON.parse(message.data) as ScopeListJsonScheme;
-      if (data.name && data.name === 'ScopeList' && data.object.ScopeList) {
-        setData(data.object.ScopeList);
-      }
-      if (data.error) {
-        setError(data.error);
-      }
-    });
-
-    ws.addEventListener('open', () => {
-      ws.send('{"Get":{"List":"ScopeList"}}');
-    });
-
-    return (): void => {
-      ws.close();
-    };
-  }, []);
-
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((scope, index) => (
+      {tableData().map((scope) => (
         <tr
-          key={`tr${scope.id}${index}`}
+          key={`tr${scope.id}`}
           onClick={(): void => history.push(`/scopes/${scope.id}`)}
           role="gridcell"
           className="link"
         >
           <td className="w250">{scope.name}</td>
-          <td className="w250">{scope.note}</td>
         </tr>
       ))}
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
-      <Search value={search} setter={setSearch} />
-      <table className="table is-narrow">
+      <Bar value={search} setter={setSearch} name="scopes" />
+      <table className="table is-narrow is-fullwidth">
         <tbody>
           <tr>
             <th className="w250">Сфера деятельности</th>
-            <th className="w250">Заметка</th>
           </tr>
           <Body />
         </tbody>

@@ -1,32 +1,37 @@
-import React, { ChangeEvent, MouseEvent } from 'react';
+import React, { ChangeEvent, KeyboardEvent, MouseEvent } from 'react';
+
 import { Input } from './input';
 
-interface FormFieldProps {
-  name: string;
+export interface FormFieldProperties {
+  autocomplete?: string;
   className?: string;
   disabled?: boolean;
   icon?: string;
   iconRight?: string;
   label?: string;
-  onClick?: (event: MouseEvent<HTMLInputElement, globalThis.MouseEvent>) => void;
+  name: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onClick?: (event: MouseEvent<HTMLInputElement, globalThis.MouseEvent>) => void;
+  onKeyPress?: (event: KeyboardEvent<HTMLInputElement>) => void;
   placeholder?: string;
   readonly?: boolean;
   rounded?: boolean;
   type?: 'text' | 'password' | 'email' | 'tel';
-  value?: string;
+  value?: number | string;
 }
 
-export const FormField = (properties: FormFieldProps): JSX.Element => {
+export const FormField = (properties: FormFieldProperties): JSX.Element => {
   const {
-    name,
+    autocomplete,
     className,
     disabled,
     icon,
     iconRight,
     label,
-    onClick,
+    name,
     onChange,
+    onClick,
+    onKeyPress,
     placeholder,
     readonly,
     type,
@@ -41,13 +46,15 @@ export const FormField = (properties: FormFieldProps): JSX.Element => {
         </label>
       )}
       <Input
-        name={name}
+        autocomplete={autocomplete}
         className={className}
         disabled={disabled}
         icon={icon}
         iconRight={iconRight}
-        onClick={onClick}
+        name={name}
         onChange={onChange}
+        onClick={onClick}
+        onKeyPress={onKeyPress}
         placeholder={placeholder}
         readonly={readonly}
         type={type}

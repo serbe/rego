@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
-export type DatePickerValues = {
-  value: string;
-  setter: (value: string) => void;
-};
-
-interface DatePickerProps {
-  name: string;
+export interface DatePickerValues {
   value?: string;
-  setter: (value: string) => void;
+  setter: (value?: string) => void;
+}
+
+interface DatePickerProperties {
   label?: string;
+  name: string;
+  setter: (value?: string) => void;
+  value?: string;
 }
 
 const listDate = (date: Date): string[] => {
@@ -38,7 +38,7 @@ const listYears = (): string[] => {
   return list;
 };
 
-export const DatePicker = (properties: DatePickerProps): JSX.Element => {
+export const DatePicker = (properties: DatePickerProperties): JSX.Element => {
   const { name, value, setter, label } = properties;
 
   const [year, setYear] = useState(' ');
@@ -64,18 +64,18 @@ export const DatePicker = (properties: DatePickerProps): JSX.Element => {
     const strdate = `${year}-${month}-${day}`;
     if (strdate !== rawDate) {
       setRawDate(strdate);
-      setter(strdate);
+      setter(year !== ' ' && month !== ' ' && day !== ' ' ? strdate : undefined);
     }
   }, [day, month, setter, rawDate, year]);
 
   return (
     <div className="field" key={name}>
       {label && (
-        <label className="label" key="DateLabel">
+        <label className="label" key="DateLabel" htmlFor={`datepicker-${name}-id`}>
           {label}
         </label>
       )}
-      <div className="field has-addons">
+      <div className="field has-addons" id={`datepicker-${name}-id`}>
         <div className="control">
           <div className="select">
             <select
@@ -85,8 +85,8 @@ export const DatePicker = (properties: DatePickerProps): JSX.Element => {
               onChange={(event) => setDay(event.target.value)}
               onBlur={(event) => setDay(event.target.value)}
             >
-              {listDate(date).map((item, index) => (
-                <option key={`${name}day-${index}`} value={item}>
+              {listDate(date).map((item) => (
+                <option key={`${name}day-${item}`} value={item}>
                   {item}
                 </option>
               ))}
@@ -102,8 +102,8 @@ export const DatePicker = (properties: DatePickerProps): JSX.Element => {
               onChange={(event) => setMonth(event.target.value)}
               onBlur={(event) => setMonth(event.target.value)}
             >
-              {listMonth().map((item, index) => (
-                <option key={`${name}month-${index}`} value={item}>
+              {listMonth().map((item) => (
+                <option key={`${name}month-${item}`} value={item}>
                   {item}
                 </option>
               ))}
@@ -119,8 +119,8 @@ export const DatePicker = (properties: DatePickerProps): JSX.Element => {
               onChange={(event) => setYear(event.target.value)}
               onBlur={(event) => setYear(event.target.value)}
             >
-              {listYears().map((item, index) => (
-                <option key={`${name}year-${index}`} value={item}>
+              {listYears().map((item) => (
+                <option key={`${name}year-${item}`} value={item}>
                   {item}
                 </option>
               ))}

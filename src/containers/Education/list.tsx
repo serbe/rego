@@ -1,51 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { List, Search } from '../../components/table';
-import { URL } from '../../helpers/utils';
-import { EducationList, EducationListJsonScheme } from '../../models/education';
+
+import { Bar, Data } from '../../components/table';
+import { EducationList } from '../../models/education';
+import { GetList } from '../../services/fetcher';
 
 export const Educations = (): JSX.Element => {
   const history = useHistory();
-  const [data, setData] = useState<EducationList[]>([]);
+  const data = GetList('EducationList');
   const [search, setSearch] = useState('');
-  const [error, setError] = useState<string>();
 
-  const [paginationData, Paginate] = List({
-    data: data,
-    search: search,
+  const [paginationData, Paginate] = Data({
+    data,
+    search,
   });
 
   const tableData = (): EducationList[] => {
     return paginationData();
   };
 
-  useEffect(() => {
-    const ws = new WebSocket(URL);
-
-    ws.addEventListener('message', (message: MessageEvent) => {
-      const data = JSON.parse(message.data) as EducationListJsonScheme;
-      if (data.name && data.name === 'EducationList' && data.object.EducationList) {
-        setData(data.object.EducationList);
-      }
-      if (data.error) {
-        setError(data.error);
-      }
-    });
-
-    ws.addEventListener('open', () => {
-      ws.send('{"Get":{"List":"EducationList"}}');
-    });
-
-    return (): void => {
-      ws.close();
-    };
-  }, []);
-
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((education, index) => (
+      {tableData().map((education) => (
         <tr
-          key={`tr${education.id}${index}`}
+          key={`tr${education.id}`}
           onClick={(): void => history.push(`/educations/${education.id}`)}
           role="gridcell"
           className="link"
@@ -59,12 +37,10 @@ export const Educations = (): JSX.Element => {
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
-      <Search value={search} setter={setSearch} />
-      <table className="table is-narrow">
+      <Bar value={search} setter={setSearch} name="educations" />
+      <table className="table is-narrow is-fullwidth">
         <tbody>
           <tr>
             <th>Полное имя обучаемого</th>

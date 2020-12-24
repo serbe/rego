@@ -1,23 +1,8 @@
 import React, { ChangeEvent } from 'react';
+
 import { DatePicker, DatePickerValues } from '../components/datepicker';
 import { FormField } from '../components/formfield';
 import { StringInputProperties } from '../components/input';
-
-export type CertificateJsonScheme = {
-  name: string;
-  object: {
-    Certificate?: Certificate;
-  };
-  error?: string;
-};
-
-export type CertificateListJsonScheme = {
-  name: string;
-  object: {
-    CertificateList?: CertificateList[];
-  };
-  error?: string;
-};
 
 export type Certificate = {
   id: number;
@@ -26,6 +11,10 @@ export type Certificate = {
   company_id?: number;
   cert_date?: string;
   note?: string;
+};
+
+export const CertificateEmpty: Certificate = {
+  id: 0,
 };
 
 export type CertificateList = {
@@ -43,7 +32,9 @@ export const CertificateNumberInput = (properties: StringInputProperties): JSX.E
   <FormField
     name="num"
     value={properties.value}
-    onChange={(event: ChangeEvent<HTMLInputElement>): void => properties.setter(event.target.value)}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void =>
+      properties.setter(event.target.value === '' ? undefined : event.target.value)
+    }
     label="Серийный номер удостоверения"
     icon="tag"
   />

@@ -1,72 +1,57 @@
 import React, { useEffect, useReducer } from 'react';
-import { CertificateList } from '../models/certificate';
-import { CompanyList } from '../models/company';
-import { ContactList } from '../models/contact';
-import { DepartmentList } from '../models/department';
-import { EducationList } from '../models/education';
-import { KindList } from '../models/kind';
-import { PostList } from '../models/post';
-import { PracticeList } from '../models/practice';
-import { RankList } from '../models/rank';
-import { ScopeList } from '../models/scope';
-import { SirenList } from '../models/siren';
-import { SirenTypeList } from '../models/sirentype';
-import { Input, StringInputProperties } from './input';
+import { useHistory } from 'react-router-dom';
+
+import { useAuthState } from '../services/auth';
+import { List } from '../services/fetcher';
+import { Button } from './button';
+import { Input } from './input';
 import { Pagination } from './pagination';
 
 export type SData = {
-  id: number;
   data: string;
+  id: number;
 };
 
 export type PaginateProperties = {
+  currentPage: number;
   filteredDataLength: number;
   itemsPerPage: number;
-  currentPage: number;
   setter: (value: number) => void;
 };
 
-export type dataType =
-  | CertificateList
-  | CompanyList
-  | ContactList
-  | DepartmentList
-  | EducationList
-  | KindList
-  | PostList
-  | PracticeList
-  | RankList
-  | ScopeList
-  | SirenList
-  | SirenTypeList;
-
-export type ListProperties = {
-  data: dataType[];
+export type DataProperties = {
+  data: List[];
   search: string;
 };
 
+interface BarProperties {
+  name: string;
+  setter: (value: string) => void;
+  value: string;
+}
+
 type State = {
-  filteredData: dataType[];
   currentPage: number;
-  searchValues: SData[];
+  filteredData: List[];
   filteredDataLength: number;
   itemsPerPage: number;
+  searchValues: SData[];
 };
 
 type Action =
-  | { type: 'searchLessThanTwo'; value: dataType[]; valueLength: number }
-  | { type: 'changeSearch'; value: dataType[]; search: string }
-  | { type: 'setFilteredData'; value: dataType[] }
+  | { type: 'searchLessThanTwo'; value: List[]; valueLength: number }
+  | { type: 'changeSearch'; value: List[]; search: string }
+  | { type: 'setFilteredData'; value: List[] }
   | { type: 'setCurrentPage'; value: number }
   | { type: 'setSearchValues'; value: SData[] }
   | { type: 'setFilteredDataLength'; value: number };
 
 const initialArguments = {
-  filteredData: [],
   currentPage: 0,
-  searchValues: [],
+  filteredData: [],
   filteredDataLength: 0,
   itemsPerPage: 20,
+  searchValues: [],
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -115,9 +100,25 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-export const List = (properties: ListProperties): [() => dataType[], JSX.Element] => {
+export const Paginate = (properties: PaginateProperties): JSX.Element => {
+  const { filteredDataLength, itemsPerPage, currentPage, setter } = properties;
+  const receiveChildValue = (value: number): void => {
+    setter(value - 1);
+  };
+  return filteredDataLength / itemsPerPage > 2 ? (
+    <Pagination
+      currentPage={currentPage + 1}
+      lastPage={Math.ceil(filteredDataLength / itemsPerPage)}
+      setter={receiveChildValue}
+    />
+  ) : (
+    <></>
+  );
+};
+
+export const Data = (properties: DataProperties): [() => List[], JSX.Element] => {
   const { data, search } = properties;
-  type td = typeof properties.data;
+  type TableData = typeof properties.data;
 
   const [{ filteredData, currentPage, filteredDataLength, itemsPerPage }, dispatch] = useReducer(
     reducer,
@@ -139,7 +140,8 @@ export const List = (properties: ListProperties): [() => dataType[], JSX.Element
           if (value && typeof value !== 'number') {
             if (typeof value === 'string') {
               return value;
-            } else if (Array.isArray(value)) {
+            }
+            if (Array.isArray(value)) {
               return value.join('');
             }
           }
@@ -157,51 +159,52 @@ export const List = (properties: ListProperties): [() => dataType[], JSX.Element
     if (search.length < 2) {
       dispatch({ type: 'searchLessThanTwo', value: data, valueLength: data.length });
     } else {
-      dispatch({ type: 'changeSearch', value: data, search: search });
+      dispatch({ type: 'changeSearch', value: data, search });
     }
   }, [search, data]);
 
-  const paginationData = (): td => {
+  const paginationData = (): TableData => {
     return filteredData.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
   };
 
   return [
     paginationData,
     Paginate({
-      filteredDataLength: filteredDataLength,
-      itemsPerPage: itemsPerPage,
-      currentPage: currentPage,
+      currentPage,
+      filteredDataLength,
+      itemsPerPage,
       setter: setCurrentPage,
     }),
   ];
 };
 
-export const Search = (properties: StringInputProperties): JSX.Element => (
-  <div className="control mb-4" key="TableSearch">
-    <Input
-      name="search"
-      className="input is-expanded"
-      placeholder="Поиск"
-      onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
-        properties.setter(event.target.value)
-      }
-      value={properties.value}
-    />
-  </div>
-);
+export const Bar = (properties: BarProperties): JSX.Element => {
+  const { auth } = useAuthState();
+  const history = useHistory();
 
-export const Paginate = (properties: PaginateProperties): JSX.Element => {
-  const { filteredDataLength, itemsPerPage, currentPage, setter } = properties;
-  const receiveChildValue = (value: number): void => {
-    setter(value - 1);
-  };
-  return filteredDataLength / itemsPerPage > 2 ? (
-    <Pagination
-      currentPage={currentPage + 1}
-      lastPage={Math.ceil(filteredDataLength / itemsPerPage)}
-      setter={receiveChildValue}
-    />
-  ) : (
-    <></>
+  const CreateButton = () =>
+    auth.user.role > 2 ? (
+      <div className="control mb-4" key="TableNewItem">
+        <Button onClick={() => history.push(`/${properties.name}/0`)}>Создать</Button>
+      </div>
+    ) : (
+      <></>
+    );
+
+  return (
+    <div className="field is-grouped">
+      <CreateButton />
+      <div className="control mb-4 is-expanded" key="TableSearch">
+        <Input
+          className="input is-expanded"
+          name="search"
+          placeholder="Поиск"
+          onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
+            properties.setter(event.target.value)
+          }
+          value={properties.value}
+        />
+      </div>
+    </div>
   );
 };

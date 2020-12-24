@@ -1,51 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { List, Search } from '../../components/table';
-import { splitNumbers, URL } from '../../helpers/utils';
-import { SirenList, SirenListJsonScheme } from '../../models/siren';
+
+import { Bar, Data } from '../../components/table';
+import { SirenList } from '../../models/siren';
+import { GetList } from '../../services/fetcher';
+import { splitNumbers } from '../../services/utils';
 
 export const Sirens = (): JSX.Element => {
   const history = useHistory();
-  const [data, setData] = useState<SirenList[]>([]);
+  const data = GetList('SirenList');
   const [search, setSearch] = useState('');
-  const [error, setError] = useState<string>();
 
-  const [paginationData, Paginate] = List({
-    data: data,
-    search: search,
+  const [paginationData, Paginate] = Data({
+    data,
+    search,
   });
 
   const tableData = (): SirenList[] => {
     return paginationData();
   };
 
-  useEffect(() => {
-    const ws = new WebSocket(URL);
-
-    ws.addEventListener('message', (message: MessageEvent) => {
-      const data = JSON.parse(message.data) as SirenListJsonScheme;
-      if (data.name && data.name === 'SirenList' && data.object.SirenList) {
-        setData(data.object.SirenList);
-      }
-      if (data.error) {
-        setError(data.error);
-      }
-    });
-
-    ws.addEventListener('open', () => {
-      ws.send('{"Get":{"List":"SirenList"}}');
-    });
-
-    return (): void => {
-      ws.close();
-    };
-  }, []);
-
   const Body = (): JSX.Element => (
     <>
-      {tableData().map((siren, index) => (
+      {tableData().map((siren) => (
         <tr
-          key={`tr${siren.id}${index}`}
+          key={`tr${siren.id}`}
           onClick={(): void => history.push(`/sirens/${siren.id}`)}
           role="gridcell"
           className="link"
@@ -59,12 +38,10 @@ export const Sirens = (): JSX.Element => {
     </>
   );
 
-  return error ? (
-    <></>
-  ) : (
+  return (
     <>
-      <Search value={search} setter={setSearch} />
-      <table className="table is-narrow">
+      <Bar value={search} setter={setSearch} name="sirens" />
+      <table className="table is-narrow is-fullwidth">
         <tbody>
           <tr>
             <th className="w250">Тип сирены</th>

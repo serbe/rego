@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+
+import { useAuthState } from '../services/auth';
 import { Button } from './button';
 
 interface Setter {
+  setter: (value: boolean) => void;
+}
+
+interface OpenState {
+  open: boolean;
   setter: (value: boolean) => void;
 }
 
@@ -15,7 +22,7 @@ const mainItems = [
 const dropdownItems = [
   { link: '/departments', name: 'Отделы' },
   { link: '/educations', name: 'Обучение' },
-  { link: '/kinds', name: 'Типы' },
+  { link: '/kinds', name: 'Типы тренировок' },
   { link: '/posts', name: 'Должности' },
   { link: '/practices', name: 'Учения' },
   { link: '/ranks', name: 'Чины' },
@@ -24,22 +31,24 @@ const dropdownItems = [
   { link: '/sirentypes', name: 'Типы сирен' },
 ];
 
-const NavbarNotLogged: JSX.Element = (
-  <div className="navbar-brand">
-    <NavLink className="navbar-item" key="NavbarNotLogged" to="/login">
-      Авторизация
-    </NavLink>
-  </div>
+const NavbarNotLogged = (): JSX.Element => (
+  <nav className="navbar is-dark" role="navigation">
+    <div className="navbar-brand">
+      <NavLink className="navbar-item" key="NavbarNotLogged" to="/login">
+        Авторизация
+      </NavLink>
+    </div>
+  </nav>
 );
 
 const MainItems = (value: Setter): JSX.Element => (
   <>
-    {mainItems.map((item, index) => (
+    {mainItems.map((item) => (
       <NavLink
         activeClassName="is-active"
         className="navbar-item"
         to={item.link}
-        key={`main-items-${index}`}
+        key={`main-items-${item.name}`}
         onClick={() => value.setter(false)}
       >
         {item.name}
@@ -50,12 +59,12 @@ const MainItems = (value: Setter): JSX.Element => (
 
 const NavbarDropdown = (value: Setter): JSX.Element => (
   <div className="navbar-dropdown" key="navbar-dropdown">
-    {dropdownItems.map((item, index) => (
+    {dropdownItems.map((item) => (
       <NavLink
         activeClassName="is-active"
         className="navbar-item"
         to={item.link}
-        key={`navbar-dropdown-${index}`}
+        key={`navbar-dropdown-${item.name}`}
         onClick={() => value.setter(false)}
       >
         {item.name}
@@ -76,61 +85,71 @@ const NavBarStart = (value: Setter): JSX.Element => (
   </div>
 );
 
-const NavbarEnd: JSX.Element = (
-  <div className="navbar-end" key="navbar-end">
-    <div className="navbar-item has-dropdown is-hoverable">
-      <a href="#user" className="navbar-link">
-        name
-      </a>
-      <div className="navbar-dropdown is-right">
-        <div className="navbar-item">
-          <Button className="is-link">Выход</Button>
+const NavbarEnd = (): JSX.Element => {
+  const { auth, setAuth } = useAuthState();
+  return (
+    <div className="navbar-end" key="navbar-end">
+      <div className="navbar-item has-dropdown is-hoverable">
+        <a href="#user" className="navbar-link">
+          {auth.user.name}
+        </a>
+        <div className="navbar-dropdown is-right">
+          <div className="navbar-item">
+            <Button
+              className="is-link"
+              onClick={() => {
+                setAuth({ type: 'ClearAuth' });
+              }}
+            >
+              Выход
+            </Button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
+
+const BrandBar = (properties: OpenState): JSX.Element => {
+  const { open, setter } = properties;
+  return (
+    <>
+      <NavLink activeClassName="is-active" className="navbar-item" exact to="/">
+        ЕДДС
+      </NavLink>
+      <a
+        aria-expanded="false"
+        aria-label="menu"
+        className={open ? 'navbar-burger is-active' : 'navbar-burger'}
+        data-target="navbarData"
+        role="button"
+        href="#button"
+        onClick={() => setter(!open)}
+      >
+        <span aria-hidden="true" />
+        <span aria-hidden="true" />
+        <span aria-hidden="true" />
+      </a>
+    </>
+  );
+};
 
 export const NavBar = (): JSX.Element => {
-  // const [auth, setAuth] = useState(true);
   // const openClassName = (cn: string): string => (open ? `${cn} is-active` : cn);
-  const auth = true;
+  const { auth } = useAuthState();
   const [open, setOpen] = useState(false);
 
-  const handleToggle = (): void => {
-    setOpen(!open);
-  };
-
-  return (
+  return auth.user.role > 0 ? (
     <nav className="navbar is-dark" role="navigation" aria-label="dropdown navigation">
-      {auth ? (
-        <>
-          <div className="navbar-brand">
-            <NavLink activeClassName="is-active" className="navbar-item" exact={true} to="/">
-              ЕДДС
-            </NavLink>
-            <a
-              aria-expanded="false"
-              aria-label="menu"
-              className={open ? 'navbar-burger is-active' : 'navbar-burger'}
-              data-target="navbarData"
-              role="button"
-              href="#button"
-              onClick={handleToggle}
-            >
-              <span aria-hidden="true" />
-              <span aria-hidden="true" />
-              <span aria-hidden="true" />
-            </a>
-          </div>
-          <div id="navbarData" className={open ? 'navbar-menu is-active' : 'navbar-menu'}>
-            <NavBarStart setter={setOpen} />
-            {NavbarEnd}
-          </div>
-        </>
-      ) : (
-        NavbarNotLogged
-      )}
+      <div className="navbar-brand">
+        <BrandBar open={open} setter={setOpen} />
+      </div>
+      <div id="navbarData" className={open ? 'navbar-menu is-active' : 'navbar-menu'}>
+        <NavBarStart setter={setOpen} />
+        <NavbarEnd />
+      </div>
     </nav>
+  ) : (
+    <NavbarNotLogged />
   );
 };

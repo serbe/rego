@@ -1,18 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { URL } from '../../helpers/utils';
-import { EducationShort } from '../../models/education';
-import { PracticeShort } from '../../models/practice';
 import './index.css';
 
-type HomeWS = {
-  name: string;
-  object: {
-    EducationShort?: EducationShort[];
-    PracticeShort?: PracticeShort[];
-  };
-  error?: string;
-};
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+
+import { EducationShort } from '../../models/education';
+import { PracticeShort } from '../../models/practice';
+import { GetList } from '../../services/fetcher';
 
 const trClass = (date: string): string => {
   const m = new Date();
@@ -34,43 +27,13 @@ const tinyDate = (date: string): string => {
   return date;
 };
 
-export const Home = (): JSX.Element => {
-  const [hasError, setErrors] = useState<string>();
-  const [educations, setEducations] = useState<EducationShort[]>([]);
-  const [practices, setPractices] = useState<PracticeShort[]>([]);
+const EducationTable = (educations: EducationShort[]): JSX.Element => {
   const history = useHistory();
-
-  useEffect(() => {
-    const ws = new WebSocket(URL);
-
-    ws.addEventListener('message', (event: MessageEvent) => {
-      const data = JSON.parse(event.data) as HomeWS;
-      if (data.name && data.name === 'PracticeNear' && data.object.PracticeShort) {
-        setPractices(data.object.PracticeShort);
-      }
-      if (data.name && data.name === 'EducationNear' && data.object.EducationShort) {
-        setEducations(data.object.EducationShort);
-      }
-      if (data.error) {
-        setErrors(data.error);
-      }
-    });
-
-    ws.addEventListener('open', () => {
-      ws.send('{"Get":{"List":"EducationNear"}}');
-      ws.send('{"Get":{"List":"PracticeNear"}}');
-    });
-
-    return (): void => {
-      ws.close();
-    };
-  }, []);
-
-  const EducationTable = (): JSX.Element => (
+  return (
     <table className="table is-narrow">
       <tbody>
-        {educations.map((row, index) => (
-          <tr key={index} className={trClass(row.start_date)}>
+        {educations.map((row) => (
+          <tr key={row.id} className={trClass(row.start_date)}>
             <td
               className="has-text-black"
               onMouseDown={(): void => history.push(`/education/${row.id}`)}
@@ -90,12 +53,15 @@ export const Home = (): JSX.Element => {
       </tbody>
     </table>
   );
+};
 
-  const PracticeTable = (): JSX.Element => (
+const PracticeTable = (practices: PracticeShort[]): JSX.Element => {
+  const history = useHistory();
+  return (
     <table className="table is-narrow">
       <tbody>
-        {practices.map((row, index) => (
-          <tr key={index} className={trClass(row.date_of_practice)}>
+        {practices.map((row) => (
+          <tr key={row.id} className={trClass(row.date_of_practice)}>
             <td
               className="has-text-black"
               onMouseDown={(): void => history.push(`/practice/${row.id}`)}
@@ -105,14 +71,14 @@ export const Home = (): JSX.Element => {
             </td>
             <td
               className="has-text-black"
-              onMouseDown={(): void => history.push(`/kind/${row.kind_id}`)}
+              onMouseDown={(): void => history.push(`/kinds/${row.kind_id}`)}
               role="gridcell"
             >
               {row.kind_short_name}
             </td>
             <td
               className="has-text-black"
-              onMouseDown={(): void => history.push(`/company/${row.company_id}`)}
+              onMouseDown={(): void => history.push(`/companies/${row.company_id}`)}
               role="gridcell"
             >
               {row.company_name}
@@ -122,17 +88,16 @@ export const Home = (): JSX.Element => {
       </tbody>
     </table>
   );
+};
 
-  return hasError ? (
-    <div>No data</div>
-  ) : (
-    <div className="columns is-mobile">
-      <div className="column is-4">
-        <EducationTable />
-      </div>
-      <div className="column is-4 is-offset-4">
-        <PracticeTable />
-      </div>
+export const Home = (): JSX.Element => {
+  const educations = GetList('EducationNear');
+  const practices = GetList('PracticeNear');
+
+  return (
+    <div className="columns">
+      <div className="column is-4">{EducationTable(educations as EducationShort[])}</div>
+      <div className="column is-4 is-offset-4">{PracticeTable(practices as PracticeShort[])}</div>
     </div>
   );
 };

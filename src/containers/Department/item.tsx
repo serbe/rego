@@ -1,61 +1,58 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { URL } from '../../helpers/utils';
-import { DepartmentJsonScheme, DepartmentNameInput } from '../../models/department';
-import { NoteInput, ParameterTypes } from '../../models/impersonal';
+
+import { Department, DepartmentNameInput } from '../../models/department';
+import { ItemFormButtons, NoteInput, ParameterTypes } from '../../models/impersonal';
+import { useAuthState } from '../../services/auth';
+import { DelItem, GetItem, SetItem } from '../../services/fetcher';
 
 export const DepartmentItem = (): JSX.Element => {
+  const { auth } = useAuthState();
   const history = useHistory();
   const { id } = useParams<ParameterTypes>();
-  const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState('');
-  const [name, setName] = useState('');
-  const [note, setNote] = useState('');
+  const [name, setName] = useState<string>();
+  const [note, setNote] = useState<string>();
+  const item = GetItem('Department', id);
+  const [status, setStatus] = useState(false);
+
+  const send = (): void => {
+    const NumberID = Number(id);
+    const department: Department = {
+      id: NumberID,
+      name,
+      note,
+    };
+
+    SetItem(NumberID, 'Department', department, setStatus, auth.user.token);
+  };
+
+  const del = (): void => {
+    const NumberID = Number(id);
+    DelItem(NumberID, 'Department', setStatus, auth.user.token);
+  };
 
   useEffect(() => {
-    if (id !== '0') {
-      const ws = new WebSocket(URL);
-
-      ws.addEventListener('message', (message: MessageEvent) => {
-        const data = JSON.parse(message.data) as DepartmentJsonScheme;
-        if (data?.name === 'Department' && data.object.Department) {
-          const c = data.object.Department;
-          setName(c.name || '');
-          setNote(c.note || '');
-          setLoaded(true);
-        }
-        if (data.error) {
-          setError(data.error);
-        }
-      });
-
-      ws.addEventListener('open', () => {
-        ws.send(`{"Get":{"Item":{"id": ${id}, "name": "Department"}}}`);
-      });
-
-      return (): void => {
-        ws.close();
-      };
+    if (item) {
+      const data = item as Department;
+      setName(data.name);
+      setNote(data.note);
     }
-  }, [id]);
+  }, [item]);
+
+  useEffect(() => {
+    if (status) {
+      history.go(-1);
+    }
+  }, [history, status]);
 
   return (
     <div>
-      {loaded && !error && (
+      {item && (
         <>
           <DepartmentNameInput value={name} setter={setName} />
           <NoteInput value={note} setter={setNote} />
 
-          <div className="field is-grouped">
-            <div className="control">
-              <button className="button">Сохранить</button>
-            </div>
-            <div className="control">
-              <button className="button" onClick={() => history.go(-1)}>
-                Закрыть
-              </button>
-            </div>
-          </div>
+          <ItemFormButtons send={send} del={del} />
         </>
       )}
     </div>

@@ -1,59 +1,58 @@
-import React, { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, MouseEvent } from 'react';
+
 import { Icon } from './icon';
 
-export type StringInputProperties = {
-  value: string;
-  setter: (value: string) => void;
-};
+export interface StringInputProperties {
+  value?: string;
+  setter: (value?: string) => void;
+}
 
-export type NumberInputProperties = {
-  value: number;
-  setter: (value: number) => void;
-};
+export interface NumberInputProperties {
+  value?: number;
+  setter: (value?: number) => void;
+}
 
-export type BooleanInputProperties = {
+export interface BooleanInputProperties {
   value: boolean;
   setter: (value: boolean) => void;
-};
+}
 
-interface InputProps {
-  name: string;
+interface InputProperties {
+  autocomplete?: string;
   className?: string;
   classNameDiv?: string;
-  value?: string;
   disabled?: boolean;
   icon?: string;
   iconRight?: string;
-  onClick?: (event: MouseEvent<HTMLInputElement, globalThis.MouseEvent>) => void;
-  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  name: string;
   onBlur?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onClick?: (event: MouseEvent<HTMLInputElement, globalThis.MouseEvent>) => void;
+  onKeyPress?: (event: KeyboardEvent<HTMLInputElement>) => void;
   placeholder?: string;
   readonly?: boolean;
   type?: 'text' | 'password' | 'email' | 'tel';
+  value?: number | string;
 }
 
-export const Input = (properties: InputProps): JSX.Element => {
+export const Input = (properties: InputProperties): JSX.Element => {
   const {
-    name,
+    autocomplete,
     className,
     classNameDiv,
     disabled,
     icon,
     iconRight,
-    onClick,
-    onChange,
+    name,
     onBlur,
+    onChange,
+    onClick,
+    onKeyPress,
     placeholder,
     readonly,
     type,
     value,
   } = properties;
-
-  const [inputValue, setInputValue] = useState('');
-
-  useEffect(() => {
-    setInputValue(value || '');
-  }, [value]);
 
   const divClasses = `control ${classNameDiv || ''} ${icon ? 'has-icons-left' : ''} ${
     iconRight ? 'has-icons-right' : ''
@@ -62,21 +61,23 @@ export const Input = (properties: InputProps): JSX.Element => {
   return (
     <div className={divClasses}>
       <input
-        name={name}
+        autoComplete={autocomplete}
+        className={`${className || ''} input`}
+        defaultValue={value}
+        disabled={disabled}
         id={name}
         key={name}
-        className={`${className || ''} input`}
-        disabled={disabled}
-        onClick={onClick}
-        onChange={onChange}
+        name={name}
         onBlur={onBlur}
+        onChange={onChange}
+        onClick={onClick}
+        onKeyPress={onKeyPress}
         placeholder={placeholder}
         readOnly={readonly}
         type={type}
-        defaultValue={inputValue}
       />
-      {icon && <Icon position={'left'} icon={icon} />}
-      {iconRight && <Icon position={'right'} icon={iconRight} />}
+      {icon && <Icon position="left" icon={icon} />}
+      {iconRight && <Icon position="right" icon={iconRight} />}
     </div>
   );
 };
