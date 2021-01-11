@@ -3,6 +3,7 @@ import './index.scss';
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
+import Rego from './rego';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider, getStorage } from './services/auth';
 import { ConnectWS } from './services/ws';
@@ -61,7 +62,9 @@ const App = () => {
 
   return (
     <React.StrictMode>
-      <AuthProvider>{/* <Rego /> */}</AuthProvider>
+      <AuthProvider>
+        <Rego />
+      </AuthProvider>
     </React.StrictMode>
   );
 };
