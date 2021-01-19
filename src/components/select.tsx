@@ -29,6 +29,9 @@ export const Select = (properties: SelectProperties): JSX.Element => {
   const [value, setValue] = useState<string>();
 
   useEffect(() => {
+    if (itemID === 0 && id) {
+      setItemID(id);
+    }
     if (list[0].id !== 0) {
       list.unshift({ id: 0, name: '' });
     }
@@ -38,7 +41,7 @@ export const Select = (properties: SelectProperties): JSX.Element => {
       const currentItem = list.find((item) => item.id === id);
       setValue(currentItem?.name || '');
     }
-  }, [list, id]);
+  }, [list, id, itemID]);
 
   const currentValue = (): string => {
     if (opened) {
