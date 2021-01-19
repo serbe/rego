@@ -207,11 +207,11 @@ export const GetItem = (name: string, id: string): Item => {
               case 'SirenType':
                 setData(jsonData.object.SirenType);
                 break;
-              default:
-                throw new Error('unknown item');
+              // default:
+              //   throw new Error('unknown item');
             }
           }
-          throw new Error('unknown item');
+          // throw new Error('unknown item');
         });
     } else {
       switch (name) {
@@ -251,8 +251,8 @@ export const GetItem = (name: string, id: string): Item => {
         case 'SirenType':
           setData(SirenTypeEmpty);
           break;
-        default:
-          throw new Error('unknown item');
+        // default:
+        //   throw new Error('unknown item');
       }
     }
   }, [id, name, auth.user.token]);
@@ -391,11 +391,11 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
                 ? setSelect(jsonData.object.SelectItem)
                 : setSelect([{ id: 0, name: '' }]);
               break;
-            default:
-              throw new Error('unknown select');
+            // default:
+            //   throw new Error('unknown select');
           }
-        } else {
-          throw new Error('unknown select');
+          // } else {
+          //   throw new Error('unknown select');
         }
       })
       .catch(() => {
@@ -419,9 +419,9 @@ export const SetItem = (
     headers: {
       'Content-Type': 'application/json',
     },
-    body: `{"command":{"${id === 0 ? 'Insert' : 'Update'}":{"${name}":${JSON.stringify(
+    body: `{ "command": { "${id === 0 ? 'Insert' : 'Update'}": { "${name}": ${JSON.stringify(
       item,
-    )}}},"addon":"${token}"}`,
+    )} } }, "addon": "${token}" }`,
   })
     .then((response) => response.json())
     .then((response) => response as JsonItemScheme)
