@@ -14,7 +14,7 @@ import { Siren, SirenEmpty, SirenList } from '../models/siren';
 import { SirenType, SirenTypeEmpty, SirenTypeList } from '../models/sirentype';
 import { useAuthState } from './auth';
 
-const URL = 'http://127.0.0.1:9090/go/json';
+const URL = process.env.REACT_APP_JSONURL || '/go/json';
 
 export type SelectItem = {
   id: number;

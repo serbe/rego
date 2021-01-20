@@ -8,8 +8,8 @@ import React, {
   useReducer,
 } from 'react';
 
-const loginURL = 'http://127.0.0.1:9090/go/login';
-const checkURL = 'http://127.0.0.1:9090/go/check';
+const loginURL = process.env.REACT_APP_LOGINURL || '/go/login';
+const checkURL = process.env.REACT_APP_CHECKURL || '/go/check';
 
 export type User = {
   role: number;

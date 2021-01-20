@@ -8,7 +8,7 @@ interface TJson {
   r: number;
 }
 
-const URL = 'http://127.0.0.1:9090/go/login';
+const URL = process.env.REACT_APP_LOGINURL || '/go/login';
 
 export const Login = (): JSX.Element => {
   const { setAuth } = useAuthState();
