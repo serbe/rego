@@ -12,7 +12,7 @@ interface DatePickerProperties {
   value?: string;
 }
 
-const listDate = (date: Date): string[] => {
+const listDays = (date: Date): string[] => {
   const days = date.getDate();
   const list = [' '];
   for (let i = 1; i <= days; i += 1) {
@@ -21,7 +21,7 @@ const listDate = (date: Date): string[] => {
   return list;
 };
 
-const listMonth = (): string[] => {
+const listMonths = (): string[] => {
   const list = [' '];
   for (let i = 1; i < 13; i += 1) {
     list.push(i.toString().length === 1 ? `0${i}` : i.toString());
@@ -45,7 +45,6 @@ export const DatePicker = (properties: DatePickerProperties): JSX.Element => {
   const [month, setMonth] = useState(' ');
   const [day, setDay] = useState(' ');
   const [rawDate, setRawDate] = useState('');
-  const [date, setDate] = useState(new Date());
 
   useEffect(() => {
     if (value && value !== rawDate) {
@@ -55,7 +54,6 @@ export const DatePicker = (properties: DatePickerProperties): JSX.Element => {
         setYear(values[0]);
         setMonth(values[1]);
         setDay(values[2]);
-        setDate(new Date(Number(values[0]), Number(values[1]), 0));
       }
     }
   }, [rawDate, value]);
@@ -85,7 +83,13 @@ export const DatePicker = (properties: DatePickerProperties): JSX.Element => {
               onChange={(event) => setDay(event.target.value)}
               onBlur={(event) => setDay(event.target.value)}
             >
-              {listDate(date).map((item) => (
+              {listDays(
+                new Date(
+                  Number(year === ' ' ? '2021' : year),
+                  Number(month === ' ' ? '1' : month),
+                  0,
+                ),
+              ).map((item) => (
                 <option key={`${name}day-${item}`} value={item}>
                   {item}
                 </option>
@@ -102,7 +106,7 @@ export const DatePicker = (properties: DatePickerProperties): JSX.Element => {
               onChange={(event) => setMonth(event.target.value)}
               onBlur={(event) => setMonth(event.target.value)}
             >
-              {listMonth().map((item) => (
+              {listMonths().map((item) => (
                 <option key={`${name}month-${item}`} value={item}>
                   {item}
                 </option>
