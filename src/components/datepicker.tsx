@@ -12,6 +12,11 @@ interface DatePickerProperties {
   value?: string;
 }
 
+interface DatePickerMonth {
+  value: string;
+  name: string;
+}
+
 const listDays = (date: Date): string[] => {
   const days = date.getDate();
   const list = [' '];
@@ -21,11 +26,22 @@ const listDays = (date: Date): string[] => {
   return list;
 };
 
-const listMonths = (): string[] => {
-  const list = [' '];
-  for (let i = 1; i < 13; i += 1) {
-    list.push(i.toString().length === 1 ? `0${i}` : i.toString());
-  }
+const listMonths = (): DatePickerMonth[] => {
+  const list = [
+    { value: ' ', name: ' ' },
+    { value: '01', name: 'января' },
+    { value: '02', name: 'февраля' },
+    { value: '03', name: 'марта' },
+    { value: '04', name: 'апреля' },
+    { value: '05', name: 'мая' },
+    { value: '06', name: 'июня' },
+    { value: '07', name: 'июля' },
+    { value: '08', name: 'августа' },
+    { value: '09', name: 'сентября' },
+    { value: '10', name: 'октября' },
+    { value: '11', name: 'ноября' },
+    { value: '12', name: 'декабря' },
+  ];
   return list;
 };
 
@@ -107,8 +123,8 @@ export const DatePicker = (properties: DatePickerProperties): JSX.Element => {
               onBlur={(event) => setMonth(event.target.value)}
             >
               {listMonths().map((item) => (
-                <option key={`${name}month-${item}`} value={item}>
-                  {item}
+                <option key={`${name}month-${item.value}`} value={item.value}>
+                  {item.name}
                 </option>
               ))}
             </select>
