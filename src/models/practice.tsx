@@ -54,7 +54,7 @@ export const PracticeListForm = (properties: PracticeValues): JSX.Element => {
         <Input
           name={`practice-${index}`}
           key={`practice-${index}`}
-          onClick={(): void => history.push(`/practice/${practice.id}`)}
+          onClick={(): void => history.push(`/practices/${practice.id}`)}
           value={`${practice.date_str || ''} - ${practice.kind_name || ''} - ${
             practice.topic || ''
           }`}

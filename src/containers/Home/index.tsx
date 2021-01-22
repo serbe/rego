@@ -36,14 +36,14 @@ const EducationTable = (educations: EducationShort[]): JSX.Element => {
           <tr key={row.id} className={trClass(row.start_date)}>
             <td
               className="has-text-black"
-              onMouseDown={(): void => history.push(`/education/${row.id}`)}
+              onMouseDown={(): void => history.push(`/educations/${row.id}`)}
               role="gridcell"
             >
               {tinyDate(row.start_date)}
             </td>
             <td
               className="has-text-black"
-              onMouseDown={(): void => history.push(`/contact/${row.contact_id}`)}
+              onMouseDown={(): void => history.push(`/contacts/${row.contact_id}`)}
               role="gridcell"
             >
               {row.contact_name}
@@ -64,7 +64,7 @@ const PracticeTable = (practices: PracticeShort[]): JSX.Element => {
           <tr key={row.id} className={trClass(row.date_of_practice)}>
             <td
               className="has-text-black"
-              onMouseDown={(): void => history.push(`/practice/${row.id}`)}
+              onMouseDown={(): void => history.push(`/practices/${row.id}`)}
               role="gridcell"
             >
               {tinyDate(row.date_of_practice)}
