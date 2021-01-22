@@ -67,7 +67,7 @@ const initialSetAuthState: SetAuthState = {
   },
 };
 
-export const login = (name: string, pass: string): void => {
+export const login = (name: string, pass: string, setAuth: Dispatch<ReducerActions>): void => {
   fetch(loginURL, {
     method: 'POST',
     mode: 'cors',
@@ -79,7 +79,18 @@ export const login = (name: string, pass: string): void => {
     .then((response) => response.json())
     .then((response) => response as TJson)
     .then((jsonData) => {
-      setStorage({ role: jsonData.r, name, token: jsonData.t });
+      setAuth({
+        type: 'SetAuth',
+        data: {
+          user: {
+            role: jsonData.r,
+            name,
+            token: jsonData.t,
+          },
+          check: true,
+          login: true,
+        },
+      });
     });
 };
 
