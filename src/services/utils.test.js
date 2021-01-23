@@ -1,4 +1,10 @@
-import { addEmptyString, filterArrayNumber, filterArrayString, numberToString } from './utils';
+import {
+  addEmptyString,
+  filterArrayNumber,
+  filterArrayString,
+  numberToString,
+  latrus,
+} from './utils';
 
 test('filterArrayString: remove empty items', () => {
   const result = filterArrayString(['1', '', '2', '']);
@@ -34,4 +40,11 @@ test('numberToString: convert numbers to strings', () => {
   expect(result[0]).toBe('1');
   expect(result[1]).toBe('2');
   expect(result[2]).toBe('0');
+});
+
+test('latrus: convert latin to cyrillic', () => {
+  expect(latrus('qwe')).toBe('йцу');
+  expect(latrus('qwertyuiop[]asdfghjkl;\'zxcvbnm,.QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>')).toBe(
+    'йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ',
+  );
 });

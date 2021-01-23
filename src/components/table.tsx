@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { useAuthState } from '../services/auth';
+import { latrus } from '../services/utils';
 import { List } from '../services/fetcher';
 import { Button } from './button';
 import { Input } from './input';
@@ -64,7 +65,11 @@ const reducer = (state: State, action: Action): State => {
     case 'changeSearch': {
       const searchArray = action.search.toLowerCase().split(' ');
       const temporaryFilteredData = action.value.filter((_, index) =>
-        searchArray.every((value: string) => state.searchValues[index].data.includes(value)),
+        searchArray.every(
+          (value: string) =>
+            state.searchValues[index].data.includes(value) ||
+            state.searchValues[index].data.includes(latrus(value)),
+        ),
       );
       const temporaryFilteredLength = temporaryFilteredData.length;
       if (temporaryFilteredLength !== state.filteredDataLength) {
