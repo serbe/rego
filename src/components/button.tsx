@@ -1,4 +1,4 @@
-import React, { MouseEvent } from 'react';
+import { MouseEvent } from 'react';
 
 interface ButtonProperties {
   children?: string;

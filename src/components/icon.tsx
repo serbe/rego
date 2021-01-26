@@ -1,5 +1,3 @@
-import React from 'react';
-
 export interface IconProperties {
   children?: Element;
   className?: string;
