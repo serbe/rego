@@ -2,8 +2,8 @@ import React, { useEffect, useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { useAuthState } from '../services/auth';
-import { latrus } from '../services/utils';
 import { List } from '../services/fetcher';
+import { latrus } from '../services/utils';
 import { Button } from './button';
 import { Input } from './input';
 import { Pagination } from './pagination';
@@ -31,7 +31,7 @@ interface BarProperties {
   value: string;
 }
 
-type State = {
+type PaginateState = {
   currentPage: number;
   filteredData: List[];
   filteredDataLength: number;
@@ -39,7 +39,7 @@ type State = {
   searchValues: SData[];
 };
 
-type Action =
+type PaginateAction =
   | { type: 'searchLessThanTwo'; value: List[]; valueLength: number }
   | { type: 'changeSearch'; value: List[]; search: string }
   | { type: 'setFilteredData'; value: List[] }
@@ -55,7 +55,7 @@ const initialArguments = {
   searchValues: [],
 };
 
-const reducer = (state: State, action: Action): State => {
+const paginateReducer = (state: PaginateState, action: PaginateAction): PaginateState => {
   switch (action.type) {
     case 'searchLessThanTwo':
       if (state.filteredDataLength !== action.valueLength) {
@@ -68,7 +68,7 @@ const reducer = (state: State, action: Action): State => {
         searchArray.every(
           (value: string) =>
             state.searchValues[index].data.includes(value) ||
-            state.searchValues[index].data.includes(latrus(value)),
+            (latrus(value[0]) && state.searchValues[index].data.includes(latrus(value))),
         ),
       );
       const temporaryFilteredLength = temporaryFilteredData.length;
@@ -126,7 +126,7 @@ export const Data = (properties: DataProperties): [() => List[], JSX.Element] =>
   type TableData = typeof properties.data;
 
   const [{ filteredData, currentPage, filteredDataLength, itemsPerPage }, dispatch] = useReducer(
-    reducer,
+    paginateReducer,
     initialArguments,
   );
 
