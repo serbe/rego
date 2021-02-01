@@ -54,5 +54,6 @@ export const CompanyNameInput = (properties: StringInputProperties): JSX.Element
     }
     label="Наименование организации"
     icon="building"
+    autocomplete="off"
   />
 );

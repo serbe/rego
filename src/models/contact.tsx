@@ -56,11 +56,12 @@ export const ContactNameInput = (properties: StringInputProperties): JSX.Element
   <FormField
     icon="user"
     label="Фамилия Имя Отчество"
-    name="name"
+    name="contact-name"
     onChange={(event: ChangeEvent<HTMLInputElement>): void =>
       properties.setter(event.target.value === '' ? undefined : event.target.value)
     }
     value={properties.value}
+    autocomplete="off"
   />
 );
 
@@ -90,6 +91,7 @@ export const ContactShortForm = (properties: ContactShortValues): JSX.Element =>
           onClick={(): void => history.push(`/contacts/${contact.id}`)}
           readonly
           value={`${contact.name || ''} - ${contact.post_name || ''}`}
+          autocomplete="off"
         />
       ))}
     </div>

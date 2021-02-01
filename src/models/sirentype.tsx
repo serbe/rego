@@ -42,6 +42,7 @@ export const SirenTypeNameInput = (properties: StringInputProperties): JSX.Eleme
     }
     label="Тип сирены"
     icon="tag"
+    autocomplete="off"
   />
 );
 
@@ -54,5 +55,6 @@ export const SirenTypeRadiusInput = (properties: NumberInputProperties): JSX.Ele
     }
     label="Радиус действия"
     icon="tag"
+    autocomplete="off"
   />
 );

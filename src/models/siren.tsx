@@ -41,6 +41,7 @@ export const SirenNumberIDInput = (properties: NumberInputProperties): JSX.Eleme
     }
     label="Инвентарный номер"
     icon="tag"
+    autocomplete="off"
   />
 );
 
@@ -53,6 +54,7 @@ export const SirenNumberPassportInput = (properties: StringInputProperties): JSX
     }
     label="Номер по паспорту"
     icon="tag"
+    autocomplete="off"
   />
 );
 
@@ -65,6 +67,7 @@ export const SirenRadioInput = (properties: StringInputProperties): JSX.Element 
     }
     label="Радио"
     icon="tag"
+    autocomplete="off"
   />
 );
 
@@ -77,6 +80,7 @@ export const SirenDeskInput = (properties: StringInputProperties): JSX.Element =
     }
     label="Пульт управления"
     icon="tag"
+    autocomplete="off"
   />
 );
 
@@ -89,6 +93,7 @@ export const SirenLatitudeInput = (properties: StringInputProperties): JSX.Eleme
     }
     label="Широта"
     icon="tag"
+    autocomplete="off"
   />
 );
 
@@ -101,6 +106,7 @@ export const SirenLongtitudeInput = (properties: StringInputProperties): JSX.Ele
     }
     label="Долгота"
     icon="tag"
+    autocomplete="off"
   />
 );
 
@@ -113,6 +119,7 @@ export const SirenStageInput = (properties: NumberInputProperties): JSX.Element 
     }
     label="Этап"
     icon="tag"
+    autocomplete="off"
   />
 );
 
@@ -125,5 +132,6 @@ export const SirenOwnInput = (properties: StringInputProperties): JSX.Element =>
     }
     label="Собственность"
     icon="tag"
+    autocomplete="off"
   />
 );

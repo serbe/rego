@@ -40,5 +40,6 @@ export const ScopeNameInput = (properties: StringInputProperties): JSX.Element =
     }
     label="Сфера деятельности"
     icon="tag"
+    autocomplete="off"
   />
 );

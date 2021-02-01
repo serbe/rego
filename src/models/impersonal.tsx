@@ -41,6 +41,7 @@ export const EmailInputs = (properties: EmailValues): JSX.Element => (
           properties.setter(values);
         }}
         classNameDiv="pb-1"
+        autocomplete="off"
       />
     ))}
   </div>
@@ -66,6 +67,7 @@ export const PhoneInputs = (properties: PhoneValues): JSX.Element => (
           properties.setter(values);
         }}
         classNameDiv="pb-1"
+        autocomplete="off"
       />
     ))}
   </div>
@@ -91,6 +93,7 @@ export const FaxInputs = (properties: PhoneValues): JSX.Element => (
           properties.setter(values);
         }}
         classNameDiv="pb-1"
+        autocomplete="off"
       />
     ))}
   </div>
@@ -105,6 +108,7 @@ export const NoteInput = (properties: StringInputProperties): JSX.Element => (
     }}
     label="Заметки"
     icon="comment"
+    autocomplete="off"
   />
 );
 

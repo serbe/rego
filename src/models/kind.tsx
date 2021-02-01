@@ -31,6 +31,7 @@ export const KindNameInput = (properties: StringInputProperties): JSX.Element =>
     }
     label="Наименование типа тренировки"
     icon="tag"
+    autocomplete="off"
   />
 );
 
@@ -43,6 +44,7 @@ export const KindShortNameInput = (properties: StringInputProperties): JSX.Eleme
     }
     label="Сокращенное наименование"
     icon="tag"
+    autocomplete="off"
   />
 );
 

@@ -40,5 +40,6 @@ export const DepartmentNameInput = (properties: StringInputProperties): JSX.Elem
     }
     label="Наименование отдела"
     icon="tag"
+    autocomplete="off"
   />
 );

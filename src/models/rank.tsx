@@ -40,5 +40,6 @@ export const RankNameInput = (properties: StringInputProperties): JSX.Element =>
       properties.setter(event.target.value === '' ? undefined : event.target.value)
     }
     value={properties.value}
+    autocomplete="off"
   />
 );

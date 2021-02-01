@@ -98,6 +98,7 @@ export const Select = (properties: SelectProperties): JSX.Element => {
             setTimeout(() => setOpened(false), 300);
           }}
           key={`${name}-input`}
+          autoComplete="off"
         />
         {icon && (
           <Icon

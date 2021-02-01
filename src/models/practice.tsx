@@ -78,6 +78,7 @@ export const PracticeTopicInput = (properties: StringInputProperties): JSX.Eleme
     }
     label="Тема тренировки"
     icon="tag"
+    autocomplete="off"
   />
 );
 

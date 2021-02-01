@@ -53,6 +53,7 @@ export const PostNameInput = (properties: StringInputProperties): JSX.Element =>
     }
     label="Наименование должности"
     icon="tag"
+    autocomplete="off"
   />
 );
 
