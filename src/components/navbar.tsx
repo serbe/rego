@@ -139,12 +139,16 @@ export const NavBar = (): JSX.Element => {
   const { auth } = useAuthState();
   const [open, setOpen] = useState(false);
 
+  const divClass = () => {
+    return open ? 'navbar-menu is-active' : 'navbar-menu';
+  };
+
   return auth.user.role > 0 ? (
     <nav className="navbar is-dark" role="navigation" aria-label="dropdown navigation">
       <div className="navbar-brand">
         <BrandBar open={open} setter={setOpen} />
       </div>
-      <div id="navbarData" className={open ? 'navbar-menu is-active' : 'navbar-menu'}>
+      <div id="navbarData" className={divClass()}>
         <NavBarStart setter={setOpen} />
         <NavbarEnd />
       </div>

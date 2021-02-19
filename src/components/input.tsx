@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React, { ChangeEvent, KeyboardEvent, MouseEvent } from 'react';
 
 import { Icon } from './icon';
@@ -54,12 +55,15 @@ export const Input = (properties: InputProperties): JSX.Element => {
     value,
   } = properties;
 
-  const divClasses = `control ${classNameDiv || ''} ${icon ? 'has-icons-left' : ''} ${
-    iconRight ? 'has-icons-right' : ''
-  }`;
+  const divClass = clsx(
+    `control`,
+    classNameDiv,
+    { 'has-icons-left': icon },
+    { 'has-icons-right': iconRight },
+  );
 
   return (
-    <div className={divClasses}>
+    <div className={divClass}>
       <input
         autoComplete={autocomplete}
         className={`${className || ''} input`}

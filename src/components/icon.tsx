@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 export interface IconProperties {
   children?: Element;
   className?: string;
@@ -8,13 +10,15 @@ export interface IconProperties {
 
 export const Icon = (properties: IconProperties): JSX.Element => {
   const { children, className, color, position, icon } = properties;
-  const spanClasses = `icon ${className || ''} ${color ? `has-text-${color}` : ''} ${
-    position ? `is-${position}` : ''
-  }`;
+  const spanClass = clsx('icon', className, {
+    [`has-text-${color}`]: color,
+    [`is-${position}`]: position,
+  });
+  const iconClass = clsx('fas', { [`fa-${icon}`]: icon });
 
   return (
-    <span className={spanClasses}>
-      <i className={`fas fa-${icon}`}>{children}</i>
+    <span className={spanClass}>
+      <i className={iconClass}>{children}</i>
     </span>
   );
 };
