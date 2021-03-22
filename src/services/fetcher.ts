@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import axios from 'axios';
 
 import { Certificate, CertificateEmpty, CertificateList } from '../models/certificate';
 import { Company, CompanyEmpty, CompanyList } from '../models/company';
@@ -158,19 +159,20 @@ export const GetItem = (name: string, id: string): Item => {
   useEffect(() => {
     const NumberID = Number(id);
     if (NumberID !== 0) {
-      fetch(URL, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: `{"command":{"Get":{"Item":{"name":"${name}","id":${NumberID}}}},"addon":"${auth.user.token}"}`,
-      })
-        .then((response) => response.json())
-        .then((response) => response as JsonGetItemScheme)
-        .then((jsonData) => {
-          if (jsonData?.command === 'Get') {
-            switch (jsonData?.name) {
+      axios
+        .post<JsonGetItemScheme>(
+          URL,
+          `{"command":{"Get":{"Item":{"name":"${name}","id":${NumberID}}}},"addon":"${auth.user.token}"}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        )
+        .then((response) => {
+          const jsonData = response.data;
+          if (jsonData.command === 'Get') {
+            switch (jsonData.name) {
               case 'Certificate':
                 setData(jsonData.object.Certificate);
                 break;
@@ -264,17 +266,18 @@ export const GetList = (name: string): List[] => {
   const [list, setList] = useState<List[]>([]);
 
   useEffect(() => {
-    fetch(URL, {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: `{"command":{"Get":{"List":"${name}"}},"addon":"${auth.user.token}"}`,
-    })
-      .then((response) => response.json())
-      .then((response) => response as JsonListScheme)
-      .then((jsonData) => {
+    axios
+      .post<JsonListScheme>(
+        URL,
+        `{"command":{"Get":{"List":"${name}"}},"addon":"${auth.user.token}"}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      .then((response) => {
+        const jsonData = response.data;
         if (jsonData?.command === 'Get') {
           switch (jsonData?.name) {
             case 'CertificateList':
@@ -333,17 +336,18 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    fetch(URL, {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: `{"command":{"Get":{"List":"${name}"}},"addon":"${auth.user.token}"}`,
-    })
-      .then((response) => response.json())
-      .then((response) => response as JsonListScheme)
-      .then((jsonData) => {
+    axios
+      .post<JsonListScheme>(
+        URL,
+        `{"command":{"Get":{"List":"${name}"}},"addon":"${auth.user.token}"}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      .then((response) => {
+        const jsonData = response.data;
         if (jsonData?.command === 'Get') {
           switch (jsonData?.name) {
             case 'CompanySelect':
@@ -413,19 +417,20 @@ export const SetItem = (
   status: Dispatch<SetStateAction<boolean>>,
   token: string,
 ): void => {
-  fetch(URL, {
-    method: 'POST',
-    mode: 'cors',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: `{ "command": { "${id === 0 ? 'Insert' : 'Update'}": { "${name}": ${JSON.stringify(
-      item,
-    )} } }, "addon": "${token}" }`,
-  })
-    .then((response) => response.json())
-    .then((response) => response as JsonItemScheme)
-    .then((jsonData) => {
+  axios
+    .post<JsonItemScheme>(
+      URL,
+      `{ "command": { "${id === 0 ? 'Insert' : 'Update'}": { "${name}": ${JSON.stringify(
+        item,
+      )} } }, "addon": "${token}" }`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    .then((response) => {
+      const jsonData = response.data;
       const command = id === 0 ? 'Insert' : 'Update';
       if (jsonData?.command === command && jsonData.name === name) {
         status(true);
@@ -443,17 +448,14 @@ export const DelItem = (
   status: Dispatch<SetStateAction<boolean>>,
   token: string,
 ): void => {
-  fetch(URL, {
-    method: 'POST',
-    mode: 'cors',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: `{"command":{"Delete":{"name":"${name}","id":${id}}},"addon":"${token}"}`,
-  })
-    .then((response) => response.json())
-    .then((response) => response as JsonItemScheme)
-    .then((jsonData) => {
+  axios
+    .post(URL, `{"command":{"Delete":{"name":"${name}","id":${id}}},"addon":"${token}"}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .then((response) => {
+      const jsonData = response.data;
       if (jsonData?.command === 'Delete' && jsonData.name === name) {
         status(true);
       }

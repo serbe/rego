@@ -8,6 +8,8 @@ import React, {
   useReducer,
 } from 'react';
 
+import axios from 'axios';
+
 const loginURL = process.env.REACT_APP_LOGINURL || '/go/login';
 const checkURL = process.env.REACT_APP_CHECKURL || '/go/check';
 
@@ -68,24 +70,24 @@ const initialSetAuthState: SetAuthState = {
 };
 
 export const login = (name: string, pass: string, setAuth: Dispatch<ReducerActions>): void => {
-  fetch(loginURL, {
-    method: 'POST',
-    mode: 'cors',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ u: name, p: btoa(pass) }),
-  })
-    .then((response) => response.json())
-    .then((response) => response as TJson)
+  axios
+    .post<TJson>(
+      loginURL,
+      { u: name, p: btoa(pass) },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
     .then((jsonData) => {
       setAuth({
         type: 'SetAuth',
         data: {
           user: {
-            role: jsonData.r,
+            role: jsonData.data.r,
             name,
-            token: jsonData.t,
+            token: jsonData.data.t,
           },
           check: true,
           login: true,
@@ -95,18 +97,18 @@ export const login = (name: string, pass: string, setAuth: Dispatch<ReducerActio
 };
 
 export const check = (token: string, role: string): void => {
-  fetch(checkURL, {
-    method: 'POST',
-    mode: 'cors',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ t: token, r: role }),
-  })
-    .then((response) => response.json())
-    .then((response) => response as CJson)
+  axios
+    .post<CJson>(
+      checkURL,
+      { t: token, r: role },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
     .then((jsonData) => {
-      return jsonData.r;
+      return jsonData.data.r;
     });
 };
 
@@ -232,18 +234,14 @@ export const checkStorage = (
 ): void => {
   const user = getStorage();
 
-  fetch(checkURL, {
-    method: 'POST',
-    mode: 'cors',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: `{ "t": "${user.token}", "r": ${user.role} }`,
-  })
-    .then((response) => response.json())
-    .then((response) => response as CJson)
+  axios
+    .post<CJson>(checkURL, `{ "t": "${user.token}", "r": ${user.role} }`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
     .then((jsonData) => {
-      if (jsonData.r) {
+      if (jsonData.data.r) {
         setLogin(true);
         setChecker(true);
       } else {
