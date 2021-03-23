@@ -145,12 +145,14 @@ export const NavBar = (): JSX.Element => {
 
   return auth.user.role > 0 ? (
     <nav className="navbar is-dark" role="navigation" aria-label="dropdown navigation">
-      <div className="navbar-brand">
-        <BrandBar open={open} setter={setOpen} />
-      </div>
-      <div id="navbarData" className={divClass()}>
-        <NavBarStart setter={setOpen} />
-        <NavbarEnd />
+      <div className="container px-4">
+        <div className="navbar-brand">
+          <BrandBar open={open} setter={setOpen} />
+        </div>
+        <div id="navbarData" className={divClass()}>
+          <NavBarStart setter={setOpen} />
+          <NavbarEnd />
+        </div>
       </div>
     </nav>
   ) : (
