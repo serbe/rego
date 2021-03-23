@@ -59,3 +59,9 @@ export const splitNumbers = (items?: number[]): JSX.Element => (
       items.map((arrayItem: number, index: number) => <div key={`div${index}`}>{arrayItem}</div>)}
   </>
 );
+
+export const diffMonth = (month: number, date?: Date): Date => {
+  const newDate = date || new Date();
+  newDate.setMonth(newDate.getMonth() - month);
+  return newDate;
+};

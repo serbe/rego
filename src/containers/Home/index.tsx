@@ -6,15 +6,15 @@ import { useHistory } from 'react-router-dom';
 import { EducationShort } from '../../models/education';
 import { PracticeShort } from '../../models/practice';
 import { GetList } from '../../services/fetcher';
+import { diffMonth } from '../../services/utils';
 
-const trClass = (date: string): string => {
-  const m = new Date();
-  const d = new Date(date);
-  if (d < m) {
+const trClass = (dateStr: string): string => {
+  const date = new Date(dateStr);
+  if (date < new Date()) {
     return 'tr-green';
   }
-  m.setMonth(m.getMonth() + 1);
-  if (d < m) {
+  const newDate = diffMonth(1);
+  if (date < newDate) {
     return 'tr-red';
   }
   return 'tr-yellow';
