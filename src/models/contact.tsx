@@ -5,6 +5,7 @@ import { DatePicker, DatePickerValues } from '../components/datepicker';
 import { FormField } from '../components/formfield';
 import { Input, StringInputProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
+import { diffMonth } from '../services/utils';
 
 export interface ContactShortValues {
   contacts: ContactShort[];
@@ -109,6 +110,18 @@ export const ContactIDSelect = (properties: SelectValues): JSX.Element => (
   />
 );
 
+const inputClass = (dateStr: string): string => {
+  const date = new Date(dateStr);
+  if (date > new Date()) {
+    return 'is-warning';
+  }
+  const newDate = diffMonth(60);
+  if (date > newDate) {
+    return 'is-success';
+  }
+  return 'is-danger';
+};
+
 export const ContactEducations = (properties: ContactEducationsValues): JSX.Element =>
   properties.educations.length > 0 ? (
     <div className="field">
@@ -120,6 +133,7 @@ export const ContactEducations = (properties: ContactEducationsValues): JSX.Elem
           name={`education-${index}-input`}
           key={`education-${index}`}
           value={education}
+          className={inputClass(education)}
           classNameDiv="pb-1"
         />
       ))}
