@@ -56,7 +56,9 @@ export const splitStrings = (items?: string[]): JSX.Element => (
 export const splitNumbers = (items?: number[]): JSX.Element => (
   <>
     {items &&
-      items.map((arrayItem: number, index: number) => <div key={`div${index}`}>{arrayItem}</div>)}
+      items.map((arrayItem: number, index: number) => (
+        <div key={`div${index}`}>{prettyPhone(arrayItem.toString(10))}</div>
+      ))}
   </>
 );
 
@@ -64,4 +66,23 @@ export const diffMonth = (month: number, date?: Date): Date => {
   const newDate = date || new Date();
   newDate.setMonth(newDate.getMonth() - month);
   return newDate;
+};
+
+export const prettyPhone = (phone: string): string => {
+  if (phone.length > 0) {
+    phone = phone.replace(/[^0-9]/g, '');
+    if (phone.length === 10) {
+      phone = phone.replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, '+7-$1-$2-$3-$4');
+    }
+    if (phone.length === 11) {
+      if (phone[0] === '8') {
+        phone = `7${phone.slice(1)}`;
+      }
+      phone = phone.replace(/(\d)(\d{3})(\d{3})(\d{2})(\d{2})/, '+$1-$2-$3-$4-$5');
+    }
+    if (phone.length === 7) {
+      phone = phone.replace(/(\d{3})(\d{2})(\d{2})/, '$1-$2-$3');
+    }
+  }
+  return phone;
 };

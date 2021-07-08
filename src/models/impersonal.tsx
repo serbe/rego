@@ -5,7 +5,7 @@ import { FormField } from '../components/formfield';
 import { Input, StringInputProperties } from '../components/input';
 import { Select, SelectValues } from '../components/select';
 import { useAuthState } from '../services/auth';
-import { addEmptyString } from '../services/utils';
+import { addEmptyString, prettyPhone } from '../services/utils';
 
 export interface ParameterTypes {
   id: string;
@@ -58,7 +58,7 @@ export const PhoneInputs = (properties: PhoneValues): JSX.Element => (
         type="tel"
         icon="phone"
         key={`phone-${index}`}
-        value={phone.toString()}
+        value={prettyPhone(phone)}
         placeholder="Телефон"
         onBlur={(event): void => {
           let values = properties.phones;
@@ -84,7 +84,7 @@ export const FaxInputs = (properties: PhoneValues): JSX.Element => (
         type="tel"
         icon="fax"
         key={`fax-${index}`}
-        value={fax.toString()}
+        value={prettyPhone(fax)}
         placeholder="Факс"
         onBlur={(event): void => {
           let values = properties.phones;
