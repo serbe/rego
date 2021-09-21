@@ -5,7 +5,8 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { NavBar } from './components/navbar';
 import { Router } from './components/routes';
-import { checkStorage, useAuthState } from './services/auth';
+import { useAuthState } from './services/auth';
+import { checkStorage } from './services/storage';
 
 const Rego = (): JSX.Element => {
   const { setAuth } = useAuthState();

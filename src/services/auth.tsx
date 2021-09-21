@@ -1,33 +1,16 @@
-import React, {
-  createContext,
-  Dispatch,
-  ReactElement,
-  ReactNode,
-  SetStateAction,
-  useContext,
-  useReducer,
-} from 'react';
-
 import axios from 'axios';
+import { createContext, Dispatch, ReactElement, ReactNode, useContext, useReducer } from 'react';
+
+import { User } from '../models/user';
+import { clearStorage, getStorage, setStorage } from './storage';
 
 const loginURL = process.env.REACT_APP_LOGINURL || '/go/login';
-const checkURL = process.env.REACT_APP_CHECKURL || '/go/check';
 
-export type User = {
-  role: number;
-  name: string;
-  token: string;
-};
-
-export type AuthState = {
+type AuthState = {
   user: User;
   login: boolean;
   check: boolean;
 };
-
-export interface CJson {
-  r: boolean;
-}
 
 const initialAuthState: AuthState = {
   user: { role: 0, name: '', token: '' },
@@ -35,7 +18,7 @@ const initialAuthState: AuthState = {
   check: false,
 };
 
-export type ReducerActions =
+type ReducerActions =
   | {
       type: 'SetAuth';
       data: AuthState;
@@ -58,7 +41,7 @@ interface SetAuthState {
   dispatch: Dispatch<ReducerActions>;
 }
 
-interface TJson {
+interface TryResponse {
   t: string;
   r: number;
 }
@@ -71,7 +54,7 @@ const initialSetAuthState: SetAuthState = {
 
 export const login = (name: string, pass: string, setAuth: Dispatch<ReducerActions>): void => {
   axios
-    .post<TJson>(
+    .post<TryResponse>(
       loginURL,
       { u: name, p: btoa(pass) },
       {
@@ -96,57 +79,19 @@ export const login = (name: string, pass: string, setAuth: Dispatch<ReducerActio
     });
 };
 
-export const check = (token: string, role: string): void => {
-  axios
-    .post<CJson>(
-      checkURL,
-      { t: token, r: role },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-    .then((jsonData) => {
-      return jsonData.data.r;
-    });
-};
+// const logout = (): void => {
+//   clearStorage();
+// };
 
-export const logout = (): void => {
-  clearStorage();
-};
+const AuthContext = createContext(initialAuthState);
 
-export const AuthContext = createContext(initialAuthState);
-
-export const SetAuthContext = createContext(initialSetAuthState);
+const SetAuthContext = createContext(initialSetAuthState);
 
 interface AuthProviderProperties {
   children: ReactNode;
 }
 
-export const getStorage = (): User => {
-  const userStorage: string | null = localStorage.getItem('user');
-  const user: User = { role: 0, name: '', token: '' };
-  if (userStorage) {
-    const u: User | undefined = JSON.parse(userStorage);
-    if (u) {
-      user.name = u.name;
-      user.role = u.role;
-      user.token = u.token;
-    }
-  }
-  return user;
-};
-
-const setStorage = (user: User): void => {
-  localStorage.setItem('user', JSON.stringify(user));
-};
-
-const clearStorage = (): void => {
-  localStorage.removeItem('user');
-};
-
-export const reducer = (authState: AuthState, action: ReducerActions): AuthState => {
+const reducer = (authState: AuthState, action: ReducerActions): AuthState => {
   switch (action.type) {
     case 'SetAuth': {
       setStorage(action.data.user);
@@ -226,27 +171,4 @@ export const useAuthState = (): AuthContextProperties => {
   const auth = useContext(AuthContext);
   const setter = useContext(SetAuthContext);
   return { auth, setAuth: setter.dispatch };
-};
-
-export const checkStorage = (
-  setChecker: Dispatch<SetStateAction<boolean>>,
-  setLogin: Dispatch<SetStateAction<boolean>>,
-): void => {
-  const user = getStorage();
-
-  axios
-    .post<CJson>(checkURL, `{ "t": "${user.token}", "r": ${user.role} }`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    .then((jsonData) => {
-      if (jsonData.data.r) {
-        setLogin(true);
-        setChecker(true);
-      } else {
-        setLogin(false);
-        setChecker(true);
-      }
-    });
 };

@@ -1,5 +1,5 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import axios from 'axios';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 import { Certificate, CertificateEmpty, CertificateList } from '../models/certificate';
 import { Company, CompanyEmpty, CompanyList } from '../models/company';
@@ -53,104 +53,129 @@ export type List =
   | SirenList
   | SirenTypeList;
 
-type JsonListScheme =
+type GetListResponse =
   | undefined
   | {
-      command: 'Get';
+      command: 'GetList';
       name: 'CertificateList';
       object: { CertificateList: CertificateList[] };
       error: string;
     }
-  | { command: 'Get'; name: 'CompanyList'; object: { CompanyList: CompanyList[] }; error: string }
-  | { command: 'Get'; name: 'CompanySelect'; object: { SelectItem: SelectItem[] }; error: string }
-  | { command: 'Get'; name: 'ContactList'; object: { ContactList: ContactList[] }; error: string }
-  | { command: 'Get'; name: 'ContactSelect'; object: { SelectItem: SelectItem[] }; error: string }
   | {
-      command: 'Get';
+      command: 'GetList';
+      name: 'CompanyList';
+      object: { CompanyList: CompanyList[] };
+      error: string;
+    }
+  | {
+      command: 'GetList';
+      name: 'CompanySelect';
+      object: { SelectItem: SelectItem[] };
+      error: string;
+    }
+  | {
+      command: 'GetList';
+      name: 'ContactList';
+      object: { ContactList: ContactList[] };
+      error: string;
+    }
+  | {
+      command: 'GetList';
+      name: 'ContactSelect';
+      object: { SelectItem: SelectItem[] };
+      error: string;
+    }
+  | {
+      command: 'GetList';
       name: 'DepartmentList';
       object: { DepartmentList: DepartmentList[] };
       error: string;
     }
   | {
-      command: 'Get';
+      command: 'GetList';
       name: 'DepartmentSelect';
       object: { SelectItem: SelectItem[] };
       error: string;
     }
   | {
-      command: 'Get';
+      command: 'GetList';
       name: 'EducationList';
       object: { EducationList: EducationList[] };
       error: string;
     }
   | {
-      command: 'Get';
+      command: 'GetList';
       name: 'EducationNear';
       object: { EducationShort: EducationShort[] };
       error: string;
     }
-  | { command: 'Get'; name: 'KindList'; object: { KindList: KindList[] }; error: string }
-  | { command: 'Get'; name: 'KindSelect'; object: { SelectItem: SelectItem[] }; error: string }
-  | { command: 'Get'; name: 'PostGoSelect'; object: { SelectItem: SelectItem[] }; error: string }
-  | { command: 'Get'; name: 'PostList'; object: { PostList: PostList[] }; error: string }
-  | { command: 'Get'; name: 'PostSelect'; object: { SelectItem: SelectItem[] }; error: string }
+  | { command: 'GetList'; name: 'KindList'; object: { KindList: KindList[] }; error: string }
+  | { command: 'GetList'; name: 'KindSelect'; object: { SelectItem: SelectItem[] }; error: string }
   | {
-      command: 'Get';
+      command: 'GetList';
+      name: 'PostGoSelect';
+      object: { SelectItem: SelectItem[] };
+      error: string;
+    }
+  | { command: 'GetList'; name: 'PostList'; object: { PostList: PostList[] }; error: string }
+  | { command: 'GetList'; name: 'PostSelect'; object: { SelectItem: SelectItem[] }; error: string }
+  | {
+      command: 'GetList';
       name: 'PracticeList';
       object: { PracticeList: PracticeList[] };
       error: string;
     }
   | {
-      command: 'Get';
+      command: 'GetList';
       name: 'PracticeNear';
       object: { PracticeShort: PracticeShort[] };
       error: string;
     }
-  | { command: 'Get'; name: 'RankList'; object: { RankList: RankList[] }; error: string }
-  | { command: 'Get'; name: 'RankSelect'; object: { SelectItem: SelectItem[] }; error: string }
-  | { command: 'Get'; name: 'ScopeList'; object: { ScopeList: ScopeList[] }; error: string }
-  | { command: 'Get'; name: 'ScopeSelect'; object: { SelectItem: SelectItem[] }; error: string }
-  | { command: 'Get'; name: 'SirenList'; object: { SirenList: SirenList[] }; error: string }
+  | { command: 'GetList'; name: 'RankList'; object: { RankList: RankList[] }; error: string }
+  | { command: 'GetList'; name: 'RankSelect'; object: { SelectItem: SelectItem[] }; error: string }
+  | { command: 'GetList'; name: 'ScopeList'; object: { ScopeList: ScopeList[] }; error: string }
+  | { command: 'GetList'; name: 'ScopeSelect'; object: { SelectItem: SelectItem[] }; error: string }
+  | { command: 'GetList'; name: 'SirenList'; object: { SirenList: SirenList[] }; error: string }
   | {
-      command: 'Get';
+      command: 'GetList';
       name: 'SirenTypeList';
       object: { SirenTypeList: SirenTypeList[] };
       error: string;
     }
   | {
-      command: 'Get';
+      command: 'GetList';
       name: 'SirenTypeSelect';
       object: { SelectItem: SelectItem[] };
       error: string;
     };
 
-type JsonItemScheme =
-  | { command: 'Insert' | 'Update' | 'Delete'; name: 'Certificate'; error: string }
-  | { command: 'Insert' | 'Update' | 'Delete'; name: 'Company'; error: string }
-  | { command: 'Insert' | 'Update' | 'Delete'; name: 'Contact'; error: string }
-  | { command: 'Insert' | 'Update' | 'Delete'; name: 'Department'; error: string }
-  | { command: 'Insert' | 'Update' | 'Delete'; name: 'Education'; error: string }
-  | { command: 'Insert' | 'Update' | 'Delete'; name: 'Kind'; error: string }
-  | { command: 'Insert' | 'Update' | 'Delete'; name: 'Post'; error: string }
-  | { command: 'Insert' | 'Update' | 'Delete'; name: 'Practice'; error: string }
-  | { command: 'Insert' | 'Update' | 'Delete'; name: 'Rank'; error: string }
-  | { command: 'Insert' | 'Update' | 'Delete'; name: 'Scope'; error: string }
-  | { command: 'Insert' | 'Update' | 'Delete'; name: 'Siren'; error: string }
-  | { command: 'Insert' | 'Update' | 'Delete'; name: 'SirenType'; error: string };
+type ModifyItemResponse =
+  | { command: 'InsertItem' | 'UpdateItem' | 'DeleteItem'; name: 'Certificate'; error: string }
+  | { command: 'InsertItem' | 'UpdateItem' | 'DeleteItem'; name: 'Company'; error: string }
+  | { command: 'InsertItem' | 'UpdateItem' | 'DeleteItem'; name: 'Contact'; error: string }
+  | { command: 'InsertItem' | 'UpdateItem' | 'DeleteItem'; name: 'Department'; error: string }
+  | { command: 'InsertItem' | 'UpdateItem' | 'DeleteItem'; name: 'Education'; error: string }
+  | { command: 'InsertItem' | 'UpdateItem' | 'DeleteItem'; name: 'Kind'; error: string }
+  | { command: 'InsertItem' | 'UpdateItem' | 'DeleteItem'; name: 'Post'; error: string }
+  | { command: 'InsertItem' | 'UpdateItem' | 'DeleteItem'; name: 'Practice'; error: string }
+  | { command: 'InsertItem' | 'UpdateItem' | 'DeleteItem'; name: 'Rank'; error: string }
+  | { command: 'InsertItem' | 'UpdateItem' | 'DeleteItem'; name: 'Scope'; error: string }
+  | { command: 'InsertItem' | 'UpdateItem' | 'DeleteItem'; name: 'Siren'; error: string }
+  | { command: 'InsertItem' | 'UpdateItem' | 'DeleteItem'; name: 'SirenType'; error: string };
 
-type JsonGetItemScheme =
-  | { command: 'Get'; name: 'Certificate'; object: { Certificate: Certificate }; error: string }
-  | { command: 'Get'; name: 'Company'; object: { Company: Company }; error: string }
-  | { command: 'Get'; name: 'Contact'; object: { Contact: Contact }; error: string }
-  | { command: 'Get'; name: 'Department'; object: { Department: Department }; error: string }
-  | { command: 'Get'; name: 'Education'; object: { Education: Education }; error: string }
-  | { command: 'Get'; name: 'Kind'; object: { Kind: Kind }; error: string }
-  | { command: 'Get'; name: 'Post'; object: { Post: Post }; error: string }
-  | { command: 'Get'; name: 'Practice'; object: { Practice: Practice }; error: string }
-  | { command: 'Get'; name: 'Rank'; object: { Rank: Rank }; error: string }
-  | { command: 'Get'; name: 'Scope'; object: { Scope: Scope }; error: string }
-  | { command: 'Get'; name: 'Siren'; object: { Siren: Siren }; error: string }
-  | { command: 'Get'; name: 'SirenType'; object: { SirenType: SirenType }; error: string };
+type GetItemResponse =
+  | { command: 'GetItem'; name: 'Certificate'; object: { Certificate: Certificate }; error: string }
+  | { command: 'GetItem'; name: 'Company'; object: { Company: Company }; error: string }
+  | { command: 'GetItem'; name: 'Contact'; object: { Contact: Contact }; error: string }
+  | { command: 'GetItem'; name: 'Department'; object: { Department: Department }; error: string }
+  | { command: 'GetItem'; name: 'Education'; object: { Education: Education }; error: string }
+  | { command: 'GetItem'; name: 'Kind'; object: { Kind: Kind }; error: string }
+  | { command: 'GetItem'; name: 'Post'; object: { Post: Post }; error: string }
+  | { command: 'GetItem'; name: 'Practice'; object: { Practice: Practice }; error: string }
+  | { command: 'GetItem'; name: 'Rank'; object: { Rank: Rank }; error: string }
+  | { command: 'GetItem'; name: 'Scope'; object: { Scope: Scope }; error: string }
+  | { command: 'GetItem'; name: 'Siren'; object: { Siren: Siren }; error: string }
+  | { command: 'GetItem'; name: 'SirenType'; object: { SirenType: SirenType }; error: string };
 
 export const GetItem = (name: string, id: string): Item => {
   const { auth } = useAuthState();
@@ -160,9 +185,9 @@ export const GetItem = (name: string, id: string): Item => {
     const NumberID = Number(id);
     if (NumberID !== 0) {
       axios
-        .post<JsonGetItemScheme>(
+        .post<GetItemResponse>(
           URL,
-          `{"command":{"Get":{"Item":{"name":"${name}","id":${NumberID}}}},"addon":"${auth.user.token}"}`,
+          `{"command":{"GetItem":{"name":"${name}","id":${NumberID}}},"addon":"${auth.user.token}"}`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -171,7 +196,7 @@ export const GetItem = (name: string, id: string): Item => {
         )
         .then((response) => {
           const jsonData = response.data;
-          if (jsonData.command === 'Get') {
+          if (jsonData.command === 'GetItem') {
             switch (jsonData.name) {
               case 'Certificate':
                 setData(jsonData.object.Certificate);
@@ -267,9 +292,9 @@ export const GetList = (name: string): List[] => {
 
   useEffect(() => {
     axios
-      .post<JsonListScheme>(
+      .post<GetListResponse>(
         URL,
-        `{"command":{"Get":{"List":"${name}"}},"addon":"${auth.user.token}"}`,
+        `{"command":{"GetList":"${name}"},"addon":"${auth.user.token}"}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -278,7 +303,7 @@ export const GetList = (name: string): List[] => {
       )
       .then((response) => {
         const jsonData = response.data;
-        if (jsonData?.command === 'Get') {
+        if (jsonData?.command === 'GetList') {
           switch (jsonData?.name) {
             case 'CertificateList':
               setList(jsonData.object.CertificateList);
@@ -337,9 +362,9 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
 
   useEffect(() => {
     axios
-      .post<JsonListScheme>(
+      .post<GetListResponse>(
         URL,
-        `{"command":{"Get":{"List":"${name}"}},"addon":"${auth.user.token}"}`,
+        `{"command":{"GetList":"${name}"},"addon":"${auth.user.token}"}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -348,7 +373,7 @@ export const GetSelect = (name: string): [SelectItem[], string] => {
       )
       .then((response) => {
         const jsonData = response.data;
-        if (jsonData?.command === 'Get') {
+        if (jsonData?.command === 'GetList') {
           switch (jsonData?.name) {
             case 'CompanySelect':
               jsonData.object.SelectItem.length > 0
@@ -418,9 +443,9 @@ export const SetItem = (
   token: string,
 ): void => {
   axios
-    .post<JsonItemScheme>(
+    .post<ModifyItemResponse>(
       URL,
-      `{ "command": { "${id === 0 ? 'Insert' : 'Update'}": { "${name}": ${JSON.stringify(
+      `{ "command": { "${id === 0 ? 'InsertItem' : 'UpdateItem'}": { "${name}": ${JSON.stringify(
         item,
       )} } }, "addon": "${token}" }`,
       {
@@ -431,7 +456,7 @@ export const SetItem = (
     )
     .then((response) => {
       const jsonData = response.data;
-      const command = id === 0 ? 'Insert' : 'Update';
+      const command = id === 0 ? 'InsertItem' : 'UpdateItem';
       if (jsonData?.command === command && jsonData.name === name) {
         status(true);
       }
@@ -449,14 +474,14 @@ export const DelItem = (
   token: string,
 ): void => {
   axios
-    .post(URL, `{"command":{"Delete":{"name":"${name}","id":${id}}},"addon":"${token}"}`, {
+    .post(URL, `{"command":{"DeleteItem":{"name":"${name}","id":${id}}},"addon":"${token}"}`, {
       headers: {
         'Content-Type': 'application/json',
       },
     })
     .then((response) => {
       const jsonData = response.data;
-      if (jsonData?.command === 'Delete' && jsonData.name === name) {
+      if (jsonData?.command === 'DeleteItem' && jsonData.name === name) {
         status(true);
       }
       return status(false);
