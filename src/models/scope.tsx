@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent } from 'react';
 
 import { FormField } from '../components/formfield';
 import { StringInputProperties } from '../components/input';
@@ -20,23 +20,23 @@ export type ScopeList = {
   note?: string;
 };
 
-export const ScopeIDSelect = (properties: SelectValues): JSX.Element => (
+export const ScopeIDSelect = ({ id, setter }: SelectValues): JSX.Element => (
   <Select
     name="scope"
     label="Сфера деятельности"
     listName="ScopeSelect"
-    id={properties.id}
+    id={id}
     icon="tag"
-    setter={properties.setter}
+    setter={setter}
   />
 );
 
-export const ScopeNameInput = (properties: StringInputProperties): JSX.Element => (
+export const ScopeNameInput = ({ value, setter }: StringInputProperties): JSX.Element => (
   <FormField
     name="name"
-    value={properties.value}
+    value={value}
     onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-      properties.setter(event.target.value === '' ? undefined : event.target.value)
+      setter(event.target.value === '' ? undefined : event.target.value)
     }
     label="Сфера деятельности"
     icon="tag"

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, SetStateAction } from 'react';
+import { ChangeEvent, SetStateAction } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { FormField } from '../components/formfield';
@@ -21,12 +21,12 @@ export type PhoneValues = {
   setter: (value: SetStateAction<string[]>) => void;
 };
 
-export const EmailInputs = (properties: EmailValues): JSX.Element => (
+export const EmailInputs = ({ emails, setter }: EmailValues): JSX.Element => (
   <div className="field">
     <label className="label" htmlFor="email-1-input">
       Электронный адрес
     </label>
-    {properties.emails.map((email, index) => (
+    {emails.map((email, index) => (
       <Input
         name={`email-${index}-input`}
         type="email"
@@ -35,10 +35,10 @@ export const EmailInputs = (properties: EmailValues): JSX.Element => (
         value={email}
         placeholder="Электронный адрес"
         onBlur={(event): void => {
-          let values = properties.emails;
+          let values = emails;
           values[index] = event.target.value;
           values = addEmptyString(values);
-          properties.setter(values);
+          setter(values);
         }}
         classNameDiv="pb-1"
         autocomplete="off"
@@ -47,12 +47,12 @@ export const EmailInputs = (properties: EmailValues): JSX.Element => (
   </div>
 );
 
-export const PhoneInputs = (properties: PhoneValues): JSX.Element => (
+export const PhoneInputs = ({ phones, setter }: PhoneValues): JSX.Element => (
   <div className="field">
     <label className="label" htmlFor="phone-1-input">
       Телефон
     </label>
-    {properties.phones.map((phone, index) => (
+    {phones.map((phone, index) => (
       <Input
         name={`phone-${index}-input`}
         type="tel"
@@ -61,10 +61,10 @@ export const PhoneInputs = (properties: PhoneValues): JSX.Element => (
         value={prettyPhone(phone)}
         placeholder="Телефон"
         onBlur={(event): void => {
-          let values = properties.phones;
+          let values = phones;
           values[index] = event.target.value;
           values = addEmptyString(values);
-          properties.setter(values);
+          setter(values);
         }}
         classNameDiv="pb-1"
         autocomplete="off"
@@ -73,12 +73,12 @@ export const PhoneInputs = (properties: PhoneValues): JSX.Element => (
   </div>
 );
 
-export const FaxInputs = (properties: PhoneValues): JSX.Element => (
+export const FaxInputs = ({ phones, setter }: PhoneValues): JSX.Element => (
   <div className="field">
     <label className="label" htmlFor="fax-1-input">
       Факс
     </label>
-    {properties.phones.map((fax, index) => (
+    {phones.map((fax, index) => (
       <Input
         name={`fax-${index}-input`}
         type="tel"
@@ -87,10 +87,10 @@ export const FaxInputs = (properties: PhoneValues): JSX.Element => (
         value={prettyPhone(fax)}
         placeholder="Факс"
         onBlur={(event): void => {
-          let values = properties.phones;
+          let values = phones;
           values[index] = event.target.value;
           values = addEmptyString(values);
-          properties.setter(values);
+          setter(values);
         }}
         classNameDiv="pb-1"
         autocomplete="off"
@@ -99,12 +99,12 @@ export const FaxInputs = (properties: PhoneValues): JSX.Element => (
   </div>
 );
 
-export const NoteInput = (properties: StringInputProperties): JSX.Element => (
+export const NoteInput = ({ value, setter }: StringInputProperties): JSX.Element => (
   <FormField
     name="note"
-    value={properties.value}
+    value={value}
     onChange={(event: ChangeEvent<HTMLInputElement>): void => {
-      properties.setter(event.target.value === '' ? undefined : event.target.value);
+      setter(event.target.value === '' ? undefined : event.target.value);
     }}
     label="Заметки"
     icon="comment"
@@ -112,26 +112,26 @@ export const NoteInput = (properties: StringInputProperties): JSX.Element => (
   />
 );
 
-export const AddressInput = (properties: StringInputProperties): JSX.Element => (
+export const AddressInput = ({ value, setter }: StringInputProperties): JSX.Element => (
   <FormField
     name="address"
-    value={properties.value}
+    value={value}
     onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-      properties.setter(event.target.value === '' ? undefined : event.target.value)
+      setter(event.target.value === '' ? undefined : event.target.value)
     }
     label="Адрес"
     icon="address-card"
   />
 );
 
-export const ContactIDSelect = (properties: SelectValues): JSX.Element => (
+export const ContactIDSelect = ({ id, setter }: SelectValues): JSX.Element => (
   <Select
     name="contact"
     label="Контактное лицо"
     listName="ContactSelect"
-    id={properties.id}
+    id={id}
     icon="user"
-    setter={properties.setter}
+    setter={setter}
   />
 );
 
@@ -140,10 +140,9 @@ interface FormButtonsValues {
   send: () => void;
 }
 
-export const ItemFormButtons = (properties: FormButtonsValues): JSX.Element => {
+export const ItemFormButtons = ({ del, send }: FormButtonsValues): JSX.Element => {
   const history = useHistory();
   const { auth } = useAuthState();
-  const { send, del } = properties;
 
   const SaveButton = () =>
     auth.user.role > 4 ? (

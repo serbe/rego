@@ -54,9 +54,7 @@ const listYears = (): string[] => {
   return list;
 };
 
-export const DatePicker = (properties: DatePickerProperties): JSX.Element => {
-  const { name, value, setter, label } = properties;
-
+export const DatePicker = ({ name, value, setter, label }: DatePickerProperties): JSX.Element => {
   const [year, setYear] = useState(' ');
   const [month, setMonth] = useState(' ');
   const [day, setDay] = useState(' ');

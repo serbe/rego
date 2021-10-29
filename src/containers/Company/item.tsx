@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { Company, CompanyNameInput } from '../../models/company';

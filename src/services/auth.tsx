@@ -87,10 +87,6 @@ const AuthContext = createContext(initialAuthState);
 
 const SetAuthContext = createContext(initialSetAuthState);
 
-interface AuthProviderProperties {
-  children: ReactNode;
-}
-
 const reducer = (authState: AuthState, action: ReducerActions): AuthState => {
   switch (action.type) {
     case 'SetAuth': {
@@ -133,9 +129,7 @@ const reducer = (authState: AuthState, action: ReducerActions): AuthState => {
   }
 };
 
-export const AuthProvider = (properties: AuthProviderProperties): ReactElement => {
-  const { children } = properties;
-
+export const AuthProvider = ({ children }: { children: ReactNode }): ReactElement => {
   const user = getStorage();
   const initState: AuthState = {
     user,

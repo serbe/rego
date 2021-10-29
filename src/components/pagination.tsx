@@ -13,8 +13,11 @@ interface ItemProperties {
   link?: number;
 }
 
-export const Pagination = (properties: PaginationProperties): JSX.Element => {
-  const { currentPage, lastPage, setter } = properties;
+export const Pagination = ({
+  currentPage,
+  lastPage,
+  setter,
+}: PaginationProperties): JSX.Element => {
   const navClasses = `pagination is-rounded is-centered`;
 
   const Previous = (): JSX.Element =>

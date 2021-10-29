@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { useAuthState } from '../services/auth';
@@ -105,8 +105,12 @@ const paginateReducer = (state: PaginateState, action: PaginateAction): Paginate
   }
 };
 
-export const Paginate = (properties: PaginateProperties): JSX.Element => {
-  const { filteredDataLength, itemsPerPage, currentPage, setter } = properties;
+export const Paginate = ({
+  filteredDataLength,
+  itemsPerPage,
+  currentPage,
+  setter,
+}: PaginateProperties): JSX.Element => {
   const receiveChildValue = (value: number): void => {
     setter(value - 1);
   };
@@ -121,9 +125,8 @@ export const Paginate = (properties: PaginateProperties): JSX.Element => {
   );
 };
 
-export const Data = (properties: DataProperties): [() => List[], JSX.Element] => {
-  const { data, search } = properties;
-  type TableData = typeof properties.data;
+export const Data = ({ data, search }: DataProperties): [() => List[], JSX.Element] => {
+  type TableData = typeof data;
 
   const [{ filteredData, currentPage, filteredDataLength, itemsPerPage }, dispatch] = useReducer(
     paginateReducer,
@@ -138,23 +141,21 @@ export const Data = (properties: DataProperties): [() => List[], JSX.Element] =>
   };
 
   useEffect(() => {
-    const sv: SData[] = data.map(
-      (row, index): SData => {
-        const values = Object.values(row);
-        const rowString: string[] = values.map((value) => {
-          if (value && typeof value !== 'number') {
-            if (typeof value === 'string') {
-              return value;
-            }
-            if (Array.isArray(value)) {
-              return value.join('');
-            }
+    const sv: SData[] = data.map((row, index): SData => {
+      const values = Object.values(row);
+      const rowString: string[] = values.map((value) => {
+        if (value && typeof value !== 'number') {
+          if (typeof value === 'string') {
+            return value;
           }
-          return '';
-        });
-        return { id: index, data: rowString.join('').toLowerCase() };
-      },
-    );
+          if (Array.isArray(value)) {
+            return value.join('');
+          }
+        }
+        return '';
+      });
+      return { id: index, data: rowString.join('').toLowerCase() };
+    });
     dispatch({ type: 'setSearchValues', value: sv });
     dispatch({ type: 'setFilteredData', value: data });
     dispatch({ type: 'setFilteredDataLength', value: data.length });
@@ -183,14 +184,14 @@ export const Data = (properties: DataProperties): [() => List[], JSX.Element] =>
   ];
 };
 
-export const Bar = (properties: BarProperties): JSX.Element => {
+export const Bar = ({ name, setter, value }: BarProperties): JSX.Element => {
   const { auth } = useAuthState();
   const history = useHistory();
 
   const CreateButton = () =>
     auth.user.role > 2 ? (
       <div className="control mb-4" key="TableNewItem">
-        <Button onClick={() => history.push(`/${properties.name}/0`)}>Создать</Button>
+        <Button onClick={() => history.push(`/${name}/0`)}>Создать</Button>
       </div>
     ) : (
       <></>
@@ -205,9 +206,9 @@ export const Bar = (properties: BarProperties): JSX.Element => {
           name="search"
           placeholder="Поиск"
           onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
-            properties.setter(event.target.value)
+            setter(event.target.value)
           }
-          value={properties.value}
+          value={value}
         />
       </div>
     </div>

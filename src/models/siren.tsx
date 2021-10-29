@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent } from 'react';
 
 import { FormField } from '../components/formfield';
 import { NumberInputProperties, StringInputProperties } from '../components/input';
@@ -32,25 +32,23 @@ export type SirenList = {
   phones?: number[];
 };
 
-export const SirenNumberIDInput = (properties: NumberInputProperties): JSX.Element => (
+export const SirenNumberIDInput = ({ value, setter }: NumberInputProperties): JSX.Element => (
   <FormField
     name="siren_number_id"
-    value={properties.value}
-    onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-      properties.setter(Number(event.target.value))
-    }
+    value={value}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(Number(event.target.value))}
     label="Инвентарный номер"
     icon="tag"
     autocomplete="off"
   />
 );
 
-export const SirenNumberPassportInput = (properties: StringInputProperties): JSX.Element => (
+export const SirenNumberPassportInput = ({ value, setter }: StringInputProperties): JSX.Element => (
   <FormField
     name="siren_number_passport"
-    value={properties.value}
+    value={value}
     onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-      properties.setter(event.target.value === '' ? undefined : event.target.value)
+      setter(event.target.value === '' ? undefined : event.target.value)
     }
     label="Номер по паспорту"
     icon="tag"
@@ -58,12 +56,12 @@ export const SirenNumberPassportInput = (properties: StringInputProperties): JSX
   />
 );
 
-export const SirenRadioInput = (properties: StringInputProperties): JSX.Element => (
+export const SirenRadioInput = ({ value, setter }: StringInputProperties): JSX.Element => (
   <FormField
     name="siren_radio"
-    value={properties.value}
+    value={value}
     onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-      properties.setter(event.target.value === '' ? undefined : event.target.value)
+      setter(event.target.value === '' ? undefined : event.target.value)
     }
     label="Радио"
     icon="tag"
@@ -71,12 +69,12 @@ export const SirenRadioInput = (properties: StringInputProperties): JSX.Element 
   />
 );
 
-export const SirenDeskInput = (properties: StringInputProperties): JSX.Element => (
+export const SirenDeskInput = ({ value, setter }: StringInputProperties): JSX.Element => (
   <FormField
     name="siren_desk"
-    value={properties.value}
+    value={value}
     onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-      properties.setter(event.target.value === '' ? undefined : event.target.value)
+      setter(event.target.value === '' ? undefined : event.target.value)
     }
     label="Пульт управления"
     icon="tag"
@@ -84,12 +82,12 @@ export const SirenDeskInput = (properties: StringInputProperties): JSX.Element =
   />
 );
 
-export const SirenLatitudeInput = (properties: StringInputProperties): JSX.Element => (
+export const SirenLatitudeInput = ({ value, setter }: StringInputProperties): JSX.Element => (
   <FormField
     name="siren_latitude"
-    value={properties.value}
+    value={value}
     onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-      properties.setter(event.target.value === '' ? undefined : event.target.value)
+      setter(event.target.value === '' ? undefined : event.target.value)
     }
     label="Широта"
     icon="tag"
@@ -97,12 +95,12 @@ export const SirenLatitudeInput = (properties: StringInputProperties): JSX.Eleme
   />
 );
 
-export const SirenLongtitudeInput = (properties: StringInputProperties): JSX.Element => (
+export const SirenLongtitudeInput = ({ value, setter }: StringInputProperties): JSX.Element => (
   <FormField
     name="siren_longtitude"
-    value={properties.value}
+    value={value}
     onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-      properties.setter(event.target.value === '' ? undefined : event.target.value)
+      setter(event.target.value === '' ? undefined : event.target.value)
     }
     label="Долгота"
     icon="tag"
@@ -110,25 +108,23 @@ export const SirenLongtitudeInput = (properties: StringInputProperties): JSX.Ele
   />
 );
 
-export const SirenStageInput = (properties: NumberInputProperties): JSX.Element => (
+export const SirenStageInput = ({ value, setter }: NumberInputProperties): JSX.Element => (
   <FormField
     name="siren_stage"
-    value={properties.value}
-    onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-      properties.setter(Number(event.target.value))
-    }
+    value={value}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(Number(event.target.value))}
     label="Этап"
     icon="tag"
     autocomplete="off"
   />
 );
 
-export const SirenOwnInput = (properties: StringInputProperties): JSX.Element => (
+export const SirenOwnInput = ({ value, setter }: StringInputProperties): JSX.Element => (
   <FormField
     name="siren_own"
-    value={properties.value}
+    value={value}
     onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-      properties.setter(event.target.value === '' ? undefined : event.target.value)
+      setter(event.target.value === '' ? undefined : event.target.value)
     }
     label="Собственность"
     icon="tag"

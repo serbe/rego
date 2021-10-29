@@ -8,8 +8,13 @@ export interface IconProperties {
   position?: 'left' | 'right';
 }
 
-export const Icon = (properties: IconProperties): JSX.Element => {
-  const { children, className, color, position, icon } = properties;
+export const Icon = ({
+  children,
+  className,
+  color,
+  position,
+  icon,
+}: IconProperties): JSX.Element => {
   const spanClass = clsx('icon', className, {
     [`has-text-${color}`]: color,
     [`is-${position}`]: position,

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { ChangeEvent, KeyboardEvent, MouseEvent } from 'react';
+import { ChangeEvent, KeyboardEvent, MouseEvent } from 'react';
 
 import { Icon } from './icon';
 
@@ -36,25 +36,23 @@ interface InputProperties {
   value?: number | string;
 }
 
-export const Input = (properties: InputProperties): JSX.Element => {
-  const {
-    autocomplete,
-    className,
-    classNameDiv,
-    disabled,
-    icon,
-    iconRight,
-    name,
-    onBlur,
-    onChange,
-    onClick,
-    onKeyPress,
-    placeholder,
-    readonly,
-    type,
-    value,
-  } = properties;
-
+export const Input = ({
+  autocomplete,
+  className,
+  classNameDiv,
+  disabled,
+  icon,
+  iconRight,
+  name,
+  onBlur,
+  onChange,
+  onClick,
+  onKeyPress,
+  placeholder,
+  readonly,
+  type,
+  value,
+}: InputProperties): JSX.Element => {
   const divClass = clsx(
     `control`,
     classNameDiv,

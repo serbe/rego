@@ -1,6 +1,6 @@
 import './select.css';
 
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 import { GetSelect, SelectItem } from '../services/fetcher';
 import { Icon } from './icon';
@@ -20,9 +20,15 @@ interface SelectProperties {
   setter: (event?: number) => void;
 }
 
-export const Select = (properties: SelectProperties): JSX.Element => {
-  const { name, id, label, icon, color, listName, setter } = properties;
-
+export const Select = ({
+  name,
+  id,
+  label,
+  icon,
+  color,
+  listName,
+  setter,
+}: SelectProperties): JSX.Element => {
   const [opened, setOpened] = useState(false);
   const [itemID, setItemID] = useState(id || 0);
   const [list, error] = GetSelect(listName);

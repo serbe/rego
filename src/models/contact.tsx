@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { DatePicker, DatePickerValues } from '../components/datepicker';
@@ -53,36 +53,31 @@ export type ContactShort = {
   post_go_name?: string;
 };
 
-export const ContactNameInput = (properties: StringInputProperties): JSX.Element => (
+export const ContactNameInput = ({ value, setter }: StringInputProperties): JSX.Element => (
   <FormField
     icon="user"
     label="Фамилия Имя Отчество"
     name="contact-name"
     onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-      properties.setter(event.target.value === '' ? undefined : event.target.value)
+      setter(event.target.value === '' ? undefined : event.target.value)
     }
-    value={properties.value}
+    value={value}
     autocomplete="off"
   />
 );
 
-export const ContactBirthdayInput = (properties: DatePickerValues): JSX.Element => (
-  <DatePicker
-    label="Дата рождения"
-    name="birthday"
-    setter={properties.setter}
-    value={properties.value}
-  />
+export const ContactBirthdayInput = ({ value, setter }: DatePickerValues): JSX.Element => (
+  <DatePicker label="Дата рождения" name="birthday" setter={setter} value={value} />
 );
 
-export const ContactShortForm = (properties: ContactShortValues): JSX.Element => {
+export const ContactShortForm = ({ contacts }: ContactShortValues): JSX.Element => {
   const history = useHistory();
   return (
     <div className="field" key="contacts">
       <label className="label" htmlFor="contact-1">
         Сотрудники
       </label>
-      {properties.contacts.map((contact, index) => (
+      {contacts.map((contact, index) => (
         <Input
           className="link"
           classNameDiv="pb-1"
@@ -99,14 +94,14 @@ export const ContactShortForm = (properties: ContactShortValues): JSX.Element =>
   );
 };
 
-export const ContactIDSelect = (properties: SelectValues): JSX.Element => (
+export const ContactIDSelect = ({ id, setter }: SelectValues): JSX.Element => (
   <Select
     icon="user"
-    id={properties.id}
+    id={id}
     label="Фамилия Имя Отчество"
     listName="ContactSelect"
     name="contact"
-    setter={properties.setter}
+    setter={setter}
   />
 );
 
@@ -122,13 +117,13 @@ const inputClass = (dateStr: string): string => {
   return 'is-danger';
 };
 
-export const ContactEducations = (properties: ContactEducationsValues): JSX.Element =>
-  properties.educations.length > 0 ? (
+export const ContactEducations = ({ educations }: ContactEducationsValues): JSX.Element =>
+  educations.length > 0 ? (
     <div className="field">
       <label className="label" htmlFor="education-1-input">
         Даты обучения в УМЦ
       </label>
-      {properties.educations.map((education, index) => (
+      {educations.map((education, index) => (
         <Input
           name={`education-${index}-input`}
           key={`education-${index}`}

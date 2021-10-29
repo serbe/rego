@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { useAuthState } from '../services/auth';
@@ -110,8 +110,7 @@ const NavbarEnd = (): JSX.Element => {
   );
 };
 
-const BrandBar = (properties: OpenState): JSX.Element => {
-  const { open, setter } = properties;
+const BrandBar = ({ open, setter }: OpenState): JSX.Element => {
   return (
     <>
       <NavLink activeClassName="is-active" className="navbar-item" exact to="/">

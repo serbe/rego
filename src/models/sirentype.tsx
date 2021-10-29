@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent } from 'react';
 
 import { FormField } from '../components/formfield';
 import { NumberInputProperties, StringInputProperties } from '../components/input';
@@ -22,23 +22,23 @@ export type SirenTypeList = {
   note?: string;
 };
 
-export const SirenTypeIDSelect = (properties: SelectValues): JSX.Element => (
+export const SirenTypeIDSelect = ({ id, setter }: SelectValues): JSX.Element => (
   <Select
     name="siren_type_id"
     label="Тип сирены"
     listName="SirenTypeSelect"
-    id={properties.id}
+    id={id}
     icon="tag"
-    setter={properties.setter}
+    setter={setter}
   />
 );
 
-export const SirenTypeNameInput = (properties: StringInputProperties): JSX.Element => (
+export const SirenTypeNameInput = ({ value, setter }: StringInputProperties): JSX.Element => (
   <FormField
     name="siren_type_name"
-    value={properties.value}
+    value={value}
     onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-      properties.setter(event.target.value === '' ? undefined : event.target.value)
+      setter(event.target.value === '' ? undefined : event.target.value)
     }
     label="Тип сирены"
     icon="tag"
@@ -46,13 +46,11 @@ export const SirenTypeNameInput = (properties: StringInputProperties): JSX.Eleme
   />
 );
 
-export const SirenTypeRadiusInput = (properties: NumberInputProperties): JSX.Element => (
+export const SirenTypeRadiusInput = ({ value, setter }: NumberInputProperties): JSX.Element => (
   <FormField
     name="siren_type_radius"
-    value={properties.value}
-    onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-      properties.setter(Number(event.target.value))
-    }
+    value={value}
+    onChange={(event: ChangeEvent<HTMLInputElement>): void => setter(Number(event.target.value))}
     label="Радиус действия"
     icon="tag"
     autocomplete="off"

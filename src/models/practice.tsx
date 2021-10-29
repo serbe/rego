@@ -1,9 +1,10 @@
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { DatePicker, DatePickerValues } from '../components/datepicker';
 import { FormField } from '../components/formfield';
 import { Input, StringInputProperties } from '../components/input';
+import { tinyDate, trClass } from '../services/utils';
 
 export interface PracticeValues {
   practices: PracticeList[];
@@ -43,14 +44,14 @@ export type PracticeShort = {
   date_of_practice: string;
 };
 
-export const PracticeListForm = (properties: PracticeValues): JSX.Element => {
+export const PracticeListForm = ({ practices }: PracticeValues): JSX.Element => {
   const history = useHistory();
-  return properties.practices.length > 0 ? (
+  return practices.length > 0 ? (
     <div className="field" key="practices">
       <label className="label" htmlFor="practice-1">
         Тренировки
       </label>
-      {properties.practices.map((practice, index) => (
+      {practices.map((practice, index) => (
         <Input
           name={`practice-${index}`}
           key={`practice-${index}`}
@@ -69,12 +70,12 @@ export const PracticeListForm = (properties: PracticeValues): JSX.Element => {
   );
 };
 
-export const PracticeTopicInput = (properties: StringInputProperties): JSX.Element => (
+export const PracticeTopicInput = ({ value, setter }: StringInputProperties): JSX.Element => (
   <FormField
     name="practice-topic"
-    value={properties.value}
+    value={value}
     onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-      properties.setter(event.target.value === '' ? undefined : event.target.value)
+      setter(event.target.value === '' ? undefined : event.target.value)
     }
     label="Тема тренировки"
     icon="tag"
@@ -82,11 +83,46 @@ export const PracticeTopicInput = (properties: StringInputProperties): JSX.Eleme
   />
 );
 
-export const PracticeDateInput = (properties: DatePickerValues): JSX.Element => (
+export const PracticeDateInput = ({ value, setter }: DatePickerValues): JSX.Element => (
   <DatePicker
     name="practice-date"
     label="Дата проведения тренировки"
-    value={properties.value}
-    setter={properties.setter}
+    value={value}
+    setter={setter}
   />
 );
+
+export const PracticeNearList = ({ list }: { list: PracticeShort[] }): JSX.Element => {
+  const history = useHistory();
+  return (
+    <table className="table is-narrow">
+      <tbody>
+        {list.map((row) => (
+          <tr key={row.id} className={trClass(row.date_of_practice)}>
+            <td
+              className="has-text-black"
+              onMouseDown={(): void => history.push(`/practices/${row.id}`)}
+              role="gridcell"
+            >
+              {tinyDate(row.date_of_practice)}
+            </td>
+            <td
+              className="has-text-black"
+              onMouseDown={(): void => history.push(`/kinds/${row.kind_id}`)}
+              role="gridcell"
+            >
+              {row.kind_short_name}
+            </td>
+            <td
+              className="has-text-black"
+              onMouseDown={(): void => history.push(`/companies/${row.company_id}`)}
+              role="gridcell"
+            >
+              {row.company_name}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};

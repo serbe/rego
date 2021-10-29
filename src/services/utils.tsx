@@ -86,3 +86,22 @@ export const prettyPhone = (phone: string): string => {
   }
   return phone;
 };
+
+export const trClass = (dateStr: string): string => {
+  const date = new Date(dateStr);
+  if (date < new Date()) {
+    return 'tr-green';
+  }
+  const newDate = diffMonth(1);
+  if (date < newDate) {
+    return 'tr-red';
+  }
+  return 'tr-yellow';
+};
+
+export const tinyDate = (date: string): string => {
+  if (date.length === 10) {
+    return `${date.slice(8, 10)}.${date.slice(5, 7)}.${date.slice(2, 4)}`;
+  }
+  return date;
+};

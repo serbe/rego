@@ -1,4 +1,4 @@
-import React, { ChangeEvent, KeyboardEvent, MouseEvent } from 'react';
+import { ChangeEvent, KeyboardEvent, MouseEvent } from 'react';
 
 import { Input } from './input';
 
@@ -20,24 +20,22 @@ export interface FormFieldProperties {
   value?: number | string;
 }
 
-export const FormField = (properties: FormFieldProperties): JSX.Element => {
-  const {
-    autocomplete,
-    className,
-    disabled,
-    icon,
-    iconRight,
-    label,
-    name,
-    onChange,
-    onClick,
-    onKeyPress,
-    placeholder,
-    readonly,
-    type,
-    value,
-  } = properties;
-
+export const FormField = ({
+  autocomplete,
+  className,
+  disabled,
+  icon,
+  iconRight,
+  label,
+  name,
+  onChange,
+  onClick,
+  onKeyPress,
+  placeholder,
+  readonly,
+  type,
+  value,
+}: FormFieldProperties): JSX.Element => {
   return (
     <div className="field">
       {label && (

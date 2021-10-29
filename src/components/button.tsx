@@ -14,8 +14,13 @@ interface ButtonProperties {
   ) => void;
 }
 
-export const Button = (properties: ButtonProperties): JSX.Element => {
-  const { children, className, disabled, href, onClick } = properties;
+export const Button = ({
+  children,
+  className,
+  disabled,
+  href,
+  onClick,
+}: ButtonProperties): JSX.Element => {
   const buttonClass = clsx(`button`, className);
 
   return href ? (

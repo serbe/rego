@@ -1,7 +1,8 @@
-import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { DatePicker, DatePickerValues } from '../components/datepicker';
 import { Select, SelectValues } from '../components/select';
+import { tinyDate, trClass } from '../services/utils';
 
 export type Education = {
   id: number;
@@ -36,31 +37,59 @@ export type EducationShort = {
   start_date: string;
 };
 
-export const EducationNameSelect = (properties: SelectValues): JSX.Element => (
+export const EducationNameSelect = ({ id, setter }: SelectValues): JSX.Element => (
   <Select
     name="education-contact-name"
     label="Полное имя обучаемого"
     listName="ContactSelect"
-    id={properties.id}
+    id={id}
     icon="user"
-    setter={properties.setter}
+    setter={setter}
   />
 );
 
-export const EducationStartDateInput = (properties: DatePickerValues): JSX.Element => (
+export const EducationStartDateInput = ({ value, setter }: DatePickerValues): JSX.Element => (
   <DatePicker
     name="education-start-date"
     label="Дата начала обучения"
-    value={properties.value}
-    setter={properties.setter}
+    value={value}
+    setter={setter}
   />
 );
 
-export const EducationEndDateInput = (properties: DatePickerValues): JSX.Element => (
+export const EducationEndDateInput = ({ value, setter }: DatePickerValues): JSX.Element => (
   <DatePicker
     name="education-end-date"
     label="Дата окончания обучения"
-    value={properties.value}
-    setter={properties.setter}
+    value={value}
+    setter={setter}
   />
 );
+
+export const EducationNearList = ({ list }: { list: EducationShort[] }): JSX.Element => {
+  const history = useHistory();
+  return (
+    <table className="table is-narrow">
+      <tbody>
+        {list.map((row) => (
+          <tr key={row.id} className={trClass(row.start_date)}>
+            <td
+              className="has-text-black"
+              onMouseDown={(): void => history.push(`/educations/${row.id}`)}
+              role="gridcell"
+            >
+              {tinyDate(row.start_date)}
+            </td>
+            <td
+              className="has-text-black"
+              onMouseDown={(): void => history.push(`/contacts/${row.contact_id}`)}
+              role="gridcell"
+            >
+              {row.contact_name}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
